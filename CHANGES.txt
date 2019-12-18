@@ -1,0 +1,69 @@
+Changes to code:
+
+SimDSS.py
+    #CHANGE: API: setSwitch, getSwitch
+    #CHANGE: API: showYMatrixDiff
+    #CHANGE: Option to start SimDSS class without inelastic load
+    #CHANGE: API: updateCktLoads --> setLoads
+    #CHANGE: API: runPF becomes private method
+    #CHANGE: constructYMatrix not calculate each update, only when YMatrix is requested
+    #CHANGE: Create getYMatrix method
+    #CHANGE: API: getLkW --> get Load
+    #CHANGE: Commented YMatrix calculation in the constructor
+    #CHANGE: Substitute GetLoad by GetPQ
+    #CHANGE: getCktElementState returns also Power
+
+LoadGenerator.py
+    #CHANGE: Add BaseLevel
+    #CHANGE: Remove unsued variables
+
+simulator_pflow.py
+    #CHANGE: LoadGenerator constructor
+    #CHANGE: ilpqfile becomes optional argument
+    #CHANGE: incorportate ProberSim, PhasorSim, SmartmeterSim
+    #CHANGE: remove readActives
+    #CHANGE: duplicate variables t v -> mv, t -> mt (collector problem)
+
+LoadGenerator.py
+    #CHANGE: LoadGenerator constructor
+
+simulator_demo.py
+    #CHANGE: Add linkRate, linkDelay, linkErrorRate
+    #CHANGE: Collectors variables: mv, mt (removed)
+
+MosaikSim.cpp / MosaikSim.h
+    #CHANGE: Add linkRate, linkDelay, linkErrorRate
+    #CHANGE: Change readAppConnectionsFile methods to reflect new Devices file
+    #CHANGE: Remove stod operations from val
+    #CHANGE: Strip string termination string
+    #CHANGE: Send string instead of int value
+    #CHANGE: Adapt socket to receive message slipt into several packets
+
+NS3NetSim.cpp / NS3NetSim.h
+    #CHANGE: Add linkRate, linkDelay, linkErrorRate
+    #CHANGE: Modify message/time separator to "&"
+    #CHANGE: Remove server socket redundancy
+    #CHANGE: Remove src-dst link redundancy
+
+python modules:
+    #CHANGE: added pytest (and some others)
+
+cktDef.py
+    #CHANGE: added PHASE_12, PHASE_13, PHASE_23, PHASE_123
+    #CHANGE: added CKTProperty
+    #CHANGE: SNDBUS -> BUS1; RCVBUS -> BUS2
+
+examples/example_01.py
+    #CHANGE: Corrections due to modifications on SimDSS
+
+config/master33.dss
+    #CHANGE: include coords XY
+    #CHANGE: set phases=3
+
+Sensor.py
+    #CHANGE: Include IDT and TYPE in the packet
+    #CHANGE: Remove unused types of sensor
+
+
+
+
