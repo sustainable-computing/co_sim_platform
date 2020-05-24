@@ -1,0 +1,7 @@
+idn,type,src,dst,period,error,cktElement,cktTerminal,cktPhase,cktProperty
+001,phasor,1,1,10,0.0001667,line.1-2,BUS1,PHASE_123,None
+0017,phasor,17,1,10,0.0001667,line.16-17,BUS2,PHASE_123,None
+0018,phasor,18,1,10,0.0001667,line.17-18,BUS2,PHASE_123,None
+0031,phasor,31,1,10,0.0001667,line.30-31,BUS2,PHASE_123,None
+0032,phasor,32,1,10,0.0001667,line.31-32,BUS2,PHASE_123,None
+0033,phasor,33,1,10,0.0001667,line.32-33,BUS2,PHASE_123,None
