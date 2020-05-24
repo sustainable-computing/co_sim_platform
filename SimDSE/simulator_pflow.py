@@ -168,8 +168,8 @@ class PFlowSim(mosaik_api.Simulator):
              
         #--- create instance of LoadGenerator
         self.objLoadGen = LoadGenerator(nwlfile,
-                                        PFLimInf   =  1.0,
-                                        PFLimSup   =  1.0,
+                                        PFLimInf   =  0.95,
+                                        PFLimSup   =  0.95,
                                         LoadLimInf =  0.4,
                                         LoadLimSup =  0.9,
                                         AmpGain    =  0.25,
@@ -240,7 +240,8 @@ class PFlowSim(mosaik_api.Simulator):
         #--- Activate load generator
         if (0 == (time % self.loadgen_interval)):
             #-- get a new sample from loadgen
-            ePQ = self.objLoadGen.createLoads()
+            # ePQ = self.objLoadGen.createLoads()
+            ePQ = self.objLoadGen.readLoads()
             #-- execute processing of the the new elastic load
             self.dssObj.setLoads(ePQ)
 

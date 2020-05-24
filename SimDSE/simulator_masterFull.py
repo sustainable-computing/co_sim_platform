@@ -35,7 +35,7 @@ TOPO_FILE    = PRJ_PATH + 'config/master33Full.dss'
 NWL_FILE     = PRJ_PATH + 'config/IEEE33_NodeWithLoadFull.csv'
 ADJMAT_FILE  = PRJ_PATH + 'config/IEEE33_AdjMatrixFull.txt'
 COORDS_FILE  = PRJ_PATH + 'config/IEEE33_BusXYFull.csv'
-DEVS_FILE    = PRJ_PATH + 'config/IEEE33_DevicesFull.csv'
+DEVS_FILE    = PRJ_PATH + 'config/IEEE33_DevicesNode33Full.csv'
 
 
 #--- Simulators configuration
@@ -62,7 +62,7 @@ SIM_CONFIG = {
 
 
 #--- Simulation total time
-END_TIME =  250    #  1250 ms
+END_TIME =  59 * 1000 + 1    #  1250 ms
 
 #--- Devices and application for simulation
 devParams = {}
@@ -128,7 +128,7 @@ def  create_scenario( world, args ):
     pflowsim    = world.start('PFlowSim',    
                               topofile = TOPO_FILE,
                               nwlfile  = NWL_FILE,
-                              loadgen_interval = 1,                              
+                              loadgen_interval = 1000,
                               verbose = 0)        
 
 
@@ -232,7 +232,11 @@ def  create_scenario( world, args ):
                                  baseS = 100e3/3,            # single phase power base
                                  baseV = 12.66e3/np.sqrt(3),
                                  baseNode = 1,               # single phase voltage base
-                                 basePF = 0.99) 
+                                 basePF = 0.99,
+                                 se_period = 1000, # state estimation period in ms
+                                 pseudo_loads = '/home/moosa/cosimul/CoSimul_Platform/SimDSE/config/loadPseudo.mat',
+                                 se_result = '/home/moosa/cosimul/CoSimul_Platform/SimDSE/wls_results.mat' # save the wls results
+                                 )
 
 
     #--- Monitor instances
