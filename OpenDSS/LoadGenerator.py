@@ -14,6 +14,7 @@ import sys
 import numpy as np
 import logging
 import math
+import scipy.io as spio
 
 
 class LoadGenerator(object):
@@ -160,6 +161,17 @@ class LoadGenerator(object):
             #-- append to the list to return
             loadsPQ.append((ndLoad[0], ndLoad[1], ndLoad[2]))
         
+        return loadsPQ
+
+    def readLoads(self):
+        mat = spio.loadmat('/home/moosa/cosimul/CoSimul_Platform/SimDSE/config/loadHour9.mat', squeeze_me=True)
+        p = np.array(mat['P'])
+        q = np.array(mat['Q'])
+        loadNode = mat['loadNode']
+        loadsPQ = []
+        for row in range(0, len(p[:, 0])):
+            loadsPQ.append((str(loadNode[row]), p[row, self._time], q[row, self._time]))
+        self._time += 1
         return loadsPQ
 
 
