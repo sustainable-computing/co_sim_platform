@@ -254,6 +254,11 @@ As a part of the University of Alberta Future Energy Systems (FES), this
 research was made possible in part thanks to funding from the Canada First
 Research Excellence Fund (CFREF).
 
+### How to cite our paper?
+```
+Evandro de Souza, Omid Ardakanian, Ioanis Nikolaidis, "A Co-simulation Platform for Evaluating Cyber Security and Control Applications in the Smart Grid", Proceedings of the IEEE International Conference on Communications (ICC), 2020.
+```
+
 
 ## References
 1. http://smartgrid.epri.com/SimulationTool.aspx
