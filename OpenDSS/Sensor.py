@@ -40,7 +40,7 @@ class Sensor:
         return self.priorValue, self.priorTime
 
     def R2P(self, x):
-        return np.abs(x), np.angle(x, deg=True)
+        return np.abs(x), np.angle(x)
     
     def addNoise(self, x):
         noiseReal = np.random.normal(0, self.error, 1)
@@ -62,7 +62,7 @@ class Phasor(Sensor):
         
         super().__init__(idt, step_size, objDSS, cktElement, error, verbose)
         self.cktTerminal = cktTerminal
-        self.cktPhase    = cktPhase
+        self.cktPhase = cktPhase
         
     def updateValues(self, time):
         if (self.verbose > 2): print('Phasor::updateValues', 
@@ -100,13 +100,13 @@ class Phasor(Sensor):
                 
                 if (ph == 'PHASE_1'):
                     val['VA'] = (VMag, VAng)
-                    val['IA'] = (IMag, -IAng)
+                    val['IA'] = (IMag, IAng)
                 elif (ph == 'PHASE_2'):
                     val['VB'] = (VMag, VAng)
-                    val['IB'] = (IMag, -IAng)
+                    val['IB'] = (IMag, IAng)
                 elif (ph == 'PHASE_3'):
                     val['VC'] = (VMag, VAng)
-                    val['IC'] = (IMag, -IAng) 
+                    val['IC'] = (IMag, IAng)
 
             self.priorTime  = time + self.time_diff_resolution
             self.priorValue = val
