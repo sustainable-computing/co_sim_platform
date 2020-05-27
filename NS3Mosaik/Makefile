@@ -27,7 +27,7 @@
 #   Main Variables                                                            #
 #-----------------------------------------------------------------------------#
 
-BASE_DIR   := /home/evandro/DOCSHARE/Professional/CoSimulPrj/develop/cosimul
+BASE_DIR   := /mnt/hgfs/cosimul/CoSimul_Platform
 PRJ        := NS3MosaikSim
 
 PRJ_DIR     = ${BASE_DIR}/NS3Mosaik/mosaik_api
@@ -35,7 +35,7 @@ OBJ_DIR     = ${PRJ_DIR}/obj
 SRC_DIR	    = ${PRJ_DIR}/src
 INC_DIR	    = ${PRJ_DIR}/include
 
-NS3_ROOT    = ${BASE_DIR}/ns-allinone-3.30.1/ns-3.30.1
+NS3_ROOT    = /mnt/hgfs/cosimul/ns-allinone-3.30.1/ns-3.30.1
 NS3_INC     = ${NS3_ROOT}/build
 NS3_LIB     = ${NS3_ROOT}/build/lib
 
@@ -45,7 +45,7 @@ RM=/bin/rm
 
 
 #----------------
-#--- Includes --- 
+#--- Includes ---
 #----------------
 INCLUDES =	-I${INC_DIR}\
 		    -I${NS3_INC}
@@ -92,25 +92,24 @@ LXFLAGS = -ljsoncpp\
 #--------------------#
 #--- Main Project ---#
 #--------------------#
-$(PRJ):	$(OBJ_DIR)/main.o $(OBJ_DIR)/ns3-helper.o $(OBJ_DIR)/NS3Netsim.o $(OBJ_DIR)/MosaikSim.o  
+$(PRJ):	$(OBJ_DIR)/main.o $(OBJ_DIR)/ns3-helper.o $(OBJ_DIR)/NS3Netsim.o $(OBJ_DIR)/MosaikSim.o
 	$(CX)  -o $@ $^ $(LXFLAGS)
 
 $(OBJ_DIR)/main.o: ${SRC_DIR}/main.cpp | $(OBJ_DIR)
 	$(CX) $(CXFLAGS) $(INCLUDES) -c $^ -o $@
-	
+
 $(OBJ_DIR)/NS3Netsim.o: ${SRC_DIR}/NS3Netsim.cpp
 	$(CX) $(CXFLAGS) $(INCLUDES) -c $^ -o $@
 
 $(OBJ_DIR)/MosaikSim.o: ${SRC_DIR}/MosaikSim.cpp
 	$(CX) $(CXFLAGS) $(INCLUDES) -c $^ -o $@
-	
+
 $(OBJ_DIR)/ns3-helper.o: ${SRC_DIR}/ns3-helper.cpp
 	$(CX) $(CXFLAGS) $(INCLUDES) -c $^ -o $@
 
 $(OBJ_DIR):
 	mkdir -p $@
-	
-		
+
 .PHONY: clean
 clean:
 	$(RM) -f $(PRJ_DIR)/obj/$(PRJ).o \
@@ -118,4 +117,4 @@ clean:
 	$(PRJ_DIR)/obj/MosaikSim.o \
 	$(PRJ_DIR)/obj/NS3Netsim.o \
 	$(PRJ_DIR)/obj/ns3-helper.o  \
-	$(PRJ) 
+	$(PRJ)
