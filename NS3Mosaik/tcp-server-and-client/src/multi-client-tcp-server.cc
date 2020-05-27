@@ -24,7 +24,6 @@
 
 #include "ns3/address.h"
 #include "ns3/address-utils.h"
-#include "ns3/log.h"
 #include "ns3/socket-factory.h"
 #include "multi-client-tcp-server.h"
 

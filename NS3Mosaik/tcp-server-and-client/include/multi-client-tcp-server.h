@@ -22,19 +22,11 @@
  * Modelled after packet-sink.h
  */
 
+#include "ns3/core-module.h"
 #include "ns3/socket.h"
 #include "ns3/application.h"
 #include "ns3/address.h"
-#include "ns3/event-id.h"
 #include "ns3/ptr.h"
-#include "ns3/traced-callback.h"
-#include <iomanip>
-#include "ns3/core-module.h"
-#include "ns3/network-module.h"
-#include "ns3/point-to-point-module.h"
-#include "ns3/internet-module.h"
-#include "ns3/mobility-module.h"
-#include "ns3/log.h"
 
 #ifndef _MULTI_CLIENT_TCP_SERVER_H_
 #define _MULTI_CLIENT_TCP_SERVER_H_

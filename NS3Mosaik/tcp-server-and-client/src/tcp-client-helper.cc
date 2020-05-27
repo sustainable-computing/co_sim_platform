@@ -29,10 +29,8 @@
 #include "ns3/data-rate.h"
 #include "ns3/uinteger.h"
 #include "ns3/names.h"
-#include "ns3/random-variable-stream.h"
 #include "ns3/tcp-client.h"
 #include "ns3/tcp-client-helper.h"
-#include <iostream>
 
 using namespace ns3;
 

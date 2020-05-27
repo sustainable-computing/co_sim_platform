@@ -22,11 +22,9 @@
  * Modelled after udp-echo-client.cc
  */
 
-
 #include <iostream>
 #include "ns3/log.h"
 #include "ns3/ipv4-address.h"
-#include "ns3/ipv6-address.h"
 #include "ns3/nstime.h"
 #include "ns3/inet-socket-address.h"
 #include "ns3/inet6-socket-address.h"

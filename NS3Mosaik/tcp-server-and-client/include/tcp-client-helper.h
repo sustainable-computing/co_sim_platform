@@ -22,27 +22,9 @@
  * Modelled after udp-client-server-helper.h
  */
 
-#include <stdint.h>
-#include <string>
-#include "ns3/object-factory.h"
-#include "ns3/address.h"
-#include "ns3/attribute.h"
-#include "ns3/net-device.h"
 #include "ns3/node-container.h"
 #include "ns3/application-container.h"
 #include "ns3/core-module.h"
-#include "ns3/network-module.h"
-#include "ns3/point-to-point-module.h"
-#include "ns3/internet-module.h"
-#include "ns3/mobility-module.h"
-#include "ns3/log.h"
-#include "ns3/names.h"
-#include "ns3/core-module.h"
-#include "ns3/network-module.h"
-#include "ns3/point-to-point-module.h"
-#include "ns3/node-container.h"
-#include "ns3/point-to-point-helper.h"
-#include "ns3/internet-module.h"
 
 #ifndef _TCP_CLIENT_HELPER_H_
 #define _TCP_CLIENT_HELPER_H_
