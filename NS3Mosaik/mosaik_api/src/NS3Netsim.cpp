@@ -35,42 +35,13 @@ NS_LOG_COMPONENT_DEFINE ("SmartgridNs3Main");
 std::string fileNameReceived = "packets_received.pkt";
 std::string fileNameSent = "packets_sent.pkt";
 
+/**
+ * \brief Parses the packet received by the an appliction/socket and adds it to the list of packets that will be sent to the upper layer.
+ *
+ * @param socket
+ */
 void
-SendMessage (Ptr<Socket> socket, string message)
-{
-  Ptr<Packet> sendPacket =
-      Create<Packet> ((uint8_t*)message.c_str(),message.size());
-
-  socket->Send (sendPacket);
-
-  //--- print sending info
-  NS_LOG_DEBUG(
-      "Pkt Snt at "
-          << Simulator::Now ().GetMilliSeconds ()
-          << " nodeName: "
-          << Names::FindName(socket->GetNode ())
-          << " nodeId: "
-          << socket->GetNode()->GetId()
-          << " nodeAddr: "
-          << socket->GetNode ()->GetObject<Ipv4>()->GetAddress(1,0).GetLocal()
-          << " Size: "
-          << sendPacket->GetSize()
-          << " MsgSize "
-          << message.size()
-          << endl;
-  );
-//  ofstream filePacketsSent;
-//  filePacketsSent.open(fileNameSent, std::ios_base::app);
-//  filePacketsSent << "time: " << Simulator::Now ().GetMilliSeconds ()
-//                  << " nodeId: " << socket->GetNode()->GetId()
-//                  << " nodeAddr: " << socket->GetNode ()->GetObject<Ipv4>()->GetAddress(1,0).GetLocal()
-//                  << " MsgSize: " << message.size() << std::endl;
-//  filePacketsSent.close();
-}
-
-
-void
-ReceiveMessage (Ptr<Socket> socket)
+ExtractInformationFromPacketAndSendToUpperLayer (Ptr<Socket> socket)
 {
   Address from;
   Ptr<Packet> packet = socket->RecvFrom (from);
@@ -112,19 +83,19 @@ ReceiveMessage (Ptr<Socket> socket)
                        stoll(val_time)
   };
   dataXchgOutput.push_back(dataRcv);
-//  ofstream filePacketsReceived;
-//  filePacketsReceived.open(fileNameReceived, std::ios_base::app);
-//  std::replace( recMessage.begin(), recMessage.end(), '\n', ' ');
-//  filePacketsReceived << "time: " << Simulator::Now ().GetMilliSeconds ()
-//                      << " dstNodeId: "   << socket->GetNode()->GetId()
-//                      << " dstAddr: "     << socket->GetNode ()->GetObject<Ipv4>()->GetAddress(1,0).GetLocal()
-//                      << " srcNodeId: "   << srcNodeId
-//                      << " srcAddr: "     << InetSocketAddress::ConvertFrom (from).GetIpv4()
-//                      << " Payload: "     << recMessage
-//                      << " MsgSize: " << recMessage.size() << std::endl;
-//  filePacketsReceived.close();
-}
 
+  ofstream filePacketsReceived;
+  filePacketsReceived.open(fileNameReceived, std::ios_base::app);
+  std::replace( recMessage.begin(), recMessage.end(), '\n', ' ');
+  filePacketsReceived << "time: " << Simulator::Now ().GetMilliSeconds ()
+                      << " dstNodeId: "   << socket->GetNode()->GetId()
+                      << " dstAddr: "     << socket->GetNode ()->GetObject<Ipv4>()->GetAddress(1,0).GetLocal()
+                      << " srcNodeId: "   << srcNodeId
+                      << " srcAddr: "     << InetSocketAddress::ConvertFrom (from).GetIpv4()
+                      << " Payload: "     << recMessage
+                      << " MsgSize: " << recMessage.size() << std::endl;
+  filePacketsReceived.close();
+}
 
 NS3Netsim::NS3Netsim():
     linkCount(0), sinkPort(0),  startTime(0), verbose (0)
@@ -132,7 +103,14 @@ NS3Netsim::NS3Netsim():
   //--- setup simulation type
   GlobalValue::Bind ("SimulatorImplementationType",
                      StringValue ("ns3::SmartgridDefaultSimulatorImpl"));
-  LogComponentEnable("Simulator", LOG_LEVEL_INFO);
+  LogComponentEnable("Simulator", LOG_LEVEL_ALL);
+  LogComponentEnable("SmartgridDefaultSimulatorImpl", LOG_LEVEL_ALL);
+  LogComponentEnable("SmartgridNs3Main", LOG_LEVEL_ALL);
+  LogComponentEnable ("MultiClientTcpServer", LOG_LEVEL_ALL);
+  LogComponentEnable ("TcpClient", LOG_LEVEL_ALL);
+  LogComponentEnable ("Application", LOG_LEVEL_ALL);
+//  LogComponentEnable ("EventImpl", LOG_LEVEL_ALL);
+  LogComponentEnable ("Node", LOG_LEVEL_ALL);
 }
 
 
@@ -152,12 +130,16 @@ NS3Netsim::init (string f_adjmat,
                  double start_time,
                  int verb)
 {
-
+  applicationsStarted = false;
+  clientApplications = ApplicationContainer ();
+  serverApplications = ApplicationContainer ();
+  allApplications = ApplicationContainer ();
+  allNodes = NodeContainer();
   // Delete the files with the packets sent and packets received
   remove(fileNameReceived.c_str());
   remove(fileNameSent.c_str());
   //--- verbose level
-  verbose = verb;
+  verbose = 2;
 
   if (verbose > 1) {
       std::cout << "NS3Netsim::init" << std::endl;
@@ -205,12 +187,7 @@ NS3Netsim::init (string f_adjmat,
   //--- load node coordinates and names
   NS_LOG_INFO ("Load node names and coordinates");
   arrayNamesCoords = ReadCoordinatesFile (nodeCoordinatesFilename);
-  for(auto it = arrayNamesCoords.begin(); it != arrayNamesCoords.end(); it++) {
-      vector<double> row;
-      row.push_back(   atof( (*it)[1].c_str() )  );
-      row.push_back(   atof( (*it)[2].c_str() )  );
-      arrayNodeCoords.push_back(row);
-    }
+  arrayNodeCoords = loadNodeCoords(arrayNamesCoords);
   if (verbose > 1) {
       PrintNamesCoordinates (nodeCoordinatesFilename.c_str (), arrayNamesCoords);
     }
@@ -229,6 +206,7 @@ NS3Netsim::init (string f_adjmat,
     {
       Names::Add (arrayNamesCoords[m][0], nodes.Get (m));
       Ptr<Node> newNode = Names::Find<Node>(arrayNamesCoords[m][0]);
+      allNodes.Add(newNode);
     }
 
   //--- create network topology
@@ -327,8 +305,6 @@ NS3Netsim::init (string f_adjmat,
   pointToPoint.EnableAsciiAll (ascii.CreateFileStream ("traceNS3Netsim.tr"));
   //pointToPoint.EnablePcapAll("pcapNS3Netsim.pcap");
   //pointToPoint.EnablePcap("dse", 0, 0, true);
-
-
 }
 
 
@@ -343,7 +319,6 @@ NS3Netsim::create (string client, string server)
   vector<string> record;
   record.push_back(client);
   record.push_back(server);
-
   //--- Search for already existing connection
   for (auto rec = arrayAppConnections.begin(); rec != arrayAppConnections.end(); ++rec) {
       string clt = (*rec).front();
@@ -372,12 +347,19 @@ NS3Netsim::create (string client, string server)
       std::vector<std::string>::iterator it = std::find(nodeServerList.begin(), nodeServerList.end(), server);
       //--- if not found
       if(it == nodeServerList.end()) {
-          Ptr<Socket> recvSink = Socket::CreateSocket (srvNode, TypeId::LookupByName ("ns3::UdpSocketFactory"));
-          InetSocketAddress local = InetSocketAddress (Ipv4Address::GetAny (), sinkPort);
-          recvSink->Bind (local);
-          recvSink->SetRecvCallback (MakeCallback (&ReceiveMessage));
+          // Create the application
+          // Set the address to be used to make the
+          multiClientTcpServerHelper.SetAttribute("Local", AddressValue(InetSocketAddress (Ipv4Address::GetAny (), sinkPort)));
+          // Install the app in the node
+          ApplicationContainer serverAppContainer = multiClientTcpServerHelper.Install(server);
+          serverApplications.Add(serverAppContainer.Get(0));
+          allApplications.Add(serverAppContainer.Get(0));
+//          serverAppContainer.Start(Seconds(0.0));
+          // Set the call back to extract information from a packet and sent it to the upper layer
+          Ptr<MultiClientTcpServer> serverAppAsCorrectType = DynamicCast<MultiClientTcpServer> (serverAppContainer.Get(0));
+          serverAppAsCorrectType->SetPacketReceivedCallBack(ExtractInformationFromPacketAndSendToUpperLayer);
           //--- update server node list
-          nodeServerList.push_back(server);
+          nodeServerList.push_back(server); 
 
           //--- sort array
           sort(nodeServerList.begin(), nodeServerList.end());
@@ -409,15 +391,15 @@ NS3Netsim::create (string client, string server)
       Ptr<Node> dstNode = Names::Find<Node>(server);
 
       //--- create  udp socket
-      Ptr<Socket> source = Socket::CreateSocket (srcNode, TypeId::LookupByName ("ns3::UdpSocketFactory"));
+//      Ptr<Socket> source = Socket::CreateSocket (srcNode, TypeId::LookupByName ("ns3::UdpSocketFactory"));
       Ipv4InterfaceAddress sink_iaddr = dstNode->GetObject<Ipv4>()->GetAddress (1,0);
       InetSocketAddress remote = InetSocketAddress (sink_iaddr.GetLocal(), sinkPort);
-
-
-      source->Connect (remote);
-
-      //--- insert socket mapping Node --> Socket
-      mapNodeSocket[srcNode->GetId()] = source;
+      // Create a TCP client application for the srcNode
+      tcpClientHelper.SetAttribute("Remote", AddressValue(remote));
+      ApplicationContainer tcpClientContainer = tcpClientHelper.Install(client);
+      allApplications.Add(tcpClientContainer.Get(0));
+//      tcpClientContainer.Start(Seconds(0.0));
+      clientApplications.Add(tcpClientContainer.Get(0));
 
       //--- log entry
       for (uint32_t appConn = 0; appConn < arrayAppConnections.size (); appConn++)
@@ -427,7 +409,7 @@ NS3Netsim::create (string client, string server)
                                               << " srcAddr: " << srcNode->GetObject<Ipv4>()->GetAddress(1,0).GetLocal()
                                               << " dstAddr: " << dstNode->GetObject<Ipv4>()->GetAddress(1,0).GetLocal()
                                               << " remote: " << remote
-                                              << " source: " << source
+                                              //                                              << " source: " << source
                                               << endl;
           );
         }
@@ -459,25 +441,33 @@ NS3Netsim::schedule (string src, string dst, string val, string val_time)
   Ptr<Node> srcNode = Names::Find<Node>(src);
   Ptr<Node> dstNode = Names::Find<Node>(dst);
 
-  Ptr<Socket> srcSocket = mapNodeSocket[srcNode->GetId ()];
-
   //--- send value and its timestamp
   string msgx = val + "&" + val_time;
 
-  Simulator::ScheduleWithContext (srcNode->GetId (),
-                                  MilliSeconds(schDelay),
-                                  &SendMessage,
-                                  srcSocket,
-                                  msgx
-  );
-
+  Ptr<TcpClient> clientApp = DynamicCast<TcpClient> (srcNode->GetApplication(0));
+  clientApp->ScheduleTransmit(val, val_time);
 }
 
 
 void
 NS3Netsim::runUntil (string nextStop)
 {
-
+  if (!applicationsStarted) {
+    // Go through all the applications
+    for (auto iter = serverApplications.Begin(); iter != serverApplications.End(); std::advance(iter, 1)){
+        std::cout << "SERVER STARTING" << std::endl;
+      Ptr<MultiClientTcpServer> server = DynamicCast<MultiClientTcpServer>(*iter);
+      server->StartApplicationForMosaik();
+        std::cout << "SERVER STARTED" << std::endl;
+    }
+      for (auto iter = clientApplications.Begin(); iter != clientApplications.End(); std::advance(iter, 1)){
+          std::cout << "CLIENT STARTING" << std::endl;
+          Ptr<TcpClient> client = DynamicCast<TcpClient>(*iter);
+          client->StartApplicationForMosaik();
+          std::cout << "CLIENT STARTED" << std::endl;
+        }
+  }
+  applicationsStarted = true;
   if (verbose > 1) {
       std::cout << "NS3Netsim::runUntil(time=" << nextStop  << ")" << std::endl;
     }

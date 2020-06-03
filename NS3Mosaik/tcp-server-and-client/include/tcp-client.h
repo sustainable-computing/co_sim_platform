@@ -75,11 +75,16 @@ public:
   void ScheduleTransmit(std::string val, std::string valTime);
 
   /**
+   * Calls start Application
+   */
+   void StartApplicationForMosaik(void);
+
+  /**
     * \brief Callback function scheduled to send the message.
     * \param socket
     * \param message The message that will be sent
     */
-  void SendMessage (std::string message);
+//  void SendMessage (std::string message);
 protected:
   virtual void DoDispose (void);
 private:

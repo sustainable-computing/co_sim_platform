@@ -102,6 +102,10 @@ MultiClientTcpServer::SetPacketReceivedCallBack(void (*callback)(Ptr<Socket> soc
   m_packetReceivedCallback = callback;
 }
 
+void MultiClientTcpServer::StartApplicationForMosaik(void) {
+  StartApplication();
+}
+
 // Application Methods
 void
 MultiClientTcpServer::StartApplication()

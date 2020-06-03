@@ -38,6 +38,7 @@
 #include "tcp-client.h"
 
 using namespace ns3;
+using namespace std;
 
 NS_LOG_COMPONENT_DEFINE ("TcpClient");
 NS_OBJECT_ENSURE_REGISTERED (TcpClient);
@@ -112,6 +113,10 @@ TcpClient::DoDispose (void)
   Application::DoDispose ();
 }
 
+void TcpClient::StartApplicationForMosaik(void) {
+  StartApplication();
+}
+
 void
 TcpClient::StartApplication (void)
 {
@@ -122,43 +127,6 @@ TcpClient::StartApplication (void)
     {
       TypeId tid = TypeId::LookupByName ("ns3::TcpSocketFactory");
       m_socket = Socket::CreateSocket (GetNode (), tid);
-      // Confirm the peer is compatible with this server
-      if (Ipv4Address::IsMatchingType(m_peerAddress) == true)
-        {
-          if (m_socket->Bind () == -1)
-            {
-              NS_FATAL_ERROR ("Failed to bind socket");
-            }
-          m_socket->Connect (InetSocketAddress (Ipv4Address::ConvertFrom(m_peerAddress), m_peerPort));
-        }
-      else if (Ipv6Address::IsMatchingType(m_peerAddress) == true)
-        {
-          if (m_socket->Bind6 () == -1)
-            {
-              NS_FATAL_ERROR ("Failed to bind socket");
-            }
-          m_socket->Connect (Inet6SocketAddress (Ipv6Address::ConvertFrom(m_peerAddress), m_peerPort));
-        }
-      else if (InetSocketAddress::IsMatchingType (m_peerAddress) == true)
-        {
-          if (m_socket->Bind () == -1)
-            {
-              NS_FATAL_ERROR ("Failed to bind socket");
-            }
-          m_socket->Connect (m_peerAddress);
-        }
-      else if (Inet6SocketAddress::IsMatchingType (m_peerAddress) == true)
-        {
-          if (m_socket->Bind6 () == -1)
-            {
-              NS_FATAL_ERROR ("Failed to bind socket");
-            }
-          m_socket->Connect (m_peerAddress);
-        }
-      else
-        {
-          NS_ASSERT_MSG (false, "Incompatible address type: " << m_peerAddress);
-        }
     }
 }
 
@@ -178,58 +146,66 @@ TcpClient::StopApplication()
 }
 
 void
-TcpClient::ScheduleTransmit(std::string val, std::string valTime) {
-  NS_LOG_FUNCTION(this);
-
-  // Get the delay in time
-  double schDelay = std::stod(valTime) - Simulator::Now ().GetMilliSeconds ();
-
-  NS_LOG_DEBUG("TcpClient:schedule NS3_Time: " << Simulator::Now ().GetMilliSeconds ()
-                                                << " Event_Val_Time: " << valTime);
-  NS_LOG_DEBUG("TcpClient:schedule("
-                   << "source="   << m_socket->GetNode ()
-                   << ", value=" << val
-                   << ", delay=" << schDelay
-                   << ")");
-
-  // Get the message ready
-  std::string msgx = val + "&" + valTime;
-
-  // Schedule the message to be send
-  Simulator::ScheduleWithContext (GetNode()->GetId(),
-                                  MilliSeconds(schDelay),
-                                  &TcpClient::SendMessage,
-                                  this,
-                                  msgx
-  );
-}
-
-void
-TcpClient::SendMessage (std::string message)
+SendMessage (Ptr<Socket> socket, string message)
 {
+  std::cout << socket << std::endl;
   Ptr<Packet> sendPacket =
       Create<Packet> ((uint8_t*)message.c_str(),message.size());
-
-  m_socket->Send (sendPacket);
-  Address addr;
-  m_socket->GetPeerName (addr);
-  InetSocketAddress iaddr = InetSocketAddress::ConvertFrom (addr);
+  socket->Send (sendPacket);
 
   //--- print sending info
   NS_LOG_DEBUG(
       "Pkt Snt at "
           << Simulator::Now ().GetMilliSeconds ()
-          << " nodeName: "
-          << m_socket->GetNode ()
+//          << " nodeName: "
+//          << Names::FindName(socket->GetNode ())
           << " nodeId: "
-          << m_socket->GetNode()->GetId()
+          << socket->GetNode()->GetId()
           << " nodeAddr: "
-          << m_socket->GetNode ()->GetObject<Ipv4>()->GetAddress(1,0).GetLocal()
-          << " destAddr: "
-          << iaddr.GetIpv4 ()
+          << socket->GetNode ()->GetObject<Ipv4>()->GetAddress(1,0).GetLocal()
           << " Size: "
           << sendPacket->GetSize()
           << " MsgSize "
           << message.size()
+          << endl
+  );
+//  ofstream filePacketsSent;
+//  filePacketsSent.open(fileNameSent, std::ios_base::app);
+//  filePacketsSent << "time: " << Simulator::Now ().GetMilliSeconds ()
+//                  << " nodeId: " << socket->GetNode()->GetId()
+//                  << " nodeAddr: " << socket->GetNode ()->GetObject<Ipv4>()->GetAddress(1,0).GetLocal()
+//                  << " MsgSize: " << message.size() << std::endl;
+//  filePacketsSent.close();
+}
+
+void hello() {
+  std::cout << "hello" << std::endl;
+}
+
+void
+TcpClient::ScheduleTransmit(std::string val, std::string valTime) {
+  NS_LOG_FUNCTION(this);
+
+  // Get the delay in time
+  double schDelay = stod(valTime) - Simulator::Now ().GetMilliSeconds ();
+
+  NS_LOG_DEBUG("TcpClient:schedule NS3_Time: " << Simulator::Now ().GetMilliSeconds ()
+                                                << " Event_Val_Time: " << valTime << " val " << val << " socket " << m_socket);
+
+//  NS_LOG_DEBUG("TcpClient:schedule("
+////                   << "source="   << m_socket->GetNode ()
+//                   << ", value=" << val
+//                   << ", delay=" << schDelay
+//                   << ")");
+
+  // Get the message ready
+  std::string msgx = val + "&" + valTime;
+
+  // Schedule the message to be send
+   Simulator::ScheduleWithContext (GetNode()->GetId(),
+                                  MilliSeconds(schDelay),
+                                  &SendMessage,
+                                  m_socket,
+                                  msgx
   );
 }

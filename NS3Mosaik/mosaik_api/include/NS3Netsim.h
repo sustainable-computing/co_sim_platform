@@ -37,6 +37,11 @@
 
 #include "ns3/smartgrid-default-simulator-impl.h"
 
+#include "ns3/multi-client-tcp-server-helper.h"
+#include "ns3/multi-client-tcp-server.h"
+#include "ns3/tcp-client-helper.h"
+#include "ns3/tcp-client.h"
+
 using namespace std;
 using namespace ns3;
 
@@ -215,6 +220,9 @@ class NS3Netsim {
   vector<string>::iterator iList; ///< Application servers vector iterator
   uint16_t sinkPort;              ///< Application port for all server nodes
 
+  MultiClientTcpServerHelper multiClientTcpServerHelper = MultiClientTcpServerHelper(Address()); ///< Application TCP servers helper
+  TcpClientHelper tcpClientHelper = TcpClientHelper(Address()); ///< Application TCP client helper
+
   double startTime; ///< Simulation start time
   int verbose;      ///< Verbose level
 
@@ -222,6 +230,12 @@ class NS3Netsim {
 
   Ptr<SmartgridDefaultSimulatorImpl> sim; ///< Pointer to the smartgrid simulator implementation
 
+  ApplicationContainer allApplications;
+  NodeContainer allNodes;
+
+  bool applicationsStarted;
+  ApplicationContainer serverApplications;
+  ApplicationContainer clientApplications;
 };
 
 #endif /* NS3NETSIM_H_ */

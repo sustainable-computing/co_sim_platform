@@ -1,0 +1,103 @@
+NS3_SimulationModel:main argv[1]: 127.0.0.1:5555
+Starting MosaikSim class with varargin: 127.0.0.1:5555
+MosaikSim::openSocket
+NS3Netsim::init
+===>>> NS3Netsim::init(
+adjmat_file=/mnt/hgfs/cosimul/CoSimul_Platform/TapControl/tapcontrol/data/IEEE13Node-adjacency_matrix.txt,
+ coords_file=/mnt/hgfs/cosimul/CoSimul_Platform/TapControl/tapcontrol/data/IEEE13Node_BusXY.csv,
+ appcon_file=/mnt/hgfs/cosimul/CoSimul_Platform/TapControl/tapcontrol/data/IEEE13Node_AppConnections_Tap.csv)
+**** Start /mnt/hgfs/cosimul/CoSimul_Platform/TapControl/tapcontrol/data/IEEE13Node_BusXY.csv ********
+SourceBus  200  400 
+650  200  350 
+RG60  200  300 
+646  0  250 
+645  100  250 
+632  200  250 
+633  350  250 
+634  400  250 
+670  200  200 
+611  0  100 
+684  100  100 
+671  200  100 
+692  250  100 
+675  400  100 
+652  100  0 
+680  200  0 
+**** End /mnt/hgfs/cosimul/CoSimul_Platform/TapControl/tapcontrol/data/IEEE13Node_BusXY.csv ********
+int(0) =  02-06-00:00:00:00:00:01  int(1) =  02-06-00:00:00:00:00:02 ID = 1
+int(0) =  02-06-00:00:00:00:00:03  int(1) =  02-06-00:00:00:00:00:04 ID = 2
+int(0) =  02-06-00:00:00:00:00:05  int(1) =  02-06-00:00:00:00:00:06 ID = 5
+int(0) =  02-06-00:00:00:00:00:07  int(1) =  02-06-00:00:00:00:00:08 ID = 4
+int(0) =  02-06-00:00:00:00:00:09  int(1) =  02-06-00:00:00:00:00:0a ID = 5
+int(0) =  02-06-00:00:00:00:00:0b  int(1) =  02-06-00:00:00:00:00:0c ID = 6
+int(0) =  02-06-00:00:00:00:00:0d  int(1) =  02-06-00:00:00:00:00:0e ID = 8
+int(0) =  02-06-00:00:00:00:00:0f  int(1) =  02-06-00:00:00:00:00:10 ID = 7
+int(0) =  02-06-00:00:00:00:00:11  int(1) =  02-06-00:00:00:00:00:12 ID = 11
+int(0) =  02-06-00:00:00:00:00:13  int(1) =  02-06-00:00:00:00:00:14 ID = 10
+int(0) =  02-06-00:00:00:00:00:15  int(1) =  02-06-00:00:00:00:00:16 ID = 11
+int(0) =  02-06-00:00:00:00:00:17  int(1) =  02-06-00:00:00:00:00:18 ID = 14
+int(0) =  02-06-00:00:00:00:00:19  int(1) =  02-06-00:00:00:00:00:1a ID = 12
+int(0) =  02-06-00:00:00:00:00:1b  int(1) =  02-06-00:00:00:00:00:1c ID = 15
+int(0) =  02-06-00:00:00:00:00:1d  int(1) =  02-06-00:00:00:00:00:1e ID = 13
+**** Start Print IP Addresses ********
+Node ID: 0 - Ifaces: 2 - Name: SourceBus - IP Addr: 10.0.0.1 - IP Mask: 255.255.255.252
+Node ID: 1 - Ifaces: 3 - Name: 650 - IP Addr: 10.0.0.2 - IP Mask: 255.255.255.252
+Node ID: 1 - Ifaces: 3 - Name: 650 - IP Addr: 10.0.0.5 - IP Mask: 255.255.255.252
+Node ID: 2 - Ifaces: 3 - Name: RG60 - IP Addr: 10.0.0.6 - IP Mask: 255.255.255.252
+Node ID: 2 - Ifaces: 3 - Name: RG60 - IP Addr: 10.0.0.9 - IP Mask: 255.255.255.252
+Node ID: 3 - Ifaces: 2 - Name: 646 - IP Addr: 10.0.0.13 - IP Mask: 255.255.255.252
+Node ID: 4 - Ifaces: 3 - Name: 645 - IP Addr: 10.0.0.14 - IP Mask: 255.255.255.252
+Node ID: 4 - Ifaces: 3 - Name: 645 - IP Addr: 10.0.0.17 - IP Mask: 255.255.255.252
+Node ID: 5 - Ifaces: 5 - Name: 632 - IP Addr: 10.0.0.10 - IP Mask: 255.255.255.252
+Node ID: 5 - Ifaces: 5 - Name: 632 - IP Addr: 10.0.0.18 - IP Mask: 255.255.255.252
+Node ID: 5 - Ifaces: 5 - Name: 632 - IP Addr: 10.0.0.21 - IP Mask: 255.255.255.252
+Node ID: 5 - Ifaces: 5 - Name: 632 - IP Addr: 10.0.0.25 - IP Mask: 255.255.255.252
+Node ID: 6 - Ifaces: 3 - Name: 633 - IP Addr: 10.0.0.22 - IP Mask: 255.255.255.252
+Node ID: 6 - Ifaces: 3 - Name: 633 - IP Addr: 10.0.0.29 - IP Mask: 255.255.255.252
+Node ID: 7 - Ifaces: 2 - Name: 634 - IP Addr: 10.0.0.30 - IP Mask: 255.255.255.252
+Node ID: 8 - Ifaces: 3 - Name: 670 - IP Addr: 10.0.0.26 - IP Mask: 255.255.255.252
+Node ID: 8 - Ifaces: 3 - Name: 670 - IP Addr: 10.0.0.33 - IP Mask: 255.255.255.252
+Node ID: 9 - Ifaces: 2 - Name: 611 - IP Addr: 10.0.0.37 - IP Mask: 255.255.255.252
+Node ID: 10 - Ifaces: 4 - Name: 684 - IP Addr: 10.0.0.38 - IP Mask: 255.255.255.252
+Node ID: 10 - Ifaces: 4 - Name: 684 - IP Addr: 10.0.0.41 - IP Mask: 255.255.255.252
+Node ID: 10 - Ifaces: 4 - Name: 684 - IP Addr: 10.0.0.45 - IP Mask: 255.255.255.252
+Node ID: 11 - Ifaces: 5 - Name: 671 - IP Addr: 10.0.0.34 - IP Mask: 255.255.255.252
+Node ID: 11 - Ifaces: 5 - Name: 671 - IP Addr: 10.0.0.42 - IP Mask: 255.255.255.252
+Node ID: 11 - Ifaces: 5 - Name: 671 - IP Addr: 10.0.0.49 - IP Mask: 255.255.255.252
+Node ID: 11 - Ifaces: 5 - Name: 671 - IP Addr: 10.0.0.53 - IP Mask: 255.255.255.252
+Node ID: 12 - Ifaces: 3 - Name: 692 - IP Addr: 10.0.0.50 - IP Mask: 255.255.255.252
+Node ID: 12 - Ifaces: 3 - Name: 692 - IP Addr: 10.0.0.57 - IP Mask: 255.255.255.252
+Node ID: 13 - Ifaces: 2 - Name: 675 - IP Addr: 10.0.0.58 - IP Mask: 255.255.255.252
+Node ID: 14 - Ifaces: 2 - Name: 652 - IP Addr: 10.0.0.46 - IP Mask: 255.255.255.252
+Node ID: 15 - Ifaces: 2 - Name: 680 - IP Addr: 10.0.0.54 - IP Mask: 255.255.255.252
+**** End Print IP Addresses ********
+NS3Netsim::create Server: 632
+NS3Netsim::create  Create client socket
+NS3Netsim::create Server: 632
+NS3Netsim::create Server: 650
+NS3Netsim::create  Create client socket
+NS3Netsim::schedule
+NS3Netsim::schedule NS3_Time: 0 Event_Val_Time: 1.0000000000000001e-09
+
+NS3Netsim::schedule(source=611, destination=632, value=2204.1872299856659
+, delay=1e-09)
+NS3Netsim::runUntil(time=1)
+Starting simulation with args: {'appcon_file': '/mnt/hgfs/cosimul/CoSimul_Platform/TapControl/tapcontrol/data/IEEE13Node_AppConnections_Tap.csv', 'random_seed': 1}
+Starting "PFlowSim" as "PFlowSim-0" ...
+Starting "PktNetSim" as "PktNetSim-0" ...
+Starting "ControlSim" as "ControlSim-0" ...
+Starting "Collector" as "Collector-0" ...
+Connect Sensor_611 to Transp_611-632
+Connect Transp_611-632 to Control_632
+Connect Control_632 to Transp_632-650
+Connect Transp_632-650 to Actuator_650
+Connect Sensor_611 to Collector-0
+Connect Control_632 to Collector-0
+Connect Actuator_650 to Collector-0
+Connect Prober_611-V3 to Collector-0
+Connect Prober_650-T3 to Collector-0
+Connect Prober_611-Load to Collector-0
+Connect Prober_650-VPu3 to Collector-0
+Starting simulation.
+Progress: 0.00%ERROR: [Errno 104] Connection reset by peer: Simulator "PktNetSim-0" closed its connection.
+Mosaik terminating

@@ -92,6 +92,18 @@ ReadNodeAdjMatrix (string adjMatFileName)
 
 }
 
+vector<vector<double>>
+loadNodeCoords(vector<vector<string>> arrayNamesCoords)
+{
+  vector<vector<double>> arrayNodeCoords;
+  for(auto it = arrayNamesCoords.begin(); it != arrayNamesCoords.end(); it++) {
+      vector<double> row;
+      row.push_back(   atof( (*it)[1].c_str() )  );
+      row.push_back(   atof( (*it)[2].c_str() )  );
+      arrayNodeCoords.push_back(row);
+    }
+  return arrayNodeCoords;
+}
 
 void
 PrintNodeAdjMatrix (const char* description, vector<vector<bool>> array)

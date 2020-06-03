@@ -66,6 +66,11 @@ class MultiClientTcpServer: public Application
    */
   std::list<Ptr<Socket> > GetAcceptedSockets(void) const;
 
+  /**
+   * Calls start Application
+   */
+  void StartApplicationForMosaik(void);
+
   void SetPacketReceivedCallBack(void (*callback)(Ptr<Socket> socket));
   std::map<Ipv4Address, uint32_t> *mapIpv4NodeId;
  protected:

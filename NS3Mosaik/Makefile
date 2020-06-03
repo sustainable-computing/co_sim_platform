@@ -35,7 +35,7 @@ OBJ_DIR     = ${PRJ_DIR}/obj
 SRC_DIR	    = ${PRJ_DIR}/src
 INC_DIR	    = ${PRJ_DIR}/include
 
-NS3_ROOT    = /mnt/hgfs/cosimul/ns-allinone-3.30.1/ns-3.30.1
+NS3_ROOT    = /mnt/hgfs/cosimul/CoSimul_Platform/ns-allinone-3.30.1/ns-3.30.1
 NS3_INC     = ${NS3_ROOT}/build
 NS3_LIB     = ${NS3_ROOT}/build/lib
 
@@ -63,29 +63,29 @@ CXFLAGS +=
 #--- LXFLAGS ---
 #---------------
 LXFLAGS = -ljsoncpp\
-          ${NS3_LIB}/libns3.30.1-core-optimized.so\
-          ${NS3_LIB}/libns3.30.1-internet-optimized.so\
-          ${NS3_LIB}/libns3.30.1-applications-optimized.so\
-          ${NS3_LIB}/libns3.30.1-network-optimized.so\
-          ${NS3_LIB}/libns3.30.1-point-to-point-optimized.so\
-          ${NS3_LIB}/libns3.30.1-mobility-optimized.so\
-          ${NS3_LIB}/libns3.30.1-bridge-optimized.so\
-          ${NS3_LIB}/libns3.30.1-traffic-control-optimized.so\
-          ${NS3_LIB}/libns3.30.1-stats-optimized.so\
-          ${NS3_LIB}/libns3.30.1-mpi-optimized.so\
+          ${NS3_LIB}/libns3.30.1-core-debug.so\
+          ${NS3_LIB}/libns3.30.1-internet-debug.so\
+          ${NS3_LIB}/libns3.30.1-applications-debug.so\
+          ${NS3_LIB}/libns3.30.1-network-debug.so\
+          ${NS3_LIB}/libns3.30.1-point-to-point-debug.so\
+          ${NS3_LIB}/libns3.30.1-mobility-debug.so\
+          ${NS3_LIB}/libns3.30.1-bridge-debug.so\
+          ${NS3_LIB}/libns3.30.1-traffic-control-debug.so\
+          ${NS3_LIB}/libns3.30.1-stats-debug.so\
+          ${NS3_LIB}/libns3.30.1-mpi-debug.so\
 
 
 #------------------------#
 #--- Print Debug Info ---#
 #------------------------#
-#$(info $$PRJ_DIR is [${PRJ_DIR}])
-#$(info $$OBJ_DIR is [${OBJ_DIR}])
-#$(info $$SRC_DIR is [${SRC_DIR}])
-#$(info $$NS3_INC is [${NS3_INC}])
-#$(info $$NS3_LIB is [${NS3_LIB}])
-#$(info $$INCLUDES is [${INCLUDES}])
-#$(info $$CX_OBJ_FILES is [${CX_OBJ_FILES}])
-#$(info $$LXFLAGS is [${LXFLAGS}])
+# $(info $$PRJ_DIR is [${PRJ_DIR}])
+# $(info $$OBJ_DIR is [${OBJ_DIR}])
+# $(info $$SRC_DIR is [${SRC_DIR}])
+# $(info $$NS3_INC is [${NS3_INC}])
+# $(info $$NS3_LIB is [${NS3_LIB}])
+# $(info $$INCLUDES is [${INCLUDES}])
+# $(info $$CX_OBJ_FILES is [${CX_OBJ_FILES}])
+# $(info $$LXFLAGS is [${LXFLAGS}])
 
 
 
