@@ -146,12 +146,13 @@ TcpClient::StopApplication()
 }
 
 void
-SendMessage (Ptr<Socket> socket, string message)
+TcpClient::SendMessage (string message)
 {
-  std::cout << socket << std::endl;
+  NS_LOG_FUNCTION(this);
+  std::cout << m_socket << std::endl;
   Ptr<Packet> sendPacket =
       Create<Packet> ((uint8_t*)message.c_str(),message.size());
-  socket->Send (sendPacket);
+  m_socket->Send (sendPacket);
 
   //--- print sending info
   NS_LOG_DEBUG(
@@ -160,9 +161,9 @@ SendMessage (Ptr<Socket> socket, string message)
 //          << " nodeName: "
 //          << Names::FindName(socket->GetNode ())
           << " nodeId: "
-          << socket->GetNode()->GetId()
+          << m_socket->GetNode()->GetId()
           << " nodeAddr: "
-          << socket->GetNode ()->GetObject<Ipv4>()->GetAddress(1,0).GetLocal()
+          << m_socket->GetNode ()->GetObject<Ipv4>()->GetAddress(1,0).GetLocal()
           << " Size: "
           << sendPacket->GetSize()
           << " MsgSize "
@@ -204,8 +205,8 @@ TcpClient::ScheduleTransmit(std::string val, std::string valTime) {
   // Schedule the message to be send
    Simulator::ScheduleWithContext (GetNode()->GetId(),
                                   MilliSeconds(schDelay),
-                                  &SendMessage,
-                                  m_socket,
+                                  &TcpClient::SendMessage,
+                                  this,
                                   msgx
   );
 }

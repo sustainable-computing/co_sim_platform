@@ -84,7 +84,7 @@ public:
     * \param socket
     * \param message The message that will be sent
     */
-//  void SendMessage (std::string message);
+  void SendMessage (std::string message);
 protected:
   virtual void DoDispose (void);
 private:

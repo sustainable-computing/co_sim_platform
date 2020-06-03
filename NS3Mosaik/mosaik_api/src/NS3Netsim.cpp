@@ -103,14 +103,14 @@ NS3Netsim::NS3Netsim():
   //--- setup simulation type
   GlobalValue::Bind ("SimulatorImplementationType",
                      StringValue ("ns3::SmartgridDefaultSimulatorImpl"));
-  LogComponentEnable("Simulator", LOG_LEVEL_ALL);
-  LogComponentEnable("SmartgridDefaultSimulatorImpl", LOG_LEVEL_ALL);
-  LogComponentEnable("SmartgridNs3Main", LOG_LEVEL_ALL);
-  LogComponentEnable ("MultiClientTcpServer", LOG_LEVEL_ALL);
-  LogComponentEnable ("TcpClient", LOG_LEVEL_ALL);
-  LogComponentEnable ("Application", LOG_LEVEL_ALL);
+//  LogComponentEnable("Simulator", LOG_LEVEL_ALL);
+//  LogComponentEnable("SmartgridDefaultSimulatorImpl", LOG_LEVEL_ALL);
+//  LogComponentEnable("SmartgridNs3Main", LOG_LEVEL_ALL);
+//  LogComponentEnable ("MultiClientTcpServer", LOG_LEVEL_ALL);
+//  LogComponentEnable ("TcpClient", LOG_LEVEL_ALL);
+//  LogComponentEnable ("Application", LOG_LEVEL_ALL);
 //  LogComponentEnable ("EventImpl", LOG_LEVEL_ALL);
-  LogComponentEnable ("Node", LOG_LEVEL_ALL);
+//  LogComponentEnable ("Node", LOG_LEVEL_ALL);
 }
 
 
@@ -139,7 +139,7 @@ NS3Netsim::init (string f_adjmat,
   remove(fileNameReceived.c_str());
   remove(fileNameSent.c_str());
   //--- verbose level
-  verbose = 2;
+  verbose = verb;
 
   if (verbose > 1) {
       std::cout << "NS3Netsim::init" << std::endl;
@@ -359,7 +359,7 @@ NS3Netsim::create (string client, string server)
           Ptr<MultiClientTcpServer> serverAppAsCorrectType = DynamicCast<MultiClientTcpServer> (serverAppContainer.Get(0));
           serverAppAsCorrectType->SetPacketReceivedCallBack(ExtractInformationFromPacketAndSendToUpperLayer);
           //--- update server node list
-          nodeServerList.push_back(server); 
+          nodeServerList.push_back(server);
 
           //--- sort array
           sort(nodeServerList.begin(), nodeServerList.end());
@@ -455,16 +455,12 @@ NS3Netsim::runUntil (string nextStop)
   if (!applicationsStarted) {
     // Go through all the applications
     for (auto iter = serverApplications.Begin(); iter != serverApplications.End(); std::advance(iter, 1)){
-        std::cout << "SERVER STARTING" << std::endl;
       Ptr<MultiClientTcpServer> server = DynamicCast<MultiClientTcpServer>(*iter);
       server->StartApplicationForMosaik();
-        std::cout << "SERVER STARTED" << std::endl;
     }
       for (auto iter = clientApplications.Begin(); iter != clientApplications.End(); std::advance(iter, 1)){
-          std::cout << "CLIENT STARTING" << std::endl;
           Ptr<TcpClient> client = DynamicCast<TcpClient>(*iter);
           client->StartApplicationForMosaik();
-          std::cout << "CLIENT STARTED" << std::endl;
         }
   }
   applicationsStarted = true;
