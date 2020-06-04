@@ -146,7 +146,7 @@ NS3Netsim::init (string f_adjmat,
 //  remove(fileNameReceived.c_str());
 //  remove(fileNameSent.c_str());
   //--- verbose level
-  verbose = -1;
+  verbose = verb;
 
   if (verbose > 1) {
       std::cout << "NS3Netsim::init" << std::endl;
@@ -361,7 +361,7 @@ NS3Netsim::create (string client, string server)
           ApplicationContainer serverAppContainer = multiClientTcpServerHelper.Install(server);
           serverApplications.Add(serverAppContainer.Get(0));
           allApplications.Add(serverAppContainer.Get(0));
-          serverAppContainer.Start(NanoSeconds(0.0));
+          serverAppContainer.Start(NanoSeconds(1.0));
           // Set the call back to extract information from a packet and sent it to the upper layer
           Ptr<MultiClientTcpServer> serverAppAsCorrectType = DynamicCast<MultiClientTcpServer> (serverAppContainer.Get(0));
           serverAppAsCorrectType->SetPacketReceivedCallBack(ExtractInformationFromPacketAndSendToUpperLayer);
@@ -398,15 +398,13 @@ NS3Netsim::create (string client, string server)
       Ptr<Node> dstNode = Names::Find<Node>(server);
 
       //--- create  udp socket
-//      Ptr<Socket> source = Socket::CreateSocket (srcNode, TypeId::LookupByName ("ns3::UdpSocketFactory"));
       Ipv4InterfaceAddress sink_iaddr = dstNode->GetObject<Ipv4>()->GetAddress (1,0);
       InetSocketAddress remote = InetSocketAddress (sink_iaddr.GetLocal(), sinkPort);
       // Create a TCP client application for the srcNode
       tcpClientHelper.SetAttribute("Remote", AddressValue(remote));
       ApplicationContainer tcpClientContainer = tcpClientHelper.Install(client);
       allApplications.Add(tcpClientContainer.Get(0));
-      tcpClientContainer.Start(NanoSeconds(0.0));
-      clientApplications.Add(tcpClientContainer.Get(0));
+      tcpClientContainer.Start(NanoSeconds(1.0));
 
       //--- log entry
       for (uint32_t appConn = 0; appConn < arrayAppConnections.size (); appConn++)
@@ -428,13 +426,13 @@ NS3Netsim::create (string client, string server)
 void
 NS3Netsim::schedule (string src, string dst, string val, string val_time)
 {
-    if (verbose == -1) {
+    if (verbose > 1) {
         std::cout << "NS3Netsim::schedule" << std::endl;
       }
 
 //    double schDelay = stod(val_time);
 
-    if (verbose == -1) {
+    if (verbose > 1) {
         std::cout << "NS3Netsim::schedule NS3_Time: " << Simulator::Now ().GetMilliSeconds ()
                   << " Event_Val_Time: " << val_time << std::endl;
         std::cout << "NS3Netsim::schedule("
@@ -446,7 +444,6 @@ NS3Netsim::schedule (string src, string dst, string val, string val_time)
       }
 
   Ptr<Node> srcNode = Names::Find<Node>(src);
-
   Ptr<TcpClient> clientApp = DynamicCast<TcpClient> (srcNode->GetApplication(0));
   clientApp->ScheduleTransmit(val, val_time);
 }

@@ -241,6 +241,9 @@ TcpClient::ScheduleTransmit(std::string val, std::string valTime) {
 
   // Get the message ready
   std::string msgx = val + "&" + valTime;
+std::cout << "sche before" << std::endl;
+std::cout << m_socket << std::endl;
+std::cout << GetNode() << std::endl;
 
   // Schedule the message to be send
    Simulator::ScheduleWithContext (GetNode()->GetId(),
@@ -249,4 +252,5 @@ TcpClient::ScheduleTransmit(std::string val, std::string valTime) {
                                   this,
                                   msgx
   );
+  std::cout << "sche after" << std::endl;
 }
