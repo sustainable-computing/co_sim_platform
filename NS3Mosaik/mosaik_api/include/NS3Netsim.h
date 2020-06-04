@@ -236,6 +236,7 @@ class NS3Netsim {
   bool applicationsStarted;
   ApplicationContainer serverApplications;
   ApplicationContainer clientApplications;
+  double appStartTimeNanoseconds = 0.1;
 };
 
 #endif /* NS3NETSIM_H_ */

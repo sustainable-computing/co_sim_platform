@@ -27,13 +27,13 @@
 #include "NS3Netsim.h"
 #include "ns3-helper.h"
 #include "ns3/smartgrid-default-simulator-impl.h"
+#include <cassert>
 
 using namespace std;
 using namespace ns3;
 
 NS_LOG_COMPONENT_DEFINE ("SmartgridNs3Main");
 std::string fileNameReceived = "packets_received.pkt";
-std::string fileNameSent = "packets_sent.pkt";
 
 /**
  * \brief Parses the packet received by the an appliction/socket and adds it to the list of packets that will be sent to the upper layer.
@@ -43,6 +43,7 @@ std::string fileNameSent = "packets_sent.pkt";
 void
 ExtractInformationFromPacketAndSendToUpperLayer (Ptr<Socket> socket)
 {
+  assert("False");
   Address from;
   Ptr<Packet> packet = socket->RecvFrom (from);
   packet->RemoveAllPacketTags ();
@@ -108,9 +109,15 @@ NS3Netsim::NS3Netsim():
 //  LogComponentEnable("SmartgridNs3Main", LOG_LEVEL_ALL);
 //  LogComponentEnable ("MultiClientTcpServer", LOG_LEVEL_ALL);
 //  LogComponentEnable ("TcpClient", LOG_LEVEL_ALL);
-//  LogComponentEnable ("Application", LOG_LEVEL_ALL);
+//  LogComponentEnable ("Socket", LOG_LEVEL_ALL);
+//  LogComponentEnable ("SocketFactory", LOG_LEVEL_ALL);
+//  LogComponentEnable ("TcpSocket", LOG_LEVEL_ALL);
+//  LogComponentEnable ("TcpSocketBase", LOG_LEVEL_ALL);
+//  LogComponentEnable ("TcpL4Protocol", LOG_LEVEL_ALL);
+//  LogComponentEnable ("IpL4Protocol", LOG_LEVEL_ALL);
 //  LogComponentEnable ("EventImpl", LOG_LEVEL_ALL);
 //  LogComponentEnable ("Node", LOG_LEVEL_ALL);
+//  LogComponentEnable ("Application", LOG_LEVEL_ALL);
 }
 
 
@@ -136,10 +143,10 @@ NS3Netsim::init (string f_adjmat,
   allApplications = ApplicationContainer ();
   allNodes = NodeContainer();
   // Delete the files with the packets sent and packets received
-  remove(fileNameReceived.c_str());
-  remove(fileNameSent.c_str());
+//  remove(fileNameReceived.c_str());
+//  remove(fileNameSent.c_str());
   //--- verbose level
-  verbose = verb;
+  verbose = -1;
 
   if (verbose > 1) {
       std::cout << "NS3Netsim::init" << std::endl;
@@ -151,7 +158,7 @@ NS3Netsim::init (string f_adjmat,
   //--- set link properties
   LinkRate  = "512Kbps";
   LinkDelay = "15ms";
-  LinkErrorRate = "0.00001";
+  LinkErrorRate = "0.0";
 //  LinkErrorRate = "0.00001";
   linkCount = 0;
 
@@ -354,7 +361,7 @@ NS3Netsim::create (string client, string server)
           ApplicationContainer serverAppContainer = multiClientTcpServerHelper.Install(server);
           serverApplications.Add(serverAppContainer.Get(0));
           allApplications.Add(serverAppContainer.Get(0));
-//          serverAppContainer.Start(Seconds(0.0));
+          serverAppContainer.Start(NanoSeconds(0.0));
           // Set the call back to extract information from a packet and sent it to the upper layer
           Ptr<MultiClientTcpServer> serverAppAsCorrectType = DynamicCast<MultiClientTcpServer> (serverAppContainer.Get(0));
           serverAppAsCorrectType->SetPacketReceivedCallBack(ExtractInformationFromPacketAndSendToUpperLayer);
@@ -398,7 +405,7 @@ NS3Netsim::create (string client, string server)
       tcpClientHelper.SetAttribute("Remote", AddressValue(remote));
       ApplicationContainer tcpClientContainer = tcpClientHelper.Install(client);
       allApplications.Add(tcpClientContainer.Get(0));
-//      tcpClientContainer.Start(Seconds(0.0));
+      tcpClientContainer.Start(NanoSeconds(0.0));
       clientApplications.Add(tcpClientContainer.Get(0));
 
       //--- log entry
@@ -421,28 +428,24 @@ NS3Netsim::create (string client, string server)
 void
 NS3Netsim::schedule (string src, string dst, string val, string val_time)
 {
-  if (verbose > 1) {
-      std::cout << "NS3Netsim::schedule" << std::endl;
-    }
+    if (verbose == -1) {
+        std::cout << "NS3Netsim::schedule" << std::endl;
+      }
 
-  double schDelay = stod(val_time) - Simulator::Now ().GetMilliSeconds ();
+//    double schDelay = stod(val_time);
 
-  if (verbose > 1) {
-      std::cout << "NS3Netsim::schedule NS3_Time: " << Simulator::Now ().GetMilliSeconds ()
-                << " Event_Val_Time: " << val_time << std::endl;
-      std::cout << "NS3Netsim::schedule("
-                << "source="   << src
-                << ", destination=" << dst
-                << ", value=" << val
-                << ", delay=" << schDelay
-                << ")" << std::endl;
-    }
+    if (verbose == -1) {
+        std::cout << "NS3Netsim::schedule NS3_Time: " << Simulator::Now ().GetMilliSeconds ()
+                  << " Event_Val_Time: " << val_time << std::endl;
+        std::cout << "NS3Netsim::schedule("
+                  << "source="   << src
+                  << ", destination=" << dst
+                  << ", value=" << val
+                  << ", delay=" << val_time
+                  << ")" << std::endl;
+      }
 
   Ptr<Node> srcNode = Names::Find<Node>(src);
-  Ptr<Node> dstNode = Names::Find<Node>(dst);
-
-  //--- send value and its timestamp
-  string msgx = val + "&" + val_time;
 
   Ptr<TcpClient> clientApp = DynamicCast<TcpClient> (srcNode->GetApplication(0));
   clientApp->ScheduleTransmit(val, val_time);
@@ -452,17 +455,6 @@ NS3Netsim::schedule (string src, string dst, string val, string val_time)
 void
 NS3Netsim::runUntil (string nextStop)
 {
-  if (!applicationsStarted) {
-    // Go through all the applications
-    for (auto iter = serverApplications.Begin(); iter != serverApplications.End(); std::advance(iter, 1)){
-      Ptr<MultiClientTcpServer> server = DynamicCast<MultiClientTcpServer>(*iter);
-      server->StartApplicationForMosaik();
-    }
-      for (auto iter = clientApplications.Begin(); iter != clientApplications.End(); std::advance(iter, 1)){
-          Ptr<TcpClient> client = DynamicCast<TcpClient>(*iter);
-          client->StartApplicationForMosaik();
-        }
-  }
   applicationsStarted = true;
   if (verbose > 1) {
       std::cout << "NS3Netsim::runUntil(time=" << nextStop  << ")" << std::endl;

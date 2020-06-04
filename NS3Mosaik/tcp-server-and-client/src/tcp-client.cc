@@ -36,6 +36,7 @@
 #include "ns3/trace-source-accessor.h"
 #include "ns3/ipv4.h"
 #include "tcp-client.h"
+#include <fstream>
 
 using namespace ns3;
 using namespace std;
@@ -127,6 +128,43 @@ TcpClient::StartApplication (void)
     {
       TypeId tid = TypeId::LookupByName ("ns3::TcpSocketFactory");
       m_socket = Socket::CreateSocket (GetNode (), tid);
+      if (Ipv4Address::IsMatchingType(m_peerAddress) == true)
+        {
+          if (m_socket->Bind () == -1)
+            {
+              NS_FATAL_ERROR ("Failed to bind socket");
+            }
+          m_socket->Connect (InetSocketAddress (Ipv4Address::ConvertFrom(m_peerAddress), m_peerPort));
+        }
+      else if (Ipv6Address::IsMatchingType(m_peerAddress) == true)
+        {
+          if (m_socket->Bind6 () == -1)
+            {
+              NS_FATAL_ERROR ("Failed to bind socket");
+            }
+          m_socket->Connect (Inet6SocketAddress (Ipv6Address::ConvertFrom(m_peerAddress), m_peerPort));
+        }
+      else if (InetSocketAddress::IsMatchingType (m_peerAddress) == true)
+        {
+          if (m_socket->Bind () == -1)
+            {
+              NS_FATAL_ERROR ("Failed to bind socket");
+            }
+          m_socket->Connect (m_peerAddress);
+        }
+      else if (Inet6SocketAddress::IsMatchingType (m_peerAddress) == true)
+        {
+          if (m_socket->Bind6 () == -1)
+            {
+              NS_FATAL_ERROR ("Failed to bind socket");
+            }
+          m_socket->Connect (m_peerAddress);
+        }
+      else
+        {
+          NS_LOG_DEBUG(this);
+          NS_ASSERT_MSG (false, "Incompatible address type: " << m_peerAddress);
+        }
     }
 }
 
@@ -148,35 +186,39 @@ TcpClient::StopApplication()
 void
 TcpClient::SendMessage (string message)
 {
+  if (m_socket == 0){
+    return;
+  }
+
   NS_LOG_FUNCTION(this);
-  std::cout << m_socket << std::endl;
   Ptr<Packet> sendPacket =
       Create<Packet> ((uint8_t*)message.c_str(),message.size());
   m_socket->Send (sendPacket);
 
   //--- print sending info
-  NS_LOG_DEBUG(
-      "Pkt Snt at "
-          << Simulator::Now ().GetMilliSeconds ()
+//  NS_LOG_DEBUG(
+//      "Pkt Snt at "
+//          << Simulator::Now ().GetMilliSeconds ()
 //          << " nodeName: "
 //          << Names::FindName(socket->GetNode ())
-          << " nodeId: "
-          << m_socket->GetNode()->GetId()
-          << " nodeAddr: "
-          << m_socket->GetNode ()->GetObject<Ipv4>()->GetAddress(1,0).GetLocal()
-          << " Size: "
-          << sendPacket->GetSize()
-          << " MsgSize "
-          << message.size()
-          << endl
-  );
-//  ofstream filePacketsSent;
-//  filePacketsSent.open(fileNameSent, std::ios_base::app);
-//  filePacketsSent << "time: " << Simulator::Now ().GetMilliSeconds ()
-//                  << " nodeId: " << socket->GetNode()->GetId()
-//                  << " nodeAddr: " << socket->GetNode ()->GetObject<Ipv4>()->GetAddress(1,0).GetLocal()
-//                  << " MsgSize: " << message.size() << std::endl;
-//  filePacketsSent.close();
+//          << " nodeId: "
+//          << m_socket->GetNode()->GetId()
+//          << " nodeAddr: "
+//          << m_socket->GetNode ()->GetObject<Ipv4>()->GetAddress(1,0).GetLocal()
+//          << " Size: "
+//          << sendPacket->GetSize()
+//          << " MsgSize "
+//          << message.size()
+//          << endl
+//  );
+  ofstream filePacketsSent;
+  filePacketsSent.open("packets_sent.pkt", std::ios_base::app);
+  filePacketsSent << "time: " << Simulator::Now ().GetMilliSeconds ()
+                  << " nodeId: " << m_socket->GetNode()->GetId()
+                  << " nodeAddr: " << m_socket->GetNode ()->GetObject<Ipv4>()->GetAddress(1,0).GetLocal()
+
+                  << " MsgSize: " << message.size() << std::endl;
+  filePacketsSent.close();
 }
 
 void hello() {
@@ -185,13 +227,11 @@ void hello() {
 
 void
 TcpClient::ScheduleTransmit(std::string val, std::string valTime) {
-  NS_LOG_FUNCTION(this);
-
   // Get the delay in time
   double schDelay = stod(valTime) - Simulator::Now ().GetMilliSeconds ();
 
-  NS_LOG_DEBUG("TcpClient:schedule NS3_Time: " << Simulator::Now ().GetMilliSeconds ()
-                                                << " Event_Val_Time: " << valTime << " val " << val << " socket " << m_socket);
+//  NS_LOG_DEBUG("TcpClient:schedule NS3_Time: " << Simulator::Now ().GetMilliSeconds ()
+//                                                << " Event_Val_Time: " << valTime << " val " << val << " socket " << m_socket);
 
 //  NS_LOG_DEBUG("TcpClient:schedule("
 ////                   << "source="   << m_socket->GetNode ()
