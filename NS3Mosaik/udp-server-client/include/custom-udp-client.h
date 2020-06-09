@@ -16,10 +16,9 @@
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  *
  * Author:  Amrinder S. Grewal <asgrewal@ualberta.ca>
- * Date:    2020.05.14
+ * Date:    2020.06.09
  * Company: University of Alberta/Canada - Computing Science
  *
- * Modelled after udp-echo-client.h
  */
 
 #include "ns3/socket.h"
@@ -28,71 +27,44 @@
 #include "ns3/ptr.h"
 #include "ns3/traced-callback.h"
 
-#ifndef _TCP_SENSOR_H_
-#define _TCP_SENSOR_H_
+#ifndef _CUSTOM_UDP_CLIENT_H_
+#define _CUSTOM_UDP_CLIENT_H_
 
 using namespace ns3;
+using namespace std;
 
 /**
- * \brief A TCP client
- *
- * A client that creates a TCP connection with a server and sends packets
- * to it. This application was created to work with MultiClientTCPServer
- * but can be used more generally.
- *
- * Modelled after: udp-echo-client.h
+ * \brief Modified version of the udp-client in ns3. Contains a function that lets us schedule packets to be sent in
+ * NS3Netsim.
  */
-class TcpClient : public Application
-{
+
+class CustomUdpClient: public Application {
 public:
   /**
-   * \brief Get the type ID.
-   * \return the object TypeId
+   * \brief Configures the client
    */
   static TypeId GetTypeId (void);
 
-  TcpClient();
-  virtual ~TcpClient();
-
-  /**
-   * \brief set a remote address and port
-   * \param ip remote IP address
-   * \param port remote port
-   */
-   void SetRemote(Address ip, uint16_t port);
-
-  /**
-   * \brief set the remote address
-   * \param addr remote address
-   */
-   void SetRemote(Address addr);
   /**
     * \brief Schedule the next packet transmission
+    * \param dst where the message will be sent
     * \param val the message that will be send
     * \param valTime delay the transmission by this amount of time
     */
-  void ScheduleTransmit(std::string val, std::string valTime);
-
-  /**
-    * \brief Callback function scheduled to send the message.
-    * \param socket
-    * \param message The message that will be sent
-    */
-  void SendMessage (std::string message);
-protected:
-  virtual void DoDispose (void);
+  void ScheduleTransmit (std::string val, std::string valTime);
 private:
-  // inherited from Application base class.
-  virtual void StartApplication (void);    // Called at time specified by Start
-  virtual void StopApplication (void);     // Called at time specified by Stop
-
+  virtual void StartApplication (void);
+  virtual void StopApplication (void);
+  /**
+    * The over-written send callback function, to prevent crashes.
+    */
+  void SendMessage (string message);
 
   Ptr<Socket>           m_socket; //!< Socket that will be used to send the messages
   Address               m_peerAddress; //!< Remote peer address
   uint16_t              m_peerPort; //!< Remote peer port
   EventId               m_sendEvent; //!< Event to send the next packet
   Address               m_local;
-  // Stores the messages that will be sent
 
   /// Callbacks for tracing the packet Tx events
   TracedCallback<Ptr<const Packet> > m_txTrace;
@@ -107,4 +79,4 @@ private:
   TracedCallback<Ptr<const Packet>, const Address &, const Address &> m_rxTraceWithAddresses;
 };
 
-#endif //_TCP_SENSOR_H_
+#endif //_CUSTOM_UDP_CLIENT_H_

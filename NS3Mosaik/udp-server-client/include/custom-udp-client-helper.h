@@ -27,21 +27,21 @@
 #include "ns3/node-container.h"
 #include "ns3/application-container.h"
 
-#ifndef _MULTI_CLIENT_TCP_SERVER_HELPER_H_
-#define _MULTI_CLIENT_TCP_SERVER_HELPER_H_
+#ifndef _CUSTOM_UDP_CLIENT_HELPER_H_
+#define _CUSTOM_UDP_CLIENT_HELPER_H_
 
 using namespace ns3;
 
 /**
  * \brief Helps with installation and configuration of MultiClientTcpServer
  */
-class MultiClientTcpServerHelper {
+class CustomUdpClientHelper {
  public:
   /**
    * \brief constructor
    * \param address The address for the client that will be created
    */
-  MultiClientTcpServerHelper(Address address);
+  CustomUdpClientHelper(Address address);
 
   /**
    * Sets an attribute to the value passed in
@@ -81,4 +81,4 @@ class MultiClientTcpServerHelper {
   ObjectFactory           m_factory;
 };
 
-#endif //_MULTI_CLIENT_TCP_SERVER_HELPER_H_
+#endif //_CUSTOM_UDP_CLIENT_HELPER_H_

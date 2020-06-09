@@ -27,6 +27,7 @@
 
 #include <vector>
 #include <iostream>
+#include <memory>
 
 #include "ns3/core-module.h"
 #include "ns3/network-module.h"
@@ -112,6 +113,5 @@ void PrintIpAddresses(NodeContainer nodes);
  *
  */
 map<Ipv4Address, uint32_t> CreateMapIpv4NodeId(NodeContainer nodes);
-
 
 #endif /* SMARTGRID_NS3_HELPER_H_ */

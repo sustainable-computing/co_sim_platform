@@ -19,6 +19,9 @@
  * Date:    2019.05.25
  * Company: University of Alberta/Canada - Computing Science
  *
+ * Author:  Amrinder S. Grewal <asgrewal@ualberta.ca>
+ * Date:    2020.05.09
+ * Company: University of Alberta/Canada - Computing Science
  */
 
 #include "MosaikSim.h"
@@ -467,6 +470,10 @@ MosaikSim::init(Json::Value args, Json::Value kwargs) {
         {
           netsimProp.linkErrorRate = (*item).asString();
         }
+      else if (strcmp(param.c_str(), "tcpOrUdp") == 0)
+        {
+          netsimProp.tcpOrUdp = (*item).asString();
+        }
       else {
           std::cout << "Unknown init parameter" << item.key() << std::endl;
           mosaikLastMsgOp = FAILURE;
@@ -481,7 +488,8 @@ MosaikSim::init(Json::Value args, Json::Value kwargs) {
                   netsimProp.linkDelay,
                   netsimProp.linkErrorRate,
                   netsimProp.start_time,
-                  netsimProp.verbose);
+                  netsimProp.verbose,
+                  netsimProp.tcpOrUdp);
 
 
   //--- initialize Meta model

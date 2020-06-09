@@ -19,6 +19,9 @@
  * Date:    2019.06.03
  * Company: University of Alberta/Canada - Computing Science
  *
+ * Author:  Amrinder S. Grewal <asgrewal@ualberta.ca>
+ * Date:    2020.05.09
+ * Company: University of Alberta/Canada - Computing Science
  */
 
 
@@ -41,6 +44,8 @@
 #include "ns3/multi-client-tcp-server.h"
 #include "ns3/tcp-client-helper.h"
 #include "ns3/tcp-client.h"
+#include "ns3/custom-udp-client-helper.h"
+#include "ns3/custom-udp-server-helper.h"
 
 using namespace std;
 using namespace ns3;
@@ -97,7 +102,7 @@ class NS3Netsim {
    *
    */
   void init (string f_adjmat, string f_coords, string f_appcon, string s_linkRate,
-             string s_linkDelay, string s_linkErrorRate, double start_time, int verb);
+             string s_linkDelay, string s_linkErrorRate, double start_time, int verb, string s_tcpOrUdp);
 
   /**
    * \brief Create Transport connection between two nodes
@@ -192,6 +197,26 @@ class NS3Netsim {
   //--- Variables
   //---
 
+private:
+  /**
+   * Set up a tcp or udp server depending on what has been passed in.
+   *
+   * \param address The address that will be used to assigned addresses to both the server
+   * \param tcpOrUdp a string that is either set to tcp or udp, indicating which kind of server will be created
+   * \param server holds the server id
+   */
+  void setUpServer(InetSocketAddress address, string protocol, string server);
+
+  /**
+   * Sets up a tcp or udp client depending on what has been passed in
+   *
+   * \param address The address that will be used to assigned addresses to the client
+   * \param tcpOrUdp a string that is either set to tcp or udp, indicating which kind of client will be created
+   * \param server holds the server id
+   * \param client holds the client id
+   */
+  void setUpClient(InetSocketAddress address, string protocol, string server, string client);
+
   vector< vector<bool>> nodeAdjMatrix; ///< Node adjacency matrix
   string nodeAdjMatrixFilename;        ///< Node adjacency matrix filename
   string nodeCoordinatesFilename;      ///< Node names and coordinates filename
@@ -220,8 +245,10 @@ class NS3Netsim {
   vector<string>::iterator iList; ///< Application servers vector iterator
   uint16_t sinkPort;              ///< Application port for all server nodes
 
-  MultiClientTcpServerHelper multiClientTcpServerHelper = MultiClientTcpServerHelper(Address()); ///< Application TCP servers helper
+  MultiClientTcpServerHelper multiClientTcpServerHelper = MultiClientTcpServerHelper(Address()); ///< Application TCP server helper
   TcpClientHelper tcpClientHelper = TcpClientHelper(Address()); ///< Application TCP client helper
+  CustomUdpClientHelper customUdpClientHelper = CustomUdpClientHelper(Address()); ///< Application UDP server helper
+  CustomUdpServerHelper customUdpServerHelper = CustomUdpServerHelper(Address()); ///< Application UDP client helper
 
   double startTime; ///< Simulation start time
   int verbose;      ///< Verbose level
@@ -233,10 +260,7 @@ class NS3Netsim {
   ApplicationContainer allApplications;
   NodeContainer allNodes;
 
-  bool applicationsStarted;
-  ApplicationContainer serverApplications;
-  ApplicationContainer clientApplications;
-  double appStartTimeNanoseconds = 0.1;
+  string tcpOrUdp; ///< Which network protocol should be used
 };
 
 #endif /* NS3NETSIM_H_ */

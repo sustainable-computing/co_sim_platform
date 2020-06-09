@@ -19,6 +19,9 @@
  * Date:    2019.05.25
  * Company: University of Alberta/Canada - Computing Science
  *
+ * Author:  Amrinder S. Grewal <asgrewal@ualberta.ca>
+ * Date:    2020.05.09
+ * Company: University of Alberta/Canada - Computing Science
  */
 
 
@@ -143,6 +146,7 @@ struct NetSimProp {
     std::string linkDelay;
     std::string linkErrorRate;
     int verbose;
+    std::string tcpOrUdp;
 };
 
 

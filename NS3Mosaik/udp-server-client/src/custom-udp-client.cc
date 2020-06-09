@@ -16,13 +16,13 @@
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  *
  * Author:  Amrinder S. Grewal <asgrewal@ualberta.ca>
- * Date:    2020.05.13
+ * Date:    2020.06.09
  * Company: University of Alberta/Canada - Computing Science
  *
  * Modelled after udp-echo-client.cc
  */
 
-#include <iostream>
+#include "custom-udp-client.h"
 #include "ns3/log.h"
 #include "ns3/ipv4-address.h"
 #include "ns3/nstime.h"
@@ -35,94 +35,102 @@
 #include "ns3/uinteger.h"
 #include "ns3/trace-source-accessor.h"
 #include "ns3/ipv4.h"
-#include "tcp-client.h"
+#include "ns3/log.h"
 #include <fstream>
 
 using namespace ns3;
 using namespace std;
 
-NS_LOG_COMPONENT_DEFINE ("TcpClient");
-NS_OBJECT_ENSURE_REGISTERED (TcpClient);
+NS_LOG_COMPONENT_DEFINE ("CustomUdpClient");
+NS_OBJECT_ENSURE_REGISTERED (CustomUdpClient);
 
 TypeId
-TcpClient::GetTypeId(void)
+CustomUdpClient::GetTypeId (void)
 {
-  static TypeId tid = TypeId ("ns3::TcpClient")
-    .SetParent<Application> ()
-    .SetGroupName("Applications")
-    .AddConstructor<TcpClient> ()
-    .AddAttribute ("Remote", "The address of the destination",
+  static TypeId tid = TypeId ("ns3::CustomUdpClient")
+      .SetParent<Application> ()
+      .SetGroupName("Applications")
+      .AddConstructor<CustomUdpClient> ()
+      .AddAttribute ("Remote", "The address of the destination",
                      AddressValue (),
-                     MakeAddressAccessor (&TcpClient::m_peerAddress),
+                     MakeAddressAccessor (&CustomUdpClient::m_peerAddress),
                      MakeAddressChecker ())
       .AddAttribute ("Local",
                      "The Address on which to bind the socket. If not set, it is generated automatically.",
                      AddressValue (),
-                     MakeAddressAccessor (&TcpClient::m_local),
+                     MakeAddressAccessor (&CustomUdpClient::m_local),
                      MakeAddressChecker ())
       .AddTraceSource ("Tx", "A new packet is created and is sent",
-                       MakeTraceSourceAccessor (&TcpClient::m_txTrace),
+                       MakeTraceSourceAccessor (&CustomUdpClient::m_txTrace),
                        "ns3::Packet::TracedCallback")
       .AddTraceSource ("Rx", "A packet has been received",
-                       MakeTraceSourceAccessor (&TcpClient::m_rxTrace),
+                       MakeTraceSourceAccessor (&CustomUdpClient::m_rxTrace),
                        "ns3::Packet::TracedCallback")
       .AddTraceSource ("TxWithAddresses", "A new packet is created and is sent",
-                       MakeTraceSourceAccessor (&TcpClient::m_txTraceWithAddresses),
+                       MakeTraceSourceAccessor (&CustomUdpClient::m_txTraceWithAddresses),
                        "ns3::Packet::TwoAddressTracedCallback")
       .AddTraceSource ("RxWithAddresses", "A packet has been received",
-                       MakeTraceSourceAccessor (&TcpClient::m_rxTraceWithAddresses),
+                       MakeTraceSourceAccessor (&CustomUdpClient::m_rxTraceWithAddresses),
                        "ns3::Packet::TwoAddressTracedCallback")
   ;
-
   return tid;
 }
 
-TcpClient::TcpClient()
+void
+CustomUdpClient::SendMessage (string message)
 {
   NS_LOG_FUNCTION(this);
-  m_socket = 0;
-  m_sendEvent = EventId ();
-}
+  if (m_socket != 0)
+    {
+      Ptr <Packet> sendPacket =
+          Create<Packet> ((uint8_t *) message.c_str (), message.size ());
+      m_socket->Send (sendPacket);
 
-TcpClient::~TcpClient()
-{
-  NS_LOG_FUNCTION (this);
-}
+  ofstream filePacketsSent;
+  filePacketsSent.open("packets_sent.pkt", std::ios_base::app);
+  filePacketsSent << "time: " << Simulator::Now ().GetMilliSeconds ()
+                      << " nodeId: " << m_socket->GetNode()->GetId()
+                      << " nodeAddr: " << m_socket->GetNode ()->GetObject<Ipv4>()->GetAddress(1,0).GetLocal()
 
-void
-TcpClient::SetRemote(Address ip, uint16_t port)
-{
-  // Save address and port of remote
-  NS_LOG_FUNCTION (this << ip << port);
-  m_peerAddress = ip;
-  m_peerPort = port;
-}
-
-void
-TcpClient::SetRemote (Address addr)
-{
-  // Save address of remote
-  NS_LOG_FUNCTION (this << addr);
-  m_peerAddress = addr;
+                      << " MsgSize: " << message.size() << std::endl;
+  filePacketsSent.close();
+    }
 }
 
 void
-TcpClient::DoDispose (void)
+CustomUdpClient::ScheduleTransmit (std::string val, std::string valTime)
 {
-  // Dispose of the object
-  NS_LOG_FUNCTION (this);
-  Application::DoDispose ();
+  // Get the delay in time
+  NS_LOG_FUNCTION(this);
+  double schDelay = stod(valTime) - Simulator::Now ().GetMilliSeconds ();
+
+  NS_LOG_DEBUG("CustomUdpClient:schedule NS3_Time: " << Simulator::Now ().GetMilliSeconds ()
+                                               << " Event_Val_Time: " << valTime << " val " << val << " socket " << m_socket);
+
+  NS_LOG_DEBUG("CustomUdpClient:schedule("
+                   << ", value=" << val
+                   << ", delay=" << schDelay
+                   << ")");
+
+  // Get the message ready
+  std::string msgx = val + "&" + valTime;
+  Simulator::Schedule(
+      MilliSeconds(schDelay),
+      &CustomUdpClient::SendMessage,
+      this,
+      msgx
+  );
 }
 
 void
-TcpClient::StartApplication (void)
+CustomUdpClient::StartApplication (void)
 {
   NS_LOG_FUNCTION(this);
 
   // Make a socket if empty
   if (m_socket == 0)
     {
-      TypeId tid = TypeId::LookupByName ("ns3::TcpSocketFactory");
+      TypeId tid = TypeId::LookupByName ("ns3::UdpSocketFactory");
       m_socket = Socket::CreateSocket (GetNode (), tid);
       if (Ipv4Address::IsMatchingType(m_peerAddress) == true)
         {
@@ -165,7 +173,7 @@ TcpClient::StartApplication (void)
 }
 
 void
-TcpClient::StopApplication()
+CustomUdpClient::StopApplication (void)
 {
   NS_LOG_FUNCTION(this);
 
@@ -175,49 +183,4 @@ TcpClient::StopApplication()
       m_socket->Close ();
       m_socket = 0;
     }
-}
-
-void
-TcpClient::SendMessage (string message)
-{
-  NS_LOG_FUNCTION(this);
-  if (m_socket != 0) {
-    Ptr<Packet> sendPacket =
-        Create<Packet> ((uint8_t*)message.c_str(),message.size());
-    m_socket->Send (sendPacket);
-
-    ofstream filePacketsSent;
-    filePacketsSent.open("packets_sent.pkt", std::ios_base::app);
-    filePacketsSent << "time: " << Simulator::Now ().GetMilliSeconds ()
-                    << " nodeId: " << m_socket->GetNode()->GetId()
-                    << " nodeAddr: " << m_socket->GetNode ()->GetObject<Ipv4>()->GetAddress(1,0).GetLocal()
-
-                    << " MsgSize: " << message.size() << std::endl;
-    filePacketsSent.close();
-  }
-}
-
-void
-TcpClient::ScheduleTransmit(std::string val, std::string valTime) {
-  // Get the delay in time
-  NS_LOG_FUNCTION(this);
-  double schDelay = stod(valTime) - Simulator::Now ().GetMilliSeconds ();
-
-  NS_LOG_DEBUG("TcpClient:schedule NS3_Time: " << Simulator::Now ().GetMilliSeconds ()
-                                                << " Event_Val_Time: " << valTime << " val " << val << " socket " << m_socket);
-
-  NS_LOG_DEBUG("TcpClient:schedule("
-//                   << "source="   << m_socket->GetNode ()
-                   << ", value=" << val
-                   << ", delay=" << schDelay
-                   << ")");
-
-  // Get the message ready
-  std::string msgx = val + "&" + valTime;
-  Simulator::Schedule(
-        MilliSeconds(schDelay),
-        &TcpClient::SendMessage,
-        this,
-        msgx
-    );
 }

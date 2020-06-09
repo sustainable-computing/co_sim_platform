@@ -266,4 +266,3 @@ CreateMapIpv4NodeId(NodeContainer nodes)
 
   return mapIpv4NodeId;
 }
-

@@ -67,12 +67,10 @@ class MultiClientTcpServer: public Application
   std::list<Ptr<Socket> > GetAcceptedSockets(void) const;
 
   /**
-   * Calls start Application
+   * \brief set the callback function that is called when a packet is received
+   * \param callback the function to which the callback is set.
    */
-  void StartApplicationForMosaik(void);
-
   void SetPacketReceivedCallBack(void (*callback)(Ptr<Socket> socket));
-  std::map<Ipv4Address, uint32_t> *mapIpv4NodeId;
  protected:
   virtual void DoDispose (void);
 

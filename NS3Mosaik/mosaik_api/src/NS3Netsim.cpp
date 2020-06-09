@@ -19,6 +19,10 @@
  * Date:    2019.06.03
  * Company: University of Alberta/Canada - Computing Science
  *
+ * Author:  Amrinder S. Grewal <asgrewal@ualberta.ca>
+ * Date:    2020.05.09
+ * Company: University of Alberta/Canada - Computing Science
+ *
  */
 
 
@@ -38,12 +42,11 @@ std::string fileNameReceived = "packets_received.pkt";
 /**
  * \brief Parses the packet received by the an appliction/socket and adds it to the list of packets that will be sent to the upper layer.
  *
- * @param socket
+ * \param socket
  */
 void
 ExtractInformationFromPacketAndSendToUpperLayer (Ptr<Socket> socket)
 {
-  assert("False");
   Address from;
   Ptr<Packet> packet = socket->RecvFrom (from);
   packet->RemoveAllPacketTags ();
@@ -135,31 +138,24 @@ NS3Netsim::init (string f_adjmat,
                  string s_linkDelay,
                  string s_linkErrorRate,
                  double start_time,
-                 int verb)
+                 int verb,
+                 string s_tcpOrUdp)
 {
-  applicationsStarted = false;
-  clientApplications = ApplicationContainer ();
-  serverApplications = ApplicationContainer ();
   allApplications = ApplicationContainer ();
-  allNodes = NodeContainer();
-  // Delete the files with the packets sent and packets received
-//  remove(fileNameReceived.c_str());
-//  remove(fileNameSent.c_str());
   //--- verbose level
   verbose = verb;
+  // save which protocol should be used
+  tcpOrUdp = "tcp";
 
-  if (verbose > 1) {
-      std::cout << "NS3Netsim::init" << std::endl;
-    }
+  NS_LOG_FUNCTION(this);
 
   // --- generate different seed each time
   srand ( (unsigned)time ( NULL ) );
 
   //--- set link properties
-  LinkRate  = "512Kbps";
-  LinkDelay = "15ms";
-  LinkErrorRate = "0.0";
-//  LinkErrorRate = "0.00001";
+  LinkRate  = s_linkRate;
+  LinkDelay = s_linkDelay;
+  LinkErrorRate = s_linkErrorRate;
   linkCount = 0;
 
   //--- set devices properties
@@ -170,19 +166,12 @@ NS3Netsim::init (string f_adjmat,
 
   //--- simulation parameters
   startTime  = start_time;
+  cout << s_tcpOrUdp << endl;
 
   //--- set configuration file names
   nodeAdjMatrixFilename   = f_adjmat;
   nodeCoordinatesFilename = f_coords;
   appConnectionsFilename  = f_appcon;
-
-  if (verbose > 1) {
-      std::cout << "===>>> NS3Netsim::init(\n"
-                << "adjmat_file="   << nodeAdjMatrixFilename
-                << ",\n coords_file=" << nodeCoordinatesFilename
-                << ",\n appcon_file=" << appConnectionsFilename
-                << ")" << std::endl;
-    }
 
   //--- load adjacency matrix
   NS_LOG_INFO ("Load node adjacency matrix");
@@ -213,7 +202,6 @@ NS3Netsim::init (string f_adjmat,
     {
       Names::Add (arrayNamesCoords[m][0], nodes.Get (m));
       Ptr<Node> newNode = Names::Find<Node>(arrayNamesCoords[m][0]);
-      allNodes.Add(newNode);
     }
 
   //--- create network topology
@@ -318,6 +306,7 @@ NS3Netsim::init (string f_adjmat,
 void
 NS3Netsim::create (string client, string server)
 {
+  NS_LOG_FUNCTION(this);
   bool found = false;
 
   //---
@@ -332,9 +321,7 @@ NS3Netsim::create (string client, string server)
       string srv = (*rec).back();
       //--- connection already exist, break
       if ((clt.compare(client) == 0) && (srv.compare(server) == 0)) {
-          if (verbose > 1) {
-              cout << "NS3Netsim::create Connection already exist: " << client << " --> " << server << endl;
-            }
+          NS_LOG_DEBUG("NS3Netsim::create Connection already exist: " << client << " --> " << server << endl);
           found = true;
           break;
         }
@@ -344,107 +331,124 @@ NS3Netsim::create (string client, string server)
   if(found == false) {
       arrayAppConnections.push_back(record);
 
-      //---
-      //--- create server socket
-      //---
-      NS_LOG_INFO ("Create server socket.");
+      // create server socket
+      NS_LOG_INFO ("Create server.");
       Ptr<Node> srvNode = Names::Find<Node>(server);
+
+      // Check protocol
 
       //--- verify if server already exist
       std::vector<std::string>::iterator it = std::find(nodeServerList.begin(), nodeServerList.end(), server);
       //--- if not found
       if(it == nodeServerList.end()) {
-          // Create the application
-          // Set the address to be used to make the
-          multiClientTcpServerHelper.SetAttribute("Local", AddressValue(InetSocketAddress (Ipv4Address::GetAny (), sinkPort)));
-          // Install the app in the node
-          ApplicationContainer serverAppContainer = multiClientTcpServerHelper.Install(server);
-          serverApplications.Add(serverAppContainer.Get(0));
-          allApplications.Add(serverAppContainer.Get(0));
-          serverAppContainer.Start(NanoSeconds(1.0));
-          // Set the call back to extract information from a packet and sent it to the upper layer
-          Ptr<MultiClientTcpServer> serverAppAsCorrectType = DynamicCast<MultiClientTcpServer> (serverAppContainer.Get(0));
-          serverAppAsCorrectType->SetPacketReceivedCallBack(ExtractInformationFromPacketAndSendToUpperLayer);
-          //--- update server node list
-          nodeServerList.push_back(server);
-
-          //--- sort array
-          sort(nodeServerList.begin(), nodeServerList.end());
-
-          if (verbose > 1){
-              for (iList = nodeServerList.begin(); iList != nodeServerList.end(); ++iList)
-                {
-                  cout << "NS3Netsim::create Server: " << *iList << endl;
-                }
-            }
-
+          // Create the server application
+          setUpServer(InetSocketAddress (Ipv4Address::GetAny (), sinkPort), tcpOrUdp, server);
+          NS_LOG_DEBUG ("NS3Netsim::create Server: " << *iList << endl);
         } else { 		//--- end of server part
-          if (verbose > 1){
-              cout << "NS3Netsim::create Server already on the list: " << server << endl;
-            }
+          NS_LOG_DEBUG ("NS3Netsim::create Server already on the list: " << server << endl);
         }
 
-
-      //---
-      //--- create client socket
-      //---
-      NS_LOG_INFO ("Create client sockets.");
-      if (verbose > 1){
-          cout << "NS3Netsim::create  Create client socket" << endl;
-        }
-
-      //--- get src and dst nodes from application connections
-      Ptr<Node> srcNode = Names::Find<Node>(client);
+      // create client socket
+      NS_LOG_INFO ("Create client.");
       Ptr<Node> dstNode = Names::Find<Node>(server);
-
-      //--- create  udp socket
       Ipv4InterfaceAddress sink_iaddr = dstNode->GetObject<Ipv4>()->GetAddress (1,0);
       InetSocketAddress remote = InetSocketAddress (sink_iaddr.GetLocal(), sinkPort);
-      // Create a TCP client application for the srcNode
-      tcpClientHelper.SetAttribute("Remote", AddressValue(remote));
-      ApplicationContainer tcpClientContainer = tcpClientHelper.Install(client);
-      allApplications.Add(tcpClientContainer.Get(0));
-      tcpClientContainer.Start(NanoSeconds(1.0));
-
-      //--- log entry
-      for (uint32_t appConn = 0; appConn < arrayAppConnections.size (); appConn++)
-        {
-          NS_LOG_DEBUG(
-              arrayAppConnections[appConn][0] << " --> " << arrayAppConnections[appConn][1]
-                                              << " srcAddr: " << srcNode->GetObject<Ipv4>()->GetAddress(1,0).GetLocal()
-                                              << " dstAddr: " << dstNode->GetObject<Ipv4>()->GetAddress(1,0).GetLocal()
-                                              << " remote: " << remote
-                                              //                                              << " source: " << source
-                                              << endl;
-          );
-        }
-    } //--- end found === false
-
+      setUpClient(remote, tcpOrUdp, server, client);
+    }
 }
 
+void
+NS3Netsim::setUpServer(InetSocketAddress address, string protocol, string server)
+{
+  // Where the returned application will be stored
+  ApplicationContainer serverAppContainer;
+  // Switch on the protocol passed in
+  if (protocol == "tcp") {
+      // Set the address with which the application should be created
+      multiClientTcpServerHelper.SetAttribute("Local", AddressValue(address));
+      serverAppContainer = multiClientTcpServerHelper.Install(server);
+      // Set the call back to extract information from a packet and sent it to the upper layer
+      Ptr<MultiClientTcpServer> serverAppAsCorrectType = DynamicCast<MultiClientTcpServer> (serverAppContainer.Get(0));
+      // Set the function that should be called when the server receives a packet
+      serverAppAsCorrectType->SetPacketReceivedCallBack(ExtractInformationFromPacketAndSendToUpperLayer);
+  } else if (protocol == "udp") {
+      // Set the address with which the application should be created
+      customUdpServerHelper.SetAttribute("Local", AddressValue(InetSocketAddress (Ipv4Address::GetAny (), sinkPort)));
+      // Create a tcp container
+      serverAppContainer = customUdpServerHelper.Install(server);
+      // Set the call back to extract information from a packet and sent it to the upper layer
+      Ptr<CustomUdpServer> serverAppAsCorrectType = DynamicCast<CustomUdpServer> (serverAppContainer.Get(0));
+      // Set the function that should be called when the server receives a packet
+      serverAppAsCorrectType->SetPacketReceivedCallBack(ExtractInformationFromPacketAndSendToUpperLayer);
+      // Set the function that should be called when the server receives a packet
+      serverAppAsCorrectType->SetPacketReceivedCallBack(ExtractInformationFromPacketAndSendToUpperLayer);
+  } else {
+      // If unknown protocol, stop and throw error
+      NS_FATAL_ERROR("Invalid protocol passed in");
+  }
+
+  // Save the app
+  allApplications.Add(serverAppContainer.Get(0));
+  // Start the application at the start of the simulation
+  serverAppContainer.Start(NanoSeconds(0.0));
+  //--- update server node list
+  nodeServerList.push_back(server);
+  //--- sort array
+  sort(nodeServerList.begin(), nodeServerList.end());
+}
+
+void
+NS3Netsim::setUpClient(InetSocketAddress address, string protocol, string server, string client)
+{
+  // Get the server and the client nodes
+  Ptr<Node> srcNode = Names::Find<Node>(client);
+  Ptr<Node> dstNode = Names::Find<Node>(server);
+  // Where the returned application will be stored
+  ApplicationContainer clientAppContainer;
+  // Switch on the protocol passed in
+  if (protocol == "tcp") {
+      // Create a tcp client
+      tcpClientHelper.SetAttribute("Remote", AddressValue(address));
+      clientAppContainer = tcpClientHelper.Install(client);
+  } else if (protocol == "udp") {
+      // Create a udp client
+      customUdpClientHelper.SetAttribute("Remote", AddressValue(address));
+      clientAppContainer = customUdpClientHelper.Install(client);
+  } else {
+      // If unknown protocol, stop and throw error
+      NS_FATAL_ERROR("Invalid protocol passed in");
+  }
+
+  // Add the application to the container and start the application
+  allApplications.Add(clientAppContainer.Get(0));
+  clientAppContainer.Start(NanoSeconds(0.0));
+}
 
 void
 NS3Netsim::schedule (string src, string dst, string val, string val_time)
 {
-    if (verbose > 1) {
-        std::cout << "NS3Netsim::schedule" << std::endl;
-      }
+  if (verbose > 1) {
+      std::cout << "NS3Netsim::schedule" << std::endl;
+    }
 
 //    double schDelay = stod(val_time);
 
-    if (verbose > 1) {
-        std::cout << "NS3Netsim::schedule NS3_Time: " << Simulator::Now ().GetMilliSeconds ()
-                  << " Event_Val_Time: " << val_time << std::endl;
-        std::cout << "NS3Netsim::schedule("
-                  << "source="   << src
-                  << ", destination=" << dst
-                  << ", value=" << val
-                  << ", delay=" << val_time
-                  << ")" << std::endl;
-      }
+  if (verbose > 1) {
+      std::cout << "NS3Netsim::schedule NS3_Time: " << Simulator::Now ().GetMilliSeconds ()
+                << " Event_Val_Time: " << val_time << std::endl;
+      std::cout << "NS3Netsim::schedule("
+                << "source="   << src
+                << ", destination=" << dst
+                << ", value=" << val
+                << ", delay=" << val_time
+                << ")" << std::endl;
+    }
 
   Ptr<Node> srcNode = Names::Find<Node>(src);
   Ptr<TcpClient> clientApp = DynamicCast<TcpClient> (srcNode->GetApplication(0));
+  if (clientApp == 0 ){
+      clientApp = DynamicCast<TcpClient> (srcNode->GetApplication(1));
+    }
   clientApp->ScheduleTransmit(val, val_time);
 }
 
@@ -452,7 +456,6 @@ NS3Netsim::schedule (string src, string dst, string val, string val_time)
 void
 NS3Netsim::runUntil (string nextStop)
 {
-  applicationsStarted = true;
   if (verbose > 1) {
       std::cout << "NS3Netsim::runUntil(time=" << nextStop  << ")" << std::endl;
     }

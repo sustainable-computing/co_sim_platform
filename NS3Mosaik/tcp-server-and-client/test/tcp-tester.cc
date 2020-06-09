@@ -137,13 +137,15 @@ main (int argc, char *argv[])
       helper.Install (star.GetSpokeNode (i));
       Ptr<TcpClient> client = DynamicCast<TcpClient> (star.GetSpokeNode(i)->GetApplication(0));
 
-      Simulator::Schedule(
-          MilliSeconds(1000),
-          &TcpClient::ScheduleTransmit,
-          client,
-          std::to_string(i + 0.5),
-          std::to_string(i + 2000)
+      for (int j = 0; j < 10000; j++) {
+          Simulator::Schedule(
+              MilliSeconds(1000),
+              &TcpClient::ScheduleTransmit,
+              client,
+              std::to_string(i + 0.5),
+              std::to_string(i + 2000)
           );
+      }
       spokeApps.Add (ApplicationContainer(client));
     }
   spokeApps.Start (Seconds (0.0));
