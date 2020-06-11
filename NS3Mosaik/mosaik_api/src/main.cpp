@@ -28,8 +28,8 @@
 
 int main (int argc, char *argv[])
 {
-	LogComponentEnable ("SmartgridDefaultSimulatorImpl", LOG_LEVEL_ALL);
-	std::cout << "NS3_SimulationModel:main argv[1]: " << argv[1] << std::endl;
-	NS3Netsim objNetsim;
-	MosaikSim sim(argv[1], &objNetsim);
+//  LogComponentEnable ("SmartgridDefaultSimulatorImpl", LOG_LEVEL_ALL);
+  std::cout << "NS3_SimulationModel:main argv[1]: " << argv[1] << std::endl;
+  NS3Netsim objNetsim;
+  MosaikSim sim(argv[1], &objNetsim);
 }

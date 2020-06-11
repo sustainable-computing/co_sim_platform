@@ -92,6 +92,18 @@ ReadNodeAdjMatrix (string adjMatFileName)
 
 }
 
+vector<vector<double>>
+loadNodeCoords(vector<vector<string>> arrayNamesCoords)
+{
+  vector<vector<double>> arrayNodeCoords;
+  for(auto it = arrayNamesCoords.begin(); it != arrayNamesCoords.end(); it++) {
+      vector<double> row;
+      row.push_back(   atof( (*it)[1].c_str() )  );
+      row.push_back(   atof( (*it)[2].c_str() )  );
+      arrayNodeCoords.push_back(row);
+    }
+  return arrayNodeCoords;
+}
 
 void
 PrintNodeAdjMatrix (const char* description, vector<vector<bool>> array)
@@ -113,145 +125,144 @@ PrintNodeAdjMatrix (const char* description, vector<vector<bool>> array)
 vector<vector<string>>
 ReadCoordinatesFile (string nodeCoordinatesFilename)
 {
-	NS_LOG_INFO ("ReadCoordinatesFile");
-	vector<vector<string> > array;
-	ifstream node_coordinates_file;
-    ifstream inputFile(nodeCoordinatesFilename);
-    int l = 0;
+  NS_LOG_INFO ("ReadCoordinatesFile");
+  vector<vector<string> > array;
+  ifstream node_coordinates_file;
+  ifstream inputFile(nodeCoordinatesFilename);
+  int l = 0;
 
-    while (inputFile) {
-        l++;
-        string s;
-        if (!getline(inputFile, s)) break;
-        if (s != "") {
-            istringstream ss(s);
-            vector<string> record;
+  while (inputFile) {
+      l++;
+      string s;
+      if (!getline(inputFile, s)) break;
+      if (s != "") {
+          istringstream ss(s);
+          vector<string> record;
 
-            while (ss) {
-                string line;
-                if (!getline(ss, line, ',')) break;
-                //--- strip '\r'
-                if(!line.empty() && *line.rbegin() == '\r') {
-                    line.erase( line.length()-1, 1);
+          while (ss) {
+              string line;
+              if (!getline(ss, line, ',')) break;
+              //--- strip '\r'
+              if(!line.empty() && *line.rbegin() == '\r') {
+                  line.erase( line.length()-1, 1);
                 }
-                record.push_back(line);
+              record.push_back(line);
             }
-            array.push_back(record);
+          array.push_back(record);
         }
     }
 
-    if (!inputFile.eof()) {
-        cerr << "Could not read file " << nodeCoordinatesFilename << "\n";
-        __throw_invalid_argument("File not found.");
+  if (!inputFile.eof()) {
+      cerr << "Could not read file " << nodeCoordinatesFilename << "\n";
+      __throw_invalid_argument("File not found.");
     }
 
-	return array;
+  return array;
 }
 
 
 void
 PrintNamesCoordinates (const char* description, vector<vector<string> > array)
 {
-	NS_LOG_INFO ("PrintNamesCoordinates");
-	  cout << "**** Start " << description << " ********" << endl;
-	  for (size_t m = 0; m < array.size (); m++)
-	    {
-	      for (size_t n = 0; n < array[m].size (); n++)
-	        {
-	          cout << array[m][n] << ' ';
-	        }
-	      cout << endl;
-	    }
-	  cout << "**** End " << description << " ********" << endl;
+  NS_LOG_INFO ("PrintNamesCoordinates");
+  cout << "**** Start " << description << " ********" << endl;
+  for (size_t m = 0; m < array.size (); m++)
+    {
+      for (size_t n = 0; n < array[m].size (); n++)
+        {
+          cout << array[m][n] << ' ';
+        }
+      cout << endl;
+    }
+  cout << "**** End " << description << " ********" << endl;
 }
 
 
 vector<vector<string>>
 ReadAppConnectionsFile (string appConnectionsFilename)
 {
-	NS_LOG_INFO ("ReadAppConnectionsFile");
-	vector<vector<string> > array;
-	ifstream node_coordinates_file;
-    ifstream inputFile(appConnectionsFilename);
-    int l = 0;
+  NS_LOG_INFO ("ReadAppConnectionsFile");
+  vector<vector<string> > array;
+  ifstream node_coordinates_file;
+  ifstream inputFile(appConnectionsFilename);
+  int l = 0;
 
-    while (inputFile) {
-        l++;
-        string s;
-        if (!getline(inputFile, s)) break;
-        if (s != "") {
-            istringstream ss(s);
-            vector<string> record;
+  while (inputFile) {
+      l++;
+      string s;
+      if (!getline(inputFile, s)) break;
+      if (s != "") {
+          istringstream ss(s);
+          vector<string> record;
 
-            while (ss) {
-                string line;
-                if (!getline(ss, line, ',')) break;
-                //--- strip '\r'
-                if(!line.empty() && *line.rbegin() == '\r') {
-                    line.erase( line.length()-1, 1);
+          while (ss) {
+              string line;
+              if (!getline(ss, line, ',')) break;
+              //--- strip '\r'
+              if(!line.empty() && *line.rbegin() == '\r') {
+                  line.erase( line.length()-1, 1);
                 }
-                record.push_back(line);
+              record.push_back(line);
             }
-            array.push_back(record);
+          array.push_back(record);
         }
     }
 
-    if (!inputFile.eof()) {
-        cerr << "Could not read file " << appConnectionsFilename << "\n";
-        __throw_invalid_argument("File not found.");
+  if (!inputFile.eof()) {
+      cerr << "Could not read file " << appConnectionsFilename << "\n";
+      __throw_invalid_argument("File not found.");
     }
 
-	return array;
+  return array;
 }
 
 
 void
 PrintIpAddresses(NodeContainer nodes)
 {
-	NS_LOG_INFO ("PrintIpAddresses");
-	cout << "**** Start Print IP Addresses ********" << endl;
-	string nodeName;
-	Ipv4InterfaceAddress iaddr;
-	for (NodeList::Iterator i = NodeList::Begin (); i != NodeList::End (); ++i)
-	{
-		int ifaces = (*i)->GetObject<Ipv4>()->GetNInterfaces();
-			for (int j = 1; j < ifaces; j++) {
-				iaddr = (*i)->GetObject<Ipv4>()->GetAddress (j,0);
-				nodeName = Names::FindName((*i));
+  NS_LOG_INFO ("PrintIpAddresses");
+  cout << "**** Start Print IP Addresses ********" << endl;
+  string nodeName;
+  Ipv4InterfaceAddress iaddr;
+  for (NodeList::Iterator i = NodeList::Begin (); i != NodeList::End (); ++i)
+    {
+      int ifaces = (*i)->GetObject<Ipv4>()->GetNInterfaces();
+      for (int j = 1; j < ifaces; j++) {
+          iaddr = (*i)->GetObject<Ipv4>()->GetAddress (j,0);
+          nodeName = Names::FindName((*i));
 
-				cout << "Node ID: "   << (*i)->GetId() << " - "
-					 << "Ifaces: " << (*i)->GetObject<Ipv4>()->GetNInterfaces() << " - "
-					 << "Name: " <<  nodeName << " - "
-					 << "IP Addr: "   << iaddr.GetLocal() <<  " - "
-					 << "IP Mask: " << iaddr.GetMask() << endl;
-			}
-	}
-	cout << "**** End Print IP Addresses ********" << endl;
+          cout << "Node ID: "   << (*i)->GetId() << " - "
+               << "Ifaces: " << (*i)->GetObject<Ipv4>()->GetNInterfaces() << " - "
+               << "Name: " <<  nodeName << " - "
+               << "IP Addr: "   << iaddr.GetLocal() <<  " - "
+               << "IP Mask: " << iaddr.GetMask() << endl;
+        }
+    }
+  cout << "**** End Print IP Addresses ********" << endl;
 }
 
 
 map<Ipv4Address, uint32_t>
 CreateMapIpv4NodeId(NodeContainer nodes)
 {
-	NS_LOG_INFO ("CreateMapIpv4NodeId");
+  NS_LOG_INFO ("CreateMapIpv4NodeId");
 
-	map<Ipv4Address, uint32_t> mapIpv4NodeId;
-	string nodeName;
-	uint32_t nodeId;
-	Ipv4InterfaceAddress iaddr;
-	for (NodeList::Iterator i = NodeList::Begin (); i != NodeList::End (); ++i)
-	{
-		int ifaces = (*i)->GetObject<Ipv4>()->GetNInterfaces();
-			for (int j = 1; j < ifaces; j++) {
-				iaddr = (*i)->GetObject<Ipv4>()->GetAddress (j,0);
-				nodeId = (*i)->GetId ();
-				nodeName = Names::FindName((*i));
+  map<Ipv4Address, uint32_t> mapIpv4NodeId;
+  string nodeName;
+  uint32_t nodeId;
+  Ipv4InterfaceAddress iaddr;
+  for (NodeList::Iterator i = NodeList::Begin (); i != NodeList::End (); ++i)
+    {
+      int ifaces = (*i)->GetObject<Ipv4>()->GetNInterfaces();
+      for (int j = 1; j < ifaces; j++) {
+          iaddr = (*i)->GetObject<Ipv4>()->GetAddress (j,0);
+          nodeId = (*i)->GetId ();
+          nodeName = Names::FindName((*i));
 
-				mapIpv4NodeId[iaddr.GetLocal()] = nodeId;
+          mapIpv4NodeId[iaddr.GetLocal()] = nodeId;
 
-			}
-	}
+        }
+    }
 
-	return mapIpv4NodeId;
+  return mapIpv4NodeId;
 }
-

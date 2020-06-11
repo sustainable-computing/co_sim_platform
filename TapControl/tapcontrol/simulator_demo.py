@@ -3,7 +3,7 @@ Created on Jun. 01, 2019
 Mosaik script to initialize, interconnect and manage simulators
 
 @file    simulator_demo.py
-@author  Evandro de Souza
+@author  Evandro de Souza, Amrinder S. Grewal
 @date    2019.06.01  
 @version 0.1
 @company University of Alberta - Computing Science
@@ -131,18 +131,19 @@ def  create_scenario( world, args ):
                               verbose = 0)    
 
     pktnetsim = world.start( 'PktNetSim',
-        model_name = 'TransporterModel',
-        eid_prefix = 'Transp_',
-        adjmat_file   = ADJMAT_RPATH_FILE, 
-        coords_file   = COORDS_RPATH_FILE, 
-        appcon_file   = APPCON_RPATH_FILE,
-        linkRate      = "512Kbps",
-        linkDelay     = "15ms",
-        linkErrorRate = "0.0001",
-        step_size=1,
-        start_time=0, 
-        random_seed=args.random_seed,        
-        verbose=0                                
+        model_name      = 'TransporterModel',
+        eid_prefix      = 'Transp_',
+        adjmat_file     = ADJMAT_RPATH_FILE,
+        coords_file     = COORDS_RPATH_FILE,
+        appcon_file     = APPCON_RPATH_FILE,
+        linkRate        = "512Kbps",
+        linkDelay       = "15ms",
+        linkErrorRate   = "0.0001",
+        step_size       = 1,
+        start_time      = 0,
+        random_seed     = args.random_seed,
+        verbose         = 0,
+        tcpOrUdp        = "udp"
     )
   
     controlsim  = world.start('ControlSim',  
