@@ -22,13 +22,13 @@
  * Modelled after packet-sink-helper.h
  */
 
+#ifndef _MULTI_CLIENT_TCP_SERVER_HELPER_H_
+#define _MULTI_CLIENT_TCP_SERVER_HELPER_H_
+
 #include "ns3/object-factory.h"
 #include "ns3/ipv4-address.h"
 #include "ns3/node-container.h"
 #include "ns3/application-container.h"
-
-#ifndef _MULTI_CLIENT_TCP_SERVER_HELPER_H_
-#define _MULTI_CLIENT_TCP_SERVER_HELPER_H_
 
 using namespace ns3;
 

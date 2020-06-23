@@ -22,12 +22,12 @@
  * Modelled after udp-client-server-helper.h
  */
 
+#ifndef _TCP_CLIENT_HELPER_H_
+#define _TCP_CLIENT_HELPER_H_
+
 #include "ns3/node-container.h"
 #include "ns3/application-container.h"
 #include "ns3/core-module.h"
-
-#ifndef _TCP_CLIENT_HELPER_H_
-#define _TCP_CLIENT_HELPER_H_
 
 using namespace ns3;
 

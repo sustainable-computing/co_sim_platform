@@ -22,14 +22,14 @@
  * Modelled after packet-sink.h
  */
 
+#ifndef _MULTI_CLIENT_TCP_SERVER_H_
+#define _MULTI_CLIENT_TCP_SERVER_H_
+
 #include "ns3/core-module.h"
 #include "ns3/socket.h"
 #include "ns3/application.h"
 #include "ns3/address.h"
 #include "ns3/ptr.h"
-
-#ifndef _MULTI_CLIENT_TCP_SERVER_H_
-#define _MULTI_CLIENT_TCP_SERVER_H_
 
 using namespace ns3;
 /**
