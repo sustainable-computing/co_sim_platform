@@ -185,15 +185,6 @@ TcpClient::SendMessage (string message)
     Ptr<Packet> sendPacket =
         Create<Packet> ((uint8_t*)message.c_str(),message.size());
     m_socket->Send (sendPacket);
-
-    ofstream filePacketsSent;
-    filePacketsSent.open("packets_sent.pkt", std::ios_base::app);
-    filePacketsSent << "time: " << Simulator::Now ().GetMilliSeconds ()
-                    << " nodeId: " << m_socket->GetNode()->GetId()
-                    << " nodeAddr: " << m_socket->GetNode ()->GetObject<Ipv4>()->GetAddress(1,0).GetLocal()
-
-                    << " MsgSize: " << message.size() << std::endl;
-    filePacketsSent.close();
   }
 }
 

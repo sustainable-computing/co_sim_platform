@@ -87,18 +87,6 @@ ExtractInformationFromPacketAndSendToUpperLayer (Ptr<Socket> socket)
                        stoll(val_time)
   };
   dataXchgOutput.push_back(dataRcv);
-
-  ofstream filePacketsReceived;
-  filePacketsReceived.open(fileNameReceived, std::ios_base::app);
-  std::replace( recMessage.begin(), recMessage.end(), '\n', ' ');
-  filePacketsReceived << "time: " << Simulator::Now ().GetMilliSeconds ()
-                      << " dstNodeId: "   << socket->GetNode()->GetId()
-                      << " dstAddr: "     << socket->GetNode ()->GetObject<Ipv4>()->GetAddress(1,0).GetLocal()
-                      << " srcNodeId: "   << srcNodeId
-                      << " srcAddr: "     << InetSocketAddress::ConvertFrom (from).GetIpv4()
-                      << " Payload: "     << recMessage
-                      << " MsgSize: " << recMessage.size() << std::endl;
-  filePacketsReceived.close();
 }
 
 NS3Netsim::NS3Netsim():
@@ -145,7 +133,8 @@ NS3Netsim::init (string f_adjmat,
   //--- verbose level
   verbose = verb;
   // save which protocol should be used
-  tcpOrUdp = "tcp";
+  tcpOrUdp = s_tcpOrUdp;
+  std::cout << "Network Mode: " << tcpOrUdp << std::endl;
 
   NS_LOG_FUNCTION(this);
 
@@ -166,7 +155,6 @@ NS3Netsim::init (string f_adjmat,
 
   //--- simulation parameters
   startTime  = start_time;
-  cout << s_tcpOrUdp << endl;
 
   //--- set configuration file names
   nodeAdjMatrixFilename   = f_adjmat;
@@ -226,8 +214,7 @@ NS3Netsim::init (string f_adjmat,
             }
         }
     }
-
-
+  NS_LOG_INFO("");
 
   //--- set link error rate
   Ptr<RateErrorModel> em = CreateObject<RateErrorModel> ();
@@ -431,8 +418,6 @@ NS3Netsim::schedule (string src, string dst, string val, string val_time)
       std::cout << "NS3Netsim::schedule" << std::endl;
     }
 
-//    double schDelay = stod(val_time);
-
   if (verbose > 1) {
       std::cout << "NS3Netsim::schedule NS3_Time: " << Simulator::Now ().GetMilliSeconds ()
                 << " Event_Val_Time: " << val_time << std::endl;
@@ -444,12 +429,21 @@ NS3Netsim::schedule (string src, string dst, string val, string val_time)
                 << ")" << std::endl;
     }
 
-  Ptr<Node> srcNode = Names::Find<Node>(src);
-  Ptr<TcpClient> clientApp = DynamicCast<TcpClient> (srcNode->GetApplication(0));
-  if (clientApp == 0 ){
-      clientApp = DynamicCast<TcpClient> (srcNode->GetApplication(1));
-    }
-  clientApp->ScheduleTransmit(val, val_time);
+  if (tcpOrUdp == "tcp") {
+	Ptr<Node> srcNode = Names::Find<Node>(src);
+	Ptr<TcpClient> clientApp = DynamicCast<TcpClient> (srcNode->GetApplication(0));
+	if (clientApp == 0 ){
+	  clientApp = DynamicCast<TcpClient> (srcNode->GetApplication(1));
+	}
+	clientApp->ScheduleTransmit(val, val_time);
+  } else if (tcpOrUdp == "udp") {
+	Ptr<Node> srcNode = Names::Find<Node>(src);
+	Ptr<CustomUdpClient> clientApp = DynamicCast<CustomUdpClient> (srcNode->GetApplication(0));
+	if (clientApp == 0 ){
+	  clientApp = DynamicCast<CustomUdpClient> (srcNode->GetApplication(1));
+	}
+	clientApp->ScheduleTransmit(val, val_time);
+  }
 }
 
 
