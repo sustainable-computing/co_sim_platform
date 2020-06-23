@@ -1,4 +1,4 @@
-/* -*- Mode:C++; c-file-style:"gnu"; indent-tabs-mode:nil; -*- */
+
 /*
  * Copyright (c) 2020 Amrinder S. Grewal
  *
@@ -44,27 +44,26 @@ using namespace ns3;
  *
  * Modelled after packet-sink.h
  */
-class MultiClientTcpServer: public Application
-{
+class MultiClientTcpServer : public Application {
  public:
   /**
    * \brief Get the type ID.
    * \return the object TypeID
    */
-  static TypeId GetTypeId (void);
+  static TypeId GetTypeId(void);
 
-  MultiClientTcpServer ();
-  virtual ~MultiClientTcpServer ();
+  MultiClientTcpServer();
+  virtual ~MultiClientTcpServer();
 
   /**
    * \return pointer to the listening socket.
    */
-  Ptr<Socket> GetListeningSocket (void) const;
+  Ptr<Socket> GetListeningSocket(void) const;
 
   /**
    * \return list of pointer to accepted sockets
    */
-  std::list<Ptr<Socket> > GetAcceptedSockets(void) const;
+  std::list<Ptr<Socket>> GetAcceptedSockets(void) const;
 
   /**
    * \brief set the callback function that is called when a packet is received
@@ -72,26 +71,26 @@ class MultiClientTcpServer: public Application
    */
   void SetPacketReceivedCallBack(void (*callback)(Ptr<Socket> socket));
  protected:
-  virtual void DoDispose (void);
+  virtual void DoDispose(void);
 
  private:
   // inherited from Application base class.
-  virtual void StartApplication (void);    // Called at time specified by Start
-  virtual void StopApplication (void);     // Called at time specified by Stop
+  virtual void StartApplication(void);    // Called at time specified by Start
+  virtual void StopApplication(void);     // Called at time specified by Stop
 
   /**
    * \brief Handle a connection request received by the application.
    * \param socket the incoming connection socket
    * \param from the address the connection is from
    */
-  bool HandleRequest(Ptr<Socket> socket, const Address& from);
+  bool HandleRequest(Ptr<Socket> socket, const Address &from);
 
   /**
    * \brief Handle an incoming connection that has been accepted
    * \param socket the incoming connection socket
    * \param from the address the connection is from
    */
-  void HandleAccept(Ptr<Socket> socket, const Address& from);
+  void HandleAccept(Ptr<Socket> socket, const Address &from);
 
   /**
    * \brief Handle a packet received by the application
@@ -103,21 +102,21 @@ class MultiClientTcpServer: public Application
    * \brief Handle an connection close
    * \param socket the connected socket
    */
-  void HandlePeerClose (Ptr<Socket> socket);
+  void HandlePeerClose(Ptr<Socket> socket);
 
   /**
    * \brief Handle an connection error
    * \param socket the connected socket
    */
-  void HandlePeerError (Ptr<Socket> socket);
+  void HandlePeerError(Ptr<Socket> socket);
 
   // When a connection is accepted in TCP, a new socket is returned
   // So we need to store a listening socket for this class
-  Ptr<Socket>     m_listeningSocket; //!< Listening socket
+  Ptr<Socket> m_listeningSocket; //!< Listening socket
   // And a list of sockets that have been accepted
-  std::list<Ptr<Socket> > m_acceptedSocketList; //!< the accepted sockets
+  std::list<Ptr<Socket>> m_acceptedSocketList; //!< the accepted sockets
 
-  Address         m_local;         //!< Local address to bind to
+  Address m_local;         //!< Local address to bind to
 
   /// Traced Callback: received packets, source address.
   TracedCallback<Ptr<const Packet>, const Address &> m_rxTrace;
