@@ -94,10 +94,34 @@ LXFLAGS = -ljsoncpp\
 #--------------------#
 #--- Main Project ---#
 #--------------------#
-$(PRJ):	$(OBJ_DIR)/main.o $(OBJ_DIR)/ns3-helper.o $(OBJ_DIR)/NS3Netsim.o $(OBJ_DIR)/MosaikSim.o
+$(PRJ):	$(OBJ_DIR)/main.o $(OBJ_DIR)/ns3-helper.o $(OBJ_DIR)/NS3Netsim.o $(OBJ_DIR)/MosaikSim.o $(OBJ_DIR)/multi-client-tcp-server-helper.o $(OBJ_DIR)/multi-client-tcp-server.o $(OBJ_DIR)/tcp-client-helper.o $(OBJ_DIR)/tcp-client.o $(OBJ_DIR)/custom-udp-client-helper.o $(OBJ_DIR)/custom-udp-client.o $(OBJ_DIR)/custom-udp-server-helper.o $(OBJ_DIR)/custom-udp-server.o
 	$(CX)  -o $@ $^ $(LXFLAGS)
 
 $(OBJ_DIR)/main.o: ${SRC_DIR}/main.cpp | $(OBJ_DIR)
+	$(CX) $(CXFLAGS) $(INCLUDES) -c $^ -o $@
+
+$(OBJ_DIR)/multi-client-tcp-server-helper.o: ${BASE_DIR}/tcp-server-and-client/src/multi-client-tcp-server-helper.cc
+	$(CX) $(CXFLAGS) $(INCLUDES) -c $^ -o $@
+
+$(OBJ_DIR)/multi-client-tcp-server.o: ${BASE_DIR}/tcp-server-and-client/src/multi-client-tcp-server.cc
+	$(CX) $(CXFLAGS) $(INCLUDES) -c $^ -o $@
+
+$(OBJ_DIR)/tcp-client-helper.o: ${BASE_DIR}/tcp-server-and-client/src/tcp-client-helper.cc
+	$(CX) $(CXFLAGS) $(INCLUDES) -c $^ -o $@
+
+$(OBJ_DIR)/tcp-client.o: ${BASE_DIR}/tcp-server-and-client/src/tcp-client.cc
+	$(CX) $(CXFLAGS) $(INCLUDES) -c $^ -o $@
+
+$(OBJ_DIR)/custom-udp-client-helper.o: ${BASE_DIR}/udp-server-client/src/custom-udp-client-helper.cc
+	$(CX) $(CXFLAGS) $(INCLUDES) -c $^ -o $@
+
+$(OBJ_DIR)/custom-udp-client.o: ${BASE_DIR}/udp-server-client/src/custom-udp-client.cc
+	$(CX) $(CXFLAGS) $(INCLUDES) -c $^ -o $@
+
+$(OBJ_DIR)/custom-udp-server-helper.o: ${BASE_DIR}/udp-server-client/src/custom-udp-server-helper.cc
+	$(CX) $(CXFLAGS) $(INCLUDES) -c $^ -o $@
+
+$(OBJ_DIR)/custom-udp-server.o: ${BASE_DIR}/udp-server-client/src/custom-udp-server.cc
 	$(CX) $(CXFLAGS) $(INCLUDES) -c $^ -o $@
 
 $(OBJ_DIR)/NS3Netsim.o: ${SRC_DIR}/NS3Netsim.cpp
@@ -114,9 +138,5 @@ $(OBJ_DIR):
 
 .PHONY: clean
 clean:
-	$(RM) -f $(PRJ_DIR)/obj/$(PRJ).o \
-	$(PRJ_DIR)/obj/main.o  \
-	$(PRJ_DIR)/obj/MosaikSim.o \
-	$(PRJ_DIR)/obj/NS3Netsim.o \
-	$(PRJ_DIR)/obj/ns3-helper.o  \
-	$(PRJ)
+	$(RM) -fr $(PRJ_DIR)/obj
+	$(RM) -fr $(PRJ)
