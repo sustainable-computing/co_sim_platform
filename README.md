@@ -176,7 +176,6 @@ NS3Mosaik/NS3MosaikSim_test.sh | script to test NS3Mosaik middleware after compi
 
 
 * Compile NS3MosaikSim and test NS3MosaikSim
-* Do not forget to change "BASE_DIR" in Makefile and in NS3MosaikSim_test.sh
 
 > cd *PATH-TO-PROJECT-ROOT*/NS3Mosaik
 
