@@ -9,7 +9,6 @@ BASE_DIR="../.."
 VIRTENV=$BASE_DIR/virtualenv/cosimul
 SGEXEC=$BASE_DIR/CoSimul_Platform/TapControl
 
-
 #--- set python environment
 source $VIRTENV/bin/activate
 export PYTHONPATH=$PYTHONPATH:$BASE_DIR:$BASE_DIR/CoSimul_Platform/OpenDSS

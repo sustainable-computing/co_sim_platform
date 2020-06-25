@@ -143,7 +143,7 @@ def  create_scenario( world, args ):
         start_time      = 0,
         random_seed     = args.random_seed,
         verbose         = 0,
-        tcpOrUdp        = "udp"
+        tcpOrUdp        = "tcp"
     )
   
     controlsim  = world.start('ControlSim',  
