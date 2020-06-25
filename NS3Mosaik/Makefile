@@ -47,10 +47,8 @@ RM=/bin/rm
 #----------------
 #--- Includes ---
 #----------------
-INCLUDES =	-I${INC_DIR} \
-		    -I${NS3_INC} \
-		    -I./tcp-server-and-client/include \
-		    -I./udp-server-client/include
+INCLUDES =	-I${INC_DIR}\
+		    -I${NS3_INC}
 
 
 #---------------
