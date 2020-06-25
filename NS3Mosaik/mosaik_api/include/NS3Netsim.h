@@ -40,14 +40,12 @@
 
 #include "ns3/smartgrid-default-simulator-impl.h"
 
-#include "multi-client-tcp-server-helper.h"
-#include "multi-client-tcp-server.h"
-#include "tcp-client-helper.h"
-#include "tcp-client.h"
-#include "custom-udp-client-helper.h"
-#include "custom-udp-server-helper.h"
-#include "custom-udp-server.h"
-#include "custom-udp-client.h"
+#include "ns3/multi-client-tcp-server-helper.h"
+#include "ns3/multi-client-tcp-server.h"
+#include "ns3/tcp-client-helper.h"
+#include "ns3/tcp-client.h"
+#include "ns3/custom-udp-client-helper.h"
+#include "ns3/custom-udp-server-helper.h"
 
 using namespace std;
 using namespace ns3;
