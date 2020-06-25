@@ -1,7 +1,4 @@
 # Smartgrid Cosimulation Platform
-
-
-
 ## Table of Contents
 
 | Directory       | Content                                                              |
@@ -13,16 +10,13 @@
 | *SmartgridSimulator* | NS3 simulation core class modification                           |
 | *TapControl*    | Voltage control application                                          |
 
-
-
 ## File Description
-
 ### NS3-Mosaik API
 | File           | Content                                                                |
 |----------------|:-------------------------------------------------------------------------------------------------------------------|
 | NS3Mosaik/Makefile       | NS3 script and middleware compilation         |
 | NS3Mosaik/NS3MosaikSim   | binary of NS3Mosaik middleware                |
-NS3Mosaik/NS3MosaikSim_test.sh | script to test NS3Mosaik middleware after compilation |
+| NS3Mosaik/NS3MosaikSim_test.sh | script to test NS3Mosaik middleware after compilation |
 | NS3Mosaik/mosaik_api/include/MosaikSim.h                                 | Includes for NS3-Mosaik middleware |
 | NS3Mosaik/mosaik_api/include/NS3Netsim.h                                 | Includes for NS3 script for communication model |
 | NS3Mosaik/mosaik_api/include/ns3-helper.h                                | Includes for Auxiliary function for MS3Mosaik middleware |
@@ -30,7 +24,6 @@ NS3Mosaik/NS3MosaikSim_test.sh | script to test NS3Mosaik middleware after compi
 | NS3Mosaik/mosaik_api/src/MosaikSim.cpp                                   | NS3-Mosaik middleware |
 | NS3Mosaik/mosaik_api/src/ns3-helper.cpp                                  | Auxiliary function for MS3Mosaik middleware |
 | NS3Mosaik/mosaik_api/src/NS3Netsim.cpp                                   | NS3 script for communication model |
-
 
 ### OpenDSS wrapper class and accessories
 | File           | Content                                                                                                            |
@@ -40,8 +33,6 @@ NS3Mosaik/NS3MosaikSim_test.sh | script to test NS3Mosaik middleware after compi
 | OpenDSS/SimDSS.py            | Python wrapper class for OpenDSS simulator |
 | OpenDSS/examples             | Directory with some examples of OpenDSS wrapper class |
 | OpenDSS/tests                | Directory with some tests scripts |
-
-
 
 ### Distributed State Estimation Application
 | File           | Content                                                                                                            |
@@ -57,16 +48,31 @@ NS3Mosaik/NS3MosaikSim_test.sh | script to test NS3Mosaik middleware after compi
 | SimDSE/data                    | Directory with simulation results and graphs |
 | SimDSE/aux                     | Directory with config generation scripts |
 
-
 ### NS3 core files
 | File           | Content                                                                                                            |
 |----------------|:-------------------------------------------------------------------------------------------------------------------|
-| SmartgridSimulator/wscript                                     | Metafile modified to include NS3 smartgrid simulator class |
 | SmartgridSimulator/smartgrid-default-simulator-impl.cc   | NS3 smartgrid simulator class C++ code |
 | SmartgridSimulator/smartgrid-default-simulator-impl.h    | NS3 smartgrid simulator class includes |
 
-
-
+### NS3 Application Files
+| File           | Content                                                                                                            |
+|----------------|:-------------------------------------------------------------------------------------------------------------------|
+| tcp-server-and-client/multi-client-tcp-server.cc   | NS3 TCP server with multiple clients C++ code |
+| tcp-server-and-client/multi-client-tcp-server.h   | NS3 TCP server with multiple clients includes |
+| tcp-server-and-client/multi-client-tcp-server-helper.cc   | NS3 Helper for TCP server with multiple clients C++ code |
+| tcp-server-and-client/multi-client-tcp-server-helper.h   | NS3 Helper for TCP server with multiple clients includes |
+| tcp-server-and-client/tcp-client.cc   | NS3 TCP client C++ code |
+| tcp-server-and-client/tcp-client.h   | NS3 TCP client C++ includes |
+| tcp-server-and-client/tcp-client-helper.cc   | NS3 Helper for TCP client C++ code |
+| tcp-server-and-client/tcp-client-helper.h   | NS3 Helper for TCP client C++ includes |
+| udp-server-client/custom-udp-server.cc   | NS3 UDP server application C++ code |
+| udp-server-client/custom-udp-server.h   | NS3 UDP server application includes |
+| udp-server-client/custom-udp-server-helper.cc   | NS3 Helper for UDP server application C++ code |
+| udp-server-client/custom-udp-server-helper.h   | NS3 Helper for UDP server application includes |
+| udp-server-client/custom-udp-client.cc   | NS3 UDP client C++ code |
+| udp-server-client/custom-udp-client.h   | NS3 UDP client C++ includes |
+| udp-server-client/custom-udp-client-helper.cc   | NS3 Helper for UDP client C++ code |
+| udp-server-client/custom-udp-client-helper.h   | NS3 Helper for UDP client C++ includes |
 
 ### Tap Control Application
 | File           | Content                                                                                                            |
@@ -87,19 +93,11 @@ NS3Mosaik/NS3MosaikSim_test.sh | script to test NS3Mosaik middleware after compi
 | TapControl/data/IEEE13Node_coordinates.txt                          | NS3 node coordinates (x, y) |
 | TapControl/data/IEEELineCodes.dss                                   | OpenDSS line codes for main OpenDSS config file |
 
-
-
-
-
-
-
 ## Getting Started
-
 * This project was develop in a Linux platform, and this installation procedure is based on this platform.
 * Even though it is not anticipated major problems to install on Windows or Mac, adaptations in the process are required.
 * Python version **3.6.8** was used during the development.
 * The use of Python *virtualenv* is optional, but recommended. Running scripts use virtualenv.
-
 
 ### Prepare area
 1. Create project directory
@@ -120,7 +118,7 @@ NS3Mosaik/NS3MosaikSim_test.sh | script to test NS3Mosaik middleware after compi
 * [mercurial] 4.5.3
 * [ns-3] 3.30.1
 
-#### Instalation
+#### Installation
 
   > sudo apt install libjsoncpp-dev
 
@@ -132,42 +130,77 @@ NS3Mosaik/NS3MosaikSim_test.sh | script to test NS3Mosaik middleware after compi
 
  > sudo apt install mercurial
 
+ > cd CoSimul_Platform
+
  > wget https://www.nsnam.org/releases/ns-allinone-3.30.1.tar.bz2
 
  > tar xjf ns-allinone-3.30.1.tar.bz2
 
 
-* Go to the ns-3 source code and insert smartgrid simulator class.
+* Go to the ns-3 source code and insert smartgrid simulator class and applications classes.
 * It must be placed in the correct location in ns-3 source source tree.
 * ns-3 configuration files must be changed too to new class be compiled.
 
 > cd ns-allinone-3.30.1/ns-3.30.1/src/core/model
-
-> cp *PATH-TO-PROJECT-ROOT*/SmartgridSimulator/smartgrid-default-simulator-impl.* .
+>
+> cp ../../../../../SmartGridSimulator/smartgrid-default-simulator-impl.* .
+>
+> cd ../../applications/model
+>
+> cp ../../../../../tcp-server-and-client/include/\*.* .
+>
+> cp ../../../../../tcp-server-and-client/src/\*.* .
+>
+> cp ../../../../../udp-server-client/include/\*.* .
+>
+> cp ../../../../../udp-server-client/src/\*.* .
 
 
 * Change *wscript* to include smartgrid simulator class in ns-3 compilation
+* In ns-allinone-3.30.1/ns-3.30.1/src/core/model/wscript, add to core.source:
+	'model/smartgrid-default-simulator-impl.cc'
+* In ns-allinone-3.30.1/ns-3.30.1/src/core/model/wscript, add to headers.source:
+	'model/smartgrid-default-simulator-impl.h'
 
-> cd ..
+* In ns-allinone-3.30.1/ns-3.30.1/src/applications/model/wscript, add to module.source:
 
-> vi wscript
+    'model/tcp-client-helper.cc',
+    
+    'model/tcp-client.cc',
+    
+    'model/multi-client-tcp-server-helper.cc',
+    
+    'model/multi-client-tcp-server.cc',
+    
+    'model/custom-udp-client-helper.cc',
+    
+    'model/custom-udp-client.cc',
+    
+    'model/custom-udp-server-helper.cc',
+    
+    'model/custom-udp-server.cc',
+    
+* In ns-allinone-3.30.1/ns-3.30.1/src/applications/model/wscript, add to headers.source:
 
-	in "core.source = [" include:
+    'model/tcp-client-helper.h',
+    
+    'model/tcp-client.h',
+    
+    'model/multi-client-tcp-server-helper.h',
+    
+    'model/multi-client-tcp-server.h',
+    
+    'model/custom-udp-client-helper.h',
+    
+    'model/custom-udp-client.h',
+    
+    'model/custom-udp-server-helper.h',
+    
+    'model/custom-udp-server.h',
 
-		'model/smartgrid-default-simulator-impl.cc',
-
-	in "headers.source = [" include:
-
-		'model/smartgrid-default-simulator-impl.h',
-
-
-
-* Return to ns-3 top directory to compile the package.
+* Return to ns-3 top directory to compile the package, named ns-allinone-3.30.1/ns-3.30.1
 * Change ns-3 configuration to optimized version.
 * It may take a while to compile
-
-> cd ../..
-
 > ./waf clean
 
 > ./waf configure --build-profile=optimized
@@ -176,8 +209,6 @@ NS3Mosaik/NS3MosaikSim_test.sh | script to test NS3Mosaik middleware after compi
 
 
 * Compile NS3MosaikSim and test NS3MosaikSim
-* Do not forget to change "BASE_DIR" in Makefile and in NS3MosaikSim_test.sh
-
 > cd *PATH-TO-PROJECT-ROOT*/NS3Mosaik
 
 > make

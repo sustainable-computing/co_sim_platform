@@ -27,15 +27,15 @@
 #   Main Variables                                                            #
 #-----------------------------------------------------------------------------#
 
-BASE_DIR   := /mnt/hgfs/cosimul/CoSimul_Platform
+BASE_DIR   := .
 PRJ        := NS3MosaikSim
 
-PRJ_DIR     = ${BASE_DIR}/NS3Mosaik/mosaik_api
+PRJ_DIR     = ${BASE_DIR}/mosaik_api
 OBJ_DIR     = ${PRJ_DIR}/obj
 SRC_DIR	    = ${PRJ_DIR}/src
 INC_DIR	    = ${PRJ_DIR}/include
 
-NS3_ROOT    = /mnt/hgfs/cosimul/CoSimul_Platform/ns-allinone-3.30.1/ns-3.30.1
+NS3_ROOT    = ../ns-allinone-3.30.1/ns-3.30.1
 NS3_INC     = ${NS3_ROOT}/build
 NS3_LIB     = ${NS3_ROOT}/build/lib
 
@@ -93,7 +93,7 @@ LXFLAGS = -ljsoncpp\
 #--- Main Project ---#
 #--------------------#
 $(PRJ):	$(OBJ_DIR)/main.o $(OBJ_DIR)/ns3-helper.o $(OBJ_DIR)/NS3Netsim.o $(OBJ_DIR)/MosaikSim.o
-	$(CX)  -o $@ $^ $(LXFLAGS)
+	$(CX) -lm -o $@ $^ $(LXFLAGS)
 
 $(OBJ_DIR)/main.o: ${SRC_DIR}/main.cpp | $(OBJ_DIR)
 	$(CX) $(CXFLAGS) $(INCLUDES) -c $^ -o $@

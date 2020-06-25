@@ -21,14 +21,14 @@
  *
  */
 
+#ifndef _CUSTOM_UDP_SERVER_H_
+#define _CUSTOM_UDP_SERVER_H_
+
 #include "ns3/core-module.h"
 #include "ns3/socket.h"
 #include "ns3/application.h"
 #include "ns3/address.h"
 #include "ns3/ptr.h"
-
-#ifndef _CUSTOM_UDP_SERVER_H_
-#define _CUSTOM_UDP_SERVER_H_
 
 using namespace ns3;
 using namespace std;

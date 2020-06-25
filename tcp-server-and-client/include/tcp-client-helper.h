@@ -19,29 +19,29 @@
  * Date:    2020.05.18
  * Company: University of Alberta/Canada - Computing Science
  *
- * Modelled after packet-sink-helper.h
+ * Modelled after udp-client-server-helper.h
  */
 
-#include "ns3/object-factory.h"
-#include "ns3/ipv4-address.h"
+#ifndef _TCP_CLIENT_HELPER_H_
+#define _TCP_CLIENT_HELPER_H_
+
 #include "ns3/node-container.h"
 #include "ns3/application-container.h"
-
-#ifndef _CUSTOM_UDP_SERVER_HELPER_H_
-#define _CUSTOM_UDP_SERVER_HELPER_H_
+#include "ns3/core-module.h"
 
 using namespace ns3;
 
 /**
- * \brief Helps with installation and configuration of MultiClientTcpServer
+ * \brief Helps with installation and configuration of TcpClient
  */
-class CustomUdpServerHelper {
+class TcpClientHelper
+{
  public:
   /**
    * \brief constructor
    * \param address The address for the client that will be created
    */
-  CustomUdpServerHelper(Address address);
+  TcpClientHelper(Address address);
 
   /**
    * Sets an attribute to the value passed in
@@ -81,4 +81,4 @@ class CustomUdpServerHelper {
   ObjectFactory           m_factory;
 };
 
-#endif //_CUSTOM_UDP_SERVER_HELPER_H_
+#endif //_TCP_CLIENT_HELPER_H_

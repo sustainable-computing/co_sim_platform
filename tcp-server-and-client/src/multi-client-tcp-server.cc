@@ -26,7 +26,6 @@
 #include "ns3/address-utils.h"
 #include "ns3/socket-factory.h"
 #include "multi-client-tcp-server.h"
-#include "multi-use-code.h"
 
 using namespace ns3;
 

@@ -22,33 +22,33 @@
  * Modelled after packet-sink-helper.h
  */
 
+#ifndef _CUSTOM_UDP_SERVER_HELPER_H_
+#define _CUSTOM_UDP_SERVER_HELPER_H_
+
 #include "ns3/object-factory.h"
 #include "ns3/ipv4-address.h"
 #include "ns3/node-container.h"
 #include "ns3/application-container.h"
-
-#ifndef _MULTI_CLIENT_TCP_SERVER_HELPER_H_
-#define _MULTI_CLIENT_TCP_SERVER_HELPER_H_
 
 using namespace ns3;
 
 /**
  * \brief Helps with installation and configuration of MultiClientTcpServer
  */
-class MultiClientTcpServerHelper {
+class CustomUdpServerHelper {
  public:
   /**
    * \brief constructor
    * \param address The address for the client that will be created
    */
-  MultiClientTcpServerHelper(Address address);
+  CustomUdpServerHelper(Address address);
 
   /**
    * Sets an attribute to the value passed in
    * \param name The name of the attribute
    * \param value The value to which the attribute should be set to
    */
-  void SetAttribute(std::string name, const AttributeValue &value);
+  void SetAttribute (std::string name, const AttributeValue &value);
 
   /**
    * \brief Installs TcpClient on every node in the NodeContainer
@@ -57,7 +57,7 @@ class MultiClientTcpServerHelper {
    *
    * \return An application container with all the applications
    */
-  ApplicationContainer Install(NodeContainer c) const;
+  ApplicationContainer Install (NodeContainer c) const;
 
   /**
    * \brief Installs TcpClient on the given node
@@ -66,7 +66,7 @@ class MultiClientTcpServerHelper {
    *
    * \return An application container with the installed application
    */
-  ApplicationContainer Install(Ptr<Node> node) const;
+  ApplicationContainer Install (Ptr<Node> node) const;
 
   /**
    * \brief Installs TcpClient on a node with nodeName
@@ -75,10 +75,10 @@ class MultiClientTcpServerHelper {
    *
    * \return An application container with the installed application
    */
-  ApplicationContainer Install(std::string nodeName) const;
+  ApplicationContainer Install (std::string nodeName) const;
  private:
-  Ptr<Application> InstallPriv(Ptr<Node> node) const;
-  ObjectFactory m_factory;
+  Ptr<Application> InstallPriv (Ptr<Node> node) const;
+  ObjectFactory           m_factory;
 };
 
-#endif //_MULTI_CLIENT_TCP_SERVER_HELPER_H_
+#endif //_CUSTOM_UDP_SERVER_HELPER_H_
