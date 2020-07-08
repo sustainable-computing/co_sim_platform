@@ -114,4 +114,13 @@ void PrintIpAddresses(NodeContainer nodes);
  */
 map<Ipv4Address, uint32_t> CreateMapIpv4NodeId(NodeContainer nodes);
 
+/**
+ * TODO: Reads the files for the LR-WPAN networks that will be created.
+ * For now returns a fake network to test the LR-WPAN connections
+ *
+ * \param lrWpanFileName String, filename of the file that contains information on the LR-WPAN networks
+ * \returns Map, keys being the center of LR-WPAN and set of nodes being the to that key
+ */
+map<string, set<string>> CreateMapForLRWPAN(string lrWpanFileName);
+
 #endif /* SMARTGRID_NS3_HELPER_H_ */

@@ -30,8 +30,12 @@
 #include <cstdio>
 #include "NS3Netsim.h"
 #include "ns3-helper.h"
+#include "ns3/lr-wpan-module.h"
+#include "ns3/internet-apps-module.h"
+#include "ns3/sixlowpan-module.h"
 #include "ns3/smartgrid-default-simulator-impl.h"
 #include <cassert>
+#include <string>
 
 using namespace std;
 using namespace ns3;
@@ -58,6 +62,7 @@ ExtractInformationFromPacketAndSendToUpperLayer (Ptr<Socket> socket)
   string recMessage = string((char*)buffer);
   recMessage = recMessage.substr (0,packet->GetSize());
 
+  // TODO: Change this so that we get ipv6 and ipv4 addresses depending on the socket passed in
   Ipv4Address srcIpv4Address = InetSocketAddress::ConvertFrom (from).GetIpv4();
   uint32_t srcNodeId = mapIpv4NodeId[srcIpv4Address];
 
@@ -66,9 +71,7 @@ ExtractInformationFromPacketAndSendToUpperLayer (Ptr<Socket> socket)
       "Pkt Rcv at "    << Simulator::Now ().GetMilliSeconds ()
                        << " by nodeName: " << Names::FindName(socket->GetNode ())
                        << " dstNodeId: "   << socket->GetNode()->GetId()
-                       << " dstAddr: "     << socket->GetNode ()->GetObject<Ipv4>()->GetAddress(1,0).GetLocal()
                        << " srcNodeId: "   << srcNodeId
-                       << " srcAddr: "     << InetSocketAddress::ConvertFrom (from).GetIpv4()
                        << " Size: "        << packet->GetSize()
                        << " Payload: "     << recMessage
                        << endl;
@@ -87,6 +90,15 @@ ExtractInformationFromPacketAndSendToUpperLayer (Ptr<Socket> socket)
                        stoll(val_time)
   };
   dataXchgOutput.push_back(dataRcv);
+
+  ofstream filePacketsSent;
+  filePacketsSent.open("packets_rec.pkt", std::ios_base::app);
+  filePacketsSent << "time: " << Simulator::Now ().GetMilliSeconds ()
+	  << " by nodeName: " << Names::FindName(socket->GetNode ())
+	  << " dstNodeId: "   << socket->GetNode()->GetId()
+	  << " srcNodeId: "   << srcNodeId
+	  << " Payload: "     << recMessage;
+  filePacketsSent.close();
 }
 
 NS3Netsim::NS3Netsim():
@@ -95,20 +107,29 @@ NS3Netsim::NS3Netsim():
   //--- setup simulation type
   GlobalValue::Bind ("SimulatorImplementationType",
                      StringValue ("ns3::SmartgridDefaultSimulatorImpl"));
+//  LogComponentEnable ("Ping6Application", LOG_LEVEL_ALL);
+//  LogComponentEnable("ArpL3Protocol", LOG_LEVEL_ALL);
+//  LogComponentEnable("ArpCache", LOG_LEVEL_ALL);
 //  LogComponentEnable("Simulator", LOG_LEVEL_ALL);
+//  LogComponentEnable("LrWpanCsmaCa", LOG_LEVEL_ALL);
+//  LogComponentEnable("LrWpanNetDevice", LOG_LEVEL_ALL);
+//  LogComponentEnable("LrWpanMac", LOG_LEVEL_ALL);
 //  LogComponentEnable("SmartgridDefaultSimulatorImpl", LOG_LEVEL_ALL);
-//  LogComponentEnable("SmartgridNs3Main", LOG_LEVEL_ALL);
+  LogComponentEnable("SmartgridNs3Main", LOG_LEVEL_ALL);
 //  LogComponentEnable ("MultiClientTcpServer", LOG_LEVEL_ALL);
 //  LogComponentEnable ("TcpClient", LOG_LEVEL_ALL);
 //  LogComponentEnable ("Socket", LOG_LEVEL_ALL);
 //  LogComponentEnable ("SocketFactory", LOG_LEVEL_ALL);
 //  LogComponentEnable ("TcpSocket", LOG_LEVEL_ALL);
 //  LogComponentEnable ("TcpSocketBase", LOG_LEVEL_ALL);
+//  LogComponentEnable ("SixLowPanNetDevice", LOG_LEVEL_ALL);
 //  LogComponentEnable ("TcpL4Protocol", LOG_LEVEL_ALL);
 //  LogComponentEnable ("IpL4Protocol", LOG_LEVEL_ALL);
 //  LogComponentEnable ("EventImpl", LOG_LEVEL_ALL);
 //  LogComponentEnable ("Node", LOG_LEVEL_ALL);
 //  LogComponentEnable ("Application", LOG_LEVEL_ALL);
+//  LogComponentEnable ("Packet", LOG_LEVEL_ALL);
+//  LogComponentEnable ("Address", LOG_LEVEL_ALL);
 }
 
 
@@ -129,6 +150,21 @@ NS3Netsim::init (string f_adjmat,
                  int verb,
                  string s_tcpOrUdp)
 {
+  // Point to point helper for point to point connections
+  PointToPointHelper pointToPoint;
+  // LrWpanHelper for 802.15.4 wireless communcation
+  LrWpanHelper lrWpanHelper;
+  // Internet stack helper to help with installation of internet
+  InternetStackHelper internet;
+  // Pointer to Ipv4 Internet helper class
+  Ipv4AddressHelper ipv4Address;
+  // Pointer to the Ipv6 Internet helper class
+  Ipv6AddressHelper ipv6Address;
+  // Pointer to mobility (position) helper class
+  MobilityHelper mobility;
+  // Helper, set up a stack to be used between IPv6 and a generic
+  SixLowPanHelper sixlowpan;
+
   allApplications = ApplicationContainer ();
   //--- verbose level
   verbose = verb;
@@ -147,8 +183,10 @@ NS3Netsim::init (string f_adjmat,
   LinkErrorRate = s_linkErrorRate;
   linkCount = 0;
 
-  //--- set devices properties
+  //--- set address properties for ipv4
   ipv4Address.SetBase ("10.0.0.0", "255.255.255.252");
+  //--- set the address properties for ipv6
+  ipv6Address.SetBase (Ipv6Address ("2001:2::"), Ipv6Prefix (64));
 
   //--- set application destination port
   sinkPort = 3030;
@@ -192,68 +230,6 @@ NS3Netsim::init (string f_adjmat,
       Ptr<Node> newNode = Names::Find<Node>(arrayNamesCoords[m][0]);
     }
 
-  //--- create network topology
-  NS_LOG_INFO ("Create Links Between Nodes.");
-  pointToPoint.SetDeviceAttribute  ("DataRate", StringValue (LinkRate));
-  pointToPoint.SetChannelAttribute ("Delay",    StringValue (LinkDelay));
-  for (size_t i = 0; i < nodeAdjMatrix.size (); i++)
-    {
-      for (size_t j = i; j < nodeAdjMatrix[i].size (); j++)
-        {
-          if (nodeAdjMatrix[i][j] == 1)
-            {
-              linkCount++;
-              NodeContainer n_links = NodeContainer (nodes.Get (i), nodes.Get (j));
-              NetDeviceContainer n_devs = pointToPoint.Install (n_links);
-              p2pDevices.push_back(n_devs);
-              NS_LOG_INFO ("matrix element [" << i << "][" << j << "] is 1");
-            }
-          else
-            {
-              NS_LOG_INFO ("matrix element [" << i << "][" << j << "] is 0");
-            }
-        }
-    }
-  NS_LOG_INFO("");
-
-  //--- set link error rate
-  Ptr<RateErrorModel> em = CreateObject<RateErrorModel> ();
-  em->SetAttribute ("ErrorRate", DoubleValue (stod(LinkErrorRate)));
-  for (auto dev = p2pDevices.begin(); dev != p2pDevices.end(); ++dev)
-    {
-      (*dev).Get(1)->SetAttribute ("ReceiveErrorModel", PointerValue (em));
-      if (verbose > 1) {
-          std::cout << "int(0) =  "   << (*dev).Get(0)->GetAddress()
-                    << "  int(1) =  " << (*dev).Get(1)->GetAddress()
-                    << " ID = " << (*dev).Get(1)->GetNode()->GetId()
-                    << std::endl;
-        }
-    }
-
-
-  //--- set Internet stack and IP address to the p2p devices
-  NS_LOG_INFO ("Set internet stack and addresses.");
-  internet.Install (NodeContainer::GetGlobal ());
-  for (auto dev = p2pDevices.begin(); dev != p2pDevices.end(); ++dev)
-    {
-      ipv4Address.Assign (*dev);
-      ipv4Address.NewNetwork ();
-    }
-  if (verbose > 1) {
-      PrintIpAddresses(nodes);
-    }
-
-  //--- create map Ipv4 address to NodeId
-  mapIpv4NodeId = CreateMapIpv4NodeId(nodes);
-
-  // --- Global routing protocol for IP version 4 stacks
-  NS_LOG_INFO ("Initialize Global Routing.");
-  Ipv4GlobalRoutingHelper::PopulateRoutingTables ();
-
-  //--- Output topology summary
-  NS_LOG_INFO ("Number of links in the adjacency matrix is: " << linkCount);
-  NS_LOG_INFO ("Number of all nodes is: " << nodes.GetN ());
-
   // --- Allocate node positions
   NS_LOG_INFO ("Allocate Positions to Nodes.");
   nodePositionAlloc = CreateObject<ListPositionAllocator> ();
@@ -281,12 +257,113 @@ NS3Netsim::init (string f_adjmat,
   //--- resize list
   nodeServerList.resize(distance(nodeServerList.begin(), iList));
 
+  // Set the internet stack on every node
+  internet.Install (NodeContainer::GetGlobal ());
+
+  //--- create network topology
+  NS_LOG_INFO ("Create p2p and lr-wpan links Between Nodes, then set internet stack and addresses");
+  pointToPoint.SetDeviceAttribute  ("DataRate", StringValue (LinkRate));
+  pointToPoint.SetChannelAttribute ("Delay",    StringValue (LinkDelay));
+  for (size_t i = 0; i < nodeAdjMatrix.size (); i++)
+  {
+	for (size_t j = i; j < nodeAdjMatrix[i].size (); j++)
+	{
+	  if (nodeAdjMatrix[i][j] == 1)
+	  {
+		// Create a point to point link
+		linkCount++;
+		NodeContainer n_links = NodeContainer (nodes.Get (i), nodes.Get (j));
+
+		uint32_t iId = nodes.Get(i)->GetId();
+		uint32_t jId = nodes.Get(j)->GetId();
+
+		NS_LOG_INFO ("matrix element [" << i << "][" << j << "] is " << nodeAdjMatrix[i][j]);
+		NetDeviceContainer n_devs = pointToPoint.Install (n_links);
+		p2pDevices.push_back(n_devs);
+		ipv4Address.Assign (n_devs);
+		ipv4Address.NewNetwork ();
+	  }
+	  else
+	  {
+		NS_LOG_INFO ("matrix element [" << i << "][" << j << "] is 0");
+	  }
+	}
+  }
+
+  // Getting PAN network from files
+  panNetworks = CreateMapForLRWPAN("");
+
+  // Create the LR-WPAN connections specified in the files with 6LoWPAN
+  // Iterate through the keys found in the network, the keys act as the center of the PAN
+  for (auto center = panNetworks.begin(); center != panNetworks.end(); center++) {
+	// Stores the nodes in the PAN
+	NodeContainer panNodes;
+	// Add the center to the list
+	panNodes.Add(Names::Find<Node>((*center).first));
+	for (auto spokes = (*center).second.begin(); spokes != (*center).second.end(); spokes++) {
+	  // Add the spokes to the list
+	  panNodes.Add(Names::Find<Node>(*spokes));
+	}
+	// Install the LR-WPAN devices
+	NetDeviceContainer lrwpanDevices = lrWpanHelper.Install(panNodes);
+	// Fake PAN association and short address assignment.
+	lrWpanHelper.AssociateToPan (lrwpanDevices, stoi((*center).first));
+	// Add Sixlowpan devices
+	NetDeviceContainer sixlowpanDevices = sixlowpan.Install (lrwpanDevices);
+	// Add the ipv6 addresses
+	Ipv6InterfaceContainer deviceInterfaces = ipv6Address.Assign (sixlowpanDevices);
+	ipv6Address.NewNetwork();
+  }
+
+  if (verbose > 1) {
+	cout << "Printing LR-WPAN network connections read from file" << endl;
+	for (auto it = panNetworks.begin(); it != panNetworks.end(); it++) {
+	  cout << (*it).first << ";";
+	  for (auto it2 = (*it).second.begin(); it2 != (*it).second.end(); it2++) {
+		cout << *it2 << ",";
+		create((*it).first, *it2);
+	  }
+	  cout << endl;
+	}
+  }
+
+  //--- set link error rate
+  Ptr<RateErrorModel> em = CreateObject<RateErrorModel> ();
+  em->SetAttribute ("ErrorRate", DoubleValue (stod(LinkErrorRate)));
+  for (auto dev = p2pDevices.begin(); dev != p2pDevices.end(); ++dev)
+  {
+	(*dev).Get(1)->SetAttribute ("ReceiveErrorModel", PointerValue (em));
+	if (verbose > 1) {
+	  std::cout << "int(0) =  "   << (*dev).Get(0)->GetAddress()
+				<< "  int(1) =  " << (*dev).Get(1)->GetAddress()
+				<< " ID = " << (*dev).Get(1)->GetNode()->GetId()
+				<< std::endl;
+	}
+  }
+
+  if (verbose > 1) {
+	PrintIpAddresses(nodes);
+  }
+
+  //--- create map Ipv4 address to NodeId
+  mapIpv4NodeId = CreateMapIpv4NodeId(nodes);
+
+  // --- Global routing protocol for IP version 4 stacks
+  NS_LOG_INFO ("Initialize Global Routing.");
+  Ipv4GlobalRoutingHelper::PopulateRoutingTables ();
+
+  //--- Output topology summary
+  NS_LOG_INFO ("Number of links in the adjacency matrix is: " << linkCount);
+  NS_LOG_INFO ("Number of all nodes is: " << nodes.GetN ());
 
   //--- set regular trace file
   AsciiTraceHelper ascii;
-  pointToPoint.EnableAsciiAll (ascii.CreateFileStream ("traceNS3Netsim.tr"));
-  //pointToPoint.EnablePcapAll("pcapNS3Netsim.pcap");
-  //pointToPoint.EnablePcap("dse", 0, 0, true);
+//  pointToPoint.EnableAsciiAll (ascii.CreateFileStream ("pointToPointNS3.tr"));
+//  lrWpanHelper.EnableAsciiAll (ascii.CreateFileStream ("lrWpanHelperNS3.tr"));
+//  pointToPoint.EnablePcapAll("pcapNS3Netsim.pcap");
+//  pointToPoint.EnablePcap("dse", 0, 0, true);
+//  lrWpanHelper.EnablePcapAll("lrWpanHelperNS3.pcap");
+//  lrWpanHelper.EnablePcap("dse", 0, 0, true);
 }
 
 
@@ -313,46 +390,54 @@ NS3Netsim::create (string client, string server)
           break;
         }
     }
-
   //--- new connection, create entries
   if(found == false) {
-      arrayAppConnections.push_back(record);
+	arrayAppConnections.push_back(record);
 
-      // create server socket
-      NS_LOG_INFO ("Create server.");
-      Ptr<Node> srvNode = Names::Find<Node>(server);
+	// create server socket
+	NS_LOG_INFO("Create server.");
+	Ptr<Node> srvNode = Names::Find<Node>(server);
 
-      // Check protocol
+	Ptr<Node> dstNode = Names::Find<Node>(server);
 
-      //--- verify if server already exist
-      std::vector<std::string>::iterator it = std::find(nodeServerList.begin(), nodeServerList.end(), server);
-      //--- if not found
-      if(it == nodeServerList.end()) {
-          // Create the server application
-          setUpServer(InetSocketAddress (Ipv4Address::GetAny (), sinkPort), tcpOrUdp, server);
-          NS_LOG_DEBUG ("NS3Netsim::create Server: " << *iList << endl);
-        } else { 		//--- end of server part
-          NS_LOG_DEBUG ("NS3Netsim::create Server already on the list: " << server << endl);
-        }
-
-      // create client socket
-      NS_LOG_INFO ("Create client.");
-      Ptr<Node> dstNode = Names::Find<Node>(server);
-      Ipv4InterfaceAddress sink_iaddr = dstNode->GetObject<Ipv4>()->GetAddress (1,0);
-      InetSocketAddress remote = InetSocketAddress (sink_iaddr.GetLocal(), sinkPort);
-      setUpClient(remote, tcpOrUdp, server, client);
-    }
+	// Check protocol
+	//--- verify if server already exist
+	std::vector<std::string>::iterator it = std::find(nodeServerList.begin(), nodeServerList.end(), server);
+	//--- if not found
+	if (it == nodeServerList.end()) {
+	  // Create the server application
+	  setUpServer(InetSocketAddress(Ipv4Address::GetAny(), sinkPort), Inet6SocketAddress(Ipv6Address::GetAny (), sinkPort), tcpOrUdp, server);
+	  NS_LOG_DEBUG("NS3Netsim::create Server: " << *iList << endl);
+	} else {        //--- end of server part
+	  NS_LOG_DEBUG("NS3Netsim::create Server already on the list: " << server << endl);
+	}
+	// create client socket
+	NS_LOG_INFO("Create client.");
+	// Check if  this is part of one of the LR-WPAN networks
+	// If part of LR-WPAN, use ipv6, otherwise use ipv4
+	if (panNetworks.count(server) != 0 && panNetworks[server].count(client) != 0) {
+	  Ipv6InterfaceAddress sink_iaddr = dstNode->GetObject<Ipv6>()->GetAddress(1,0);
+	  Inet6SocketAddress remote = Inet6SocketAddress(sink_iaddr.GetAddress(), sinkPort);
+	  setUpClient(AddressValue(remote), tcpOrUdp, server, client);
+	} else {
+	  Ipv4InterfaceAddress sink_iaddr = dstNode->GetObject<Ipv4>()->GetAddress(1,0);
+	  InetSocketAddress remote = InetSocketAddress(sink_iaddr.GetLocal(), sinkPort);
+	  setUpClient(AddressValue(remote), tcpOrUdp, server, client);
+	}
+  }
 }
 
 void
-NS3Netsim::setUpServer(InetSocketAddress address, string protocol, string server)
+NS3Netsim::setUpServer(InetSocketAddress addressIpv4, Inet6SocketAddress addressIpv6, string protocol, string server)
 {
+  NS_LOG_FUNCTION(this);
   // Where the returned application will be stored
   ApplicationContainer serverAppContainer;
   // Switch on the protocol passed in
   if (protocol == "tcp") {
       // Set the address with which the application should be created
-      multiClientTcpServerHelper.SetAttribute("Local", AddressValue(address));
+      multiClientTcpServerHelper.SetAttribute("LocalIpv4", AddressValue(addressIpv4));
+      multiClientTcpServerHelper.SetAttribute("LocalIpv6", AddressValue(addressIpv6));
       serverAppContainer = multiClientTcpServerHelper.Install(server);
       // Set the call back to extract information from a packet and sent it to the upper layer
       Ptr<MultiClientTcpServer> serverAppAsCorrectType = DynamicCast<MultiClientTcpServer> (serverAppContainer.Get(0));
@@ -360,13 +445,12 @@ NS3Netsim::setUpServer(InetSocketAddress address, string protocol, string server
       serverAppAsCorrectType->SetPacketReceivedCallBack(ExtractInformationFromPacketAndSendToUpperLayer);
   } else if (protocol == "udp") {
       // Set the address with which the application should be created
-      customUdpServerHelper.SetAttribute("Local", AddressValue(InetSocketAddress (Ipv4Address::GetAny (), sinkPort)));
+      customUdpServerHelper.SetAttribute("LocalIpv4", AddressValue(addressIpv4));
+      customUdpServerHelper.SetAttribute("LocalIpv6", AddressValue(addressIpv6));
       // Create a tcp container
       serverAppContainer = customUdpServerHelper.Install(server);
       // Set the call back to extract information from a packet and sent it to the upper layer
       Ptr<CustomUdpServer> serverAppAsCorrectType = DynamicCast<CustomUdpServer> (serverAppContainer.Get(0));
-      // Set the function that should be called when the server receives a packet
-      serverAppAsCorrectType->SetPacketReceivedCallBack(ExtractInformationFromPacketAndSendToUpperLayer);
       // Set the function that should be called when the server receives a packet
       serverAppAsCorrectType->SetPacketReceivedCallBack(ExtractInformationFromPacketAndSendToUpperLayer);
   } else {
@@ -385,8 +469,9 @@ NS3Netsim::setUpServer(InetSocketAddress address, string protocol, string server
 }
 
 void
-NS3Netsim::setUpClient(InetSocketAddress address, string protocol, string server, string client)
+NS3Netsim::setUpClient(AddressValue addressValue, string protocol, string server, string client)
 {
+  NS_LOG_FUNCTION(this);
   // Get the server and the client nodes
   Ptr<Node> srcNode = Names::Find<Node>(client);
   Ptr<Node> dstNode = Names::Find<Node>(server);
@@ -395,11 +480,11 @@ NS3Netsim::setUpClient(InetSocketAddress address, string protocol, string server
   // Switch on the protocol passed in
   if (protocol == "tcp") {
       // Create a tcp client
-      tcpClientHelper.SetAttribute("Remote", AddressValue(address));
+      tcpClientHelper.SetAttribute("Remote", addressValue);
       clientAppContainer = tcpClientHelper.Install(client);
   } else if (protocol == "udp") {
       // Create a udp client
-      customUdpClientHelper.SetAttribute("Remote", AddressValue(address));
+      customUdpClientHelper.SetAttribute("Remote", addressValue);
       clientAppContainer = customUdpClientHelper.Install(client);
   } else {
       // If unknown protocol, stop and throw error
@@ -429,20 +514,21 @@ NS3Netsim::schedule (string src, string dst, string val, string val_time)
                 << ")" << std::endl;
     }
 
-  if (tcpOrUdp == "tcp") {
-	Ptr<Node> srcNode = Names::Find<Node>(src);
-	Ptr<TcpClient> clientApp = DynamicCast<TcpClient> (srcNode->GetApplication(0));
-	if (clientApp == 0 ){
-	  clientApp = DynamicCast<TcpClient> (srcNode->GetApplication(1));
+  Ptr<Node> srcNode = Names::Find<Node>(src);
+  if (srcNode->GetNApplications() > 0) {
+	if (tcpOrUdp == "tcp") {
+	  Ptr<TcpClient> clientApp = DynamicCast<TcpClient> (srcNode->GetApplication(0));
+	  if (clientApp == 0){
+		clientApp = DynamicCast<TcpClient> (srcNode->GetApplication(1));
+	  }
+	  clientApp->ScheduleTransmit(val, val_time);
+	} else if (tcpOrUdp == "udp") {
+	  Ptr<CustomUdpClient> clientApp = DynamicCast<CustomUdpClient> (srcNode->GetApplication(0));
+	  if (clientApp == 0){
+		clientApp = DynamicCast<CustomUdpClient> (srcNode->GetApplication(1));
+	  }
+	  clientApp->ScheduleTransmit(val, val_time);
 	}
-	clientApp->ScheduleTransmit(val, val_time);
-  } else if (tcpOrUdp == "udp") {
-	Ptr<Node> srcNode = Names::Find<Node>(src);
-	Ptr<CustomUdpClient> clientApp = DynamicCast<CustomUdpClient> (srcNode->GetApplication(0));
-	if (clientApp == 0 ){
-	  clientApp = DynamicCast<CustomUdpClient> (srcNode->GetApplication(1));
-	}
-	clientApp->ScheduleTransmit(val, val_time);
   }
 }
 
@@ -471,10 +557,13 @@ NS3Netsim::runUntil (string nextStop)
         }
     }
 
+  if (stoi(nextStop) % 100 == 0){
+	schedule ("6321", "632", to_string(-stoi(nextStop)), to_string(stoi(nextStop) + 20));
+  }
+
   if (verbose > 1) {
       std::cout << "NS3Netsim::runUntil After_run NS3 time: " <<  Simulator::Now ().GetMilliSeconds () << std::endl;
     }
-
 }
 
 

@@ -29,10 +29,9 @@
 
 using namespace ns3;
 
-MultiClientTcpServerHelper::MultiClientTcpServerHelper(Address address)
+MultiClientTcpServerHelper::MultiClientTcpServerHelper()
 {
   m_factory.SetTypeId ("ns3::MultiClientTcpServer");
-  m_factory.Set ("Local", AddressValue (address));
 }
 
 void

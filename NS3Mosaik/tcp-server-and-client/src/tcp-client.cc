@@ -35,6 +35,8 @@
 #include "ns3/uinteger.h"
 #include "ns3/trace-source-accessor.h"
 #include "ns3/ipv4.h"
+#include "ns3/ipv6.h"
+#include "ns3/names.h"
 #include "tcp-client.h"
 #include <fstream>
 
@@ -118,29 +120,12 @@ void
 TcpClient::StartApplication (void)
 {
   NS_LOG_FUNCTION(this);
-
   // Make a socket if empty
   if (m_socket == 0)
     {
       TypeId tid = TypeId::LookupByName ("ns3::TcpSocketFactory");
       m_socket = Socket::CreateSocket (GetNode (), tid);
-      if (Ipv4Address::IsMatchingType(m_peerAddress) == true)
-        {
-          if (m_socket->Bind () == -1)
-            {
-              NS_FATAL_ERROR ("Failed to bind socket");
-            }
-          m_socket->Connect (InetSocketAddress (Ipv4Address::ConvertFrom(m_peerAddress), m_peerPort));
-        }
-      else if (Ipv6Address::IsMatchingType(m_peerAddress) == true)
-        {
-          if (m_socket->Bind6 () == -1)
-            {
-              NS_FATAL_ERROR ("Failed to bind socket");
-            }
-          m_socket->Connect (Inet6SocketAddress (Ipv6Address::ConvertFrom(m_peerAddress), m_peerPort));
-        }
-      else if (InetSocketAddress::IsMatchingType (m_peerAddress) == true)
+      if (InetSocketAddress::IsMatchingType (m_peerAddress) == true)
         {
           if (m_socket->Bind () == -1)
             {
@@ -185,6 +170,16 @@ TcpClient::SendMessage (string message)
     Ptr<Packet> sendPacket =
         Create<Packet> ((uint8_t*)message.c_str(),message.size());
     m_socket->Send (sendPacket);
+
+    ofstream filePacketsSent;
+    filePacketsSent.open("packets_sent.pkt", std::ios_base::app);
+    filePacketsSent << "time: " << Simulator::Now ().GetMilliSeconds ()
+                    << " nodeId: " << m_socket->GetNode()->GetId()
+					<< " by nodeName: " << Names::FindName(m_socket->GetNode ())
+                    << " MsgSize: " << message.size() << std::endl;
+    filePacketsSent.close();
+  } else {
+    std::cout << "m_socket is 0" << std::endl;
   }
 }
 
@@ -198,7 +193,6 @@ TcpClient::ScheduleTransmit(std::string val, std::string valTime) {
                                                 << " Event_Val_Time: " << valTime << " val " << val << " socket " << m_socket);
 
   NS_LOG_DEBUG("TcpClient:schedule("
-//                   << "source="   << m_socket->GetNode ()
                    << ", value=" << val
                    << ", delay=" << schDelay
                    << ")");

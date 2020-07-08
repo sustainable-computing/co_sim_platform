@@ -22,13 +22,13 @@
  * Modelled after packet-sink-helper.h
  */
 
+#ifndef _CUSTOM_UDP_SERVER_HELPER_H_
+#define _CUSTOM_UDP_SERVER_HELPER_H_
+
 #include "ns3/object-factory.h"
 #include "ns3/ipv4-address.h"
 #include "ns3/node-container.h"
 #include "ns3/application-container.h"
-
-#ifndef _CUSTOM_UDP_SERVER_HELPER_H_
-#define _CUSTOM_UDP_SERVER_HELPER_H_
 
 using namespace ns3;
 
@@ -41,7 +41,7 @@ class CustomUdpServerHelper {
    * \brief constructor
    * \param address The address for the client that will be created
    */
-  CustomUdpServerHelper(Address address);
+  CustomUdpServerHelper();
 
   /**
    * Sets an attribute to the value passed in

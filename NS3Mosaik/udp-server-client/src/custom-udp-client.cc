@@ -35,6 +35,7 @@
 #include "ns3/uinteger.h"
 #include "ns3/trace-source-accessor.h"
 #include "ns3/ipv4.h"
+#include "ns3/names.h"
 #include "ns3/log.h"
 #include <fstream>
 
@@ -85,6 +86,14 @@ CustomUdpClient::SendMessage (string message)
       Ptr <Packet> sendPacket =
           Create<Packet> ((uint8_t *) message.c_str (), message.size ());
       m_socket->Send (sendPacket);
+
+	  ofstream filePacketsSent;
+	  filePacketsSent.open("packets_sent.pkt", std::ios_base::app);
+	  filePacketsSent << "time: " << Simulator::Now ().GetMilliSeconds ()
+					  << " nodeId: " << m_socket->GetNode()->GetId()
+					  << " by nodeName: " << Names::FindName(m_socket->GetNode ())
+					  << " MsgSize: " << message.size() << std::endl;
+	  filePacketsSent.close();
     }
 }
 

@@ -21,14 +21,14 @@
  *
  */
 
+#ifndef _CUSTOM_UDP_SERVER_H_
+#define _CUSTOM_UDP_SERVER_H_
+
 #include "ns3/core-module.h"
 #include "ns3/socket.h"
 #include "ns3/application.h"
 #include "ns3/address.h"
 #include "ns3/ptr.h"
-
-#ifndef _CUSTOM_UDP_SERVER_H_
-#define _CUSTOM_UDP_SERVER_H_
 
 using namespace ns3;
 using namespace std;
@@ -51,6 +51,19 @@ public:
 private:
   virtual void StartApplication (void);
   virtual void StopApplication (void);
+
+  /**
+   * \Brief, create a udp socket and bind it to the address
+   * \param bindTo, the address to which the udp packet should be bound to
+   * \return socket, the created udp socket
+   */
+  Ptr<Socket> CreateSocket(const Address bindTo);
+
+  /**
+   * Close a udp socket.
+   * \param socket, the udp socket to close
+   */
+  void CloseSocket(Ptr<Socket> socket);
   /**
    * The over-written read callback function that calls ExtractInformationFromPacketAndSendToUpperLayer to send
    * a message that a new packet has been received.
@@ -58,8 +71,10 @@ private:
   virtual void HandleRead (Ptr<Socket> socket);
   /// The function that will be called when a packet is received
   void (*m_packetReceivedCallback)(Ptr<Socket> socket);
-  Ptr<Socket>           m_socket; //!< Socket that will be used to send the messages
-  Address               m_local;         //!< Local address to bind to
+  Ptr<Socket>           m_socketIpv4; //!< Socket that will be used to send the messages for ipv4
+  Ptr<Socket>           m_socketIpv6; //!< Socket that will be used to send the messages for ipv6
+  Address               m_localIpv4;         //!< Local address to bind to for ipv4 socket
+  Address               m_localIpv6;         //!< Local address to bind to for ipv4 socket
 
   TracedCallback<Ptr<const Packet> > m_rxTrace;
   TracedCallback<Ptr<const Packet>, const Address &, const Address &> m_rxTraceWithAddresses;

@@ -29,10 +29,9 @@
 
 using namespace ns3;
 
-CustomUdpServerHelper::CustomUdpServerHelper(Address address)
+CustomUdpServerHelper::CustomUdpServerHelper()
 {
   m_factory.SetTypeId ("ns3::CustomUdpServer");
-  m_factory.Set ("Local", AddressValue (address));
 }
 
 void

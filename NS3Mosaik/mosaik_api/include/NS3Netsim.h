@@ -63,6 +63,7 @@ struct DataXCHG {
 static vector<DataXCHG> dataXchgInput;  ///< Input data exchange vector
 static vector<DataXCHG> dataXchgOutput; ///< Output data exchange vector
 static map<Ipv4Address, uint32_t> mapIpv4NodeId; ///< Map from client Ipv4 to Node Id
+static map<string, set<string>> panNetworks;
 
 
 class NS3Netsim {
@@ -205,7 +206,7 @@ private:
    * \param tcpOrUdp a string that is either set to tcp or udp, indicating which kind of server will be created
    * \param server holds the server id
    */
-  void setUpServer(InetSocketAddress address, string protocol, string server);
+  void setUpServer(InetSocketAddress addressIpv4, Inet6SocketAddress addressIpv6, string protocol, string server);
 
   /**
    * Sets up a tcp or udp client depending on what has been passed in
@@ -215,7 +216,7 @@ private:
    * \param server holds the server id
    * \param client holds the client id
    */
-  void setUpClient(InetSocketAddress address, string protocol, string server, string client);
+  void setUpClient(AddressValue addressValue, string protocol, string server, string client);
 
   vector< vector<bool>> nodeAdjMatrix; ///< Node adjacency matrix
   string nodeAdjMatrixFilename;        ///< Node adjacency matrix filename
@@ -225,17 +226,14 @@ private:
   vector<vector<double>> arrayNodeCoords;  ///< Array of doubles with node coordinates
   NodeContainer nodes;                     ///< NS3 container with simulation nodes
 
-  PointToPointHelper pointToPoint;       ///< Pointer to pointTopoint helper class
   string LinkRate;                       ///< Uniform link data rate
   string LinkDelay;                      ///< Uniform link delay
   string LinkErrorRate;				   ///< Uniform Link error rate
   uint32_t linkCount;                    ///< Network link count
   vector<NetDeviceContainer> p2pDevices; ///< Vector with all link devices
+  vector<NetDeviceContainer> lrWpanDevices; ///< Vector with all lrwpan devices
+  vector<NetDeviceContainer> sixlowpanDevices; ///< Vector with all sixlowpan devices
 
-  InternetStackHelper internet;  ///< Pointer to Internet helper class
-  Ipv4AddressHelper ipv4Address; ///< Pointer to Ipv4 Internet helper class
-
-  MobilityHelper mobility;                      ///< Pointer to mobility (position) helper class
   Ptr<ListPositionAllocator> nodePositionAlloc; ///< Pointer to node position allocation
 
   string appConnectionsFilename;              ///< Application client-server connections filename
@@ -245,10 +243,10 @@ private:
   vector<string>::iterator iList; ///< Application servers vector iterator
   uint16_t sinkPort;              ///< Application port for all server nodes
 
-  MultiClientTcpServerHelper multiClientTcpServerHelper = MultiClientTcpServerHelper(Address()); ///< Application TCP server helper
+  MultiClientTcpServerHelper multiClientTcpServerHelper; ///< Application TCP server helper
   TcpClientHelper tcpClientHelper = TcpClientHelper(Address()); ///< Application TCP client helper
-  CustomUdpClientHelper customUdpClientHelper = CustomUdpClientHelper(Address()); ///< Application UDP server helper
-  CustomUdpServerHelper customUdpServerHelper = CustomUdpServerHelper(Address()); ///< Application UDP client helper
+  CustomUdpClientHelper customUdpClientHelper = CustomUdpClientHelper(Address()); ///< Application UDP client helper
+  CustomUdpServerHelper customUdpServerHelper; ///< Application UDP server helper
 
   double startTime; ///< Simulation start time
   int verbose;      ///< Verbose level
@@ -258,7 +256,6 @@ private:
   Ptr<SmartgridDefaultSimulatorImpl> sim; ///< Pointer to the smartgrid simulator implementation
 
   ApplicationContainer allApplications;
-  NodeContainer allNodes;
 
   string tcpOrUdp; ///< Which network protocol should be used
 };

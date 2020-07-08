@@ -49,11 +49,16 @@ CustomUdpServer::GetTypeId (void)
       .SetParent<Application> ()
       .SetGroupName("Applications")
       .AddConstructor<CustomUdpServer> ()
-      .AddAttribute("Local",
-                    "The value on which to Bind the rx socket.",
-                    AddressValue (),
-                    MakeAddressAccessor (&CustomUdpServer::m_local),
-                    MakeAddressChecker())
+	  .AddAttribute("LocalIpv4",
+					"The value on which to Bind the rx socket.",
+					AddressValue (),
+					MakeAddressAccessor (&CustomUdpServer::m_localIpv4),
+					MakeAddressChecker())
+	  .AddAttribute("LocalIpv6",
+					"The value on which to Bind the rx socket.",
+					AddressValue (),
+					MakeAddressAccessor (&CustomUdpServer::m_localIpv6),
+					MakeAddressChecker())
       .AddTraceSource ("Rx", "A packet has been received",
                        MakeTraceSourceAccessor (&CustomUdpServer::m_rxTrace),
                        "ns3::Packet::TracedCallback")
@@ -85,32 +90,63 @@ CustomUdpServer::StartApplication (void)
 {
   NS_LOG_FUNCTION(this);
   // Create the socket if it does not already exist
-  if (m_socket == 0) {
-      TypeId tid = TypeId::LookupByName ("ns3::UdpSocketFactory");
-      m_socket = Socket::CreateSocket(GetNode(), tid);
-      if (m_socket->Bind(m_local) == -1)
-        {
-          NS_FATAL_ERROR ("Failed to bind socket");
-        }
+  if (m_socketIpv4 == 0)
+  {
+	m_socketIpv4 = CreateSocket(m_localIpv4);
+  }
 
-      m_socket->Listen();
-      m_socket->ShutdownSend ();
-      // No need to worry about multi-cast, not appropriate for TCP
-    }
+  if (m_socketIpv6 == 0)
+  {
+	m_socketIpv6 = CreateSocket(m_localIpv6);
+  }
+}
+
+Ptr<Socket>
+CustomUdpServer::CreateSocket(const Address bindTo)
+{
+  NS_LOG_FUNCTION(this);
+  Ptr<Socket> socket;
+  // Create a socket
+  TypeId tid = TypeId::LookupByName ("ns3::UdpSocketFactory");
+  socket = Socket::CreateSocket(GetNode(), tid);
+  // Bind teh socket
+  if (socket->Bind(bindTo) == -1)
+  {
+    NS_FATAL_ERROR ("Failed to bind socket");
+  }
+
+  // Tell the socket to listen
+  socket->Listen();
+  socket->ShutdownSend ();
+  // No need to worry about multi-cast, not appropriate for TCP
 
   // Set the call back for packet reception for the listening socket
-  m_socket->SetRecvCallback(
-      MakeCallback(&CustomUdpServer::HandleRead, this)
+  socket->SetRecvCallback(
+	  MakeCallback(&CustomUdpServer::HandleRead, this)
   );
+
+  return socket;
 }
 
 void
 CustomUdpServer::StopApplication (void)
 {
   // Close the socket
-  if (m_socket != 0)
-    {
-      m_socket->Close ();
-      m_socket->SetRecvCallback (MakeNullCallback<void, Ptr<Socket> > ());
-    }
+  if (m_socketIpv4 != 0)
+  {
+    CloseSocket(m_socketIpv4);
+  }
+
+  if (m_socketIpv6 != 0)
+  {
+	CloseSocket(m_socketIpv6);
+  }
+}
+
+void
+CustomUdpServer::CloseSocket(Ptr<Socket> socket)
+{
+  NS_LOG_FUNCTION(this);
+  socket->Close ();
+  socket->SetRecvCallback (MakeNullCallback<void, Ptr<Socket> > ());
 }

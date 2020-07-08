@@ -22,14 +22,14 @@
  * Modelled after udp-echo-client.h
  */
 
+#ifndef _TCP_CLIENT_H_
+#define _TCP_CLIENT_H_
+
 #include "ns3/socket.h"
 #include "ns3/application.h"
 #include "ns3/address.h"
 #include "ns3/ptr.h"
 #include "ns3/traced-callback.h"
-
-#ifndef _TCP_SENSOR_H_
-#define _TCP_SENSOR_H_
 
 using namespace ns3;
 
@@ -107,4 +107,4 @@ private:
   TracedCallback<Ptr<const Packet>, const Address &, const Address &> m_rxTraceWithAddresses;
 };
 
-#endif //_TCP_SENSOR_H_
+#endif //_TCP_CLIENT_H_
