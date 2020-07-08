@@ -78,6 +78,8 @@ LXFLAGS = -ljsoncpp\
           ${NS3_LIB}/libns3.30.1-propagation-debug.so\
           ${NS3_LIB}/libns3.30.1-spectrum-debug.so\
           ${NS3_LIB}/libns3.30.1-antenna-debug.so\
+          ${NS3_LIB}/libns3.30.1-wifi-debug.so\
+          ${NS3_LIB}/libns3.30.1-energy-debug.so\
 
 #------------------------#
 #--- Print Debug Info ---#

@@ -28,14 +28,16 @@
 
 //--- Includes ---//
 #include <cstdio>
-#include "NS3Netsim.h"
-#include "ns3-helper.h"
-#include "ns3/lr-wpan-module.h"
-#include "ns3/internet-apps-module.h"
-#include "ns3/sixlowpan-module.h"
-#include "ns3/smartgrid-default-simulator-impl.h"
 #include <cassert>
 #include <string>
+#include "ns3/lr-wpan-module.h"
+#include "ns3/core-module.h"
+#include "ns3/internet-apps-module.h"
+#include "ns3/wifi-module.h"
+#include "ns3/sixlowpan-module.h"
+#include "ns3/smartgrid-default-simulator-impl.h"
+#include "NS3Netsim.h"
+#include "ns3-helper.h"
 
 using namespace std;
 using namespace ns3;
@@ -63,15 +65,15 @@ ExtractInformationFromPacketAndSendToUpperLayer (Ptr<Socket> socket)
   recMessage = recMessage.substr (0,packet->GetSize());
 
   // TODO: Change this so that we get ipv6 and ipv4 addresses depending on the socket passed in
-  Ipv4Address srcIpv4Address = InetSocketAddress::ConvertFrom (from).GetIpv4();
-  uint32_t srcNodeId = mapIpv4NodeId[srcIpv4Address];
+//  Ipv4Address srcIpv4Address = InetSocketAddress::ConvertFrom (from).GetIpv4();
+//  uint32_t srcNodeId = mapIpv4NodeId[srcIpv4Address];
 
   //--- print received msg
   NS_LOG_DEBUG(
       "Pkt Rcv at "    << Simulator::Now ().GetMilliSeconds ()
                        << " by nodeName: " << Names::FindName(socket->GetNode ())
                        << " dstNodeId: "   << socket->GetNode()->GetId()
-                       << " srcNodeId: "   << srcNodeId
+//                       << " srcNodeId: "   << srcNodeId
                        << " Size: "        << packet->GetSize()
                        << " Payload: "     << recMessage
                        << endl;
@@ -84,20 +86,20 @@ ExtractInformationFromPacketAndSendToUpperLayer (Ptr<Socket> socket)
   string val_time = recMessage.substr(current+1);
 
   //--- insert data on dataXchgOutput / give to upper layer
-  DataXCHG dataRcv = { Names::FindName(NodeList::GetNode(srcNodeId)),
-                       Names::FindName(socket->GetNode ()),
-                       val,
-                       stoll(val_time)
-  };
-  dataXchgOutput.push_back(dataRcv);
+//  DataXCHG dataRcv = { Names::FindName(NodeList::GetNode(srcNodeId)),
+//                       Names::FindName(socket->GetNode ()),
+//                       val,
+//                       stoll(val_time)
+//  };
+//  dataXchgOutput.push_back(dataRcv);
 
   ofstream filePacketsSent;
   filePacketsSent.open("packets_rec.pkt", std::ios_base::app);
   filePacketsSent << "time: " << Simulator::Now ().GetMilliSeconds ()
 	  << " by nodeName: " << Names::FindName(socket->GetNode ())
 	  << " dstNodeId: "   << socket->GetNode()->GetId()
-	  << " srcNodeId: "   << srcNodeId
-	  << " Payload: "     << recMessage;
+//	  << " srcNodeId: "   << srcNodeId
+	  << " Payload: "     << recMessage << std::endl;
   filePacketsSent.close();
 }
 
@@ -115,7 +117,7 @@ NS3Netsim::NS3Netsim():
 //  LogComponentEnable("LrWpanNetDevice", LOG_LEVEL_ALL);
 //  LogComponentEnable("LrWpanMac", LOG_LEVEL_ALL);
 //  LogComponentEnable("SmartgridDefaultSimulatorImpl", LOG_LEVEL_ALL);
-  LogComponentEnable("SmartgridNs3Main", LOG_LEVEL_ALL);
+//  LogComponentEnable("SmartgridNs3Main", LOG_LEVEL_ALL);
 //  LogComponentEnable ("MultiClientTcpServer", LOG_LEVEL_ALL);
 //  LogComponentEnable ("TcpClient", LOG_LEVEL_ALL);
 //  LogComponentEnable ("Socket", LOG_LEVEL_ALL);
@@ -296,36 +298,63 @@ NS3Netsim::init (string f_adjmat,
   // Create the LR-WPAN connections specified in the files with 6LoWPAN
   // Iterate through the keys found in the network, the keys act as the center of the PAN
   for (auto center = panNetworks.begin(); center != panNetworks.end(); center++) {
-	// Stores the nodes in the PAN
+    // Stores the nodes in the PAN
 	NodeContainer panNodes;
 	// Add the center to the list
-	panNodes.Add(Names::Find<Node>((*center).first));
+//	panNodes.Add(Names::Find<Node>((*center).first));
 	for (auto spokes = (*center).second.begin(); spokes != (*center).second.end(); spokes++) {
 	  // Add the spokes to the list
 	  panNodes.Add(Names::Find<Node>(*spokes));
 	}
-	// Install the LR-WPAN devices
-	NetDeviceContainer lrwpanDevices = lrWpanHelper.Install(panNodes);
-	// Fake PAN association and short address assignment.
-	lrWpanHelper.AssociateToPan (lrwpanDevices, stoi((*center).first));
-	// Add Sixlowpan devices
-	NetDeviceContainer sixlowpanDevices = sixlowpan.Install (lrwpanDevices);
-	// Add the ipv6 addresses
-	Ipv6InterfaceContainer deviceInterfaces = ipv6Address.Assign (sixlowpanDevices);
+
+	WifiHelper wifi;
+	NetDeviceContainer staDevs;
+	NetDeviceContainer apDevs;
+	WifiMacHelper wifiMac;
+	YansWifiPhyHelper wifiPhy = YansWifiPhyHelper::Default ();
+	YansWifiChannelHelper wifiChannel = YansWifiChannelHelper::Default ();
+	wifiPhy.SetChannel (wifiChannel.Create ());
+	Ssid ssid = Ssid ((*center).first);
+	wifi.SetRemoteStationManager ("ns3::ArfWifiManager");
+
+	wifiMac.SetType ("ns3::StaWifiMac",
+					 "ActiveProbing", BooleanValue (true),
+					 "Ssid", SsidValue (ssid));
+	staDevs = wifi.Install (wifiPhy, wifiMac, panNodes);
+	// setup ap.
+	wifiMac.SetType ("ns3::ApWifiMac",
+					 "Ssid", SsidValue (ssid));
+	apDevs = wifi.Install (wifiPhy, wifiMac, Names::Find<Node>((*center).first));
+
+	wifiPhy.EnablePcap ("AccessPoint", apDevs);
+	wifiPhy.EnablePcap ("Station", staDevs);
+
+	ipv6Address.Assign (staDevs);
+	ipv6Address.Assign (apDevs);
 	ipv6Address.NewNetwork();
+
+//	// Install the LR-WPAN devices
+//	NetDeviceContainer lrwpanDevices = lrWpanHelper.Install(panNodes);
+//	// Fake PAN association and short address assignment.
+//	lrWpanHelper.AssociateToPan (lrwpanDevices, stoi((*center).first));
+//	// Add Sixlowpan devices
+//	NetDeviceContainer sixlowpanDevices = sixlowpan.Install (lrwpanDevices);
+//	// Add the ipv6 addresses
+//	ipv6Address.Assign (sixlowpanDevices);
+//	ipv6Address.NewNetwork();
   }
 
-  if (verbose > 1) {
-	cout << "Printing LR-WPAN network connections read from file" << endl;
-	for (auto it = panNetworks.begin(); it != panNetworks.end(); it++) {
-	  cout << (*it).first << ";";
-	  for (auto it2 = (*it).second.begin(); it2 != (*it).second.end(); it2++) {
-		cout << *it2 << ",";
-		create((*it).first, *it2);
-	  }
-	  cout << endl;
-	}
-  }
+//  if (verbose > 1) {
+//	cout << "Printing LR-WPAN network connections read from file" << endl;
+//	for (auto it = panNetworks.begin(); it != panNetworks.end(); it++) {
+//	  cout << (*it).first << ";";
+//	  for (auto it2 = (*it).second.begin(); it2 != (*it).second.end(); it2++) {
+//		cout << *it2 << ",";
+//		create((*it).first, *it2);
+//	  }
+//	  cout << endl;
+//	}
+//  }
 
   //--- set link error rate
   Ptr<RateErrorModel> em = CreateObject<RateErrorModel> ();
