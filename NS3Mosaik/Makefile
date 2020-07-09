@@ -63,16 +63,16 @@ CXFLAGS +=
 #--- LXFLAGS ---
 #---------------
 LXFLAGS = -ljsoncpp\
-          ${NS3_LIB}/libns3.30.1-core-debug.so\
-          ${NS3_LIB}/libns3.30.1-internet-debug.so\
-          ${NS3_LIB}/libns3.30.1-applications-debug.so\
-          ${NS3_LIB}/libns3.30.1-network-debug.so\
-          ${NS3_LIB}/libns3.30.1-point-to-point-debug.so\
-          ${NS3_LIB}/libns3.30.1-mobility-debug.so\
-          ${NS3_LIB}/libns3.30.1-bridge-debug.so\
-          ${NS3_LIB}/libns3.30.1-traffic-control-debug.so\
-          ${NS3_LIB}/libns3.30.1-stats-debug.so\
-          ${NS3_LIB}/libns3.30.1-mpi-debug.so\
+          ${NS3_LIB}/libns3.30.1-core-optimized.so\
+          ${NS3_LIB}/libns3.30.1-internet-optimized.so\
+          ${NS3_LIB}/libns3.30.1-applications-optimized.so\
+          ${NS3_LIB}/libns3.30.1-network-optimized.so\
+          ${NS3_LIB}/libns3.30.1-point-to-point-optimized.so\
+          ${NS3_LIB}/libns3.30.1-mobility-optimized.so\
+          ${NS3_LIB}/libns3.30.1-bridge-optimized.so\
+          ${NS3_LIB}/libns3.30.1-traffic-control-optimized.so\
+          ${NS3_LIB}/libns3.30.1-stats-optimized.so\
+          ${NS3_LIB}/libns3.30.1-mpi-optimized.so\
 
 
 #------------------------#
