@@ -38,10 +38,13 @@ cd ../../NS3Mosaik
 make
 
 echo "Creating virtual env"
-cd ../
+cd ../../
 mkdir virtualenv
 virtualenv -p /usr/bin/python3 virtualenv/cosimul
 source virtualenv/cosimul/bin/activate
 pip install mosaik
 pip install OpenDSSDirect.py[extras]
 pip install tables
+pip install scipy
+pip install matplotlib
+pip install pandas

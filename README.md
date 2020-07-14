@@ -16,38 +16,29 @@ point to point links.
 * The following python versions have been used to develop the co-simulator:
     * 3.6.8
     * 3.8.2
+* Hardware Requirements:
+    * 8.0 GB or more to build NS-3
 
 The simulator might run on other operating systems and with other python versions, but this has not been tested.
 
 ## Installation
 1. Create project directory
-    > mkdir cosimul
-
-    > cd cosimul
+    
+    ``` 
+       > mkdir cosimul
+       > cd cosimul 
+    ```
 
 2. Clone repository
-    > git clone https://github.com/sustainable-computing/CoSimul_Platform
+    ``` 
+       > git clone https://github.com/sustainable-computing/CoSimul_Platform
+    ```
 
 3. Run Script
-    > cd CoSimul_Platform
-
-    > ./install.sh
-
-### Python / Mosaik / OpenDSS
-#### Create virtualenv and install packages
-> cd <PATH-TO-PROJECT-ROOT>
-
-> mkdir virtualenv
-
-> virtualenv -p /usr/bin/python3 virtualenv/cosimul
-
-> source virtualenv/cosimul/bin/activate
-
-> pip install mosaik
-
-> pip install OpenDSSDirect.py[extras]
-
-> pip install tables
+    ``` 
+       > cd CoSimul_Platform
+       > ./install.sh
+    ```
 
 ## Components used:
 * [Mosaik co-simulation framework](https://mosaik.offis.de/)
@@ -73,4 +64,4 @@ Developers:
 Evandro de Souza, Omid Ardakanian, Ioanis Nikolaidis, "A Co-simulation Platform for Evaluating Cyber Security and Control Applications in the Smart Grid", Proceedings of the IEEE International Conference on Communications (ICC), 2020.
 ```
 
-Last Modification: 2020-07-08
+Last Modification: 2020-07-13
