@@ -16,6 +16,8 @@ point to point links.
 * The following python versions have been used to develop the co-simulator:
     * 3.6.8
     * 3.8.2
+* Hardware Requirements:
+    * 8.0 GB or more to build NS-3
 
 The simulator might run on other operating systems and with other python versions, but this has not been tested.
 
