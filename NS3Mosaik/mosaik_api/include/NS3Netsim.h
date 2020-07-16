@@ -201,11 +201,11 @@ private:
   /**
    * Set up a tcp or udp server depending on what has been passed in.
    *
-   * \param address The address that will be used to assigned addresses to both the server
+   * \param addressPrimary The address that will be used to assign addresses to both type of servers for the primary network
    * \param tcpOrUdp a string that is either set to tcp or udp, indicating which kind of server will be created
    * \param server holds the server id
    */
-  void setUpServer(InetSocketAddress addressIpv4, string protocol, string server);
+  void setUpServer(InetSocketAddress addressPrimary, string protocol, string server);
 
   /**
    * Sets up a tcp or udp client depending on what has been passed in

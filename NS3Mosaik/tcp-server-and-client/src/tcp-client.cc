@@ -178,8 +178,6 @@ TcpClient::SendMessage (string message)
 					<< " by nodeName: " << Names::FindName(m_socket->GetNode ())
                     << " MsgSize: " << message.size() << std::endl;
     filePacketsSent.close();
-  } else {
-    std::cout << "m_socket is 0" << std::endl;
   }
 }
 

@@ -57,14 +57,14 @@ class MultiClientTcpServer: public Application
   virtual ~MultiClientTcpServer ();
 
   /**
-   * \return pointer to the listening socket with ipv4 address
+   * \return pointer to the listening socket in the primary network
    */
-  Ptr<Socket> GetListeningSocketIpv4 (void) const;
+  Ptr<Socket> GetListeningSocketPrimary (void) const;
 
   /**
- 	* \return pointer to the listening socket with ipv4 address
+ 	* \return pointer to the listening socket with the wifi network
  	*/
-  Ptr<Socket> GetListeningSocketIpv6 (void) const;
+  Ptr<Socket> GetListeningSocketWifi (void) const;
 
   /**
    * \return list of pointer to accepted sockets
@@ -77,8 +77,22 @@ class MultiClientTcpServer: public Application
    */
   void SetPacketReceivedCallBack(void (*callback)(Ptr<Socket> socket));
 
-  Address         m_localIpv4;         //!< Local address to bind to for ipv4 socket
-  Address		  m_localIpv6;			//!< Local address to bind to for the ipv6 socket
+  /**
+   * \brief Created to control the creation of the wifi-socket. This needs to be done before the application is started.
+   * After the application is started, calling this method will have no effect. Default is no-wifi socket creation.
+   *
+   * \param the bool value which will enable/disable the wifi creation
+   */
+  void SetCreateWifiSocket(bool enable);
+
+  /**
+   * \brief Fetch the value of the wifi socket creation bool
+   * \return bool indicating if the wifi socket will be created or not
+   */
+  bool GetCreateWifiSocket(void);
+
+  Address         m_LocalPrimary;         //!< The primary network ipv4 address
+  Address		  m_LocalWifi;			//!< The secondary network ipv4 address, this is the wifi network address
  protected:
   virtual void DoDispose (void);
 
@@ -134,11 +148,10 @@ class MultiClientTcpServer: public Application
 
   // When a connection is accepted in TCP, a new socket is returned
   // So we need to store a listening socket for this class
-  Ptr<Socket>     m_listeningSocketIpv4; //!< Listening socket for ipv4
-  Ptr<Socket>     m_listeningSocketIpv6; //!< Listening socket for ipv6
+  Ptr<Socket>     m_listeningPrimary; //!< Listening socket for the primary network
+  Ptr<Socket>     m_listeningWifi; //!< Listening socket for the wifi network
   // And a list of sockets that have been accepted
   std::list<Ptr<Socket> > m_acceptedSocketList; //!< the accepted sockets
-
 
   /// Traced Callback: received packets, source address.
   TracedCallback<Ptr<const Packet>, const Address &> m_rxTrace;
@@ -148,6 +161,9 @@ class MultiClientTcpServer: public Application
 
   /// The function that will be called when a packet is received
   void (*m_packetReceivedCallback)(Ptr<Socket> socket);
+
+  /// The creation of a wifi-socket will depend on the value of this member
+  bool m_createWifiSocket;
 };
 
 #endif //_MULTI_CLIENT_TCP_SERVER_H_

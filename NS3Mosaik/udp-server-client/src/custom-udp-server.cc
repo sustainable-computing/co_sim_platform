@@ -49,15 +49,15 @@ CustomUdpServer::GetTypeId (void)
       .SetParent<Application> ()
       .SetGroupName("Applications")
       .AddConstructor<CustomUdpServer> ()
-	  .AddAttribute("LocalIpv4",
+	  .AddAttribute("LocalPrimary",
 					"The value on which to Bind the rx socket.",
 					AddressValue (),
-					MakeAddressAccessor (&CustomUdpServer::m_localIpv4),
+					MakeAddressAccessor (&CustomUdpServer::m_LocalPrimary),
 					MakeAddressChecker())
-	  .AddAttribute("LocalIpv6",
+	  .AddAttribute("LocalWifi",
 					"The value on which to Bind the rx socket.",
 					AddressValue (),
-					MakeAddressAccessor (&CustomUdpServer::m_localIpv6),
+					MakeAddressAccessor (&CustomUdpServer::m_LocalWifi),
 					MakeAddressChecker())
       .AddTraceSource ("Rx", "A packet has been received",
                        MakeTraceSourceAccessor (&CustomUdpServer::m_rxTrace),
@@ -67,6 +67,20 @@ CustomUdpServer::GetTypeId (void)
                        "ns3::Packet::TwoAddressTracedCallback")
   ;
   return tid;
+}
+
+CustomUdpServer::CustomUdpServer()
+{
+  NS_LOG_FUNCTION(this);
+  // Set the socket to null
+  m_socketPrimary = 0;
+  m_socketWifi = 0;
+  m_createWifiSocket = false;
+}
+
+CustomUdpServer::~CustomUdpServer()
+{
+  NS_LOG_FUNCTION (this);
 }
 
 void
@@ -90,14 +104,14 @@ CustomUdpServer::StartApplication (void)
 {
   NS_LOG_FUNCTION(this);
   // Create the socket if it does not already exist
-  if (m_socketIpv4 == 0)
+  if (m_socketPrimary == 0)
   {
-	m_socketIpv4 = CreateSocket(m_localIpv4);
+	m_socketPrimary = CreateSocket(m_LocalPrimary);
   }
 
-  if (m_socketIpv6 == 0)
+  if (m_socketWifi == 0 && m_createWifiSocket == true)
   {
-	m_socketIpv6 = CreateSocket(m_localIpv6);
+	m_socketWifi = CreateSocket(m_LocalWifi);
   }
 }
 
@@ -132,14 +146,14 @@ void
 CustomUdpServer::StopApplication (void)
 {
   // Close the socket
-  if (m_socketIpv4 != 0)
+  if (m_socketPrimary != 0)
   {
-    CloseSocket(m_socketIpv4);
+    CloseSocket(m_socketPrimary);
   }
 
-  if (m_socketIpv6 != 0)
+  if (m_socketWifi != 0)
   {
-	CloseSocket(m_socketIpv6);
+	CloseSocket(m_socketWifi);
   }
 }
 
@@ -149,4 +163,18 @@ CustomUdpServer::CloseSocket(Ptr<Socket> socket)
   NS_LOG_FUNCTION(this);
   socket->Close ();
   socket->SetRecvCallback (MakeNullCallback<void, Ptr<Socket> > ());
+}
+
+void
+CustomUdpServer::SetCreateWifiSocket(bool enable)
+{
+  NS_LOG_FUNCTION(this);
+  m_createWifiSocket = enable;
+}
+
+bool
+CustomUdpServer::GetCreateWifiSocket(void)
+{
+  NS_LOG_FUNCTION(this);
+  return m_createWifiSocket;
 }

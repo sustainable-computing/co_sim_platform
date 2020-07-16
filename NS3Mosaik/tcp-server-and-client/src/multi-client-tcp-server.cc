@@ -39,15 +39,15 @@ MultiClientTcpServer::GetTypeId (void)
       .SetParent<Application> ()
       .SetGroupName("Applications")
       .AddConstructor<MultiClientTcpServer> ()
-      .AddAttribute("LocalIpv4",
+      .AddAttribute("LocalPrimary",
                     "The value on which to Bind the rx socket.",
                     AddressValue (),
-                    MakeAddressAccessor (&MultiClientTcpServer::m_localIpv4),
+                    MakeAddressAccessor (&MultiClientTcpServer::m_LocalPrimary),
                     MakeAddressChecker())
-	  .AddAttribute("LocalIpv6",
+	  .AddAttribute("LocalWifi",
 					"The value on which to Bind the rx socket.",
 					AddressValue (),
-					MakeAddressAccessor (&MultiClientTcpServer::m_localIpv6),
+					MakeAddressAccessor (&MultiClientTcpServer::m_LocalWifi),
 					MakeAddressChecker())
       .AddTraceSource("Rx",
                       "A packet has been received",
@@ -65,9 +65,10 @@ MultiClientTcpServer::MultiClientTcpServer()
 {
   NS_LOG_FUNCTION(this);
   // Set the socket to null
-  m_listeningSocketIpv4 = 0;
-  m_listeningSocketIpv6 = 0;
+  m_listeningPrimary = 0;
+  m_listeningWifi = 0;
   m_packetReceivedCallback = 0;
+  m_createWifiSocket = false;
 }
 
 MultiClientTcpServer::~MultiClientTcpServer()
@@ -76,17 +77,17 @@ MultiClientTcpServer::~MultiClientTcpServer()
 }
 
 Ptr<Socket>
-MultiClientTcpServer::GetListeningSocketIpv4 (void) const
+MultiClientTcpServer::GetListeningSocketPrimary (void) const
 {
   NS_LOG_FUNCTION (this);
-  return m_listeningSocketIpv4;
+  return m_listeningPrimary;
 }
 
 Ptr<Socket>
-MultiClientTcpServer::GetListeningSocketIpv6 (void) const
+MultiClientTcpServer::GetListeningSocketWifi (void) const
 {
   NS_LOG_FUNCTION (this);
-  return m_listeningSocketIpv6;
+  return m_listeningWifi;
 }
 
 std::list<Ptr<Socket> >
@@ -101,8 +102,8 @@ MultiClientTcpServer::DoDispose (void)
 {
   NS_LOG_FUNCTION (this);
   // Clear the listening socket
-  m_listeningSocketIpv4 = 0;
-  m_listeningSocketIpv6 = 0;
+  m_listeningPrimary = 0;
+  m_listeningWifi = 0;
   // Clear the accepted socket
   m_acceptedSocketList.clear ();
 
@@ -121,14 +122,14 @@ void
 MultiClientTcpServer::StartApplication()
 {
   NS_LOG_FUNCTION(this);
-  // Create ipv4 listening socket if it does not exist
-  if (m_listeningSocketIpv4 == 0) {
-	m_listeningSocketIpv4 = CreateListeningSocket(m_localIpv4);
+  // Create ipv4 primary listening socket if it does not exist
+  if (m_listeningPrimary == 0) {
+	m_listeningPrimary = CreateListeningSocket(m_LocalPrimary);
   }
 
-  // Create ipv6 listening socket if it does not exist
-  if (m_listeningSocketIpv6 == 0) {
-	m_listeningSocketIpv6 = CreateListeningSocket(m_localIpv6);
+  // Create ipv4 wifi listening socket if it does not exist
+  if (m_listeningWifi == 0 && m_createWifiSocket) {
+	m_listeningWifi = CreateListeningSocket(m_LocalWifi);
   }
 }
 
@@ -180,13 +181,13 @@ MultiClientTcpServer::StopApplication()
   }
 
   // Close the listening sockets
-  if (m_listeningSocketIpv4 != 0)
+  if (m_listeningPrimary != 0)
   {
-    CloseListeningSocket(m_listeningSocketIpv4);
+    CloseListeningSocket(m_listeningPrimary);
   }
-  if (m_listeningSocketIpv6 != 0)
+  if (m_listeningWifi != 0)
   {
-	CloseListeningSocket(m_listeningSocketIpv6);
+	CloseListeningSocket(m_listeningWifi);
   }
 }
 
@@ -235,11 +236,26 @@ MultiClientTcpServer::HandleAccept (Ptr<Socket> socket, const Address& from)
 }
 
 void
-MultiClientTcpServer::HandleRead(Ptr<Socket> socket) {
+MultiClientTcpServer::HandleRead(Ptr<Socket> socket)
+{
   NS_LOG_FUNCTION (this);
   // Call the callback in the simulator to let it know that a message has been received
   if (m_packetReceivedCallback != NULL)
     {
       m_packetReceivedCallback(socket);
     }
+}
+
+void
+MultiClientTcpServer::SetCreateWifiSocket(bool enable)
+{
+  NS_LOG_FUNCTION(this);
+  m_createWifiSocket = enable;
+}
+
+bool
+MultiClientTcpServer::GetCreateWifiSocket(void)
+{
+  NS_LOG_FUNCTION(this);
+  return m_createWifiSocket;
 }

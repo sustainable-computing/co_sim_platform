@@ -43,11 +43,42 @@ public:
    * \brief Configures the server
    */
   static TypeId GetTypeId (void);
+
+  CustomUdpServer ();
+  virtual ~CustomUdpServer ();
+
   /**
    * \brief set the callback function that is called when a packet is received
    * \param callback the function to which the callback is set.
    */
   void SetPacketReceivedCallBack(void (*callback)(Ptr<Socket> socket));
+
+  /**
+   * \return pointer to the listening socket in the primary network
+   */
+  Ptr<Socket> GetListeningSocketPrimary (void) const;
+
+  /**
+   * \return pointer to the listening socket with the wifi network
+   */
+  Ptr<Socket> GetListeningSocketWifi (void) const;
+
+  /**
+   * \brief Created to control the creation of the wifi-socket. This needs to be done before the application is started.
+   * After the application is started, calling this method will have no effect. Default is no-wifi socket creation.
+   *
+   * \param the bool value which will enable/disable the wifi creation
+   */
+  void SetCreateWifiSocket(bool enable);
+
+  /**
+   * \brief Fetch the value of the wifi socket creation bool
+   * \return bool indicating if the wifi socket will be created or not
+   */
+  bool GetCreateWifiSocket(void);
+
+  Address         m_LocalPrimary;         //!< The primary network ipv4 address
+  Address		  m_LocalWifi;			//!< The secondary network ipv4 address, this is the wifi network address
 private:
   virtual void StartApplication (void);
   virtual void StopApplication (void);
@@ -71,13 +102,15 @@ private:
   virtual void HandleRead (Ptr<Socket> socket);
   /// The function that will be called when a packet is received
   void (*m_packetReceivedCallback)(Ptr<Socket> socket);
-  Ptr<Socket>           m_socketIpv4; //!< Socket that will be used to send the messages for ipv4
-  Ptr<Socket>           m_socketIpv6; //!< Socket that will be used to send the messages for ipv6
-  Address               m_localIpv4;         //!< Local address to bind to for ipv4 socket
-  Address               m_localIpv6;         //!< Local address to bind to for ipv4 socket
+
+  Ptr<Socket>     m_socketPrimary; //!< Socket for the primary network
+  Ptr<Socket>     m_socketWifi; //!< Socket for the wifi network
 
   TracedCallback<Ptr<const Packet> > m_rxTrace;
   TracedCallback<Ptr<const Packet>, const Address &, const Address &> m_rxTraceWithAddresses;
+
+  /// The creation of a wifi-socket will depend on the value of this member
+  bool m_createWifiSocket;
 };
 
 #endif //_CUSTOM_UDP_SERVER_H_
