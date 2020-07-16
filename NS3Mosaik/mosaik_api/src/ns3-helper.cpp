@@ -266,12 +266,3 @@ CreateMapIpv4NodeId(NodeContainer nodes)
 
   return mapIpv4NodeId;
 }
-
-map<string, set<string>> CreateMapForLRWPAN(string lrWpanFileName) {
-  // What will be returned
-  map<string, set<string>> readFromFile;
-  readFromFile["632"] = set<string>();
-  readFromFile["632"].insert("6321");
-  readFromFile["632"].insert("6322");
-  return readFromFile;
-}

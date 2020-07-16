@@ -30,11 +30,9 @@
 #include <cstdio>
 #include <cassert>
 #include <string>
-#include "ns3/lr-wpan-module.h"
 #include "ns3/core-module.h"
 #include "ns3/internet-apps-module.h"
 #include "ns3/wifi-module.h"
-#include "ns3/sixlowpan-module.h"
 #include "ns3/smartgrid-default-simulator-impl.h"
 #include "NS3Netsim.h"
 #include "ns3-helper.h"
@@ -64,16 +62,17 @@ ExtractInformationFromPacketAndSendToUpperLayer (Ptr<Socket> socket)
   string recMessage = string((char*)buffer);
   recMessage = recMessage.substr (0,packet->GetSize());
 
-  // TODO: Change this so that we get ipv6 and ipv4 addresses depending on the socket passed in
-//  Ipv4Address srcIpv4Address = InetSocketAddress::ConvertFrom (from).GetIpv4();
-//  uint32_t srcNodeId = mapIpv4NodeId[srcIpv4Address];
+  Ipv4Address srcIpv4Address = InetSocketAddress::ConvertFrom (from).GetIpv4();
+  uint32_t srcNodeId = mapIpv4NodeId[srcIpv4Address];
 
   //--- print received msg
   NS_LOG_DEBUG(
       "Pkt Rcv at "    << Simulator::Now ().GetMilliSeconds ()
-                       << " by nodeName: " << Names::FindName(socket->GetNode ())
+                       << " dstNodeName: " << Names::FindName(socket->GetNode ())
                        << " dstNodeId: "   << socket->GetNode()->GetId()
-//                       << " srcNodeId: "   << srcNodeId
+                       << " srcNodeName: " << Names::FindName(socket->GetNode ())
+                       << " srcNodeId: "   << srcNodeId
+                       << " from: " 	   << InetSocketAddress::ConvertFrom (from).GetIpv4()
                        << " Size: "        << packet->GetSize()
                        << " Payload: "     << recMessage
                        << endl;
@@ -86,20 +85,24 @@ ExtractInformationFromPacketAndSendToUpperLayer (Ptr<Socket> socket)
   string val_time = recMessage.substr(current+1);
 
   //--- insert data on dataXchgOutput / give to upper layer
-//  DataXCHG dataRcv = { Names::FindName(NodeList::GetNode(srcNodeId)),
-//                       Names::FindName(socket->GetNode ()),
-//                       val,
-//                       stoll(val_time)
-//  };
-//  dataXchgOutput.push_back(dataRcv);
+  DataXCHG dataRcv = { Names::FindName(NodeList::GetNode(srcNodeId)),
+                       Names::FindName(socket->GetNode ()),
+                       val,
+                       stoll(val_time)
+  };
+  dataXchgOutput.push_back(dataRcv);
 
   ofstream filePacketsSent;
   filePacketsSent.open("packets_rec.pkt", std::ios_base::app);
-  filePacketsSent << "time: " << Simulator::Now ().GetMilliSeconds ()
-	  << " by nodeName: " << Names::FindName(socket->GetNode ())
-	  << " dstNodeId: "   << socket->GetNode()->GetId()
-//	  << " srcNodeId: "   << srcNodeId
-	  << " Payload: "     << recMessage << std::endl;
+  filePacketsSent << "Pkt Rcv at "    << Simulator::Now ().GetMilliSeconds ()
+				  << " dstNodeName: " << Names::FindName(socket->GetNode ())
+				  << " dstNodeId: "   << socket->GetNode()->GetId()
+				  << " srcNodeId: "   << srcNodeId
+				  << " from: " 		  << InetSocketAddress::ConvertFrom (from).GetIpv4()
+				  << " Size: "        << packet->GetSize()
+				  << " Payload: "     << recMessage
+				  << endl;
+
   filePacketsSent.close();
 }
 
@@ -109,29 +112,7 @@ NS3Netsim::NS3Netsim():
   //--- setup simulation type
   GlobalValue::Bind ("SimulatorImplementationType",
                      StringValue ("ns3::SmartgridDefaultSimulatorImpl"));
-//  LogComponentEnable ("Ping6Application", LOG_LEVEL_ALL);
-//  LogComponentEnable("ArpL3Protocol", LOG_LEVEL_ALL);
-//  LogComponentEnable("ArpCache", LOG_LEVEL_ALL);
-//  LogComponentEnable("Simulator", LOG_LEVEL_ALL);
-//  LogComponentEnable("LrWpanCsmaCa", LOG_LEVEL_ALL);
-//  LogComponentEnable("LrWpanNetDevice", LOG_LEVEL_ALL);
-//  LogComponentEnable("LrWpanMac", LOG_LEVEL_ALL);
-//  LogComponentEnable("SmartgridDefaultSimulatorImpl", LOG_LEVEL_ALL);
-//  LogComponentEnable("SmartgridNs3Main", LOG_LEVEL_ALL);
-//  LogComponentEnable ("MultiClientTcpServer", LOG_LEVEL_ALL);
-//  LogComponentEnable ("TcpClient", LOG_LEVEL_ALL);
-//  LogComponentEnable ("Socket", LOG_LEVEL_ALL);
-//  LogComponentEnable ("SocketFactory", LOG_LEVEL_ALL);
-//  LogComponentEnable ("TcpSocket", LOG_LEVEL_ALL);
-//  LogComponentEnable ("TcpSocketBase", LOG_LEVEL_ALL);
-//  LogComponentEnable ("SixLowPanNetDevice", LOG_LEVEL_ALL);
-//  LogComponentEnable ("TcpL4Protocol", LOG_LEVEL_ALL);
-//  LogComponentEnable ("IpL4Protocol", LOG_LEVEL_ALL);
-//  LogComponentEnable ("EventImpl", LOG_LEVEL_ALL);
-//  LogComponentEnable ("Node", LOG_LEVEL_ALL);
-//  LogComponentEnable ("Application", LOG_LEVEL_ALL);
-//  LogComponentEnable ("Packet", LOG_LEVEL_ALL);
-//  LogComponentEnable ("Address", LOG_LEVEL_ALL);
+  LogComponentEnable ("SmartgridNs3Main", LOG_LEVEL_ALL);
 }
 
 
@@ -154,18 +135,26 @@ NS3Netsim::init (string f_adjmat,
 {
   // Point to point helper for point to point connections
   PointToPointHelper pointToPoint;
-  // LrWpanHelper for 802.15.4 wireless communcation
-  LrWpanHelper lrWpanHelper;
   // Internet stack helper to help with installation of internet
   InternetStackHelper internet;
   // Pointer to Ipv4 Internet helper class
   Ipv4AddressHelper ipv4Address;
-  // Pointer to the Ipv6 Internet helper class
-  Ipv6AddressHelper ipv6Address;
   // Pointer to mobility (position) helper class
   MobilityHelper mobility;
-  // Helper, set up a stack to be used between IPv6 and a generic
-  SixLowPanHelper sixlowpan;
+  // Wifi network helper, meant to help install the wifi net device
+  WifiHelper wifi;
+  wifi.SetRemoteStationManager("ns3::ConstantRateWifiManager");
+  // Wifi mac helper
+  WifiMacHelper wifiMac;
+  // Wifi physical layer helper
+  YansWifiPhyHelper wifiPhy = YansWifiPhyHelper::Default();
+  // Wifi channel helper
+  YansWifiChannelHelper wifiChannel = YansWifiChannelHelper::Default();
+  // Set the properties of the wifi channel
+  wifiChannel.SetPropagationDelay ("ns3::ConstantSpeedPropagationDelayModel");
+  wifiChannel.AddPropagationLoss ("ns3::LogDistancePropagationLossModel",
+								  "Exponent", DoubleValue (3.0),
+								  "ReferenceLoss", DoubleValue (40.0459));
 
   allApplications = ApplicationContainer ();
   //--- verbose level
@@ -186,9 +175,8 @@ NS3Netsim::init (string f_adjmat,
   linkCount = 0;
 
   //--- set address properties for ipv4
-  ipv4Address.SetBase ("10.0.0.0", "255.255.255.252");
-  //--- set the address properties for ipv6
-  ipv6Address.SetBase (Ipv6Address ("2001:2::"), Ipv6Prefix (64));
+  // For the primary network, the address will start with 172
+  ipv4Address.SetBase ("172.0.0.0", "255.255.255.0");
 
   //--- set application destination port
   sinkPort = 3030;
@@ -212,6 +200,7 @@ NS3Netsim::init (string f_adjmat,
   NS_LOG_INFO ("Load node names and coordinates");
   arrayNamesCoords = ReadCoordinatesFile (nodeCoordinatesFilename);
   arrayNodeCoords = loadNodeCoords(arrayNamesCoords);
+  PrintNamesCoordinates (nodeCoordinatesFilename.c_str (), arrayNamesCoords);
   if (verbose > 1) {
       PrintNamesCoordinates (nodeCoordinatesFilename.c_str (), arrayNamesCoords);
     }
@@ -263,7 +252,8 @@ NS3Netsim::init (string f_adjmat,
   internet.Install (NodeContainer::GetGlobal ());
 
   //--- create network topology
-  NS_LOG_INFO ("Create p2p and lr-wpan links Between Nodes, then set internet stack and addresses");
+  NS_LOG_INFO ("Create p2p links and wifi networks between Nodes, then set internet stack and addresses");
+  // Create the p2p links for the hard-wired links
   pointToPoint.SetDeviceAttribute  ("DataRate", StringValue (LinkRate));
   pointToPoint.SetChannelAttribute ("Delay",    StringValue (LinkDelay));
   for (size_t i = 0; i < nodeAdjMatrix.size (); i++)
@@ -292,69 +282,40 @@ NS3Netsim::init (string f_adjmat,
 	}
   }
 
-  // Getting PAN network from files
-  panNetworks = CreateMapForLRWPAN("");
+  // For the wifi network, the address will start with 10
+  ipv4Address.NewNetwork();
+  ipv4Address.SetBase ("192.168.0.0", "255.255.255.0");
+  wifiNetworks["632"] = set<string>();
+  wifiNetworks["632"].insert("6321");
+  wifiNetworks["632"].insert("6322");
+  // Create a WiFi network according to the nodes passed in, each set inside the vector is a network that needs to be created
+  for (auto network = wifiNetworks.begin(); network != wifiNetworks.end(); network++) {
+    // Grab the end node of the primary network
+    string primaryNodeName = (*network).first;
 
-  // Create the LR-WPAN connections specified in the files with 6LoWPAN
-  // Iterate through the keys found in the network, the keys act as the center of the PAN
-  for (auto center = panNetworks.begin(); center != panNetworks.end(); center++) {
-    // Stores the nodes in the PAN
-	NodeContainer panNodes;
-	// Add the center to the list
-//	panNodes.Add(Names::Find<Node>((*center).first));
-	for (auto spokes = (*center).second.begin(); spokes != (*center).second.end(); spokes++) {
-	  // Add the spokes to the list
-	  panNodes.Add(Names::Find<Node>(*spokes));
-	}
+    // Find all the nodes in the network
+    NodeContainer networkNodes;
+	networkNodes.Add(Names::Find<Node>(primaryNodeName));
+    for (auto nodeName = (*network).second.begin(); nodeName != (*network).second.end(); nodeName++) {
+	  networkNodes.Add(Names::Find<Node>(*nodeName));
+    }
 
-	WifiHelper wifi;
-	NetDeviceContainer staDevs;
-	NetDeviceContainer apDevs;
-	WifiMacHelper wifiMac;
-	YansWifiPhyHelper wifiPhy = YansWifiPhyHelper::Default ();
-	YansWifiChannelHelper wifiChannel = YansWifiChannelHelper::Default ();
-	wifiPhy.SetChannel (wifiChannel.Create ());
-	Ssid ssid = Ssid ((*center).first);
-	wifi.SetRemoteStationManager ("ns3::ArfWifiManager");
+    // Create a new channel for a new wi-fi network
+	wifiPhy.SetChannel(wifiChannel.Create());
+    // New ssid with the name of the end node in the primary network
+	Ssid ssid = Ssid(primaryNodeName);
 
-	wifiMac.SetType ("ns3::StaWifiMac",
-					 "ActiveProbing", BooleanValue (true),
-					 "Ssid", SsidValue (ssid));
-	staDevs = wifi.Install (wifiPhy, wifiMac, panNodes);
-	// setup ap.
-	wifiMac.SetType ("ns3::ApWifiMac",
-					 "Ssid", SsidValue (ssid));
-	apDevs = wifi.Install (wifiPhy, wifiMac, Names::Find<Node>((*center).first));
+	// Set the type of mac network, with the correct ssid
+	wifiMac.SetType("ns3::AdhocWifiMac",
+					"Ssid", SsidValue(ssid));
 
-	wifiPhy.EnablePcap ("AccessPoint", apDevs);
-	wifiPhy.EnablePcap ("Station", staDevs);
+	// Connect all the devices
+	NetDeviceContainer devices = wifi.Install (wifiPhy, wifiMac, networkNodes);
 
-	ipv6Address.Assign (staDevs);
-	ipv6Address.Assign (apDevs);
-	ipv6Address.NewNetwork();
-
-//	// Install the LR-WPAN devices
-//	NetDeviceContainer lrwpanDevices = lrWpanHelper.Install(panNodes);
-//	// Fake PAN association and short address assignment.
-//	lrWpanHelper.AssociateToPan (lrwpanDevices, stoi((*center).first));
-//	// Add Sixlowpan devices
-//	NetDeviceContainer sixlowpanDevices = sixlowpan.Install (lrwpanDevices);
-//	// Add the ipv6 addresses
-//	ipv6Address.Assign (sixlowpanDevices);
-//	ipv6Address.NewNetwork();
+	// Assign the addresses
+	ipv4Address.Assign(devices);
+	ipv4Address.NewNetwork();
   }
-
-//  if (verbose > 1) {
-//	cout << "Printing LR-WPAN network connections read from file" << endl;
-//	for (auto it = panNetworks.begin(); it != panNetworks.end(); it++) {
-//	  cout << (*it).first << ";";
-//	  for (auto it2 = (*it).second.begin(); it2 != (*it).second.end(); it2++) {
-//		cout << *it2 << ",";
-//		create((*it).first, *it2);
-//	  }
-//	  cout << endl;
-//	}
-//  }
 
   //--- set link error rate
   Ptr<RateErrorModel> em = CreateObject<RateErrorModel> ();
@@ -386,13 +347,10 @@ NS3Netsim::init (string f_adjmat,
   NS_LOG_INFO ("Number of all nodes is: " << nodes.GetN ());
 
   //--- set regular trace file
-  AsciiTraceHelper ascii;
+//  AsciiTraceHelper ascii;
 //  pointToPoint.EnableAsciiAll (ascii.CreateFileStream ("pointToPointNS3.tr"));
-//  lrWpanHelper.EnableAsciiAll (ascii.CreateFileStream ("lrWpanHelperNS3.tr"));
 //  pointToPoint.EnablePcapAll("pcapNS3Netsim.pcap");
 //  pointToPoint.EnablePcap("dse", 0, 0, true);
-//  lrWpanHelper.EnablePcapAll("lrWpanHelperNS3.pcap");
-//  lrWpanHelper.EnablePcap("dse", 0, 0, true);
 }
 
 
@@ -401,7 +359,6 @@ NS3Netsim::create (string client, string server)
 {
   NS_LOG_FUNCTION(this);
   bool found = false;
-
   //---
   //--- update list of application connections
   //---
@@ -419,10 +376,10 @@ NS3Netsim::create (string client, string server)
           break;
         }
     }
+
   //--- new connection, create entries
   if(found == false) {
 	arrayAppConnections.push_back(record);
-
 	// create server socket
 	NS_LOG_INFO("Create server.");
 	Ptr<Node> srvNode = Names::Find<Node>(server);
@@ -442,22 +399,25 @@ NS3Netsim::create (string client, string server)
 	}
 	// create client socket
 	NS_LOG_INFO("Create client.");
-	// Check if  this is part of one of the LR-WPAN networks
-	// If part of LR-WPAN, use ipv6, otherwise use ipv4
-	if (panNetworks.count(server) != 0 && panNetworks[server].count(client) != 0) {
-	  Ipv6InterfaceAddress sink_iaddr = dstNode->GetObject<Ipv6>()->GetAddress(1,0);
-	  Inet6SocketAddress remote = Inet6SocketAddress(sink_iaddr.GetAddress(), sinkPort);
-	  setUpClient(AddressValue(remote), tcpOrUdp, server, client);
+
+	// Get the net device depending on if the nodes are in a wifi network or a p2p network
+	Ipv4InterfaceAddress serverAddr;
+
+	if (wifiNetworks.count(server) != 0 && wifiNetworks[server].count(client) != 0) {
+	  std::cout << "here" << std::endl;
+	  serverAddr = dstNode->GetObject<Ipv4>()->GetAddress(2,0);
 	} else {
-	  Ipv4InterfaceAddress sink_iaddr = dstNode->GetObject<Ipv4>()->GetAddress(1,0);
-	  InetSocketAddress remote = InetSocketAddress(sink_iaddr.GetLocal(), sinkPort);
-	  setUpClient(AddressValue(remote), tcpOrUdp, server, client);
+	  serverAddr = dstNode->GetObject<Ipv4>()->GetAddress(2,0);
 	}
+
+	InetSocketAddress remote = InetSocketAddress(serverAddr.GetLocal(), sinkPort);
+	std::cout << remote.GetIpv4() << std::endl;
+	setUpClient(AddressValue(remote), tcpOrUdp, server, client);
   }
 }
 
 void
-NS3Netsim::setUpServer(InetSocketAddress addressIpv4, Inet6SocketAddress addressIpv6, string protocol, string server)
+NS3Netsim::setUpServer(std::vector<InetSocketAddress> addressIpv4, string protocol, string server)
 {
   NS_LOG_FUNCTION(this);
   // Where the returned application will be stored
@@ -586,9 +546,10 @@ NS3Netsim::runUntil (string nextStop)
         }
     }
 
-  if (stoi(nextStop) % 100 == 0){
-	schedule ("6321", "632", to_string(-stoi(nextStop)), to_string(stoi(nextStop) + 20));
-  }
+//  if (stoi(nextStop) % 100 == 0){
+//	schedule ("6321", "632", to_string(-stoi(nextStop)), to_string(stoi(nextStop) + 20));
+//	schedule ("6322", "632", to_string(-stoi(nextStop)), to_string(stoi(nextStop) + 20));
+//  }
 
   if (verbose > 1) {
       std::cout << "NS3Netsim::runUntil After_run NS3 time: " <<  Simulator::Now ().GetMilliSeconds () << std::endl;

@@ -115,12 +115,28 @@ void PrintIpAddresses(NodeContainer nodes);
 map<Ipv4Address, uint32_t> CreateMapIpv4NodeId(NodeContainer nodes);
 
 /**
- * TODO: Reads the files for the LR-WPAN networks that will be created.
- * For now returns a fake network to test the LR-WPAN connections
- *
- * \param lrWpanFileName String, filename of the file that contains information on the LR-WPAN networks
- * \returns Map, keys being the center of LR-WPAN and set of nodes being the to that key
+ * Get a wifi net-device from the node passed in
  */
-map<string, set<string>> CreateMapForLRWPAN(string lrWpanFileName);
+template <typename T>
+Ptr<T> GetNetDeviceOfType(NodeContainer node) {
+  // Get the number of nodes in the node container, if larger than one, throw an error
+  if (node.GetN() != 1) {
+	throw "Number of nodes passed in is too large, the node container can only contain one node.";
+  }
+
+  // Now iterate through the net devices
+  for (int i = 0; i < node.Get(0)->GetNDevices(); i++) {
+	// Try a dynamic cast
+	Ptr<T> netDevice = DynamicCast<T> (node.Get(0)->GetDevice(i));
+	// If T is not null, successful, return the device
+	if (netDevice != 0) {
+	  return netDevice;
+	}
+  }
+
+  // If you've gotten to this point there is no net device of this type, throw an error
+  throw "NetDevice of this correct type not found";
+}
+
 
 #endif /* SMARTGRID_NS3_HELPER_H_ */

@@ -63,8 +63,7 @@ struct DataXCHG {
 static vector<DataXCHG> dataXchgInput;  ///< Input data exchange vector
 static vector<DataXCHG> dataXchgOutput; ///< Output data exchange vector
 static map<Ipv4Address, uint32_t> mapIpv4NodeId; ///< Map from client Ipv4 to Node Id
-static map<string, set<string>> panNetworks;
-
+static map<string, set<string>> wifiNetworks; ///< Map for the end-node in the primary network and the secondary network nodes
 
 class NS3Netsim {
  public:
@@ -206,7 +205,7 @@ private:
    * \param tcpOrUdp a string that is either set to tcp or udp, indicating which kind of server will be created
    * \param server holds the server id
    */
-  void setUpServer(InetSocketAddress addressIpv4, Inet6SocketAddress addressIpv6, string protocol, string server);
+  void setUpServer(InetSocketAddress addressIpv4, string protocol, string server);
 
   /**
    * Sets up a tcp or udp client depending on what has been passed in
