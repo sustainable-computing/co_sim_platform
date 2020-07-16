@@ -146,6 +146,7 @@ NS3Netsim::init (string f_adjmat,
   MobilityHelper mobility;
   // Wifi network helper, meant to help install the wifi net device
   WifiHelper wifi;
+  wifi.SetStandard (WIFI_PHY_STANDARD_80211g);
   wifi.SetRemoteStationManager("ns3::ConstantRateWifiManager");
   // Wifi mac helper
   WifiMacHelper wifiMac;
@@ -155,9 +156,7 @@ NS3Netsim::init (string f_adjmat,
   YansWifiChannelHelper wifiChannel = YansWifiChannelHelper::Default();
   // Set the properties of the wifi channel
   wifiChannel.SetPropagationDelay ("ns3::ConstantSpeedPropagationDelayModel");
-  wifiChannel.AddPropagationLoss ("ns3::LogDistancePropagationLossModel",
-								  "Exponent", DoubleValue (3.0),
-								  "ReferenceLoss", DoubleValue (40.0459));
+  wifiChannel.AddPropagationLoss ("ns3::FriisPropagationLossModel");
 
   allApplications = ApplicationContainer ();
   //--- verbose level
@@ -287,9 +286,6 @@ NS3Netsim::init (string f_adjmat,
   // For the wifi network, the address will start with 10
   ipv4Address.NewNetwork();
   ipv4Address.SetBase ("192.168.0.0", "255.255.255.0");
-  wifiNetworks["632"] = set<string>();
-  wifiNetworks["632"].insert("6321");
-  wifiNetworks["632"].insert("6322");
   // Create a WiFi network according to the nodes passed in, each set inside the vector is a network that needs to be created
   for (auto network = wifiNetworks.begin(); network != wifiNetworks.end(); network++) {
     // Grab the end node of the primary network
@@ -314,6 +310,7 @@ NS3Netsim::init (string f_adjmat,
 	// Connect all the devices
 	NetDeviceContainer devices = wifi.Install (wifiPhy, wifiMac, networkNodes);
 
+	wifiPhy.EnablePcapAll("pcapNS3Netsim.pcap");
 	// Assign the addresses
 	ipv4Address.Assign(devices);
 	ipv4Address.NewNetwork();
@@ -417,7 +414,16 @@ NS3Netsim::create (string client, string server)
 		}
 	  } else if (tcpOrUdp == "udp") {
 	    // Fetch the custom-udp-server
-		Ptr<CustomUdpServer> clientApp = GetApplicationOfType<CustomUdpServer>(NodeContainer(srvNode));
+		Ptr<CustomUdpServer> serverApp = GetApplicationOfType<CustomUdpServer>(NodeContainer(srvNode));
+		// Get the wifi address
+		serverAddr = InetSocketAddress(getAddressForNodeStartingWith(NodeContainer(srvNode), "192.168"), sinkPort);
+
+		// Check if the wifi socket has been enabled
+		if (serverApp->GetCreateWifiSocket() == false) {
+		  // Now enabled enable it
+		  serverApp->SetCreateWifiSocket(true);
+		  serverApp->m_LocalWifi = serverAddr;
+		}
 	  }
 	} else {
 	  serverAddr = InetSocketAddress(getAddressForNodeStartingWith(NodeContainer(srvNode), "172.0"), sinkPort);
@@ -555,8 +561,10 @@ NS3Netsim::runUntil (string nextStop)
     }
 
   if (stoi(nextStop) % 100 == 0){
-	schedule ("6321", "632", to_string(-stoi(nextStop)), to_string(stoi(nextStop) + 201));
-	schedule ("6322", "632", to_string(-stoi(nextStop)), to_string(stoi(nextStop) + 20));
+	schedule ("6321", "632", to_string(20), to_string(stoi(nextStop) + 20));
+	schedule ("6322", "632", to_string(20), to_string(stoi(nextStop) + 20));
+	schedule ("6501", "650", to_string(30), to_string(stoi(nextStop) + 20));
+	schedule ("6502", "650", to_string(30), to_string(stoi(nextStop) + 20));
   }
 
   if (verbose > 1) {
