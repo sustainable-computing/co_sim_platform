@@ -115,15 +115,27 @@ void PrintIpAddresses(NodeContainer nodes);
 map<Ipv4Address, uint32_t> CreateMapIpv4NodeId(NodeContainer nodes);
 
 /**
- * Get a wifi net-device from the node passed in
+ * Checks the number of nodes. If the number does not match the number passed in, throws an error
+ * \param nodes, the node container which should be checked
+ * \param numberToCheck, the size nodes should equal this number
+ */
+void checkNumberOfNodesInContainer(NodeContainer nodes, int numberToCheck);
+
+/**
+ * Gets the address that starts with the string passed in.
+ * \param node, contains the node for which all the ipv4 addresses will be fetched
+ * \param starting, the string with which the address starts
+ * \return return the ipv4 address that starts with the starting string
+ */
+Ipv4Address getAddressForNodeStartingWith(NodeContainer node, std::string starting);
+
+/**
+ * Get a net-device of the type passed in
+ * \param node, the node which will be searched.
  */
 template <typename T>
 Ptr<T> GetNetDeviceOfType(NodeContainer node) {
-  // Get the number of nodes in the node container, if larger than one, throw an error
-  if (node.GetN() != 1) {
-	throw "Number of nodes passed in is too large, the node container can only contain one node.";
-  }
-
+  checkNumberOfNodesInContainer(node, 1);
   // Now iterate through the net devices
   for (int i = 0; i < node.Get(0)->GetNDevices(); i++) {
 	// Try a dynamic cast
@@ -135,8 +147,28 @@ Ptr<T> GetNetDeviceOfType(NodeContainer node) {
   }
 
   // If you've gotten to this point there is no net device of this type, throw an error
-  throw "NetDevice of this correct type not found";
+  NS_FATAL_ERROR("NetDevice of correct type not found.");
 }
 
+/**
+ * Get a application of the type passed in
+ * \param node, the node which will be searched
+ */
+template <typename T>
+Ptr<T> GetApplicationOfType(NodeContainer node) {
+  checkNumberOfNodesInContainer(node, 1);
+  // Now iterate through the net devices
+  for (int i = 0; i < node.Get(0)->GetNApplications(); i++) {
+	// Try a dynamic cast
+	Ptr<T> application = DynamicCast<T> (node.Get(0)->GetApplication(i));
+	// If T is not null, successful, return the device
+	if (application != 0) {
+	  return application;
+	}
+  }
+
+  // If you've gotten to this point there is no application of this type, throw an error
+  NS_FATAL_ERROR("Application of correct type not found.");
+}
 
 #endif /* SMARTGRID_NS3_HELPER_H_ */

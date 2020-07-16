@@ -266,3 +266,27 @@ CreateMapIpv4NodeId(NodeContainer nodes)
 
   return mapIpv4NodeId;
 }
+
+void
+checkNumberOfNodesInContainer(NodeContainer nodes, int numberToCheck) {
+  if (nodes.GetN() != numberToCheck) {
+	NS_FATAL_ERROR("Number of nodes passed in does not equal the desired number.");
+  }
+}
+
+Ipv4Address
+getAddressForNodeStartingWith(NodeContainer node, std::string starting) {
+  checkNumberOfNodesInContainer(node, 1);
+
+  // Get all the ipv4 addresses
+  for (int i = 0; i < node.Get(0)->GetNDevices(); i++) {
+    // Convert the address into a string
+	std::ostringstream stream;
+	stream << node.Get(0)->GetObject<Ipv4>()->GetAddress (i,0).GetLocal();
+	std::string j =  stream.str();
+	if (j.rfind(starting, 0) == 0) {
+	  return node.Get(0)->GetObject<Ipv4>()->GetAddress (i,0).GetLocal();
+	}
+  }
+  NS_FATAL_ERROR("Address not found.");
+}
