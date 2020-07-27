@@ -1,3 +1,5 @@
+#!/bin/bash
+
 echo "Updating apt"
 sudo apt-get update --fix-missing
 
@@ -43,8 +45,8 @@ mkdir virtualenv
 virtualenv -p /usr/bin/python3 virtualenv/cosimul
 source virtualenv/cosimul/bin/activate
 pip install mosaik
-pip install OpenDSSDirect.py[extras]
 pip install tables
 pip install scipy
 pip install matplotlib
 pip install pandas
+pip install CoSimul_Platform/opendssdirect3.7
