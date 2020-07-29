@@ -132,75 +132,131 @@
         ],
         "network_layout": [
             {
-            	"nodes":["632", "645"], 
+            	"nodes":["0", "1"], 
             	"type": "p2p"
             },
             {
-            	"nodes":["670", "671"], 
+            	"nodes":["1", "2"], 
             	"type": "p2p"
             },
             {
-            	"nodes":["632", "RG60"], 
+            	"nodes":["6", "7"], 
             	"type": "p2p"
             },
             {
-            	"nodes":["650", "SourceBus"], 
+            	"nodes":["10", "11"], 
             	"type": "p2p"
             },
             {
-            	"nodes":["633", "634"], 
+            	"nodes":["4", "5"], 
             	"type": "p2p"
             },
             {
-            	"nodes":["671", "692"], 
+            	"nodes":["5", "6"], 
             	"type": "p2p"
             },
             {
-            	"nodes":["675", "692"], 
+            	"nodes":["8", "11"], 
             	"type": "p2p"
             },
             {
-            	"nodes":["671", "684"], 
+            	"nodes":["11", "12"], 
             	"type": "p2p"
             },
             {
-            	"nodes":["652", "684"], 
+            	"nodes":["12", "13"], 
             	"type": "p2p"
             },
             {
-            	"nodes":["632", "670"], 
+            	"nodes":["9", "10"], 
             	"type": "p2p"
             },
             {
-            	"nodes":["671", "680"], 
+            	"nodes":["10", "14"], 
             	"type": "p2p"
             },
             {
-            	"nodes":["611", "684"], 
+            	"nodes":["11", "15"], 
             	"type": "p2p"
             },
             {
-            	"nodes":["645", "646"], 
+            	"nodes":["2", "5"], 
             	"type": "p2p"
             },
             {
-            	"nodes":["632", "633"], 
+            	"nodes":["3", "4"], 
             	"type": "p2p"
             },
             {
-            	"nodes":["650", "RG60"], 
+            	"nodes":["5", "8"], 
             	"type": "p2p"
+            }
+        ]
+    },
+    "secondary_network": {
+        "nodes": [
+            {
+                "id": "16",
+                "access_point": false,
+                "power_network_id": "6321",
+                "location": {
+                    "x": "150",
+                    "y": "250"
+                }
+            },
+            {
+                "id": "17",
+                "access_point": false,
+                "power_network_id": "6322",
+                "location": {
+                    "x": "100",
+                    "y": "350"
+                }
+            },
+            {
+                "id": "18",
+                "access_point": true,
+                "location": {
+                    "x": "100",
+                    "y": "300"
+                }
+            }
+        ],
+        "network_layout": [
+            {
+                "nodes": ["16", "5"],
+                "type": "wifi"
+            },
+            {
+                "nodes": ["18", "5"],
+                "type": "wifi"
+            },
+            {
+                "nodes": ["18", "17"],
+                "type": "wifi"
             }
         ]
     },
     "app_connections": [
         {
-            "server": "632",
-            "client": "611"
+            "server": "5",
+            "client": "9",
+            "client_type": "sensor"
         },
         {
-            "server": "632",
-            "client": "650"
+            "server": "1",
+            "client": "5",
+            "client_type": "controller"
+        },
+        {
+            "server": "5",
+            "client": "9",
+            "client_type": "sensor"
+        },
+                {
+            "server": "5",
+            "client": "9",
+            "client_type": "sensor"
         }
     ]
 }

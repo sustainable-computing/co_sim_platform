@@ -553,12 +553,14 @@ MosaikSim::create(Json::Value args, Json::Value kwargs)
   std::string result;
   std::string entity;
 
+  std::cout << "CREATING" << std::endl;
   mosaikNum      = args[0].asInt();
   mosaikSimModel = args[1].asString();
 
   if (verbose > 1)
     std::cout << "MosaikSim::create mosaikNum: " << mosaikNum << " - mosaikSimModel: " << mosaikSimModel << std::endl;
 
+  std::cout << kwargs << std::endl;
   //--- Store simulator parameters
   for (auto const& key : kwargs.getMemberNames()) {
       netsimParams[key] = (kwargs[key]).asString();

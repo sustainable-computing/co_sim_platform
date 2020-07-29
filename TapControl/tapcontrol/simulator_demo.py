@@ -192,12 +192,14 @@ def  create_scenario( world, args ):
     #--- Transporter instances (Pktnet)
     transporters = []
     for client, server, role in appconLinks:
+        print("TRANSPORTER")
         created_transporter = False       
         for transporter in transporters:
             transporter_instance = 'Transp_' + str(client) + '-' + str(server)
             if (transporter_instance == transporter.eid):
                 created_transporter = True            
         if not created_transporter:
+            print(client, server)
             transporters.append(pktnetsim.Transporter(src=client, dst=server))    
 
     #--- Actuator instances
@@ -249,19 +251,7 @@ def  create_scenario( world, args ):
                     for transporter in transporters:
                         if (transporter_instance == transporter.eid):
                             world.connect(transporter, controller, 'v', 't')
-                            print('Connect', transporter.eid, 'to', controller.eid)     
- 
-    #--- Sensor to Controller
-#     for client, server, role in appconLinks:
-#         if (role == 'sensing'):
-#             for sensor in sensors:
-#                 sensor_instance = 'Sensor_' + str(client)
-#                 if (sensor_instance == sensor.eid):
-#                     for controller in controllers:
-#                         controller_instance = 'Control_' + str(server)
-#                         if (controller_instance == controller.eid):
-#                             world.connect(sensor, controller, 'v', 't')
-#                             print('Connect', sensor.eid, 'to', controller.eid)
+                            print('Connect', transporter.eid, 'to', controller.eid)
 
     #--- Controller to PktNet
     for client, server, role in appconLinks:    
@@ -287,21 +277,7 @@ def  create_scenario( world, args ):
                         if (transporter_instance == transporter.eid):
                             world.connect(transporter, actuator, 'v', 't',
                                 time_shifted=True, initial_data={'v': None, 't': None})
-                            print('Connect', transporter.eid, 'to', actuator.eid)      
-
-    #--- Controller to Actuator
-#     for client, server, role in appconLinks:
-#         if (role == 'acting'):
-#             for controller in controllers:
-#                 controller_instance = 'Control_' + str(client)
-#                 if (controller_instance == controller.eid):
-#                     for actuator in actuators:
-#                         actuator_instance = 'Actuator_' + str(server)
-#                         if (actuator_instance == actuator.eid):                        
-#                             print('Connect', controller.eid, 'to', actuator.eid)                           
-#                             world.connect(controller, actuator, 'v', 't', 
-#                                 time_shifted=True, initial_data={'v': None, 't': None})
-
+                            print('Connect', transporter.eid, 'to', actuator.eid)
 
     #---
     #--- Simulators to Monitor
@@ -311,11 +287,6 @@ def  create_scenario( world, args ):
     mosaik.util.connect_many_to_one(world, sensors, monitor, 'v', 't')
     for sensor in sensors:
         print('Connect', sensor.eid, 'to', monitor.sid)
-
-    #--- PktNet(Transporter) to Monitor
-#     mosaik.util.connect_many_to_one(world, transporters, monitor, 'v', 't')
-#     for transporter in transporters:    
-#         print('Connect', transporter.eid, 'to', monitor.sid)
 
     #--- Controller to Monitor
     mosaik.util.connect_many_to_one(world, controllers, monitor, 'v', 't')
