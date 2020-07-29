@@ -1,0 +1,206 @@
+{
+    "primary_network": {
+        "nodes": [
+            {
+                "id": "0",
+                "power_network_id": "SourceBus",
+                "location": {
+                    "x": "200",
+                    "y": "400"
+                }
+            },
+            {
+                "id": "1",
+                "power_network_id": "650",
+                "location": {
+                    "x": "200",
+                    "y": "350"
+                }
+            },
+            {
+                "id": "2",
+                "power_network_id": "RG60",
+                "location": {
+                    "x": "200",
+                    "y": "300"
+                }
+            },
+            {
+                "id": "3",
+                "power_network_id": "646",
+                "location": {
+                    "x": "0",
+                    "y": "250"
+                }
+            },
+            {
+                "id": "4",
+                "power_network_id": "645",
+                "location": {
+                    "x": "100",
+                    "y": "250"
+                }
+            },
+            {
+                "id": "5",
+                "power_network_id": "632",
+                "location": {
+                    "x": "200",
+                    "y": "250"
+                }
+            },
+            {
+                "id": "6",
+                "power_network_id": "633",
+                "location": {
+                    "x": "350",
+                    "y": "250"
+                }
+            },
+            {
+                "id": "7",
+                "power_network_id": "634",
+                "location": {
+                    "x": "400",
+                    "y": "250"
+                }
+            },
+            {
+                "id": "8",
+                "power_network_id": "670",
+                "location": {
+                    "x": "200",
+                    "y": "200"
+                }
+            },
+            {
+                "id": "9",
+                "power_network_id": "611",
+                "location": {
+                    "x": "0",
+                    "y": "100"
+                }
+            },
+            {
+                "id": "10",
+                "power_network_id": "684",
+                "location": {
+                    "x": "100",
+                    "y": "100"
+                }
+            },
+            {
+                "id": "11",
+                "power_network_id": "671",
+                "location": {
+                    "x": "200",
+                    "y": "100"
+                }
+            },
+            {
+                "id": "12",
+                "power_network_id": "692",
+                "location": {
+                    "x": "250",
+                    "y": "100"
+                }
+            },
+            {
+                "id": "13",
+                "power_network_id": "675",
+                "location": {
+                    "x": "400",
+                    "y": "100"
+                }
+            },
+            {
+                "id": "14",
+                "power_network_id": "652",
+                "location": {
+                    "x": "100",
+                    "y": "0"
+                }
+            },
+            {
+                "id": "15",
+                "power_network_id": "680",
+                "location": {
+                    "x": "200",
+                    "y": "0"
+                }
+            }
+        ],
+        "network_layout": [
+            {
+            	"nodes":["632", "645"], 
+            	"type": "p2p"
+            },
+            {
+            	"nodes":["670", "671"], 
+            	"type": "p2p"
+            },
+            {
+            	"nodes":["632", "RG60"], 
+            	"type": "p2p"
+            },
+            {
+            	"nodes":["650", "SourceBus"], 
+            	"type": "p2p"
+            },
+            {
+            	"nodes":["633", "634"], 
+            	"type": "p2p"
+            },
+            {
+            	"nodes":["671", "692"], 
+            	"type": "p2p"
+            },
+            {
+            	"nodes":["675", "692"], 
+            	"type": "p2p"
+            },
+            {
+            	"nodes":["671", "684"], 
+            	"type": "p2p"
+            },
+            {
+            	"nodes":["652", "684"], 
+            	"type": "p2p"
+            },
+            {
+            	"nodes":["632", "670"], 
+            	"type": "p2p"
+            },
+            {
+            	"nodes":["671", "680"], 
+            	"type": "p2p"
+            },
+            {
+            	"nodes":["611", "684"], 
+            	"type": "p2p"
+            },
+            {
+            	"nodes":["645", "646"], 
+            	"type": "p2p"
+            },
+            {
+            	"nodes":["632", "633"], 
+            	"type": "p2p"
+            },
+            {
+            	"nodes":["650", "RG60"], 
+            	"type": "p2p"
+            }
+        ]
+    },
+    "app_connections": [
+        {
+            "server": "632",
+            "client": "611"
+        },
+        {
+            "server": "632",
+            "client": "650"
+        }
+    ]
+}

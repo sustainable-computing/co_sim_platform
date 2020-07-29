@@ -601,6 +601,7 @@ MosaikSim::create(Json::Value args, Json::Value kwargs)
     }
 
   return result;
+  exit(0);
 }
 
 
