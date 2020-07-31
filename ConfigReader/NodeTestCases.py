@@ -111,7 +111,7 @@ class NodeTestCases(unittest.TestCase):
         :return:
         """
         with self.assertRaises(InvalidNICType):
-            node = Node("test", "test", {"x": "321", "y": "123"}, nic_type="not_valid")
+            node = Node("test", "test", {"x": "321", "y": "123"}, nic_types=["not_valid"])
 
     def test_none_nic_type(self):
         """
@@ -126,7 +126,7 @@ class NodeTestCases(unittest.TestCase):
         :return:
         """
         with self.assertRaises(InvalidAccessPointValueForNICType):
-            node = Node("test", "test", {"x": "321", "y": "123"}, nic_type="wifi")
+            node = Node("test", "test", {"x": "321", "y": "123"}, nic_types=["wifi"])
 
     def test_nic_p2p_with_access_point(self):
         """
@@ -134,7 +134,7 @@ class NodeTestCases(unittest.TestCase):
         :return:
         """
         with self.assertRaises(InvalidAccessPointValueForNICType):
-            node = Node("test", "test", {"x": "321", "y": "123"}, nic_type="p2p", access_point=False)
+            node = Node("test", "test", {"x": "321", "y": "123"}, nic_types=["p2p"], access_point=False)
 
 
 if __name__ == '__main__':
