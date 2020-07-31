@@ -1,6 +1,15 @@
 """
+Created on July 30, 2020
 File contains all the validation tests needed to make sure the values stored in the Classes are valid.
+
+@file    ValidationFunctions.py
+@author  Amrinder S. Grewal
+@email   asgrewal@ualberta.ca
+@date    2020.07.30
+@version 0.1
+@company University of Alberta - Computing Science
 """
+
 from ConfigErrors import InvalidNetworkType, InvalidAccessPointValueForNICType, \
     NetworkConnectionNumberOfNodesNotCorrect, NetworkConnectionHasNodesWithConnectionToSelf
 
@@ -60,6 +69,7 @@ def check_network_connection_type(network_connection_type):
     """
     if len(set(network_connection_type).intersection(set(valid_nic_types))) != len(network_connection_type):
         raise InvalidNetworkType
+
 
 def check_network_connection_nodes(nodes):
     """

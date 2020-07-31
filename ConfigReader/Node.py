@@ -1,3 +1,15 @@
+"""
+Created on July 30, 2020
+File contains the class that will store nodes.
+
+@file    Node.py
+@author  Amrinder S. Grewal
+@email   asgrewal@ualberta.ca
+@date    2020.07.30
+@version 0.1
+@company University of Alberta - Computing Science
+"""
+
 from ConfigErrors import ImmutableObjectError
 from ValidationFunctions import check_location_coordinates, check_network_card_type_and_access_point_value, \
     check_non_empty_non_none_string
