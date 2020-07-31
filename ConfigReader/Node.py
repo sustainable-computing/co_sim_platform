@@ -7,8 +7,6 @@ class Node:
     """
     Class was created to store the information on a node. Solely meant to be used by ConfigReader
     """
-    # Stores the valid types
-    __valid_nic_types = ["wifi", "p2p", None]
     # Stores the id of the node in the power system
     power_id = ""
     # Stores the id of the node in the network
@@ -20,7 +18,7 @@ class Node:
     # If this network card is a wifi card, then this will be used
     access_point = False
 
-    def __init__(self, power_id, network_id, location, nic_types=[None], access_point=None):
+    def __init__(self, power_id, network_id, location, nic_types, access_point=None):
         """
         Validates that all the data necessary is present and is of the correct type and then saves it
         :param power_id:
@@ -30,7 +28,7 @@ class Node:
         self.__check_power_id_type(power_id)
         self.__check_network_id_type(network_id)
         check_location_coordinates(location)
-        check_network_card_type_and_access_point_value(nic_types, access_point, self.__valid_nic_types)
+        check_network_card_type_and_access_point_value(nic_types, access_point)
 
         super(Node, self).__setattr__('power_id', power_id)
         super(Node, self).__setattr__('network_id', network_id)

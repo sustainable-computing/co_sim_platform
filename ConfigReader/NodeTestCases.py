@@ -1,7 +1,7 @@
 import unittest
 
 from Node import Node
-from ConfigErrors import ImmutableObjectError, InvalidNICType, InvalidAccessPointValueForNICType
+from ConfigErrors import ImmutableObjectError, InvalidNetworkType, InvalidAccessPointValueForNICType
 
 
 class NodeTestCases(unittest.TestCase):
@@ -15,7 +15,7 @@ class NodeTestCases(unittest.TestCase):
         :return:
         """
         with self.assertRaises(TypeError):
-            node = Node(None, "test", {"x": "123", "y": "321"})
+            node = Node(None, "test", {"x": "123", "y": "321"}, ["p2p"])
 
     def test_power_id_empty(self):
         """
@@ -23,7 +23,7 @@ class NodeTestCases(unittest.TestCase):
         :return:
         """
         with self.assertRaises(ValueError):
-            node = Node("", "test", {"x": "123", "y": "321"})
+            node = Node("", "test", {"x": "123", "y": "321"}, ["p2p"])
 
     def test_power_id_type(self):
         """
@@ -31,7 +31,7 @@ class NodeTestCases(unittest.TestCase):
         :return:
         """
         with self.assertRaises(TypeError):
-            node = Node(1, "test", {"x": "123", "y": "321"})
+            node = Node(1, "test", {"x": "123", "y": "321"}, ["p2p"])
 
     def test_network_id_none(self):
         """
@@ -39,7 +39,7 @@ class NodeTestCases(unittest.TestCase):
         :return:
         """
         with self.assertRaises(TypeError):
-            node = Node("test", None, {"x": "123", "y": "321"})
+            node = Node("test", None, {"x": "123", "y": "321"}, ["p2p"])
 
     def test_network_id_empty(self):
         """
@@ -47,7 +47,7 @@ class NodeTestCases(unittest.TestCase):
         :return:
         """
         with self.assertRaises(ValueError):
-            node = Node("test", "", {"x": "123", "y": "321"})
+            node = Node("test", "", {"x": "123", "y": "321"}, ["p2p"])
 
     def test_network_id_type(self):
         """
@@ -55,7 +55,7 @@ class NodeTestCases(unittest.TestCase):
         :return:
         """
         with self.assertRaises(TypeError):
-            node = Node("test", 1, {"x": "123", "y": "321"})
+            node = Node("test", 1, {"x": "123", "y": "321"}, ["p2p"])
 
     def test_missing_location_x(self):
         """
@@ -63,7 +63,7 @@ class NodeTestCases(unittest.TestCase):
         :return:
         """
         with self.assertRaises(KeyError):
-            node = Node("test", "test", {"y", "123"})
+            node = Node("test", "test", {"y", "123"}, ["p2p"])
 
     def test_missing_location_y(self):
         """
@@ -71,7 +71,7 @@ class NodeTestCases(unittest.TestCase):
         :return:
         """
         with self.assertRaises(KeyError):
-            node = Node("test", "test", {"x": "123"})
+            node = Node("test", "test", {"x": "123"}, ["p2p"])
 
     def test_non_num_location_x(self):
         """
@@ -79,7 +79,7 @@ class NodeTestCases(unittest.TestCase):
         :return:
         """
         with self.assertRaises(ValueError):
-            node = Node("test", "test", {"x": "a", "y": "123.1"})
+            node = Node("test", "test", {"x": "a", "y": "123.1"}, ["p2p"])
 
     def test_non_num_location_y(self):
         """
@@ -87,7 +87,7 @@ class NodeTestCases(unittest.TestCase):
         :return:
         """
         with self.assertRaises(ValueError):
-            node = Node("test", "test", {"x": "321", "y": "b"})
+            node = Node("test", "test", {"x": "321", "y": "b"}, ["p2p"])
 
     def test_none_location_x(self):
         """
@@ -95,7 +95,7 @@ class NodeTestCases(unittest.TestCase):
         :return:
         """
         with self.assertRaises(TypeError):
-            node = Node("test", "test", {"x": None, "y": "123"})
+            node = Node("test", "test", {"x": None, "y": "123"}, ["p2p"])
 
     def test_none_location_y(self):
         """
@@ -103,22 +103,15 @@ class NodeTestCases(unittest.TestCase):
         :return:
         """
         with self.assertRaises(TypeError):
-            node = Node("test", "test", {"x": "321", "y": None})
+            node = Node("test", "test", {"x": "321", "y": None}, ["p2p"])
 
     def test_invalid_nic_type(self):
         """
         Create a node with an invalid type of nic
         :return:
         """
-        with self.assertRaises(InvalidNICType):
-            node = Node("test", "test", {"x": "321", "y": "123"}, nic_types=["not_valid"])
-
-    def test_none_nic_type(self):
-        """
-        Create a node with a None nic card, should not raise an error
-        :return:
-        """
-        node = Node("test", "test", {"x": "321", "y": "123"})
+        with self.assertRaises(InvalidNetworkType):
+            node = Node("test", "test", {"x": "321", "y": "123"}, ["not_valid"])
 
     def test_nic_wifi_with_none_access_point(self):
         """
@@ -126,7 +119,7 @@ class NodeTestCases(unittest.TestCase):
         :return:
         """
         with self.assertRaises(InvalidAccessPointValueForNICType):
-            node = Node("test", "test", {"x": "321", "y": "123"}, nic_types=["wifi"])
+            node = Node("test", "test", {"x": "321", "y": "123"}, ["wifi"])
 
     def test_nic_p2p_with_access_point(self):
         """
@@ -134,7 +127,7 @@ class NodeTestCases(unittest.TestCase):
         :return:
         """
         with self.assertRaises(InvalidAccessPointValueForNICType):
-            node = Node("test", "test", {"x": "321", "y": "123"}, nic_types=["p2p"], access_point=False)
+            node = Node("test", "test", {"x": "321", "y": "123"}, ["p2p"], access_point=False)
 
 
 if __name__ == '__main__':

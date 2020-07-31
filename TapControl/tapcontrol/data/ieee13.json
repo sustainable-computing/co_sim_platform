@@ -7,7 +7,8 @@
                 "location": {
                     "x": "200",
                     "y": "400"
-                }
+                },
+                "nic_card_types": ["p2p"]
             },
             {
                 "id": "1",
@@ -15,7 +16,8 @@
                 "location": {
                     "x": "200",
                     "y": "350"
-                }
+                },
+                "nic_card_types": ["p2p"]
             },
             {
                 "id": "2",
@@ -23,7 +25,8 @@
                 "location": {
                     "x": "200",
                     "y": "300"
-                }
+                },
+                "nic_card_types": ["p2p"]
             },
             {
                 "id": "3",
@@ -31,7 +34,8 @@
                 "location": {
                     "x": "0",
                     "y": "250"
-                }
+                },
+                "nic_card_types": ["p2p"]
             },
             {
                 "id": "4",
@@ -39,7 +43,8 @@
                 "location": {
                     "x": "100",
                     "y": "250"
-                }
+                },
+                "nic_card_types": ["p2p"]
             },
             {
                 "id": "5",
@@ -47,7 +52,9 @@
                 "location": {
                     "x": "200",
                     "y": "250"
-                }
+                },
+                "nic_card_types": ["p2p", "wifi"],
+                "access_point": true
             },
             {
                 "id": "6",
@@ -55,7 +62,8 @@
                 "location": {
                     "x": "350",
                     "y": "250"
-                }
+                },
+                "nic_card_types": ["p2p"]
             },
             {
                 "id": "7",
@@ -63,7 +71,8 @@
                 "location": {
                     "x": "400",
                     "y": "250"
-                }
+                },
+                "nic_card_types": ["p2p"]
             },
             {
                 "id": "8",
@@ -71,7 +80,8 @@
                 "location": {
                     "x": "200",
                     "y": "200"
-                }
+                },
+                "nic_card_types": ["p2p"]
             },
             {
                 "id": "9",
@@ -79,7 +89,8 @@
                 "location": {
                     "x": "0",
                     "y": "100"
-                }
+                },
+                "nic_card_types": ["p2p"]
             },
             {
                 "id": "10",
@@ -87,7 +98,8 @@
                 "location": {
                     "x": "100",
                     "y": "100"
-                }
+                },
+                "nic_card_types": ["p2p"]
             },
             {
                 "id": "11",
@@ -95,7 +107,8 @@
                 "location": {
                     "x": "200",
                     "y": "100"
-                }
+                },
+                "nic_card_types": ["p2p"]
             },
             {
                 "id": "12",
@@ -103,7 +116,8 @@
                 "location": {
                     "x": "250",
                     "y": "100"
-                }
+                },
+                "nic_card_types": ["p2p"]
             },
             {
                 "id": "13",
@@ -111,7 +125,8 @@
                 "location": {
                     "x": "400",
                     "y": "100"
-                }
+                },
+                "nic_card_types": ["p2p"]
             },
             {
                 "id": "14",
@@ -119,7 +134,8 @@
                 "location": {
                     "x": "100",
                     "y": "0"
-                }
+                },
+                "nic_card_types": ["p2p"]
             },
             {
                 "id": "15",
@@ -127,69 +143,70 @@
                 "location": {
                     "x": "200",
                     "y": "0"
-                }
+                },
+                "nic_card_types": ["p2p"]
             }
         ],
         "network_layout": [
             {
-            	"nodes":["0", "1"], 
-            	"type": "p2p"
+                "nodes":["0", "1"],
+                "type": "p2p"
             },
             {
-            	"nodes":["1", "2"], 
-            	"type": "p2p"
+                "nodes":["1", "2"],
+                "type": "p2p"
             },
             {
-            	"nodes":["6", "7"], 
-            	"type": "p2p"
+                "nodes":["6", "7"],
+                "type": "p2p"
             },
             {
-            	"nodes":["10", "11"], 
-            	"type": "p2p"
+                "nodes":["10", "11"],
+                "type": "p2p"
             },
             {
-            	"nodes":["4", "5"], 
-            	"type": "p2p"
+                "nodes":["4", "5"],
+                "type": "p2p"
             },
             {
-            	"nodes":["5", "6"], 
-            	"type": "p2p"
+                "nodes":["5", "6"],
+                "type": "p2p"
             },
             {
-            	"nodes":["8", "11"], 
-            	"type": "p2p"
+                "nodes":["8", "11"],
+                "type": "p2p"
             },
             {
-            	"nodes":["11", "12"], 
-            	"type": "p2p"
+                "nodes":["11", "12"],
+                "type": "p2p"
             },
             {
-            	"nodes":["12", "13"], 
-            	"type": "p2p"
+                "nodes":["12", "13"],
+                "type": "p2p"
             },
             {
-            	"nodes":["9", "10"], 
-            	"type": "p2p"
+                "nodes":["9", "10"],
+                "type": "p2p"
             },
             {
-            	"nodes":["10", "14"], 
-            	"type": "p2p"
+                "nodes":["10", "14"],
+                "type": "p2p"
             },
             {
-            	"nodes":["11", "15"], 
-            	"type": "p2p"
+                "nodes":["11", "15"],
+                "type": "p2p"
             },
             {
-            	"nodes":["2", "5"], 
-            	"type": "p2p"
+                "nodes":["2", "5"],
+                "type": "p2p"
             },
             {
-            	"nodes":["3", "4"], 
-            	"type": "p2p"
+                "nodes":["3", "4"],
+                "type": "p2p"
             },
             {
-            	"nodes":["5", "8"], 
-            	"type": "p2p"
+                "nodes":["5", "8"],
+                "type": "p2p"
             }
         ]
     },
@@ -197,29 +214,32 @@
         "nodes": [
             {
                 "id": "16",
-                "access_point": false,
                 "power_network_id": "6321",
                 "location": {
                     "x": "150",
                     "y": "250"
-                }
+                },
+                "nic_card_types": ["wifi"],
+                "access_point": false
             },
             {
                 "id": "17",
-                "access_point": false,
                 "power_network_id": "6322",
                 "location": {
                     "x": "100",
                     "y": "350"
-                }
+                },
+                "nic_card_types": ["wifi"],
+                "access_point": false
             },
             {
                 "id": "18",
-                "access_point": true,
                 "location": {
                     "x": "100",
                     "y": "300"
-                }
+                },
+                "nic_card_types": ["wifi"],
+                "access_point": true
             }
         ],
         "network_layout": [

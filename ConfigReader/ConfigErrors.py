@@ -8,7 +8,7 @@ class ImmutableObjectError(Exception):
     pass
 
 
-class InvalidNICType(Exception):
+class InvalidNetworkType(Exception):
     """Raised when an invalid type of NIC is passed in"""
     pass
 
@@ -19,3 +19,14 @@ class InvalidAccessPointValueForNICType(Exception):
      - the value of access point in not None when the NIC is not wifi
     """
     pass
+
+
+class NetworkConnectionNumberOfNodesNotCorrect(Exception):
+    """Raised when a network connection does not have 2 nodes passed in."""
+    pass
+
+
+class NetworkConnectionHasNodesWithConnectionToSelf(Exception):
+    """Raised when a node is connected to itself in the network connection."""
+    pass
+
