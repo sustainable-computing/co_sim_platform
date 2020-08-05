@@ -11,8 +11,7 @@ File contains the class that will store nodes.
 """
 
 from ConfigErrors import ImmutableObjectError
-from ValidationFunctions import check_location_coordinates, check_network_card_type_and_access_point_value, \
-    check_non_empty_non_none_string
+from ValidationFunctions import check_location_coordinates, check_non_empty_non_none_string, check_nic_types
 
 
 class Node:
@@ -25,7 +24,7 @@ class Node:
     network_id = ""
     # Stores the network of the system
     location = {}
-    # Stores the NIC card type
+    # Stores the NIC card type, should be nic objects that are passed in
     nic_types = []
     # If this network card is a wifi card, then this will be used
     access_point = False
@@ -40,7 +39,7 @@ class Node:
         self.__check_power_id_type(power_id)
         self.__check_network_id_type(network_id)
         check_location_coordinates(location)
-        check_network_card_type_and_access_point_value(nic_types, access_point)
+        check_nic_types(nic_types)
 
         super(Node, self).__setattr__('power_id', power_id)
         super(Node, self).__setattr__('network_id', network_id)

@@ -36,4 +36,3 @@ class NetworkConnectionNumberOfNodesNotCorrect(Exception):
 class NetworkConnectionHasNodesWithConnectionToSelf(Exception):
     """Raised when a node is connected to itself in the network connection."""
     pass
-

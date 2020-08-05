@@ -12,9 +12,11 @@ File contains all the validation tests needed to make sure the values stored in 
 
 from ConfigErrors import InvalidNetworkType, InvalidAccessPointValueForNICType, \
     NetworkConnectionNumberOfNodesNotCorrect, NetworkConnectionHasNodesWithConnectionToSelf
+from NICs import P2PNIC, WiFiNIC
 
 # Stores the valid types of nics
-valid_nic_types = ["wifi", "p2p"]
+valid_nic_types = [P2PNIC, WiFiNIC]
+
 
 def check_non_empty_non_none_string(to_check):
     """
@@ -42,23 +44,26 @@ def check_location_coordinates(location_to_check):
     float(location_to_check['y'])
 
 
-def check_network_card_type_and_access_point_value(network_card_types, access_point):
+def check_nic_types(nics_to_check):
     """
-    Checks the value of network card type, if it is of type wifi or p2p, then check access point value. If type of
-    NIC is wifi, then access_point should not be None, otherwise it should be None
-    :param network_card_type:
-    :param access_point:
-    :param valid_nic_types:
+    Check to make sure that all the nics in nics_to_check are of type valid_nic_types and that there are not duplicated.
+    :param nics_to_check:
     :return:
     """
-    check_network_connection_type(network_card_types)
+    types_found = []
+    # Iterate through every type and make sure there are no duplicated
+    for nic in nics_to_check:
+        found = False
 
-    if "wifi" not in network_card_types and access_point is not None:
-        raise InvalidAccessPointValueForNICType
-    elif "wifi" in network_card_types:
-        # Check to make sure access_point is not None and is a bool
-        if access_point is None or not isinstance(access_point, bool):
-            raise InvalidAccessPointValueForNICType
+        for valid_nic in valid_nic_types:
+            if isinstance(nic, valid_nic):
+                found = True
+                break
+
+        if not found:
+            raise InvalidNetworkType
+
+        types_found.append(nic.type)
 
 
 def check_network_connection_type(network_connection_type):

@@ -8,7 +8,10 @@
                     "x": "200",
                     "y": "400"
                 },
-                "nic_card_types": ["p2p"]
+                "nic_card_types": [
+                {
+                    "type": "p2p"
+                }]
             },
             {
                 "id": "1",
@@ -17,7 +20,10 @@
                     "x": "200",
                     "y": "350"
                 },
-                "nic_card_types": ["p2p"]
+                "nic_card_types": [
+                {
+                    "type": "p2p"
+                }]
             },
             {
                 "id": "2",
@@ -26,7 +32,10 @@
                     "x": "200",
                     "y": "300"
                 },
-                "nic_card_types": ["p2p"]
+                "nic_card_types": [
+                {
+                    "type": "p2p"
+                }]
             },
             {
                 "id": "3",
@@ -35,7 +44,10 @@
                     "x": "0",
                     "y": "250"
                 },
-                "nic_card_types": ["p2p"]
+                "nic_card_types": [
+                {
+                    "type": "p2p"
+                }]
             },
             {
                 "id": "4",
@@ -44,7 +56,10 @@
                     "x": "100",
                     "y": "250"
                 },
-                "nic_card_types": ["p2p"]
+                "nic_card_types": [
+                {
+                    "type": "p2p"
+                }]
             },
             {
                 "id": "5",
@@ -53,8 +68,14 @@
                     "x": "200",
                     "y": "250"
                 },
-                "nic_card_types": ["p2p", "wifi"],
-                "access_point": true
+                "nic_card_types": [
+                {
+                    "type": "p2p"
+                },
+                {
+                    "type":"wifi",
+                    "access_point": true
+                }],
             },
             {
                 "id": "6",
@@ -63,7 +84,10 @@
                     "x": "350",
                     "y": "250"
                 },
-                "nic_card_types": ["p2p"]
+                "nic_card_types": [
+                {
+                    "type": "p2p"
+                }]
             },
             {
                 "id": "7",
@@ -72,7 +96,10 @@
                     "x": "400",
                     "y": "250"
                 },
-                "nic_card_types": ["p2p"]
+                "nic_card_types": [
+                {
+                    "type": "p2p"
+                }]
             },
             {
                 "id": "8",
@@ -81,7 +108,10 @@
                     "x": "200",
                     "y": "200"
                 },
-                "nic_card_types": ["p2p"]
+                "nic_card_types": [
+                {
+                    "type": "p2p"
+                }]
             },
             {
                 "id": "9",
@@ -90,7 +120,10 @@
                     "x": "0",
                     "y": "100"
                 },
-                "nic_card_types": ["p2p"]
+                "nic_card_types": [
+                {
+                    "type": "p2p"
+                }]
             },
             {
                 "id": "10",
@@ -99,7 +132,10 @@
                     "x": "100",
                     "y": "100"
                 },
-                "nic_card_types": ["p2p"]
+                "nic_card_types": [
+                {
+                    "type": "p2p"
+                }]
             },
             {
                 "id": "11",
@@ -108,7 +144,10 @@
                     "x": "200",
                     "y": "100"
                 },
-                "nic_card_types": ["p2p"]
+                "nic_card_types": [
+                {
+                    "type": "p2p"
+                }]
             },
             {
                 "id": "12",
@@ -117,7 +156,10 @@
                     "x": "250",
                     "y": "100"
                 },
-                "nic_card_types": ["p2p"]
+                "nic_card_types": [
+                {
+                    "type": "p2p"
+                }]
             },
             {
                 "id": "13",
@@ -126,7 +168,10 @@
                     "x": "400",
                     "y": "100"
                 },
-                "nic_card_types": ["p2p"]
+                "nic_card_types": [
+                {
+                    "type": "p2p"
+                }]
             },
             {
                 "id": "14",
@@ -135,7 +180,10 @@
                     "x": "100",
                     "y": "0"
                 },
-                "nic_card_types": ["p2p"]
+                "nic_card_types": [
+                {
+                    "type": "p2p"
+                }]
             },
             {
                 "id": "15",
@@ -144,7 +192,10 @@
                     "x": "200",
                     "y": "0"
                 },
-                "nic_card_types": ["p2p"]
+                "nic_card_types": [
+                {
+                    "type": "p2p"
+                }]
             }
         ],
         "network_layout": [
@@ -219,8 +270,10 @@
                     "x": "150",
                     "y": "250"
                 },
-                "nic_card_types": ["wifi"],
-                "access_point": false
+                "nic_card_types": [{
+                    "type":"wifi",
+                    "access_point": false
+                }]
             },
             {
                 "id": "17",
@@ -229,8 +282,10 @@
                     "x": "100",
                     "y": "350"
                 },
-                "nic_card_types": ["wifi"],
-                "access_point": false
+                "nic_card_types": [{
+                    "type":"wifi",
+                    "access_point": false
+                }]
             },
             {
                 "id": "18",
@@ -238,8 +293,10 @@
                     "x": "100",
                     "y": "300"
                 },
-                "nic_card_types": ["wifi"],
-                "access_point": true
+                "nic_card_types": [{
+                    "type":"wifi",
+                    "access_point": true
+                }]
             }
         ],
         "network_layout": [
@@ -259,24 +316,14 @@
     },
     "app_connections": [
         {
-            "server": "5",
-            "client": "9",
-            "client_type": "sensor"
+            "receiver": "5",
+            "sender": "9",
+            "path_type": "control"
         },
         {
-            "server": "1",
-            "client": "5",
-            "client_type": "controller"
-        },
-        {
-            "server": "5",
-            "client": "9",
-            "client_type": "sensor"
-        },
-                {
-            "server": "5",
-            "client": "9",
-            "client_type": "sensor"
+            "receiver": "1",
+            "sender": "5",
+            "path_type": "actuator"
         }
     ]
 }

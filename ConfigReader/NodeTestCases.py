@@ -12,7 +12,8 @@ File contains the class that will store nodes.
 import unittest
 
 from Node import Node
-from ConfigErrors import ImmutableObjectError, InvalidNetworkType, InvalidAccessPointValueForNICType
+from NICs import P2PNIC, WiFiNIC, NIC
+from ConfigErrors import InvalidNetworkType, InvalidAccessPointValueForNICType
 
 
 class NodeTestCases(unittest.TestCase):
@@ -116,29 +117,25 @@ class NodeTestCases(unittest.TestCase):
         with self.assertRaises(TypeError):
             node = Node("test", "test", {"x": "321", "y": None}, ["p2p"])
 
-    def test_invalid_nic_type(self):
+    def test_incorrect_type_nic(self):
         """
-        Create a node with an invalid type of nic
+        Create a base type of NIC and a string, should create an error.
         :return:
         """
         with self.assertRaises(InvalidNetworkType):
-            node = Node("test", "test", {"x": "321", "y": "123"}, ["not_valid"])
+            node = Node("test", "test", {"x": "321", "y": "321"}, [NIC()])
 
-    def test_nic_wifi_with_none_access_point(self):
+        with self.assertRaises(InvalidNetworkType):
+            node = Node("test", "test", {"x": "321", "y": "321"}, ["p2p"])
+
+    def test_correct(self):
         """
-        Create a node with a wifi nic card, but no access point value passed in
+        Everything is correct, no error should be raised.
         :return:
         """
-        with self.assertRaises(InvalidAccessPointValueForNICType):
-            node = Node("test", "test", {"x": "321", "y": "123"}, ["wifi"])
-
-    def test_nic_p2p_with_access_point(self):
-        """
-        Create a node with a p2p nic card, but with an access point value
-        :return:
-        """
-        with self.assertRaises(InvalidAccessPointValueForNICType):
-            node = Node("test", "test", {"x": "321", "y": "123"}, ["p2p"], access_point=False)
+        node = Node("test", "test", {"x": "321", "y": "321"}, [P2PNIC()])
+        node = Node("test", "test", {"x": "321", "y": "321"}, [WiFiNIC()])
+        node = Node("test", "test", {"x": "321", "y": "321"}, [WiFiNIC(access_point=True)])
 
 
 if __name__ == '__main__':
