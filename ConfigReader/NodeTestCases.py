@@ -27,7 +27,7 @@ class NodeTestCases(unittest.TestCase):
         :return:
         """
         with self.assertRaises(TypeError):
-            node = Node(None, "test", {"x": "123", "y": "321"}, ["p2p"])
+            node = Node(None, "test", {"x": "123", "y": "321"}, [P2PNIC()])
 
     def test_power_id_empty(self):
         """
@@ -35,7 +35,7 @@ class NodeTestCases(unittest.TestCase):
         :return:
         """
         with self.assertRaises(ValueError):
-            node = Node("", "test", {"x": "123", "y": "321"}, ["p2p"])
+            node = Node("", "test", {"x": "123", "y": "321"}, [P2PNIC()])
 
     def test_power_id_type(self):
         """
@@ -43,7 +43,7 @@ class NodeTestCases(unittest.TestCase):
         :return:
         """
         with self.assertRaises(TypeError):
-            node = Node(1, "test", {"x": "123", "y": "321"}, ["p2p"])
+            node = Node(1, "test", {"x": "123", "y": "321"}, [P2PNIC()])
 
     def test_network_id_none(self):
         """
@@ -51,7 +51,7 @@ class NodeTestCases(unittest.TestCase):
         :return:
         """
         with self.assertRaises(TypeError):
-            node = Node("test", None, {"x": "123", "y": "321"}, ["p2p"])
+            node = Node("test", None, {"x": "123", "y": "321"}, [P2PNIC()])
 
     def test_network_id_empty(self):
         """
@@ -59,7 +59,7 @@ class NodeTestCases(unittest.TestCase):
         :return:
         """
         with self.assertRaises(ValueError):
-            node = Node("test", "", {"x": "123", "y": "321"}, ["p2p"])
+            node = Node("test", "", {"x": "123", "y": "321"}, [P2PNIC()])
 
     def test_network_id_type(self):
         """
@@ -67,7 +67,7 @@ class NodeTestCases(unittest.TestCase):
         :return:
         """
         with self.assertRaises(TypeError):
-            node = Node("test", 1, {"x": "123", "y": "321"}, ["p2p"])
+            node = Node("test", 1, {"x": "123", "y": "321"}, [P2PNIC()])
 
     def test_missing_location_x(self):
         """
@@ -75,7 +75,7 @@ class NodeTestCases(unittest.TestCase):
         :return:
         """
         with self.assertRaises(KeyError):
-            node = Node("test", "test", {"y", "123"}, ["p2p"])
+            node = Node("test", "test", {"y", "123"}, [P2PNIC()])
 
     def test_missing_location_y(self):
         """
@@ -83,7 +83,7 @@ class NodeTestCases(unittest.TestCase):
         :return:
         """
         with self.assertRaises(KeyError):
-            node = Node("test", "test", {"x": "123"}, ["p2p"])
+            node = Node("test", "test", {"x": "123"}, [P2PNIC()])
 
     def test_non_num_location_x(self):
         """
@@ -91,7 +91,7 @@ class NodeTestCases(unittest.TestCase):
         :return:
         """
         with self.assertRaises(ValueError):
-            node = Node("test", "test", {"x": "a", "y": "123.1"}, ["p2p"])
+            node = Node("test", "test", {"x": "a", "y": "123.1"}, [P2PNIC()])
 
     def test_non_num_location_y(self):
         """
@@ -99,7 +99,7 @@ class NodeTestCases(unittest.TestCase):
         :return:
         """
         with self.assertRaises(ValueError):
-            node = Node("test", "test", {"x": "321", "y": "b"}, ["p2p"])
+            node = Node("test", "test", {"x": "321", "y": "b"}, [P2PNIC()])
 
     def test_none_location_x(self):
         """
@@ -107,7 +107,7 @@ class NodeTestCases(unittest.TestCase):
         :return:
         """
         with self.assertRaises(TypeError):
-            node = Node("test", "test", {"x": None, "y": "123"}, ["p2p"])
+            node = Node("test", "test", {"x": None, "y": "123"}, [P2PNIC()])
 
     def test_none_location_y(self):
         """
@@ -115,7 +115,7 @@ class NodeTestCases(unittest.TestCase):
         :return:
         """
         with self.assertRaises(TypeError):
-            node = Node("test", "test", {"x": "321", "y": None}, ["p2p"])
+            node = Node("test", "test", {"x": "321", "y": None}, [P2PNIC()])
 
     def test_incorrect_type_nic(self):
         """
@@ -127,6 +127,7 @@ class NodeTestCases(unittest.TestCase):
 
         with self.assertRaises(InvalidNetworkType):
             node = Node("test", "test", {"x": "321", "y": "321"}, ["p2p"])
+
 
     def test_correct(self):
         """

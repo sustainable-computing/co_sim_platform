@@ -11,7 +11,7 @@ File contains the class that will store network connections.
 """
 
 from ConfigErrors import ImmutableObjectError
-from ValidationFunctions import check_network_connection_nodes, check_network_connection_type
+from ValidationFunctions import check_network_connection_nodes, check_network_connection_types
 
 
 class NetworkConnection:
@@ -32,7 +32,7 @@ class NetworkConnection:
         :param type:
         """
         check_network_connection_nodes(nodes)
-        check_network_connection_type([conn_type])
+        check_network_connection_types(conn_type)
 
         super(NetworkConnection, self).__setattr__('nodes', nodes)
         super(NetworkConnection, self).__setattr__('conn_type', conn_type)

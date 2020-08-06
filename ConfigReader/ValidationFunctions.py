@@ -11,11 +11,16 @@ File contains all the validation tests needed to make sure the values stored in 
 """
 
 from ConfigErrors import InvalidNetworkType, InvalidAccessPointValueForNICType, \
-    NetworkConnectionNumberOfNodesNotCorrect, NetworkConnectionHasNodesWithConnectionToSelf
+    NetworkConnectionNumberOfNodesNotCorrect, NetworkConnectionHasNodesWithConnectionToSelf, \
+    InvalidNetworkConnectionType, InvalidAppConnectionType
 from NICs import P2PNIC, WiFiNIC
+from NetworkConnectionTypes import NetworkConnectionWiFi, NetworkConnectionP2P
+from AppConnectionsTypes import ControlAppConnectionPathType, ActuatorAppConnectionPathType
 
 # Stores the valid types of nics
 valid_nic_types = [P2PNIC, WiFiNIC]
+valid_network_connection_types = [NetworkConnectionP2P, NetworkConnectionWiFi]
+valid_app_connection_types = [ActuatorAppConnectionPathType, ControlAppConnectionPathType]
 
 
 def check_non_empty_non_none_string(to_check):
@@ -66,14 +71,44 @@ def check_nic_types(nics_to_check):
         types_found.append(nic.type)
 
 
-def check_network_connection_type(network_connection_type):
+def check_if_passed_in_is_of_valid_type(passed_in, valid_types):
+    """
+    Iterates through valid_types to check if passed_in is of that type.
+    :param passed_in:
+    :param valid_types:
+    :return:
+    """
+    found = False
+    for valid_type in valid_types:
+        if isinstance(passed_in, valid_type):
+            found = True
+            break
+
+    return found
+
+
+def check_network_connection_types(network_connection_type):
     """
     Check to see if the network connection type is of a valid type.
     :param network_connection_type:
     :return:
     """
-    if len(set(network_connection_type).intersection(set(valid_nic_types))) != len(network_connection_type):
-        raise InvalidNetworkType
+    found = check_if_passed_in_is_of_valid_type(network_connection_type, valid_network_connection_types)
+
+    if not found:
+        raise InvalidNetworkConnectionType
+
+
+def check_app_connection_types(app_connection_type):
+    """
+    Check if the app connection type is of a valid type
+    :param app_connection_type:
+    :return:
+    """
+    found = check_if_passed_in_is_of_valid_type(app_connection_type, valid_app_connection_types)
+
+    if not found:
+        raise InvalidAppConnectionType
 
 
 def check_network_connection_nodes(nodes):

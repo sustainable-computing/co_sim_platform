@@ -20,6 +20,16 @@ class InvalidNetworkType(Exception):
     pass
 
 
+class InvalidNetworkConnectionType(Exception):
+    """Raised when an invalid type of network connection is passed in"""
+    pass
+
+
+class InvalidAppConnectionType(Exception):
+    """Raised when an invalid type of app connection is passed in"""
+    pass
+
+
 class InvalidAccessPointValueForNICType(Exception):
     """Raised when:
      - the value of access point is None or not a bool if NIC is of type wifi
