@@ -17,7 +17,32 @@ class NIC:
     Created to store the base type of NIC, where its not specified to be p2p or wifi, etc.
     """
     # Stores the type of card, this cannot be set, each class has its own type that is set but cannot be changed
-    type = "base"
+    nic_type = "base"
+
+    def __str__(self):
+        """
+        Returns a description of the nic
+        :return:
+        """
+        return self.nic_type
+
+    def __eq__(self, other):
+        """
+        Method checks to see if the type of other is correct and if type var is equal in self and other.
+        :param other:
+        :return:
+        """
+        if isinstance(other, NIC):
+            return self.nic_type == other.nic_type
+        return False
+
+    def __ne__(self, other):
+        """
+        Returns the opposite value of __eq__, compares type
+        :param other:
+        :return:
+        """
+        return not self.__eq__(other)
 
 
 class P2PNIC(NIC):
@@ -25,7 +50,7 @@ class P2PNIC(NIC):
     Created to store the p2p NIC card.
     """
     # Stores the type of card, this cannot be set, each class has its own type that is set but cannot be changed
-    type = "p2p"
+    nic_type = "p2p"
 
     def __setattr__(self, key, value):
         """
@@ -42,7 +67,7 @@ class WiFiNIC(NIC):
     Created to store the Wifi NIC card.
     """
     # Stores the type of card, this cannot be set, each class has its own type that is set but cannot be changed
-    type = "wifi"
+    nic_type = "wifi"
     # Indicates if the wifi card is an access-point or not, by default its not
     access_point = False
 
@@ -61,3 +86,21 @@ class WiFiNIC(NIC):
         :return:
         """
         raise ImmutableObjectError
+
+    def __eq__(self, other):
+        """
+        Method checks to see if the type of other is correct and if type var is equal in self and other.
+        :param other:
+        :return:
+        """
+        if super(WiFiNIC, self).__eq__(other):
+            return self.access_point == other.access_point
+        return False
+
+    def __ne__(self, other):
+        """
+        Returns the opposite value of __eq__, compares type
+        :param other:
+        :return:
+        """
+        return not self.__eq__(other)

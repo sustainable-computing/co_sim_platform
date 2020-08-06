@@ -68,7 +68,7 @@ def check_nic_types(nics_to_check):
         if not found:
             raise InvalidNetworkType
 
-        types_found.append(nic.type)
+        types_found.append(nic.nic_type)
 
 
 def check_if_passed_in_is_of_valid_type(passed_in, valid_types):

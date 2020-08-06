@@ -117,6 +117,13 @@ class NodeTestCases(unittest.TestCase):
         with self.assertRaises(TypeError):
             node = Node("test", "test", {"x": "321", "y": None}, [P2PNIC()])
 
+    def test_no_nic(self):
+        """
+        Create a Node with no NIC, should produce no error
+        :return:
+        """
+        node = Node("test", "test", {"x": "321", "y": "321"}, [])
+
     def test_incorrect_type_nic(self):
         """
         Create a base type of NIC and a string, should create an error.
@@ -128,7 +135,6 @@ class NodeTestCases(unittest.TestCase):
         with self.assertRaises(InvalidNetworkType):
             node = Node("test", "test", {"x": "321", "y": "321"}, ["p2p"])
 
-
     def test_correct(self):
         """
         Everything is correct, no error should be raised.
@@ -137,6 +143,100 @@ class NodeTestCases(unittest.TestCase):
         node = Node("test", "test", {"x": "321", "y": "321"}, [P2PNIC()])
         node = Node("test", "test", {"x": "321", "y": "321"}, [WiFiNIC()])
         node = Node("test", "test", {"x": "321", "y": "321"}, [WiFiNIC(access_point=True)])
+
+    def test_eq_incorrect_type(self):
+        """
+        Create two identical nodes and check if they are equal. They should not be equal.
+        :return:
+        """
+        n1 = Node("test", "test", {"x": "321", "y": "321"}, [P2PNIC()])
+        n2 = "123"
+        self.assertFalse(n1 == n2)
+
+    def test_eq_is_equal(self):
+        """
+        Create two identical nodes and check if they are equal. They should be equal.
+        :return:
+        """
+        n1 = Node("test", "test", {"x": "321", "y": "321"}, [P2PNIC()])
+        n2 = Node("test", "test", {"x": "321", "y": "321"}, [P2PNIC()])
+        self.assertTrue(n1 == n2)
+
+    def test_eq_not_equal(self):
+        """
+        Create two non-identical nodes and check if they are equal. They should not be equal.
+        :return:
+        """
+        n1 = Node("test", "test", {"x": "321", "y": "321"}, [P2PNIC()])
+        n2 = Node("test1", "test", {"x": "321", "y": "321"}, [P2PNIC()])
+        self.assertFalse(n1 == n2)
+
+        n1 = Node("test", "test", {"x": "321", "y": "321"}, [P2PNIC()])
+        n2 = Node("test", "test1", {"x": "321", "y": "321"}, [P2PNIC()])
+        self.assertFalse(n1 == n2)
+
+        n1 = Node("test", "test", {"x": "321", "y": "321"}, [P2PNIC()])
+        n2 = Node("test", "test", {"x": "3211", "y": "321"}, [P2PNIC()])
+        self.assertFalse(n1 == n2)
+
+        n1 = Node("test", "test", {"x": "321", "y": "321"}, [P2PNIC()])
+        n2 = Node("test", "test", {"x": "321", "y": "3211"}, [P2PNIC()])
+        self.assertFalse(n1 == n2)
+
+        n1 = Node("test", "test", {"x": "321", "y": "321"}, [P2PNIC()])
+        n2 = Node("test", "test", {"x": "321", "y": "321"}, [WiFiNIC()])
+        self.assertFalse(n1 == n2)
+
+        n1 = Node("test", "test", {"x": "321", "y": "321"}, [P2PNIC()])
+        n2 = Node("test", "test", {"x": "321", "y": "321"}, [WiFiNIC(), P2PNIC()])
+        self.assertFalse(n1 == n2)
+
+    def test_ne_incorrect_type(self):
+        """
+        Create two identical nodes and check if they are equal. Should be true, they are not equal
+        :return:
+        """
+        n1 = Node("test", "test", {"x": "321", "y": "321"}, [P2PNIC()])
+        n2 = "123"
+        self.assertTrue(n1 != n2)
+
+    def test_ne_is_equal(self):
+        """
+        Create two identical nodes check if they are not equal. Should be false, since they are equal.
+        :return:
+        """
+        n1 = Node("test", "test", {"x": "321", "y": "321"}, [P2PNIC()])
+        n2 = Node("test", "test", {"x": "321", "y": "321"}, [P2PNIC()])
+        self.assertFalse(n1 != n2)
+
+    def test_ne_not_equal(self):
+        """
+        Create two non-identical nodes to check if they are not equal. Should be true, since they are not equal.
+        :return:
+        """
+        n1 = Node("test", "test", {"x": "321", "y": "321"}, [P2PNIC()])
+        n2 = Node("test1", "test", {"x": "321", "y": "321"}, [P2PNIC()])
+        self.assertTrue(n1 != n2)
+
+        n1 = Node("test", "test", {"x": "321", "y": "321"}, [P2PNIC()])
+        n2 = Node("test", "test1", {"x": "321", "y": "321"}, [P2PNIC()])
+        self.assertTrue(n1 != n2)
+
+        n1 = Node("test", "test", {"x": "321", "y": "321"}, [P2PNIC()])
+        n2 = Node("test", "test", {"x": "3211", "y": "321"}, [P2PNIC()])
+        self.assertTrue(n1 != n2)
+
+        n1 = Node("test", "test", {"x": "321", "y": "321"}, [P2PNIC()])
+        n2 = Node("test", "test", {"x": "321", "y": "3211"}, [P2PNIC()])
+        self.assertTrue(n1 != n2)
+
+        n1 = Node("test", "test", {"x": "321", "y": "321"}, [P2PNIC()])
+        n2 = Node("test", "test", {"x": "321", "y": "321"}, [WiFiNIC()])
+        self.assertTrue(n1 != n2)
+
+        n1 = Node("test", "test", {"x": "321", "y": "321"}, [P2PNIC()])
+        n2 = Node("test", "test", {"x": "321", "y": "321"}, [WiFiNIC(), P2PNIC()])
+        self.assertTrue(n1 != n2)
 
 
 if __name__ == '__main__':

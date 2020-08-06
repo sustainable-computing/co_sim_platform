@@ -26,10 +26,8 @@ class Node:
     location = {}
     # Stores the NIC card type, should be nic objects that are passed in
     nic_types = []
-    # If this network card is a wifi card, then this will be used
-    access_point = False
 
-    def __init__(self, power_id, network_id, location, nic_types, access_point=None):
+    def __init__(self, power_id, network_id, location, nic_types):
         """
         Validates that all the data necessary is present and is of the correct type and then saves it
         :param power_id:
@@ -45,7 +43,6 @@ class Node:
         super(Node, self).__setattr__('network_id', network_id)
         super(Node, self).__setattr__('location', location)
         super(Node, self).__setattr__('nic_types', nic_types)
-        super(Node, self).__setattr__('access_point', access_point)
 
     def __setattr__(self, key, value):
         """
@@ -72,3 +69,63 @@ class Node:
         """
         check_non_empty_non_none_string(network_id)
 
+    def __eq__(self, other):
+        """
+        Over-ridden to make it easier to compare two nodes and see if they are equal
+        :param other:
+        :return:
+        """
+        # Check type of node
+        if isinstance(other, Node):
+            return (other.power_id == self.power_id) and \
+                    (other.network_id == self.network_id) and \
+                    (other.location["x"] == self.location["x"]) and \
+                    (other.location["y"] == self.location["y"]) and \
+                    (self.__compare_nic_types(other.nic_types))
+        return False
+
+    def __ne__(self, other):
+        """
+        Over-ridden to make it easier to compare two nodes and see if they are not equal. Just inverts the bool returned
+        by other.
+        :param other:
+        :return:
+        """
+        return not self.__eq__(other)
+
+    def __compare_nic_types(self, other_nics):
+        """
+        Compare's NICs. They need to be in the same order for this to be successful.
+        :param other_nics:
+        :return:
+        """
+        # If the length is not the same, return false
+        if len(self.nic_types) != len(other_nics):
+            return False
+
+        # If the length if the same, start comparing the NIC types
+        for i in range(0, len(self.nic_types)):
+            if self.nic_types[i] != other_nics[i]:
+                return False
+
+        # Everything matches, return true
+        return True
+
+    def __str__(self):
+        """
+        Returns a string describing the node.
+        :return:
+        """
+        string_to_return = "\nNode Object: \n" \
+                           "\t power_id: " + self.power_id + "\n" \
+                           "\t network_id: " + self.network_id + "\n" \
+                           "\t location: " + self.network_id + "\n" \
+                           "\t nics: "
+
+        for nic in self.nic_types:
+            string_to_return += ("(" + str(nic) + "), ")
+
+        string_to_return = string_to_return[:-2]
+        string_to_return += "\n"
+
+        return string_to_return

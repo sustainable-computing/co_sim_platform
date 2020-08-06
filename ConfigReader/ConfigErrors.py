@@ -10,6 +10,7 @@ File was created to store all the errors created for Config reading
 @company University of Alberta - Computing Science
 """
 
+
 class ImmutableObjectError(Exception):
     """Raised when an Immutable object is being edited"""
     pass
@@ -45,4 +46,14 @@ class NetworkConnectionNumberOfNodesNotCorrect(Exception):
 
 class NetworkConnectionHasNodesWithConnectionToSelf(Exception):
     """Raised when a node is connected to itself in the network connection."""
+    pass
+
+
+class NodeWithNetworkIdAlreadyExistsInNetwork(Exception):
+    """Raised when a node with a network id is being created that is already taken."""
+    pass
+
+
+class NodeWithPowerIdAlreadyExistsInNetwork(Exception):
+    """Raised when a node with a power id is being created that is already taken."""
     pass

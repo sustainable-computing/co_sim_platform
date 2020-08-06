@@ -2,7 +2,7 @@
 Created on August 5, 2020
 File contains the class that will test NIC class. Super simple in this case.
 
-@file    AllNICTestCases.py
+@file    NICTestCases.py
 @author  Amrinder S. Grewal
 @email   asgrewal@ualberta.ca
 @date    2020.08.05
@@ -27,7 +27,7 @@ class AllNICTestCases(unittest.TestCase):
         :return:
         """
         nic = NIC()
-        self.assertEqual("base", nic.type, "TYPE FOR BASE NIC CLASS IS NOT base")
+        self.assertEqual("base", nic.nic_type, "TYPE FOR BASE NIC CLASS IS NOT base")
 
     def test_type_of_nic_p2p(self):
         """
@@ -35,7 +35,7 @@ class AllNICTestCases(unittest.TestCase):
         :return:
         """
         nic = P2PNIC()
-        self.assertEqual("p2p", nic.type, "TYPE FOR BASE NIC CLASS IS NOT p2p")
+        self.assertEqual("p2p", nic.nic_type, "TYPE FOR BASE NIC CLASS IS NOT p2p")
 
     def test_change_of_type_in_nic_p2p(self):
         """
@@ -44,7 +44,7 @@ class AllNICTestCases(unittest.TestCase):
         """
         with self.assertRaises(ImmutableObjectError):
             nic = P2PNIC()
-            nic.type = "another_type"
+            nic.nic_type = "another_type"
 
     def test_type_of_nic_wifi(self):
         """
@@ -52,7 +52,7 @@ class AllNICTestCases(unittest.TestCase):
         :return:
         """
         nic = WiFiNIC()
-        self.assertEqual("wifi", nic.type, "TYPE FOR BASE NIC CLASS IS NOT wifi")
+        self.assertEqual("wifi", nic.nic_type, "TYPE FOR BASE NIC CLASS IS NOT wifi")
 
     def test_change_of_type_in_nic_wifi(self):
         """
@@ -61,7 +61,7 @@ class AllNICTestCases(unittest.TestCase):
         """
         with self.assertRaises(ImmutableObjectError):
             nic = WiFiNIC()
-            nic.type = "another_type"
+            nic.nic_type = "another_type"
 
     def test_access_point_setting_at_init_in_wifi_nic(self):
         """
@@ -75,6 +75,48 @@ class AllNICTestCases(unittest.TestCase):
         self.assertEqual(False, nic.access_point, "WIFI NIC ACCESS POINT NOW FALSE WHEN SET IN INIT")
         nic = WiFiNIC(access_point=True)
         self.assertEqual(True, nic.access_point, "WIFI NIC ACCESS POINT NOW TRUE WHEN SET IN INIT")
+
+    def test_eq_for_all_types(self):
+        """
+        Check the equality operator for each type.
+        :return:
+        """
+        nic1 = WiFiNIC()
+        nic2 = WiFiNIC()
+        self.assertTrue(nic1 == nic2)
+
+        nic1 = P2PNIC()
+        nic2 = P2PNIC()
+        self.assertTrue(nic1 == nic2)
+
+        nic1 = WiFiNIC(access_point=True)
+        nic2 = WiFiNIC(access_point=True)
+        self.assertTrue(nic1 == nic2)
+
+        nic1 = WiFiNIC(access_point=True)
+        nic2 = WiFiNIC(access_point=False)
+        self.assertFalse(nic1 == nic2)
+
+    def test_ne_for_all_types(self):
+        """
+        Check if the __ne__ operator is working correctly.
+        :return:
+        """
+        nic1 = WiFiNIC()
+        nic2 = WiFiNIC()
+        self.assertFalse(nic1 != nic2)
+
+        nic1 = P2PNIC()
+        nic2 = P2PNIC()
+        self.assertFalse(nic1 != nic2)
+
+        nic1 = WiFiNIC(access_point=True)
+        nic2 = WiFiNIC(access_point=True)
+        self.assertFalse(nic1 != nic2)
+
+        nic1 = WiFiNIC(access_point=True)
+        nic2 = WiFiNIC(access_point=False)
+        self.assertTrue(nic1 != nic2)
 
 
 if __name__ == '__main__':

@@ -1,0 +1,47 @@
+{
+  "primary_network": {
+    "nodes": [
+      {
+        "id": "8",
+        "power_network_id": "624",
+        "location": {
+          "x": "100",
+          "y": "120"
+        },
+        "nic_card_types": [
+          {
+            "type": "p2p"
+          },
+          {
+            "type": "wifi",
+            "access_point": true
+          }]
+      },
+      {
+        "id": "9",
+        "power_network_id": "614",
+        "location": {
+          "x": "110",
+          "y": "130"
+        },
+        "nic_card_types": [
+          {
+            "type": "nil"
+          }]
+      },
+      {
+        "id": "10",
+        "power_network_id": "634",
+        "location": {
+          "x": "120",
+          "y": "140"
+        },
+        "nic_card_types": [
+          {
+            "type": "wifi",
+            "access_point": false
+          }]
+      }
+    ]
+  }
+}

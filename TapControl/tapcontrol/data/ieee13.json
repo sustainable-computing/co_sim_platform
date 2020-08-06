@@ -261,7 +261,7 @@
             }
         ]
     },
-    "secondary_network": {
+    "secondary_networks": {
         "nodes": [
             {
                 "id": "16",
