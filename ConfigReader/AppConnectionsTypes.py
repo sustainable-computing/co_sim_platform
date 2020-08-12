@@ -16,7 +16,7 @@ class BaseAppConnectionPathType:
     The base app connection type.
     """
     # Stores the type of the network connection
-    type = "base"
+    app_conn_type = "base"
 
     def __setattr__(self, key, value):
         """
@@ -27,16 +27,34 @@ class BaseAppConnectionPathType:
         """
         raise ImmutableObjectError
 
+    def __eq__(self, other):
+        """
+        If the app_conn_type is equal, return true, otherwise false.
+        :param other:
+        :return:
+        """
+        if isinstance(other, BaseAppConnectionPathType):
+            return self.app_conn_type == other.app_conn_type
+        return False
+
+    def __ne__(self, other):
+        """
+        If the app_conn_type is equal, return true, otherwise false.
+        :param other:
+        :return:
+        """
+        return not self.__eq__(other)
+
 
 class ControlAppConnectionPathType(BaseAppConnectionPathType):
     """
     A control app connection path type
     """
-    type = "control"
+    app_conn_type = "control"
 
 
 class ActuatorAppConnectionPathType(BaseAppConnectionPathType):
     """
     A actuator app connection path type
     """
-    type = "actuator"
+    app_conn_type = "actuator"

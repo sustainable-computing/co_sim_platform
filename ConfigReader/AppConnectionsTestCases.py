@@ -77,7 +77,6 @@ class AppConnectionsTestCases(unittest.TestCase):
         with self.assertRaises(InvalidAppConnectionType):
             app_conn = AppConnections("123", "123", BaseAppConnectionPathType())
 
-
     def test_app_connections_actuator_type(self):
         """
         Create a app connection where the path type is actuator, no error
@@ -91,6 +90,94 @@ class AppConnectionsTestCases(unittest.TestCase):
         :return:
         """
         app_conn = AppConnections("123", "123", ControlAppConnectionPathType())
+
+    def test_eq_equal(self):
+        """
+        Compare two app cons that have the sender, receiver and path type being equal.
+        :return:
+        """
+        ac1 = AppConnections("123", "123", ControlAppConnectionPathType())
+        ac2 = AppConnections("123", "123", ControlAppConnectionPathType())
+        self.assertTrue(ac1 == ac2)
+
+        ac1 = AppConnections("321", "123", ActuatorAppConnectionPathType())
+        ac2 = AppConnections("321", "123", ActuatorAppConnectionPathType())
+        self.assertTrue(ac1 == ac2)
+
+    def test_eq_not_equal_sender(self):
+        """
+        Compare two app conns that do not have the same sender and test eq operator.
+        :return:
+        """
+        ac1 = AppConnections("123", "123", ControlAppConnectionPathType())
+        ac2 = AppConnections("321", "123", ControlAppConnectionPathType())
+        self.assertFalse(ac1 == ac2)
+
+    def test_eq_not_equal_receiver(self):
+        """
+        Compare two app conns that do not have the same receiver and test eq operator.
+        :return:
+        """
+        ac1 = AppConnections("123", "123", ControlAppConnectionPathType())
+        ac2 = AppConnections("123", "321", ControlAppConnectionPathType())
+        self.assertFalse(ac1 == ac2)
+
+    def test_eq_not_equal_path_type(self):
+        """
+        Compare two app conns that do not have the same path type and test eq operator.
+        :return:
+        """
+        ac1 = AppConnections("123", "123", ControlAppConnectionPathType())
+        ac2 = AppConnections("123", "123", ActuatorAppConnectionPathType())
+        self.assertFalse(ac1 == ac2)
+
+        ac1 = AppConnections("123", "123", ActuatorAppConnectionPathType())
+        ac2 = AppConnections("123", "123", ControlAppConnectionPathType())
+        self.assertFalse(ac1 == ac2)
+
+    def test_ne_equal(self):
+        """
+        Compare two equal app cons using not equal operator.
+        :return:
+        """
+        ac1 = AppConnections("123", "123", ControlAppConnectionPathType())
+        ac2 = AppConnections("123", "123", ControlAppConnectionPathType())
+        self.assertFalse(ac1 != ac2)
+
+        ac1 = AppConnections("321", "123", ActuatorAppConnectionPathType())
+        ac2 = AppConnections("321", "123", ActuatorAppConnectionPathType())
+        self.assertFalse(ac1 != ac2)
+
+    def test_ne_not_equal_sender(self):
+        """
+        Compare two not equal sender using the not equal operator.
+        :return:
+        """
+        ac1 = AppConnections("123", "123", ControlAppConnectionPathType())
+        ac2 = AppConnections("321", "123", ControlAppConnectionPathType())
+        self.assertTrue(ac1 != ac2)
+
+    def test_ne_not_equal_receiver(self):
+        """
+        Compare two not equal receiver using the not equal operator.
+        :return:
+        """
+        ac1 = AppConnections("123", "123", ControlAppConnectionPathType())
+        ac2 = AppConnections("123", "321", ControlAppConnectionPathType())
+        self.assertTrue(ac1 != ac2)
+
+    def test_ne_not_equal_path_type(self):
+        """
+        Compare two app conns that do not have the same path type and test != operator.
+        :return:
+        """
+        ac1 = AppConnections("123", "123", ControlAppConnectionPathType())
+        ac2 = AppConnections("123", "123", ActuatorAppConnectionPathType())
+        self.assertTrue(ac1 != ac2)
+
+        ac1 = AppConnections("123", "123", ActuatorAppConnectionPathType())
+        ac2 = AppConnections("123", "123", ControlAppConnectionPathType())
+        self.assertTrue(ac1 != ac2)
 
 
 if __name__ == '__main__':

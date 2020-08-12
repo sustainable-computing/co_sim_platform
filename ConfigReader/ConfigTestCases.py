@@ -14,9 +14,12 @@ from Config import Config
 from Node import Node
 from NICs import P2PNIC, WiFiNIC
 from NetworkConnection import NetworkConnection
+from AppConnections import AppConnections
+from AppConnectionsTypes import ControlAppConnectionPathType, ActuatorAppConnectionPathType
 from ConfigErrors import NodeWithNetworkIdAlreadyExistsInNetwork, NodeWithPowerIdAlreadyExistsInNetwork, \
     InvalidNetworkType, NetworkConnectionAlreadyExists, NodeInNetworkConnectionDoesHaveCorrectNIC, \
-    NoAccessPointFoundInNetworkConnection, NoNonAccessPointFoundInNetworkConnection, NodeInNetworkConnectionDoesNotExist
+    NoAccessPointFoundInNetworkConnection, NoNonAccessPointFoundInNetworkConnection, \
+    NodeInNetworkConnectionDoesNotExist, NodeInAppConnectionDoesNotExist, InvalidAppConnectionType
 from NetworkConnectionTypes import NetworkConnectionP2P, NetworkConnectionWiFi
 
 
@@ -216,6 +219,55 @@ class ConfigTestCases(unittest.TestCase):
         """
         self.__open_file_and_wait_to_raise("TestFiles/not_valid_network_missing_node.json",
                                             NodeInNetworkConnectionDoesNotExist)
+
+    def test_node_one_missing(self):
+        """
+        Check to see if config reader will fail if node one in an app connection is missing. Error should be thrown.
+        :return:
+        """
+        self.__open_file_and_wait_to_raise("TestFiles/not_valid_app_conn_node_one_missing.json",
+                                           NodeInAppConnectionDoesNotExist)
+
+    def test_node_two_missing(self):
+        """
+        Check to see if config reader will fail if node two in an app connection is missing. Error should be thrown.
+        :return:
+        """
+        self.__open_file_and_wait_to_raise("TestFiles/not_valid_app_conn_node_two_missing.json",
+                                           NodeInAppConnectionDoesNotExist)
+
+    def test_wrong_connection_types(self):
+        """
+        Will pass in invalid path type of app connections, errors should be thrown.
+        :return:
+        """
+        self.__open_file_and_wait_to_raise("TestFiles/not_valid_app_conn_wrong_path_type_one.json",
+                                           InvalidAppConnectionType)
+        self.__open_file_and_wait_to_raise("TestFiles/not_valid_app_conn_wrong_path_type_two.json",
+                                           InvalidAppConnectionType)
+
+    def test_valid_app_connection(self):
+        """
+        Will pass in valid app connections of different types. Should work.
+        :return:
+        """
+        valid_app_conns_list = [
+            AppConnections("-111", "-222", ControlAppConnectionPathType()),
+            AppConnections("-333", "-444", ActuatorAppConnectionPathType())
+        ]
+        # Read the file
+        file = open("TestFiles/valid_app_conns.json")
+        config = Config(file)
+        config.read_config()
+        # Should have read 3 nodes
+        self.assertEqual(len(config.app_connections), len(valid_app_conns_list))
+
+        # Iterate through the nodes to check their properties
+        for i in range(0, len(valid_app_conns_list)):
+            self.assertTrue(valid_app_conns_list[i] == config.app_connections[i])
+
+        # Close the file
+        file.close()
 
 
 if __name__ == '__main__':

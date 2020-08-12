@@ -81,26 +81,26 @@ class Node:
         """
         raise ImmutableObjectError
 
-    def __has_type_of_card(self, type):
+    def __has_type_of_card(self, card_type):
         """
         Check to see if Node has a type of card in nic_types
-        :param type:
+        :param card_type:
         :return:
         """
-        if len(self.__get_type_of_cards(type)) > 0:
+        if len(self.__get_type_of_cards(card_type)) > 0:
             return True
         else:
             return False
 
-    def __get_type_of_cards(self, type):
+    def __get_type_of_cards(self, card_type):
         """
         Gets and returns all the cards of type, well type
-        :param type:
+        :param card_type:
         :return:
         """
         to_return = []
         for card in self.nic_types:
-            if isinstance(card, type):
+            if isinstance(card, card_type):
                 to_return.append(card)
 
         return to_return

@@ -64,6 +64,11 @@ class NodeInNetworkConnectionDoesNotExist(Exception):
     pass
 
 
+class NodeInAppConnectionDoesNotExist(Exception):
+    """Raised when a node in a applications connection does not exist part of the file."""
+    pass
+
+
 class NodeInNetworkConnectionDoesHaveCorrectNIC(Exception):
     """Raised when a node in a network connection does not have the correct nic."""
     pass

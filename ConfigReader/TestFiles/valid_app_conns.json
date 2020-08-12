@@ -2,8 +2,8 @@
     "primary_network": {
         "nodes": [
             {
-                "id": "11111",
-                "power_network_id": "111100",
+                "id": "-111",
+                "power_network_id": "-1111",
                 "location": {
                     "x": "200",
                     "y": "400"
@@ -11,12 +11,16 @@
                 "nic_card_types": [
                     {
                         "type": "p2p"
+                    },
+                    {
+                        "type": "wifi",
+                        "access_point": true
                     }
                 ]
             },
             {
-                "id": "11112",
-                "power_network_id": "111101",
+                "id": "-222",
+                "power_network_id": "-2222",
                 "location": {
                     "x": "200",
                     "y": "350"
@@ -28,37 +32,28 @@
                 ]
             },
             {
-                "id": "11113",
-                "power_network_id": "111102",
+                "id": "-333",
+                "power_network_id": "-3333",
                 "location": {
                     "x": "200",
-                    "y": "300"
+                    "y": "400"
                 },
                 "nic_card_types": [
                     {
                         "type": "p2p"
-                    }
-                ]
-            },
-            {
-                "id": "11114",
-                "power_network_id": "111103",
-                "location": {
-                    "x": "0",
-                    "y": "250"
-                },
-                "nic_card_types": [
+                    },
                     {
-                        "type": "p2p"
+                        "type": "wifi",
+                        "access_point": true
                     }
                 ]
             },
             {
-                "id": "11115",
-                "power_network_id": "111104",
+                "id": "-444",
+                "power_network_id": "-4444",
                 "location": {
-                    "x": "100",
-                    "y": "250"
+                    "x": "200",
+                    "y": "350"
                 },
                 "nic_card_types": [
                     {
@@ -70,40 +65,30 @@
         "network_layout": [
             {
                 "nodes": [
-                    "11111",
-                    "11112"
+                    "-111",
+                    "-222"
                 ],
                 "type": "p2p"
             },
             {
                 "nodes": [
-                    "11112",
-                    "11113"
-                ],
-                "type": "p2p"
-            },
-            {
-                "nodes": [
-                    "11113",
-                    "11115"
-                ],
-                "type": "p2p"
-            },
-            {
-                "nodes": [
-                    "11115",
-                    "11114"
-                ],
-                "type": "p2p"
-            },
-            {
-                "nodes": [
-                    "11114",
-                    "11113"
+                    "-333",
+                    "-444"
                 ],
                 "type": "p2p"
             }
         ],
-        "app_connections": []
+        "app_connections": [
+            {
+                "sender": "-111",
+                "receiver": "-222",
+                "path_type": "control"
+            },
+            {
+                "sender": "-333",
+                "receiver": "-444",
+                "path_type": "actuator"
+            }
+        ]
     }
 }

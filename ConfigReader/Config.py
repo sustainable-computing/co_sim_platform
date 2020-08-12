@@ -14,8 +14,10 @@ import json
 from ConfigErrors import InvalidNetworkType, NodeWithNetworkIdAlreadyExistsInNetwork, \
     NodeWithPowerIdAlreadyExistsInNetwork, NodeInNetworkConnectionDoesNotExist, NetworkConnectionAlreadyExists, \
     InvalidNetworkConnectionType, NoAccessPointFoundInNetworkConnection, NoNonAccessPointFoundInNetworkConnection, \
-    NodeInNetworkConnectionDoesHaveCorrectNIC
+    NodeInNetworkConnectionDoesHaveCorrectNIC, NodeInAppConnectionDoesNotExist, InvalidAppConnectionType
 from NetworkConnection import NetworkConnection
+from AppConnections import AppConnections
+from AppConnectionsTypes import ControlAppConnectionPathType, ActuatorAppConnectionPathType
 from NetworkConnectionTypes import NetworkConnectionP2P, NetworkConnectionWiFi
 from NICs import P2PNIC, WiFiNIC
 from Node import Node
@@ -39,8 +41,6 @@ class Config:
     __network_connection_ids = set()
     # Stores the app connections
     app_connections = []
-    # Stores the app connection ids in a set, used for verification purposes
-    __app_connections = []
 
     def __init__(self, file):
         """
@@ -85,6 +85,10 @@ class Config:
         # Loads the network connections in the primary network
         network_layout_dict = primary_network_dict["network_layout"]
         self.__read_network_connections(network_layout_dict)
+
+        # Loads the app connections
+        app_connections_dict = primary_network_dict["app_connections"]
+        self.__read_app_connections(app_connections_dict)
 
     def __read_nodes_from_network(self, data):
         """
@@ -140,11 +144,23 @@ class Config:
             - Both nodes have correct type of NIC
         :return:
         """
-        # Go through each connection and create a node from it
+        # Go through each connection
         for network_conn_dict in network_layout_dict:
             network_connection = self.__read_and_create_network_connections(network_conn_dict)
             self.network_connections.append(network_connection)
             self.__network_connection_ids.add(tuple(sorted([network_connection.nodes[0], network_connection.nodes[1]])))
+
+    def __read_app_connections(self, app_connections_dict):
+        """
+        Reads the app connections between nodes, parses them and verifies them.
+            - Both nodes exist in the app connection
+        :param app_connections_dict:
+        :return:
+        """
+        # Go through each app connection
+        for app_conn_dict in app_connections_dict:
+            app_conn = self.__read_application_connections(app_conn_dict)
+            self.app_connections.append(app_conn)
 
     def __read_and_create_network_connections(self, network_conn_dict):
         """
@@ -210,6 +226,38 @@ class Config:
 
         # Create a conn and return it
         return NetworkConnection([node_one, node_two], conn_type)
+
+    def __read_application_connections(self, app_conn_dict):
+        """
+        Reads the application connections, validates the connections by making sure the nodes exist. It does not however
+        validate the network connection to determine reachability.
+        :return:
+        """
+        # Get the nodes
+        sender = app_conn_dict["sender"]
+        receiver = app_conn_dict["receiver"]
+
+        # Check the nodes exist
+        if sender not in self.__network_node_ids:
+            raise NodeInAppConnectionDoesNotExist(sender)
+        if receiver not in self.__network_node_ids:
+            raise NodeInAppConnectionDoesNotExist(receiver)
+
+        # Get the nodes if they exist, or it'll never get to this point
+        sender_found = self.__get_node_with_network_id(sender)
+        receiver_found = self.__get_node_with_network_id(receiver)
+
+        # Check if the connection path type is valid
+        path_type = None
+        if app_conn_dict["path_type"] == "control":
+            path_type = ControlAppConnectionPathType()
+        elif app_conn_dict["path_type"] == "actuator":
+            path_type = ActuatorAppConnectionPathType()
+        else:
+            raise InvalidAppConnectionType
+
+        # Return an app connection type
+        return AppConnections(sender_found.network_id, receiver_found.network_id, path_type)
 
     def __get_node_with_network_id(self, network_id):
         """

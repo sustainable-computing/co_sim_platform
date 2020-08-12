@@ -43,6 +43,7 @@
           }]
       }
     ],
-    "network_layout": []
+    "network_layout": [],
+    "app_connections": []
   }
 }

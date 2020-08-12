@@ -118,6 +118,7 @@
                 ],
                 "type": "wifi"
             }
-        ]
+        ],
+        "app_connections": []
     }
 }

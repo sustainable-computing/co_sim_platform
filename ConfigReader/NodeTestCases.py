@@ -283,6 +283,5 @@ class NodeTestCases(unittest.TestCase):
         n = Node("test", "test", {"x": "321", "y": "321"}, [WiFiNIC(access_point=True)])
         self.assertTrue(n.is_wifi_access_point())
 
-
 if __name__ == '__main__':
     unittest.main()

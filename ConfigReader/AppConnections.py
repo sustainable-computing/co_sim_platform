@@ -49,3 +49,23 @@ class AppConnections:
         :return:
         """
         raise ImmutableObjectError
+
+    def __eq__(self, other):
+        """
+        Compare and make sure the the app connections are equal by comparing sender, receiver and path_type
+        :param other:
+        :return:
+        """
+        if isinstance(other, AppConnections):
+            return (self.sender == other.sender
+                    and self.receiver == other.receiver
+                    and self.path_type == other.path_type)
+        return False
+
+    def __ne__(self, other):
+        """
+        Returns the opposite of eq.
+        :param other:
+        :return:
+        """
+        return not self.__eq__(other)
