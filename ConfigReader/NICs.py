@@ -87,6 +87,13 @@ class WiFiNIC(NIC):
         """
         raise ImmutableObjectError
 
+    def __str__(self):
+        """
+        Returns a description of the nic
+        :return:
+        """
+        return self.nic_type + ", access_point: " + str(self.access_point)
+
     def __eq__(self, other):
         """
         Method checks to see if the type of other is correct and if type var is equal in self and other.

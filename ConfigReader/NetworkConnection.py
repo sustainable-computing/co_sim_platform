@@ -45,3 +45,29 @@ class NetworkConnection:
         :return:
         """
         raise ImmutableObjectError
+
+    def __eq__(self, other):
+        """
+        Make sure the nodes are equal and the conn type is equal, return true
+        :param other:
+        :return:
+        """
+        if isinstance(other, NetworkConnection):
+            # Sort the nodes in both
+            sorted_nodes = sorted(self.nodes)
+            sorted_nodes_other = sorted(other.nodes)
+            # Make sure the nodes are equal, and the type is equal
+            return (
+                    sorted_nodes[0] == sorted_nodes_other[0] and
+                    sorted_nodes[1] == sorted_nodes_other[1] and
+                    self.conn_type == other.conn_type
+            )
+        return False
+
+    def __ne__(self, other):
+        """
+        Return the opposite of eq. If nodes are not equal or the conn type is not equal, return true
+        :param other:
+        :return:
+        """
+        return not self.__eq__(other)

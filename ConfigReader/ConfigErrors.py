@@ -57,3 +57,28 @@ class NodeWithNetworkIdAlreadyExistsInNetwork(Exception):
 class NodeWithPowerIdAlreadyExistsInNetwork(Exception):
     """Raised when a node with a power id is being created that is already taken."""
     pass
+
+
+class NodeInNetworkConnectionDoesNotExist(Exception):
+    """Raised when a node in a network connection does not exist in nodes part of the file."""
+    pass
+
+
+class NodeInNetworkConnectionDoesHaveCorrectNIC(Exception):
+    """Raised when a node in a network connection does not have the correct nic."""
+    pass
+
+
+class NetworkConnectionAlreadyExists(Exception):
+    """Raised when a network connection between two nodes already exists."""
+    pass
+
+
+class NoAccessPointFoundInNetworkConnection(Exception):
+    """Raised when two wifi nodes are connected but an access point has not been found."""
+    pass
+
+
+class NoNonAccessPointFoundInNetworkConnection(Exception):
+    """Raised when two wifi nodes are connected but a non-access-point has not been found."""
+    pass

@@ -1,0 +1,50 @@
+{
+    "primary_network": {
+        "nodes": [
+            {
+                "id": "45",
+                "power_network_id": "145",
+                "location": {
+                    "x": "200",
+                    "y": "400"
+                },
+                "nic_card_types": [
+                    {
+                        "type": "wifi",
+                        "access_point": true
+                    }
+                ]
+            },
+            {
+                "id": "46",
+                "power_network_id": "146",
+                "location": {
+                    "x": "200",
+                    "y": "350"
+                },
+                "nic_card_types": [
+                    {
+                        "type": "wifi",
+                        "access_point": false
+                    }
+                ]
+            }
+        ],
+        "network_layout": [
+            {
+                "nodes": [
+                    "45",
+                    "46"
+                ],
+                "type": "wifi"
+            },
+            {
+                "nodes": [
+                    "46",
+                    "45"
+                ],
+                "type": "wifi"
+            }
+        ]
+    }
+}

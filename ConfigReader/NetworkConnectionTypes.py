@@ -16,7 +16,7 @@ class NetworkConnectionTypeBase:
     The base network connection type.
     """
     # Stores the type of the network connection
-    type = "base"
+    conn_type = "base"
 
     def __setattr__(self, key, value):
         """
@@ -27,16 +27,34 @@ class NetworkConnectionTypeBase:
         """
         raise ImmutableObjectError
 
+    def __eq__(self, other):
+        """
+        Checks to see if conn_type of two NetworkConnections is the same
+        :param other:
+        :return:
+        """
+        if isinstance(other, NetworkConnectionTypeBase):
+            return self.conn_type == other.conn_type
+        return False
+
+    def __ne__(self, other):
+        """
+        Checks to see if conn_type of two NetworkConnections is not the same, opposite of eq
+        :param other:
+        :return:
+        """
+        return not self.__eq__(other)
+
 
 class NetworkConnectionP2P(NetworkConnectionTypeBase):
     """
     A p2p network connection type
     """
-    type = "p2p"
+    conn_type = "p2p"
 
 
 class NetworkConnectionWiFi(NetworkConnectionTypeBase):
     """
     A WiFi network connection type
     """
-    type = "wifi"
+    conn_type = "wifi"

@@ -1,0 +1,37 @@
+{
+    "primary_network": {
+        "nodes": [
+            {
+                "id": "43123213",
+                "power_network_id": "10123421340",
+                "location": {
+                    "x": "200",
+                    "y": "400"
+                },
+                "nic_card_types": []
+            },
+            {
+                "id": "44123123",
+                "power_network_id": "10123412341",
+                "location": {
+                    "x": "200",
+                    "y": "350"
+                },
+                "nic_card_types": [
+                    {
+                        "type": "p2p"
+                    }
+                ]
+            }
+        ],
+        "network_layout": [
+            {
+                "nodes": [
+                    "43123213",
+                    "44123123"
+                ],
+                "type": "p2p"
+            }
+        ]
+    }
+}

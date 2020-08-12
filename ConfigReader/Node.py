@@ -12,7 +12,7 @@ File contains the class that will store nodes.
 
 from ConfigErrors import ImmutableObjectError
 from ValidationFunctions import check_location_coordinates, check_non_empty_non_none_string, check_nic_types
-
+from NICs import P2PNIC, WiFiNIC
 
 class Node:
     """
@@ -44,6 +44,34 @@ class Node:
         super(Node, self).__setattr__('location', location)
         super(Node, self).__setattr__('nic_types', nic_types)
 
+    def has_p2p_card(self):
+        """
+        Check the nics to see if it has a p2p card.
+        :return:
+        """
+        return self.__has_type_of_card(P2PNIC)
+
+    def has_wifi_card(self):
+        """
+        Check the nics to see if it has a wifi card.
+        :return:
+        """
+        return self.__has_type_of_card(WiFiNIC)
+
+    def is_wifi_access_point(self):
+        """
+        Check the nics to see if it has a wifi card.
+        :return:
+        """
+        # Get wifi cards
+        wifi_cards = self.__get_type_of_cards(WiFiNIC)
+        if len(wifi_cards) > 0:
+            for card in wifi_cards:
+                if card.access_point:
+                    return True
+
+        return False
+
     def __setattr__(self, key, value):
         """
         Overridden to ensure that nothing in the class is mutable after creation
@@ -52,6 +80,30 @@ class Node:
         :return:
         """
         raise ImmutableObjectError
+
+    def __has_type_of_card(self, type):
+        """
+        Check to see if Node has a type of card in nic_types
+        :param type:
+        :return:
+        """
+        if len(self.__get_type_of_cards(type)) > 0:
+            return True
+        else:
+            return False
+
+    def __get_type_of_cards(self, type):
+        """
+        Gets and returns all the cards of type, well type
+        :param type:
+        :return:
+        """
+        to_return = []
+        for card in self.nic_types:
+            if isinstance(card, type):
+                to_return.append(card)
+
+        return to_return
 
     def __check_power_id_type(self, power_id):
         """

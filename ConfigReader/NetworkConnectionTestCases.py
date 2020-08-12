@@ -74,6 +74,134 @@ class NetworkConnectionTestCases(unittest.TestCase):
         with self.assertRaises(InvalidNetworkConnectionType):
             nc = NetworkConnection(["123", "321"], NetworkConnectionTypeBase())
 
+    def test_eq_is_equal_network_connection(self):
+        """
+        Test network connections that are equal with the == operator.
+        :return:
+        """
+        nc1 = NetworkConnection(["1", "2"], NetworkConnectionP2P())
+        nc2 = NetworkConnection(["1", "2"], NetworkConnectionP2P())
+        self.assertTrue(nc1 == nc2)
+
+        nc1 = NetworkConnection(["1", "2"], NetworkConnectionWiFi())
+        nc2 = NetworkConnection(["1", "2"], NetworkConnectionWiFi())
+        self.assertTrue(nc1 == nc2)
+
+    def test_eq_not_equal_network_connection(self):
+        """
+        Test network connections that are not equal with the == operator.
+        :return:
+        """
+        nc1 = NetworkConnection(["1", "2"], NetworkConnectionP2P())
+        nc2 = NetworkConnection(["3", "2"], NetworkConnectionP2P())
+        self.assertFalse(nc1 == nc2)
+
+        nc1 = NetworkConnection(["1", "2"], NetworkConnectionP2P())
+        nc2 = NetworkConnection(["1", "3"], NetworkConnectionP2P())
+        self.assertFalse(nc1 == nc2)
+
+        nc1 = NetworkConnection(["1", "2"], NetworkConnectionWiFi())
+        nc2 = NetworkConnection(["3", "2"], NetworkConnectionWiFi())
+        self.assertFalse(nc1 == nc2)
+
+        nc1 = NetworkConnection(["1", "2"], NetworkConnectionWiFi())
+        nc2 = NetworkConnection(["1", "3"], NetworkConnectionWiFi())
+        self.assertFalse(nc1 == nc2)
+
+        nc1 = NetworkConnection(["1", "2"], NetworkConnectionWiFi())
+        nc2 = NetworkConnection(["1", "2"], NetworkConnectionP2P())
+        self.assertFalse(nc1 == nc2)
+
+    def test_ne_is_equal_network_connection(self):
+        """
+        Test network connections that are equal with the != operator.
+        :return:
+        """
+        nc1 = NetworkConnection(["1", "2"], NetworkConnectionP2P())
+        nc2 = NetworkConnection(["1", "2"], NetworkConnectionP2P())
+        self.assertFalse(nc1 != nc2)
+
+        nc1 = NetworkConnection(["1", "2"], NetworkConnectionWiFi())
+        nc2 = NetworkConnection(["1", "2"], NetworkConnectionWiFi())
+        self.assertFalse(nc1 != nc2)
+
+    def test_ne_not_equal_network_connection(self):
+        """
+        Test network connections that are not equal with the != operator.
+        :return:
+        """
+        nc1 = NetworkConnection(["1", "2"], NetworkConnectionP2P())
+        nc2 = NetworkConnection(["3", "2"], NetworkConnectionP2P())
+        self.assertTrue(nc1 != nc2)
+
+        nc1 = NetworkConnection(["1", "2"], NetworkConnectionP2P())
+        nc2 = NetworkConnection(["1", "3"], NetworkConnectionP2P())
+        self.assertTrue(nc1 != nc2)
+
+        nc1 = NetworkConnection(["1", "2"], NetworkConnectionWiFi())
+        nc2 = NetworkConnection(["3", "2"], NetworkConnectionWiFi())
+        self.assertTrue(nc1 != nc2)
+
+        nc1 = NetworkConnection(["1", "2"], NetworkConnectionWiFi())
+        nc2 = NetworkConnection(["1", "3"], NetworkConnectionWiFi())
+        self.assertTrue(nc1 != nc2)
+
+        nc1 = NetworkConnection(["1", "2"], NetworkConnectionWiFi())
+        nc2 = NetworkConnection(["1", "2"], NetworkConnectionP2P())
+        self.assertTrue(nc1 != nc2)
+
+    def test_eq_is_equal_network_connection_type(self):
+        """
+        Check the connection type with == when they are both equal
+        :return:
+        """
+        nct1 = NetworkConnectionWiFi()
+        nct2 = NetworkConnectionWiFi()
+        self.assertTrue(nct1 == nct2)
+
+        nct1 = NetworkConnectionP2P()
+        nct2 = NetworkConnectionP2P()
+        self.assertTrue(nct1 == nct2)
+
+    def test_eq_not_equal_network_connection_type(self):
+        """
+        Check the connection type with == when they are not equal
+        :return:
+        """
+        nct1 = NetworkConnectionWiFi()
+        nct2 = NetworkConnectionP2P()
+        self.assertFalse(nct1 == nct2)
+
+        nct1 = NetworkConnectionP2P()
+        nct2 = NetworkConnectionWiFi()
+        self.assertFalse(nct1 == nct2)
+
+    def test_ne_is_equal_network_connection_type(self):
+        """
+        Check the connection type with != when they are both equal
+        :return:
+        """
+        nct1 = NetworkConnectionWiFi()
+        nct2 = NetworkConnectionWiFi()
+        self.assertFalse(nct1 != nct2)
+
+        nct1 = NetworkConnectionP2P()
+        nct2 = NetworkConnectionP2P()
+        self.assertFalse(nct1 != nct2)
+
+    def test_ne_not_equal_network_connection_type(self):
+        """
+        Check the connection type with != when they are not equal
+        :return:
+        """
+        nct1 = NetworkConnectionWiFi()
+        nct2 = NetworkConnectionP2P()
+        self.assertTrue(nct1 != nct2)
+
+        nct1 = NetworkConnectionP2P()
+        nct2 = NetworkConnectionWiFi()
+        self.assertTrue(nct1 != nct2)
+
 
 if __name__ == '__main__':
     unittest.main()

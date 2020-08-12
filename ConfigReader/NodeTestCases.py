@@ -238,6 +238,51 @@ class NodeTestCases(unittest.TestCase):
         n2 = Node("test", "test", {"x": "321", "y": "321"}, [WiFiNIC(), P2PNIC()])
         self.assertTrue(n1 != n2)
 
+    def test_has_p2p_card(self):
+        """
+        Check to see if has_p2p_card method is working properly
+        :return:
+        """
+        n = Node("test", "test", {"x": "321", "y": "321"}, [P2PNIC()])
+        self.assertTrue(n.has_p2p_card())
+
+        n = Node("test", "test", {"x": "321", "y": "321"}, [WiFiNIC()])
+        self.assertFalse(n.has_p2p_card())
+
+        n = Node("test", "test", {"x": "321", "y": "321"}, [P2PNIC(), WiFiNIC()])
+        self.assertTrue(n.has_p2p_card())
+
+    def test_has_wifi_card(self):
+        """
+        Check to see if has_wifi_card method is working properly
+        :return:
+        """
+        n = Node("test", "test", {"x": "321", "y": "321"}, [P2PNIC()])
+        self.assertFalse(n.has_wifi_card())
+
+        n = Node("test", "test", {"x": "321", "y": "321"}, [WiFiNIC()])
+        self.assertTrue(n.has_wifi_card())
+
+        n = Node("test", "test", {"x": "321", "y": "321"}, [P2PNIC(), WiFiNIC()])
+        self.assertTrue(n.has_wifi_card())
+
+    def test_is_wifi_access_point(self):
+        """
+        Check to see if is_wifi_access_point method is working properly
+        :return:
+        """
+        n = Node("test", "test", {"x": "321", "y": "321"}, [P2PNIC()])
+        self.assertFalse(n.is_wifi_access_point())
+
+        n = Node("test", "test", {"x": "321", "y": "321"}, [WiFiNIC()])
+        self.assertFalse(n.is_wifi_access_point())
+
+        n = Node("test", "test", {"x": "321", "y": "321"}, [WiFiNIC(access_point=False)])
+        self.assertFalse(n.is_wifi_access_point())
+
+        n = Node("test", "test", {"x": "321", "y": "321"}, [WiFiNIC(access_point=True)])
+        self.assertTrue(n.is_wifi_access_point())
+
 
 if __name__ == '__main__':
     unittest.main()

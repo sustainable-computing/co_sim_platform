@@ -1,0 +1,28 @@
+{
+    "primary_network": {
+        "nodes": [
+            {
+                "id": "430000",
+                "power_network_id": "10000000",
+                "location": {
+                    "x": "200",
+                    "y": "400"
+                },
+                "nic_card_types": [
+                    {
+                        "type": "p2p"
+                    }
+                ]
+            }
+        ],
+        "network_layout": [
+            {
+                "nodes": [
+                    "430000",
+                    "440000"
+                ],
+                "type": "p2p"
+            }
+        ]
+    }
+}

@@ -12,7 +12,11 @@ File contains the classes that will read and verify the config files.
 import json
 
 from ConfigErrors import InvalidNetworkType, NodeWithNetworkIdAlreadyExistsInNetwork, \
-    NodeWithPowerIdAlreadyExistsInNetwork
+    NodeWithPowerIdAlreadyExistsInNetwork, NodeInNetworkConnectionDoesNotExist, NetworkConnectionAlreadyExists, \
+    InvalidNetworkConnectionType, NoAccessPointFoundInNetworkConnection, NoNonAccessPointFoundInNetworkConnection, \
+    NodeInNetworkConnectionDoesHaveCorrectNIC
+from NetworkConnection import NetworkConnection
+from NetworkConnectionTypes import NetworkConnectionP2P, NetworkConnectionWiFi
 from NICs import P2PNIC, WiFiNIC
 from Node import Node
 
@@ -32,7 +36,7 @@ class Config:
     # Stores the Network connection
     network_connections = []
     # Stores all the ids of the network connections in a set, used for verification purposes
-    __network_connections = set()
+    __network_connection_ids = set()
     # Stores the app connections
     app_connections = []
     # Stores the app connection ids in a set, used for verification purposes
@@ -72,12 +76,17 @@ class Config:
         # Load the config file
         data = json.load(self.file)
         # Get the primary network out
-        primary_network = data["primary_network"]
-        nodes_dict = primary_network["nodes"]
-        # Load the nodes
-        self.__read_nodes_from_primary_network(nodes_dict)
+        primary_network_dict = data["primary_network"]
 
-    def __read_nodes_from_primary_network(self, data):
+        # Load the nodes
+        nodes_dict = primary_network_dict["nodes"]
+        self.__read_nodes_from_network(nodes_dict)
+
+        # Loads the network connections in the primary network
+        network_layout_dict = primary_network_dict["network_layout"]
+        self.__read_network_connections(network_layout_dict)
+
+    def __read_nodes_from_network(self, data):
         """
         Reads the nodes from the primary network, parses them, then verifies them.
             - No duplicates
@@ -86,13 +95,6 @@ class Config:
         # Go through every node and create a node from it
         for node_dict in data:
             node = self.__read_and_create_node(node_dict)
-            # Check that the node creates no duplicates
-            if node.network_id in self.__network_node_ids:
-                raise NodeWithNetworkIdAlreadyExistsInNetwork(node)
-            if node.power_id in self.__power_node_ids:
-                raise NodeWithPowerIdAlreadyExistsInNetwork(node)
-
-            # No errors, add to sets and list
             self.__network_node_ids.add(node.network_id)
             self.__power_node_ids.add(node.power_id)
             self.nodes.append(node)
@@ -117,9 +119,106 @@ class Config:
             elif nic_type["type"] == "wifi":
                 nic = WiFiNIC(nic_type["access_point"])
             else:
-                raise InvalidNetworkType
+                raise InvalidNetworkType(nic_type)
             # Add the nic to end
             nics.append(nic)
 
-        # Create a node and return it
-        return Node(power_id, network_id, location, nics)
+        node = Node(power_id, network_id, location, nics)
+        # Check that the node creates no duplicates
+        if network_id in self.__network_node_ids:
+            raise NodeWithNetworkIdAlreadyExistsInNetwork(node)
+        if power_id in self.__power_node_ids:
+            raise NodeWithPowerIdAlreadyExistsInNetwork(node)
+
+        return node
+
+    def __read_network_connections(self, network_layout_dict):
+        """
+        Reads the network connections between nodes, parses them and then verifies them.
+            - No duplicates
+            - Both nodes exist
+            - Both nodes have correct type of NIC
+        :return:
+        """
+        # Go through each connection and create a node from it
+        for network_conn_dict in network_layout_dict:
+            network_connection = self.__read_and_create_network_connections(network_conn_dict)
+            self.network_connections.append(network_connection)
+            self.__network_connection_ids.add(tuple(sorted([network_connection.nodes[0], network_connection.nodes[1]])))
+
+    def __read_and_create_network_connections(self, network_conn_dict):
+        """
+        Reads a network connection, the nodes and the type, converts it to a NetworkConnection class, and verifies the
+        type connection.
+        :param self:
+        :param network_conn_dict:
+        :return:
+        """
+        # Get the nodes
+        node_one = network_conn_dict["nodes"][0]
+        node_two = network_conn_dict["nodes"][1]
+
+        # Check the nodes exist
+        if node_one not in self.__network_node_ids:
+            raise NodeInNetworkConnectionDoesNotExist(node_one)
+        if node_two not in self.__network_node_ids:
+            raise NodeInNetworkConnectionDoesNotExist(node_two)
+
+        node_one_found = self.__get_node_with_network_id(node_one)
+        node_two_found = self.__get_node_with_network_id(node_two)
+
+        # Now check if the connection already exists
+        if tuple(sorted([node_one, node_two])) in self.__network_connection_ids:
+            raise NetworkConnectionAlreadyExists(node_one_found, node_two_found)
+
+        # Now check if the network connection type is valid
+        if network_conn_dict["type"] == "p2p":
+            conn_type = NetworkConnectionP2P()
+            if not node_one_found.has_p2p_card():
+                raise NodeInNetworkConnectionDoesHaveCorrectNIC(node_one_found)
+
+            if not node_two_found.has_p2p_card():
+                raise NodeInNetworkConnectionDoesHaveCorrectNIC(node_two_found)
+            # No additional validation required
+        elif network_conn_dict["type"] == "wifi":
+            if not node_one_found.has_wifi_card():
+                raise NodeInNetworkConnectionDoesHaveCorrectNIC(node_one_found)
+
+            if not node_two_found.has_wifi_card():
+                raise NodeInNetworkConnectionDoesHaveCorrectNIC(node_two_found)
+
+            conn_type = NetworkConnectionWiFi()
+            found_access_point = False
+            found_non_access_point = False
+            # In this case, we need to verify that at least one of the wifi nodes is an access point and the other is
+            # not
+
+            if not node_one_found.is_wifi_access_point() or not node_two_found.is_wifi_access_point():
+                found_non_access_point = True
+
+            if node_one_found.is_wifi_access_point() or node_two_found.is_wifi_access_point():
+                found_access_point = True
+
+            # Now check if access point and non-access point node in the network connection has been found
+            if not found_non_access_point:
+                raise NoNonAccessPointFoundInNetworkConnection(str(node_one_found), str(node_two_found))
+
+            if not found_access_point:
+                raise NoAccessPointFoundInNetworkConnection(str(node_one_found), str(node_two_found))
+        else:
+            raise InvalidNetworkConnectionType(network_conn_dict["type"])
+
+        # Create a conn and return it
+        return NetworkConnection([node_one, node_two], conn_type)
+
+    def __get_node_with_network_id(self, network_id):
+        """
+        Returns the node with the passed in network id if found, else return None
+        :param network_id:
+        :return:
+        """
+        for node in self.nodes:
+            if node.network_id == network_id:
+                return node
+
+        return None
