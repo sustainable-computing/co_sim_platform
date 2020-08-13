@@ -164,7 +164,7 @@ class LoadGenerator(object):
         return loadsPQ
 
     def readLoads(self):
-        mat = spio.loadmat('/home/moosa/cosimul/CoSimul_Platform/SimDSE/config/loadHour9.mat', squeeze_me=True)
+        mat = spio.loadmat('config/loadHour9.mat', squeeze_me=True)
         p = np.array(mat['P'])
         q = np.array(mat['Q'])
         loadNode = mat['loadNode']

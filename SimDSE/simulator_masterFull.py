@@ -234,8 +234,8 @@ def  create_scenario( world, args ):
                                  baseNode = 1,               # single phase voltage base
                                  basePF = 0.99,
                                  se_period = 1000, # state estimation period in ms
-                                 pseudo_loads = '/home/moosa/cosimul/CoSimul_Platform/SimDSE/config/loadPseudo.mat',
-                                 se_result = '/home/moosa/cosimul/CoSimul_Platform/SimDSE/wls_results.mat' # save the wls results
+                                 pseudo_loads = 'config/loadPseudo.mat',
+                                 se_result = 'wls_results.mat' # save the wls results
                                  )
 
 

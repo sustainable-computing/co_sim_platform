@@ -157,7 +157,8 @@ def  create_scenario( world, args ):
         step_size     = 1,
         start_time    = 0, 
         random_seed   = args.random_seed,        
-        verbose       = 0                      
+        verbose       = 0,
+        tcpOrUdp      = "tcp"
     )
 
 
