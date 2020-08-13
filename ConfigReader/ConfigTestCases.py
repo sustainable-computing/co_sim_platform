@@ -19,7 +19,8 @@ from AppConnectionsTypes import ControlAppConnectionPathType, ActuatorAppConnect
 from ConfigErrors import NodeWithNetworkIdAlreadyExistsInNetwork, NodeWithPowerIdAlreadyExistsInNetwork, \
     InvalidNetworkType, NetworkConnectionAlreadyExists, NodeInNetworkConnectionDoesHaveCorrectNIC, \
     NoAccessPointFoundInNetworkConnection, NoNonAccessPointFoundInNetworkConnection, \
-    NodeInNetworkConnectionDoesNotExist, NodeInAppConnectionDoesNotExist, InvalidAppConnectionType
+    NodeInNetworkConnectionDoesNotExist, NodeInAppConnectionDoesNotExist, InvalidAppConnectionType, \
+    NodeTooFarAwayFromAccessPoint
 from NetworkConnectionTypes import NetworkConnectionP2P, NetworkConnectionWiFi
 
 
@@ -269,6 +270,38 @@ class ConfigTestCases(unittest.TestCase):
         # Close the file
         file.close()
 
+    def test_distance_too_far_p2p(self):
+        """
+        In this case, the distance should not matter. The layout should be valid.
+        :return:
+        """
+        file = open("TestFiles/valid_network_connections_distance_p2p.json")
+        config = Config(file)
+        config.read_config()
+        file.close()
+
+    def test_distance_too_far_wifi(self):
+        """
+        In this case, distance should matter, should get an exception.
+        :return:
+        """
+        file = open("TestFiles/invalid_network_connections_distance_wifi.json")
+        config = Config(file)
+
+        with self.assertRaises(NodeTooFarAwayFromAccessPoint):
+            config.read_config()
+
+        file.close()
+
+    def test_distance_close_enough_wifi(self):
+        """
+        In this case, distance should matter, but should be valid.
+        :return:
+        """
+        file = open("TestFiles/valid_network_connections_distance_wifi.json")
+        config = Config(file)
+        config.read_config()
+        file.close()
 
 if __name__ == '__main__':
     unittest.main()

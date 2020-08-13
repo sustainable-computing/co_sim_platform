@@ -87,3 +87,8 @@ class NoAccessPointFoundInNetworkConnection(Exception):
 class NoNonAccessPointFoundInNetworkConnection(Exception):
     """Raised when two wifi nodes are connected but a non-access-point has not been found."""
     pass
+
+
+class NodeTooFarAwayFromAccessPoint(Exception):
+    """Raised when a wifi node and an access point are too far away, for now that is 50m or more."""
+    pass

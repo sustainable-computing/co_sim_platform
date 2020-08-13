@@ -14,13 +14,15 @@ import json
 from ConfigErrors import InvalidNetworkType, NodeWithNetworkIdAlreadyExistsInNetwork, \
     NodeWithPowerIdAlreadyExistsInNetwork, NodeInNetworkConnectionDoesNotExist, NetworkConnectionAlreadyExists, \
     InvalidNetworkConnectionType, NoAccessPointFoundInNetworkConnection, NoNonAccessPointFoundInNetworkConnection, \
-    NodeInNetworkConnectionDoesHaveCorrectNIC, NodeInAppConnectionDoesNotExist, InvalidAppConnectionType
+    NodeInNetworkConnectionDoesHaveCorrectNIC, NodeInAppConnectionDoesNotExist, InvalidAppConnectionType, \
+    NodeTooFarAwayFromAccessPoint
 from NetworkConnection import NetworkConnection
 from AppConnections import AppConnections
 from AppConnectionsTypes import ControlAppConnectionPathType, ActuatorAppConnectionPathType
 from NetworkConnectionTypes import NetworkConnectionP2P, NetworkConnectionWiFi
 from NICs import P2PNIC, WiFiNIC
 from Node import Node
+from ValidationFunctions import check_distance_between_wifi_access_point_and_node
 
 
 class Config:
@@ -221,6 +223,9 @@ class Config:
 
             if not found_access_point:
                 raise NoAccessPointFoundInNetworkConnection(str(node_one_found), str(node_two_found))
+
+            if not check_distance_between_wifi_access_point_and_node([node_one_found, node_two_found]):
+                raise NodeTooFarAwayFromAccessPoint
         else:
             raise InvalidNetworkConnectionType(network_conn_dict["type"])
 

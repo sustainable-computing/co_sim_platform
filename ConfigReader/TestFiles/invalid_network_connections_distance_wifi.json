@@ -2,8 +2,8 @@
     "primary_network": {
         "nodes": [
             {
-                "id": "45",
-                "power_network_id": "145",
+                "id": "-1111819",
+                "power_network_id": "-11118009",
                 "location": {
                     "x": "200",
                     "y": "400"
@@ -16,11 +16,11 @@
                 ]
             },
             {
-                "id": "46",
-                "power_network_id": "146",
+                "id": "-1111829",
+                "power_network_id": "-11181019",
                 "location": {
                     "x": "200",
-                    "y": "410"
+                    "y": "349"
                 },
                 "nic_card_types": [
                     {
@@ -33,18 +33,12 @@
         "network_layout": [
             {
                 "nodes": [
-                    "45",
-                    "46"
-                ],
-                "type": "wifi"
-            },
-            {
-                "nodes": [
-                    "46",
-                    "45"
+                    "-1111819",
+                    "-1111829"
                 ],
                 "type": "wifi"
             }
-        ]
+        ],
+        "app_connections": []
     }
 }

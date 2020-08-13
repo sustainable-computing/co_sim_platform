@@ -16,6 +16,8 @@ from ConfigErrors import InvalidNetworkType, InvalidAccessPointValueForNICType, 
 from NICs import P2PNIC, WiFiNIC
 from NetworkConnectionTypes import NetworkConnectionWiFi, NetworkConnectionP2P
 from AppConnectionsTypes import ControlAppConnectionPathType, ActuatorAppConnectionPathType
+from math import sqrt
+from ConfigHelpers import find_access_point_in_wifi_nodes, find_non_access_point_in_wifi_nodes
 
 # Stores the valid types of nics
 valid_nic_types = [P2PNIC, WiFiNIC]
@@ -127,3 +129,24 @@ def check_network_connection_nodes(nodes):
     # Now make sure every node is valid
     for node in nodes:
         check_non_empty_non_none_string(node)
+
+
+def check_distance_between_wifi_access_point_and_node(nodes):
+    """
+    Check the distance between ap and node to make sure it is less than 50m.
+    :param nodes:
+    :return:
+    """
+    # Make sure there are only two nodes in nodes
+    if len(nodes) != 2:
+        raise NetworkConnectionNumberOfNodesNotCorrect
+
+    ap = find_access_point_in_wifi_nodes(nodes)
+    node = find_non_access_point_in_wifi_nodes(nodes)
+
+    distance = sqrt(((ap.location['x'] - node.location['x']) ** 2) + ((ap.location['y'] - node.location['y']) ** 2))
+
+    if distance < 50:
+        return True
+    else:
+        return False

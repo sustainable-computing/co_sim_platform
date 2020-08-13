@@ -41,7 +41,7 @@ class Node:
 
         super(Node, self).__setattr__('power_id', power_id)
         super(Node, self).__setattr__('network_id', network_id)
-        super(Node, self).__setattr__('location', location)
+        super(Node, self).__setattr__('location', {'x': float(location['x']), 'y': float(location['y'])})
         super(Node, self).__setattr__('nic_types', nic_types)
 
     def has_p2p_card(self):
