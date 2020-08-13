@@ -189,8 +189,8 @@ class PFlowSim(mosaik_api.Simulator):
 
         if (model == 'Prober'): 
             self.instances[eid] = ProberSim(
-                                            cktTerminal  = kwargs['cktTerminal'], 
-                                            cktPhase     = kwargs['cktPhase'],  
+                                            cktTerminal  = kwargs['cktTerminal'],
+                                            cktPhase     = kwargs['cktPhase'],
                                             cktProperty  = kwargs['cktProperty'],
                                             idt          = idt,
                                             step_size    = kwargs['step_size'],
@@ -198,7 +198,7 @@ class PFlowSim(mosaik_api.Simulator):
                                             cktElement   = kwargs['cktElement'],
                                             error        = kwargs['error'],
                                             verbose      = kwargs['verbose']
-                                           )      
+                                           )
 
         if (model == 'Phasor'): 
             self.instances[eid] = PhasorSim(
@@ -242,8 +242,13 @@ class PFlowSim(mosaik_api.Simulator):
             #-- get a new sample from loadgen
             # ePQ = self.objLoadGen.createLoads()
             ePQ = self.objLoadGen.readLoads()
+            # Remove the nodes that are not in the dss obj
+            filteredNodes = []
+            for e in ePQ:
+                if e[0] in self.dssObj._NodeList:
+                    filteredNodes.append(e)
             #-- execute processing of the the new elastic load
-            self.dssObj.setLoads(ePQ)
+            self.dssObj.setLoads(filteredNodes)
 
 
         #--- use actuators to update opendss state with actions received by controllers (Mosaik)

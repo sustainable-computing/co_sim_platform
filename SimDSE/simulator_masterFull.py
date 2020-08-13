@@ -149,18 +149,19 @@ def  create_scenario( world, args ):
 
 
     pktnetsim = world.start( 'PktNetSim',
-        model_name = 'TransporterModel',
-        eid_prefix = 'Transp_',
+        model_name    = 'TransporterModel',
+        eid_prefix    = 'Transp_',
         adjmat_file   = ADJMAT_FILE, 
         coords_file   = COORDS_FILE, 
         appcon_file   = DEVS_FILE,
         linkRate      = "1024Kbps",
         linkDelay     = "1ms",
         linkErrorRate = "0.0001",
-        step_size=1,
-        start_time=0, 
-        random_seed=args.random_seed,        
-        verbose=0                      
+        step_size     = 1,
+        start_time    = 0,
+        random_seed   = args.random_seed,
+        verbose       = 0,
+        tcpOrUdp      = "udp"
     )
 
 

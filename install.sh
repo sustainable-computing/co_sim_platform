@@ -32,22 +32,22 @@
 echo "Building NS-3"
 cd ns-allinone-3.30.1/ns-3.30.1
 
-#./waf configure --build-profile=optimized
-#./waf
+./waf configure --build-profile=debug
+./waf
 
 echo "Building NS3Mosaik"
 cd ../../NS3Mosaik
-#make
-
-echo "Creating virtual env"
-cd ../../
-mkdir virtualenv
-virtualenv -p /usr/bin/python3 virtualenv/cosimul
-source virtualenv/cosimul/bin/activate
-pip install mosaik
-pip install tables
-pip install scipy
-pip install matplotlib
-pip install pandas
-pip install CoSimul_Platform/opendssdirect3.7
+make
+#
+#echo "Creating virtual env"
+#cd ../../
+#mkdir virtualenv
+#virtualenv -p /usr/bin/python3 virtualenv/cosimul
+#source virtualenv/cosimul/bin/activate
+#pip install mosaik
+#pip install tables
+#pip install scipy
+#pip install matplotlib
+#pip install pandas
+#pip install CoSimul_Platform/opendssdirect3.7
 #pip install 'OpenDSSDirect.py[extras]'==0.4.0

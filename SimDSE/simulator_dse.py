@@ -132,7 +132,6 @@ class DSESim(mosaik_api.Simulator):
 
         return entities
 
-
     def step(self, time, inputs):
         if (self.verbose > 5): print('simulator_dse::step INPUT', time, inputs)
 
@@ -150,11 +149,11 @@ class DSESim(mosaik_api.Simulator):
             ''' for each smartmeter/phasor '''
             for dev_instance, param in attr_v.items():
                 if (param != None and param != 'null' and param != "None"):
-
                     self.MsgCount += 1
 
                     ''' change to dict because NS-3 need to transmit string '''
                     if isinstance(param, str):
+                        param = param.replace("\"", "'")
                         param = literal_eval(param)
 
                     dev_idn  = (param['IDT']).split("_")[1]
@@ -458,6 +457,9 @@ class DSESim(mosaik_api.Simulator):
             node = int(device)
 
             # node voltage phasor measurements
+            print("--------------")
+            print(data, device, data.loc[device, 'VMA'])
+            print("--------------")
             if data.loc[device, 'VMA'] > 0:
                 z.append(data.loc[device, 'VMA'])
                 z_type.append([5, 3 * node - 2, 0, 0])

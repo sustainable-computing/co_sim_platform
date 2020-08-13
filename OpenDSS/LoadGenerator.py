@@ -169,7 +169,8 @@ class LoadGenerator(object):
         q = np.array(mat['Q'])
         loadNode = mat['loadNode']
         loadsPQ = []
-        for row in range(0, len(p[:, 0])):
+        for row in range(0, len(p[:0])):
+            print(len(p), len(q), len(loadsPQ), len(loadNode), row)
             loadsPQ.append((str(loadNode[row]), p[row, self._time], q[row, self._time]))
         self._time += 1
         return loadsPQ
@@ -178,5 +179,3 @@ class LoadGenerator(object):
 if __name__ == '__main__':
     print('LoadGenerator class file')
 
-        
-    

@@ -158,7 +158,7 @@ def  create_scenario( world, args ):
         start_time    = 0, 
         random_seed   = args.random_seed,        
         verbose       = 0,
-        tcpOrUdp      = "tcp"
+        tcpOrUdp      = "udp"
     )
 
 
@@ -221,16 +221,19 @@ def  create_scenario( world, args ):
 
 
     #--- DSE instance
-    # estimator = dsesim.Estimator(idt = 1,
-    #                              ymat_file = 'config/IEEE33_YMatrix.npy',
-    #                              devs_file = DEVS_FILE,
-    #                              acc_period = 100,
-    #                              max_iter = 5,
-    #                              threshold = 0.001,
-    #                              baseS = 100e3/3,            # single phase power base
-    #                              baseV = 12.66e3/np.sqrt(3),
-    #                              baseNode = 1,               # single phase voltage base
-    #                              basePF = 0.99)
+    estimator = dsesim.Estimator(idt = 1,
+                                 ymat_file = 'config/IEEE33_YMatrix.npy',
+                                 devs_file = DEVS_FILE,
+                                 acc_period = 100,
+                                 max_iter = 5,
+                                 threshold = 0.001,
+                                 baseS = 100e3/3,            # single phase power base
+                                 baseV = 12.66e3/np.sqrt(3),
+                                 baseNode = 1,               # single phase voltage base
+                                 basePF = 0.99,
+                                 se_period = 1000, # state estimation period in ms
+                                 pseudo_loads = 'config/loadPseudo.mat',
+                                 se_result = 'wls_results.mat') # save the wls results
 
     #--- Monitor instances
     monitor = collector.Monitor()

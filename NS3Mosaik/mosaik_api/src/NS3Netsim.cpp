@@ -37,7 +37,6 @@ using namespace std;
 using namespace ns3;
 
 NS_LOG_COMPONENT_DEFINE ("SmartgridNs3Main");
-std::string fileNameReceived = "packets_received.pkt";
 
 /**
  * \brief Parses the packet received by the an appliction/socket and adds it to the list of packets that will be sent to the upper layer.
@@ -100,6 +99,8 @@ NS3Netsim::NS3Netsim():
 //  LogComponentEnable("SmartgridNs3Main", LOG_LEVEL_ALL);
 //  LogComponentEnable ("MultiClientTcpServer", LOG_LEVEL_ALL);
 //  LogComponentEnable ("TcpClient", LOG_LEVEL_ALL);
+//  LogComponentEnable ("CustomUdpClient", LOG_LEVEL_ALL);
+//  LogComponentEnable ("CustomUdpServer", LOG_LEVEL_ALL);
 //  LogComponentEnable ("Socket", LOG_LEVEL_ALL);
 //  LogComponentEnable ("SocketFactory", LOG_LEVEL_ALL);
 //  LogComponentEnable ("TcpSocket", LOG_LEVEL_ALL);
