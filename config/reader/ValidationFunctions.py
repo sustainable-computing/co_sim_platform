@@ -10,14 +10,14 @@ File contains all the validation tests needed to make sure the values stored in 
 @company University of Alberta - Computing Science
 """
 
-from ConfigErrors import InvalidNetworkType, InvalidAccessPointValueForNICType, \
+from config.reader.ConfigErrors import InvalidNetworkType, InvalidAccessPointValueForNICType, \
     NetworkConnectionNumberOfNodesNotCorrect, NetworkConnectionHasNodesWithConnectionToSelf, \
     InvalidNetworkConnectionType, InvalidAppConnectionType
-from NICs import P2PNIC, WiFiNIC
-from NetworkConnectionTypes import NetworkConnectionWiFi, NetworkConnectionP2P
-from AppConnectionsTypes import ControlAppConnectionPathType, ActuatorAppConnectionPathType
+from config.reader.NICs import P2PNIC, WiFiNIC
+from config.reader.NetworkConnectionTypes import NetworkConnectionWiFi, NetworkConnectionP2P
+from config.reader.AppConnectionsTypes import ControlAppConnectionPathType, ActuatorAppConnectionPathType
 from math import sqrt
-from ConfigHelpers import find_access_point_in_wifi_nodes, find_non_access_point_in_wifi_nodes
+from config.reader.ConfigHelpers import find_access_point_in_wifi_nodes, find_non_access_point_in_wifi_nodes
 
 # Stores the valid types of nics
 valid_nic_types = [P2PNIC, WiFiNIC]

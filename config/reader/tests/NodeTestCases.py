@@ -11,9 +11,9 @@ File contains the class that will store nodes.
 """
 import unittest
 
-from Node import Node
-from NICs import P2PNIC, WiFiNIC, NIC
-from ConfigErrors import InvalidNetworkType, InvalidAccessPointValueForNICType
+from config.reader.Node import Node
+from config.reader.NICs import P2PNIC, WiFiNIC, NIC
+from config.reader.ConfigErrors import InvalidNetworkType, InvalidAccessPointValueForNICType
 
 
 class NodeTestCases(unittest.TestCase):

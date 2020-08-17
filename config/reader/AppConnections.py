@@ -10,7 +10,7 @@ File contains the app connections class, will be used to hold connections betwee
 @company University of Alberta - Computing Science
 """
 
-from ValidationFunctions import check_non_empty_non_none_string, check_app_connection_types
+from config.reader.ValidationFunctions import check_non_empty_non_none_string, check_app_connection_types
 
 
 class AppConnections:

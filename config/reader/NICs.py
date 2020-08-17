@@ -9,7 +9,7 @@ File contains all NIC type classes.
 @version 0.1
 @company University of Alberta - Computing Science
 """
-from ConfigErrors import ImmutableObjectError
+from config.reader.ConfigErrors import ImmutableObjectError
 
 
 class NIC:

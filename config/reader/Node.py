@@ -10,9 +10,10 @@ File contains the class that will store nodes.
 @company University of Alberta - Computing Science
 """
 
-from ConfigErrors import ImmutableObjectError
-from ValidationFunctions import check_location_coordinates, check_non_empty_non_none_string, check_nic_types
-from NICs import P2PNIC, WiFiNIC
+from config.reader.ConfigErrors import ImmutableObjectError
+from config.reader.ValidationFunctions import check_location_coordinates, check_non_empty_non_none_string, \
+    check_nic_types
+from config.reader.NICs import P2PNIC, WiFiNIC
 
 class Node:
     """

@@ -12,8 +12,8 @@ File contains the class that will test NIC class. Super simple in this case.
 
 import unittest
 
-from NICs import NIC, P2PNIC, WiFiNIC
-from ConfigErrors import ImmutableObjectError
+from config.reader.NICs import NIC, P2PNIC, WiFiNIC
+from config.reader.ConfigErrors import ImmutableObjectError
 
 
 class AllNICTestCases(unittest.TestCase):

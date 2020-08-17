@@ -9,7 +9,7 @@ File contains helper for the config readers/validators.
 @version 0.1
 @company University of Alberta - Computing Science
 """
-from NICs import WiFiNIC
+from config.reader.NICs import WiFiNIC
 
 
 def find_access_point_in_wifi_nodes(nodes):

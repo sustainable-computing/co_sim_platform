@@ -11,10 +11,10 @@ Test cases for testing NetworkConnections
 """
 
 import unittest
-from ConfigErrors import NetworkConnectionNumberOfNodesNotCorrect, NetworkConnectionHasNodesWithConnectionToSelf, \
-    InvalidNetworkConnectionType
-from NetworkConnection import NetworkConnection
-from NetworkConnectionTypes import NetworkConnectionP2P, NetworkConnectionTypeBase, NetworkConnectionWiFi
+from config.reader.ConfigErrors import NetworkConnectionNumberOfNodesNotCorrect, \
+    NetworkConnectionHasNodesWithConnectionToSelf, InvalidNetworkConnectionType
+from config.reader.NetworkConnection import NetworkConnection
+from config.reader.NetworkConnectionTypes import NetworkConnectionP2P, NetworkConnectionTypeBase, NetworkConnectionWiFi
 
 
 class NetworkConnectionTestCases(unittest.TestCase):

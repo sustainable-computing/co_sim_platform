@@ -10,8 +10,8 @@ File contains the class that will store network connections.
 @company University of Alberta - Computing Science
 """
 
-from ConfigErrors import ImmutableObjectError
-from ValidationFunctions import check_network_connection_nodes, check_network_connection_types
+from config.reader.ConfigErrors import ImmutableObjectError
+from config.reader.ValidationFunctions import check_network_connection_nodes, check_network_connection_types
 
 
 class NetworkConnection:

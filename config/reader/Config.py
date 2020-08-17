@@ -1,28 +1,28 @@
 """
-Created on August 30, 2020
+Created on July 30, 2020
 File contains the classes that will read and verify the config files.
 
 @file    Config.py
 @author  Amrinder S. Grewal
 @email   asgrewal@ualberta.ca
-@date    2020.08.06
+@date    2020.07.30
 @version 0.1
 @company University of Alberta - Computing Science
 """
 import json
 
-from ConfigErrors import InvalidNetworkType, NodeWithNetworkIdAlreadyExistsInNetwork, \
+from config.reader.ConfigErrors import InvalidNetworkType, NodeWithNetworkIdAlreadyExistsInNetwork, \
     NodeWithPowerIdAlreadyExistsInNetwork, NodeInNetworkConnectionDoesNotExist, NetworkConnectionAlreadyExists, \
     InvalidNetworkConnectionType, NoAccessPointFoundInNetworkConnection, NoNonAccessPointFoundInNetworkConnection, \
     NodeInNetworkConnectionDoesHaveCorrectNIC, NodeInAppConnectionDoesNotExist, InvalidAppConnectionType, \
     NodeTooFarAwayFromAccessPoint
-from NetworkConnection import NetworkConnection
-from AppConnections import AppConnections
-from AppConnectionsTypes import ControlAppConnectionPathType, ActuatorAppConnectionPathType
-from NetworkConnectionTypes import NetworkConnectionP2P, NetworkConnectionWiFi
-from NICs import P2PNIC, WiFiNIC
-from Node import Node
-from ValidationFunctions import check_distance_between_wifi_access_point_and_node
+from config.reader.NetworkConnection import NetworkConnection
+from config.reader.AppConnections import AppConnections
+from config.reader.AppConnectionsTypes import ControlAppConnectionPathType, ActuatorAppConnectionPathType
+from config.reader.NetworkConnectionTypes import NetworkConnectionP2P, NetworkConnectionWiFi
+from config.reader.NICs import P2PNIC, WiFiNIC
+from config.reader.Node import Node
+from config.reader.ValidationFunctions import check_distance_between_wifi_access_point_and_node
 
 
 class Config:

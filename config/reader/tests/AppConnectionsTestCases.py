@@ -11,9 +11,10 @@ File contains the types of network connections
 """
 
 import unittest
-from AppConnections import AppConnections
-from AppConnectionsTypes import ControlAppConnectionPathType, ActuatorAppConnectionPathType, BaseAppConnectionPathType
-from ConfigErrors import InvalidAppConnectionType
+from config.reader.AppConnections import AppConnections
+from config.reader.AppConnectionsTypes import ControlAppConnectionPathType, ActuatorAppConnectionPathType, \
+    BaseAppConnectionPathType
+from config.reader.ConfigErrors import InvalidAppConnectionType
 
 
 class AppConnectionsTestCases(unittest.TestCase):
