@@ -70,6 +70,75 @@ class Config:
             self.app_connections = []
             self.__app_connections = []
 
+    def get_nodes_as_json(self):
+        """
+        Returns all the nodes as json.
+        :return:
+        """
+        # The list that will hold all the nodes
+        nodes_to_ret = []
+        for node in self.nodes:
+            node_dict = {"power_id": node.power_id, "network_id": node.network_id, "x": node.location["x"],
+                         "y": node.location["y"]}
+
+            nics = []
+
+            for nic in node.nic_types:
+                if isinstance(nic, P2PNIC):
+                    nics.append("p2p")
+                elif isinstance(nic, WiFiNIC):
+                    nics.append("wifi")
+                else:
+                    raise TypeError("NIC type invalid")
+
+            node_dict["nics"] = nics
+
+            nodes_to_ret.append(node_dict)
+
+        return json.dumps(nodes_to_ret)
+
+    def get_network_connections_as_json(self):
+        """
+        Returns network connections as json.
+        :return:
+        """
+        # The list that will hold all the network connections
+        ncs_to_ret = []
+        for nc in self.network_connections:
+            nc_dict = {"src": nc.nodes[0], "dst": nc.nodes[1], "conn_type": nc.conn_type}
+
+            if isinstance(nc.conn_type, NetworkConnectionP2P):
+                nc_dict["conn_type"] = "p2p"
+            elif isinstance(nc.conn_type, NetworkConnectionWiFi):
+                nc_dict["conn_type"] = "wifi"
+            else:
+                raise TypeError("Invalid Network Connection Type")
+
+            ncs_to_ret.append(nc_dict)
+
+        return json.dumps(ncs_to_ret)
+
+    def get_app_connections_as_json(self):
+        """
+        Returns app connections as json.
+        :return:
+        """
+        # The list that will hold all the app connections.
+        acs_to_ret = []
+        for ac in self.app_connections:
+            ac_dict = {"sender": ac.sender, "receiver": ac.receiver}
+
+            if isinstance(ac.path_type, ActuatorAppConnectionPathType):
+                ac_dict["path_type"] = "actuator"
+            elif isinstance(ac.path_type, ControlAppConnectionPathType):
+                ac_dict["conn_type"] = "control"
+            else:
+                raise TypeError("Invalid App Connection Type")
+
+            acs_to_ret.append(ac_dict)
+
+        return json.dumps(acs_to_ret)
+
     def read_config(self):
         """
         Reads the config files and the file.

@@ -35,6 +35,7 @@ class ConfigTestCases(unittest.TestCase):
             Node("612", "4", {"x": "110", "y": "130"}, [P2PNIC()]),
             Node("632", "5", {"x": "120", "y": "140"}, [WiFiNIC()])
         ]
+
         # Read the file
         file = open("TestFiles/valid_nodes.json")
         config = Config(file)

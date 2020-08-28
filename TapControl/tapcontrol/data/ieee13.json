@@ -75,7 +75,7 @@
                 {
                     "type":"wifi",
                     "access_point": true
-                }],
+                }]
             },
             {
                 "id": "6",
@@ -198,6 +198,17 @@
                 }]
             }
         ],
+        "app_connections": [
+        {
+            "receiver": "5",
+            "sender": "9",
+            "path_type": "control"
+        },
+        {
+            "receiver": "1",
+            "sender": "5",
+            "path_type": "actuator"
+        }],
         "network_layout": [
             {
                 "nodes":["0", "1"],
@@ -260,70 +271,5 @@
                 "type": "p2p"
             }
         ]
-    },
-    "secondary_networks": {
-        "nodes": [
-            {
-                "id": "16",
-                "power_network_id": "6321",
-                "location": {
-                    "x": "150",
-                    "y": "250"
-                },
-                "nic_card_types": [{
-                    "type":"wifi",
-                    "access_point": false
-                }]
-            },
-            {
-                "id": "17",
-                "power_network_id": "6322",
-                "location": {
-                    "x": "100",
-                    "y": "350"
-                },
-                "nic_card_types": [{
-                    "type":"wifi",
-                    "access_point": false
-                }]
-            },
-            {
-                "id": "18",
-                "location": {
-                    "x": "100",
-                    "y": "300"
-                },
-                "nic_card_types": [{
-                    "type":"wifi",
-                    "access_point": true
-                }]
-            }
-        ],
-        "network_layout": [
-            {
-                "nodes": ["16", "5"],
-                "type": "wifi"
-            },
-            {
-                "nodes": ["18", "5"],
-                "type": "wifi"
-            },
-            {
-                "nodes": ["18", "17"],
-                "type": "wifi"
-            }
-        ]
-    },
-    "app_connections": [
-        {
-            "receiver": "5",
-            "sender": "9",
-            "path_type": "control"
-        },
-        {
-            "receiver": "1",
-            "sender": "5",
-            "path_type": "actuator"
-        }
-    ]
+    }
 }
