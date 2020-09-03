@@ -25,6 +25,17 @@ from config.reader.NetworkConnectionTypes import NetworkConnectionP2P, NetworkCo
 
 
 class ConfigTestCases(unittest.TestCase):
+    def test_valid_file(self):
+        """
+        Testing a valid file with ieee13.json. Should produce no errors.
+        :return:
+        """
+        file = open("TestFiles/ieee13.json")
+        config = Config(file)
+        config.read_config()
+        print(config.get_network_connections_as_json())
+        file.close()
+
     def test_valid_nodes(self):
         """
         Passes a file which has valid nodes into Config, no error

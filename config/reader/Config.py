@@ -147,18 +147,18 @@ class Config:
         # Load the config file
         data = json.load(self.file)
         # Get the primary network out
-        primary_network_dict = data["primary_network"]
+        network_dict = data["network"]
 
         # Load the nodes
-        nodes_dict = primary_network_dict["nodes"]
+        nodes_dict = network_dict["nodes"]
         self.__read_nodes_from_network(nodes_dict)
 
         # Loads the network connections in the primary network
-        network_layout_dict = primary_network_dict["network_layout"]
+        network_layout_dict = network_dict["network_layout"]
         self.__read_network_connections(network_layout_dict)
 
         # Loads the app connections
-        app_connections_dict = primary_network_dict["app_connections"]
+        app_connections_dict = network_dict["app_connections"]
         self.__read_app_connections(app_connections_dict)
 
     def __read_nodes_from_network(self, data):
