@@ -59,9 +59,14 @@ Developers:
 * Evandro de Souza
 * Amrinder S. Grewal
 
-## Citing Smartgrid Cosimulation Platform
-```
-Evandro de Souza, Omid Ardakanian, Ioanis Nikolaidis, "A Co-simulation Platform for Evaluating Cyber Security and Control Applications in the Smart Grid", Proceedings of the IEEE International Conference on Communications (ICC), 2020.
+### Citing the Co-simulation Platform
+```Bibtex
+@INPROCEEDINGS{9149212,  
+author={E. {de Souza} and O. {Ardakanian} and I. {Nikolaidis}},  
+booktitle={ICC 2020 - 2020 IEEE International Conference on Communications (ICC)},   
+title={A Co-simulation Platform for Evaluating Cyber Security and Control Applications in the Smart Grid},   
+year={2020},
+pages={1-7},}
 ```
 
-Last Modification: 2020-07-13
+Last Modification: 2020-09-08
