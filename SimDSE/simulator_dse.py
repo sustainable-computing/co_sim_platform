@@ -431,7 +431,6 @@ class DSESim(mosaik_api.Simulator):
 
     def get_measurements(self, df_devs, time):
         data = df_devs.set_index('src', drop = False)
-        test = []
         z = []
         z_type = []
         error_cov = []  # covariance matrix of measurement errors
@@ -446,13 +445,16 @@ class DSESim(mosaik_api.Simulator):
         q = mat['QpMean']
         p_std = mat['PpStd']
         q_std = mat['QpStd']
+
+        hourIndex = (hour - 1) % 24
+
         for node in range(4, 3 * 33 + 1):
-            z.append(-p[node - 4][hour - 1])
+            z.append(-p[node - 4][hourIndex])
             z_type.append([2, node, 0, 0])
-            error_cov.append(np.square(p_std[node - 4][hour - 1]))
-            z.append(-q[node - 4][hour - 1])
+            error_cov.append(np.square(p_std[node - 4][hourIndex]))
+            z.append(-q[node - 4][hourIndex])
             z_type.append([4, node, 0, 0])
-            error_cov.append(np.square(q_std[node - 4][hour - 1]))
+            error_cov.append(np.square(q_std[node - 4][hourIndex]))
 
         for device in data['src']:
             node = int(device)
