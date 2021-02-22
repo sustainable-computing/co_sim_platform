@@ -33,6 +33,7 @@ echo "Building NS-3"
 cd ns-allinone-3.30.1/ns-3.30.1
 
 ./waf configure --build-profile=optimized
+#./waf configure --build-profile=debug.
 ./waf
 
 echo "Building NS3Mosaik"

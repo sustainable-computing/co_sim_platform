@@ -4,7 +4,7 @@
 # Script to run tapcontrol application
 #---
 
-BASE_DIR="/mnt/hgfs/cosimul"
+BASE_DIR="../.."
 
 VIRTENV=$BASE_DIR/virtualenv/cosimul
 SGEXEC=$BASE_DIR/CoSimul_Platform/SimDSE

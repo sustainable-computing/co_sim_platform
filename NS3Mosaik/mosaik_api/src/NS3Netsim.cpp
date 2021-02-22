@@ -39,6 +39,33 @@ using namespace ns3;
 NS_LOG_COMPONENT_DEFINE ("SmartgridNs3Main");
 std::string fileNameReceived = "packets_received.pkt";
 
+
+
+
+
+/**
+ * \brief Passes a a preprocessed message of the form "<data>&<time>" to the upper layer.
+ *
+ * \param message
+ * \param sourceNode
+ * \param destinationNode
+ */
+void sendMessageToUpperLayer(string message, Ptr<Node> sourceNode, Ptr<Node> destinationNode){
+            std::size_t current;
+            //--- get val and val_time
+            current = message.find("&");
+            string val = message.substr(0, current);
+            string val_time = message.substr(current+1);
+            //--- insert data on dataXchgOutput / give to upper layer
+            DataXCHG dataRcv = { Names::FindName(sourceNode),
+                          Names::FindName(destinationNode),
+                          val,
+                          stoll(val_time)
+            };
+            dataXchgOutput.push_back(dataRcv);
+}
+
+
 /**
  * \brief Parses the packet received by the an appliction/socket and adds it to the list of packets that will be sent to the upper layer.
  *
@@ -49,45 +76,109 @@ ExtractInformationFromPacketAndSendToUpperLayer (Ptr<Socket> socket)
 {
   Address from;
   Ptr<Packet> packet = socket->RecvFrom (from);
-  packet->RemoveAllPacketTags ();
-  packet->RemoveAllByteTags ();
-
-  Ptr<Node> recvnode = socket->GetNode();
-  uint8_t *buffer = new uint8_t[packet->GetSize()];
-  packet->CopyData(buffer,packet->GetSize());
-  string recMessage = string((char*)buffer);
-  recMessage = recMessage.substr (0,packet->GetSize());
 
   Ipv4Address srcIpv4Address = InetSocketAddress::ConvertFrom (from).GetIpv4();
   uint32_t srcNodeId = mapIpv4NodeId[srcIpv4Address];
+  Ptr<Node> srcNode =  NodeList::GetNode(srcNodeId);
+  
+  packet->PrintPacketTags(std::cout);
 
-  //--- print received msg
-  NS_LOG_DEBUG(
-      "Pkt Rcv at "    << Simulator::Now ().GetMilliSeconds ()
-                       << " by nodeName: " << Names::FindName(socket->GetNode ())
-                       << " dstNodeId: "   << socket->GetNode()->GetId()
-                       << " dstAddr: "     << socket->GetNode ()->GetObject<Ipv4>()->GetAddress(1,0).GetLocal()
-                       << " srcNodeId: "   << srcNodeId
-                       << " srcAddr: "     << InetSocketAddress::ConvertFrom (from).GetIpv4()
-                       << " Size: "        << packet->GetSize()
-                       << " Payload: "     << recMessage
-                       << endl;
-  );
+  packet->RemoveAllPacketTags ();
+  packet->RemoveAllByteTags ();
 
-  //--- get val and val_time
-  std::size_t current;
-  current = recMessage.find("&");
-  string val = recMessage.substr(0, current);
-  string val_time = recMessage.substr(current+1);
+  uint32_t packetSize = packet->GetSize();
+  uint8_t *buffer = new uint8_t[packetSize];
+  packet->CopyData(buffer,packetSize);
+  string recMessage = string((char*)buffer);
+  recMessage = recMessage.substr (0,packetSize);
 
-  //--- insert data on dataXchgOutput / give to upper layer
-  DataXCHG dataRcv = { Names::FindName(NodeList::GetNode(srcNodeId)),
-                       Names::FindName(socket->GetNode ()),
-                       val,
-                       stoll(val_time)
-  };
-  dataXchgOutput.push_back(dataRcv);
+  PacketMetadata::ItemIterator i= packet->BeginItem();
+  //A packet can contain fragments, complete payloads or a combination of both.
+  while (i.HasNext())
+  {
+    PacketMetadata::Item item = i.Next();
+    if (item.isFragment){
+      if (item.type == PacketMetadata::Item::PAYLOAD) {
+        //We check if the sender node has an entry in the fragment buffers hash table
+        if (fragmentBuffers.find(srcNodeId) == fragmentBuffers.end()){
+          //If there is no entry, insert an entry with an empty string
+          fragmentBuffers[srcNodeId] = "";
+        }
+          //This packet is a fragment in its entirety, it can correspond to one of the middle or end fragments of 
+          //a fragmented package
+          //Example packet structure: (Fragment)
+          if (item.currentSize == packetSize){
+            //concatenate the contents of this fragment to the contents of the previously received fragments
+            fragmentBuffers[srcNodeId] = fragmentBuffers[srcNodeId] + recMessage;
+            //TODO: Flush the buffer on receiving a package that just contains a fragment?
+          }
+          //This packet contains a complete payload as well as a payload fragment(s)
+          else if  (item.currentSize < packetSize){
+            //If fragment starts at 0 bits, it means that it is the begining of a fragmented package
+            //it is reasonable to assume that the corresponding data will be at the end of the packet
+            //after the complete payload
+            //Example packet structure: (Fragment)(Payload)(Fragment) or (Fragment)(Payload)
+            if (item.currentTrimedFromStart == 0){
+              string fragmentMessage = recMessage.substr(recMessage.size() - item.currentSize, item.currentSize);
+              fragmentBuffers[srcNodeId] =  fragmentBuffers[srcNodeId] + fragmentMessage;
+              //Remove the fragment from the received message string so that we can process that fragment 
+              recMessage = recMessage.substr(0, recMessage.size()  - item.currentSize);
+            }
+            //If fragment starts at n bits of a fragmented package and the length of the fragment is less
+            //than the total length of the package, we assume that this is the final fragment  of the fragment package
+            //which may be followed by a complete payload, which will be handled in the next iteration.
+            //Since it is the final fragment, it will be located at the start of the package.
+            //Example packet structure: (Payload)(Fragment) or (Fragment)(Payload)(Fragment)
+            else if (item.currentTrimedFromStart > 0){
+              string fragmentMessage = recMessage.substr(0, item.currentSize);
+              fragmentBuffers[srcNodeId] =  fragmentBuffers[srcNodeId] + fragmentMessage;
+              //Remove the fragment from the received message string
+              recMessage = recMessage.substr(item.currentSize);
+            }          
+          }
+      }
+    }
+    else{
+      //If item is not a fragment and instead it is an unfragmented payload, 
+      //it is time to flush the fragment buffer corresponding to this source node
+      unordered_map<uint32_t, std::string>::iterator fragmentBufferIterator = fragmentBuffers.find(srcNodeId);
+      if (fragmentBufferIterator != fragmentBuffers.end()){
+            string assembledFragments = fragmentBufferIterator->second;
+            sendMessageToUpperLayer(assembledFragments, srcNode, socket->GetNode());            
+            fragmentBuffers.erase(fragmentBufferIterator);
+
+          NS_LOG_DEBUG(
+              "Fragmented Pkt Rcv at "    << Simulator::Now ().GetMilliSeconds ()
+              << " by nodeName: " << Names::FindName(socket->GetNode ())
+              << " dstNodeId: "   << socket->GetNode()->GetId()
+              << " dstAddr: "     << socket->GetNode ()->GetObject<Ipv4>()->GetAddress(1,0).GetLocal()
+              << " srcNodeId: "   << srcNodeId
+              << " srcAddr: "     << InetSocketAddress::ConvertFrom (from).GetIpv4()
+              << " Size: "        << packet->GetSize()
+              << " Payload: "     << assembledFragments
+              << endl;);
+
+          }
+      
+      //After flushing the fragments stored in the fragment buffer for this particular source node
+      //send the message received in the unfragmented payload
+      sendMessageToUpperLayer(recMessage, srcNode, socket->GetNode());
+      
+      NS_LOG_DEBUG(
+              "Unfragmented Pkt Rcv at "    << Simulator::Now ().GetMilliSeconds ()
+              << " by nodeName: " << Names::FindName(socket->GetNode ())
+              << " dstNodeId: "   << socket->GetNode()->GetId()
+              << " dstAddr: "     << socket->GetNode ()->GetObject<Ipv4>()->GetAddress(1,0).GetLocal()
+              << " srcNodeId: "   << srcNodeId
+              << " srcAddr: "     << InetSocketAddress::ConvertFrom (from).GetIpv4()
+              << " Size: "        << packet->GetSize()
+              << " Payload: "     << recMessage
+              << endl;);
+
+    }
+  }
 }
+
 
 NS3Netsim::NS3Netsim():
     linkCount(0), sinkPort(0),  startTime(0), verbose (0)

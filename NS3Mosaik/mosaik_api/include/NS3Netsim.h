@@ -46,6 +46,7 @@
 #include "ns3/tcp-client.h"
 #include "ns3/custom-udp-client-helper.h"
 #include "ns3/custom-udp-server-helper.h"
+#include <unordered_map>
 
 using namespace std;
 using namespace ns3;
@@ -63,7 +64,7 @@ struct DataXCHG {
 static vector<DataXCHG> dataXchgInput;  ///< Input data exchange vector
 static vector<DataXCHG> dataXchgOutput; ///< Output data exchange vector
 static map<Ipv4Address, uint32_t> mapIpv4NodeId; ///< Map from client Ipv4 to Node Id
-
+static unordered_map<uint32_t , string> fragmentBuffers;
 
 class NS3Netsim {
  public:
