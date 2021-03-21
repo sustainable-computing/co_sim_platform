@@ -14,8 +14,8 @@ import pandas as pd
 import sys
 
 
-phasor = 'Phasor_1_001'
-smartmeter = 'Smartmeter_6_00061'
+phasor = 'Phasor_1_1'
+smartmeter = 'Smartmeter_6_100061'
 estimator = 'Estimator_1'
 
 #--- select dataset file

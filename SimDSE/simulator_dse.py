@@ -173,7 +173,6 @@ class DSESim(mosaik_api.Simulator):
 
 
                     for dev_param_key in param.keys():
-
                         if dev_param_key == 'VA' and dev_type == 'Phasor':
                             df_devs.at[int(dev_idn), 'VMA'] = param['VA'][0] / self.entities[dse_eid]['baseV']
                             df_devs.at[int(dev_idn), 'VAA'] = param['VA'][1]
@@ -430,7 +429,7 @@ class DSESim(mosaik_api.Simulator):
         return v_phasor, k
 
     def get_measurements(self, df_devs, time):
-        data = df_devs.set_index('src', drop = False)
+        data = df_devs
         z = []
         z_type = []
         error_cov = []  # covariance matrix of measurement errors
@@ -455,8 +454,7 @@ class DSESim(mosaik_api.Simulator):
             z.append(-q[node - 4][hourIndex])
             z_type.append([4, node, 0, 0])
             error_cov.append(np.square(q_std[node - 4][hourIndex]))
-
-        for device in data['src']:
+        for device in list(data.index.values):
             node = int(device)
 
             # node voltage phasor measurements
