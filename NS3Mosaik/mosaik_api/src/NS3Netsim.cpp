@@ -81,7 +81,6 @@ ExtractInformationFromPacketAndSendToUpperLayer (Ptr<Socket> socket)
   uint32_t srcNodeId = mapIpv4NodeId[srcIpv4Address];
   Ptr<Node> srcNode =  NodeList::GetNode(srcNodeId);
   
-  packet->PrintPacketTags(std::cout);
 
   packet->RemoveAllPacketTags ();
   packet->RemoveAllByteTags ();
