@@ -165,9 +165,6 @@ class LoadGenerator(object):
 
     def readLoads(self):
         mat = spio.loadmat('config/loadHour9.mat', squeeze_me=True)
-        #-- In order to run the test version - the next line needs to be
-        #-- uncommented and the previous line needs to be commented
-        #mat = spio.loadmat('config/loadHour933.mat', squeeze_me=True)
         p = np.array(mat['P'])
         q = np.array(mat['Q'])
         loadNode = mat['loadNode']

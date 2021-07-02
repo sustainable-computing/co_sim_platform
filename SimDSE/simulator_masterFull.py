@@ -24,7 +24,7 @@ BASE_DIR = str((Path(BASE_DIR)).parent) + "/"
 
 #--- NS3 executables and library directory
 NS3_EXE_PATH = BASE_DIR + 'NS3Mosaik'
-NS3_LIB_PATH = BASE_DIR + 'ns-allinone-3.33/ns-3.33/build/lib'
+NS3_LIB_PATH = BASE_DIR + 'ns-allinone-3.30.1/ns-3.30.1/build/lib'
 
 
 #--- Project directory
