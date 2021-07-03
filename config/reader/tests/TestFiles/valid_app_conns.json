@@ -1,0 +1,94 @@
+{
+    "network": {
+        "nodes": [
+            {
+                "id": "-111",
+                "power_network_id": "-1111",
+                "location": {
+                    "x": "200",
+                    "y": "400"
+                },
+                "nic_card_types": [
+                    {
+                        "type": "p2p"
+                    },
+                    {
+                        "type": "wifi",
+                        "access_point": true
+                    }
+                ]
+            },
+            {
+                "id": "-222",
+                "power_network_id": "-2222",
+                "location": {
+                    "x": "200",
+                    "y": "350"
+                },
+                "nic_card_types": [
+                    {
+                        "type": "p2p"
+                    }
+                ]
+            },
+            {
+                "id": "-333",
+                "power_network_id": "-3333",
+                "location": {
+                    "x": "200",
+                    "y": "400"
+                },
+                "nic_card_types": [
+                    {
+                        "type": "p2p"
+                    },
+                    {
+                        "type": "wifi",
+                        "access_point": true
+                    }
+                ]
+            },
+            {
+                "id": "-444",
+                "power_network_id": "-4444",
+                "location": {
+                    "x": "200",
+                    "y": "350"
+                },
+                "nic_card_types": [
+                    {
+                        "type": "p2p"
+                    }
+                ]
+            }
+        ],
+        "network_layout": [
+            {
+                "nodes": [
+                    "-111",
+                    "-222"
+                ],
+                "type": "p2p"
+            },
+            {
+                "nodes": [
+                    "-333",
+                    "-444"
+                ],
+                "type": "p2p"
+            }
+        ],
+        "app_connections": [
+            {
+                "sender": "-111",
+                "receiver": "-222",
+                "path_type": "control"
+            },
+            {
+                "sender": "-333",
+                "receiver": "-444",
+                "path_type": "actuator"
+            }
+        ]
+    }
+}

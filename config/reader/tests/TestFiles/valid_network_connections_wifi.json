@@ -1,0 +1,100 @@
+{
+    "network": {
+        "nodes": [
+            {
+                "id": "21",
+                "power_network_id": "110",
+                "location": {
+                    "x": "0",
+                    "y": "0"
+                },
+                "nic_card_types": [
+                    {
+                        "type": "wifi",
+                        "access_point": true
+                    }
+                ]
+            },
+            {
+                "id": "22",
+                "power_network_id": "111",
+                "location": {
+                    "x": "10",
+                    "y": "10"
+                },
+                "nic_card_types": [
+                    {
+                        "type": "wifi",
+                        "access_point": false
+                    }
+                ]
+            },
+            {
+                "id": "23",
+                "power_network_id": "112",
+                "location": {
+                    "x": "20",
+                    "y": "20"
+                },
+                "nic_card_types": [
+                    {
+                        "type": "wifi",
+                        "access_point": true
+                    }
+                ]
+            },
+            {
+                "id": "24",
+                "power_network_id": "113",
+                "location": {
+                    "x": "30",
+                    "y": "30"
+                },
+                "nic_card_types": [
+                    {
+                        "type": "wifi",
+                        "access_point": false
+                    }
+                ]
+            },
+            {
+                "id": "25",
+                "power_network_id": "114",
+                "location": {
+                    "x": "40",
+                    "y": "10"
+                },
+                "nic_card_types": [
+                    {
+                        "type": "wifi",
+                        "access_point": false
+                    }
+                ]
+            }
+        ],
+        "network_layout": [
+            {
+                "nodes": [
+                    "21",
+                    "22"
+                ],
+                "type": "wifi"
+            },
+            {
+                "nodes": [
+                    "21",
+                    "25"
+                ],
+                "type": "wifi"
+            },
+            {
+                "nodes": [
+                    "24",
+                    "23"
+                ],
+                "type": "wifi"
+            }
+        ],
+        "app_connections": []
+    }
+}

@@ -1,0 +1,52 @@
+{
+    "network": {
+        "nodes": [
+            {
+                "id": "1111111",
+                "power_network_id": "11111100",
+                "location": {
+                    "x": "200",
+                    "y": "400"
+                },
+                "nic_card_types": [
+                    {
+                        "type": "p2p"
+                    },
+                    {
+                        "type": "wifi",
+                        "access_point": true
+                    }
+                ]
+            },
+            {
+                "id": "1111112",
+                "power_network_id": "11111101",
+                "location": {
+                    "x": "200",
+                    "y": "350"
+                },
+                "nic_card_types": [
+                    {
+                        "type": "p2p"
+                    }
+                ]
+            }
+        ],
+        "network_layout": [
+            {
+                "nodes": [
+                    "1111111",
+                    "1111112"
+                ],
+                "type": "p2p"
+            }
+        ],
+        "app_connections": [
+            {
+                "receiver": "1111113",
+                "sender": "1111112",
+                "path_type": "control"
+            }
+        ]
+    }
+}

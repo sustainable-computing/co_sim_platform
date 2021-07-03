@@ -1,0 +1,124 @@
+{
+    "network": {
+        "nodes": [
+            {
+                "id": "1111",
+                "power_network_id": "11100",
+                "location": {
+                    "x": "0",
+                    "y": "0"
+                },
+                "nic_card_types": [
+                    {
+                        "type": "p2p"
+                    },
+                    {
+                        "type": "wifi",
+                        "access_point": true
+                    }
+                ]
+            },
+            {
+                "id": "1112",
+                "power_network_id": "11101",
+                "location": {
+                    "x": "10",
+                    "y": "10"
+                },
+                "nic_card_types": [
+                    {
+                        "type": "p2p"
+                    }
+                ]
+            },
+            {
+                "id": "1113",
+                "power_network_id": "11102",
+                "location": {
+                    "x": "20",
+                    "y": "20"
+                },
+                "nic_card_types": [
+                    {
+                        "type": "p2p"
+                    }
+                ]
+            },
+            {
+                "id": "1114",
+                "power_network_id": "11103",
+                "location": {
+                    "x": "30",
+                    "y": "30"
+                },
+                "nic_card_types": [
+                    {
+                        "type": "p2p"
+                    }
+                ]
+            },
+            {
+                "id": "1115",
+                "power_network_id": "11104",
+                "location": {
+                    "x": "40",
+                    "y": "10"
+                },
+                "nic_card_types": [
+                    {
+                        "type": "p2p"
+                    },
+                    {
+                        "type": "wifi",
+                        "access_point": false
+                    }
+                ]
+            }
+        ],
+        "network_layout": [
+            {
+                "nodes": [
+                    "1111",
+                    "1112"
+                ],
+                "type": "p2p"
+            },
+            {
+                "nodes": [
+                    "1112",
+                    "1113"
+                ],
+                "type": "p2p"
+            },
+            {
+                "nodes": [
+                    "1113",
+                    "1115"
+                ],
+                "type": "p2p"
+            },
+            {
+                "nodes": [
+                    "1115",
+                    "1114"
+                ],
+                "type": "p2p"
+            },
+            {
+                "nodes": [
+                    "1114",
+                    "1113"
+                ],
+                "type": "p2p"
+            },
+            {
+                "nodes": [
+                    "1111",
+                    "1115"
+                ],
+                "type": "wifi"
+            }
+        ],
+        "app_connections": []
+    }
+}

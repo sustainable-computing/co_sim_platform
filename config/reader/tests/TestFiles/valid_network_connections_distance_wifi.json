@@ -1,0 +1,44 @@
+{
+    "network": {
+        "nodes": [
+            {
+                "id": "-111181",
+                "power_network_id": "-1111800",
+                "location": {
+                    "x": "200",
+                    "y": "400"
+                },
+                "nic_card_types": [
+                    {
+                        "type": "wifi",
+                        "access_point": true
+                    }
+                ]
+            },
+            {
+                "id": "-111182",
+                "power_network_id": "-1118101",
+                "location": {
+                    "x": "200",
+                    "y": "351"
+                },
+                "nic_card_types": [
+                    {
+                        "type": "wifi",
+                        "access_point": false
+                    }
+                ]
+            }
+        ],
+        "network_layout": [
+            {
+                "nodes": [
+                    "-111181",
+                    "-111182"
+                ],
+                "type": "wifi"
+            }
+        ],
+        "app_connections": []
+    }
+}
