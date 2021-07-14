@@ -475,7 +475,7 @@ SmartgridDefaultSimulatorImpl::RunUntil (const Time &checkTime)
 	  ProcessEventsWithContext ();
 	  m_stop = false;
 
-	  while (!m_events->IsEmpty () && !m_stop && NextTs () < checkTime)
+	  while (!m_events->IsEmpty () && !m_stop && NextTs () < (uint64_t)checkTime.GetInteger())
 		{
 		  ProcessOneEvent ();
 		}

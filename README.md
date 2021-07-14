@@ -31,12 +31,12 @@ The simulator might run on other operating systems and with other python version
 
 2. Clone repository
     ``` 
-       > git clone https://github.com/sustainable-computing/CoSimul_Platform
+       > git clone https://github.com/sustainable-computing/co_sim_platform
     ```
 
 3. Run Script
     ``` 
-       > cd CoSimul_Platform
+       > cd co_sim_platform
        > ./install.sh
     ```
 

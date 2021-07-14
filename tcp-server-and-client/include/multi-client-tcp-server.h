@@ -39,7 +39,7 @@ using namespace ns3;
  * socket is created after a connection has been accepted to continue
  * communicating with a client whose connection has already been accepted.
  *
- * This application was created to work with CoSimul_Platform to allow
+ * This application was created to work with co_sim_platform to allow
  * reception of TCP packets from multiple sensors.
  *
  * Modelled after packet-sink.h

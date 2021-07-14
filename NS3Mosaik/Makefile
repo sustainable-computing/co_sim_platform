@@ -35,7 +35,7 @@ OBJ_DIR     = ${PRJ_DIR}/obj
 SRC_DIR	    = ${PRJ_DIR}/src
 INC_DIR	    = ${PRJ_DIR}/include
 
-NS3_ROOT    = ../ns-allinone-3.30.1/ns-3.30.1
+NS3_ROOT    = ../ns-allinone-3.33/ns-3.33
 NS3_INC     = ${NS3_ROOT}/build
 NS3_LIB     = ${NS3_ROOT}/build/lib
 
@@ -63,29 +63,29 @@ CXFLAGS +=
 #--- LXFLAGS ---
 #---------------
 LXFLAGS = -ljsoncpp\
-          ${NS3_LIB}/libns3.30.1-core-optimized.so\
-          ${NS3_LIB}/libns3.30.1-internet-optimized.so\
-          ${NS3_LIB}/libns3.30.1-applications-optimized.so\
-          ${NS3_LIB}/libns3.30.1-network-optimized.so\
-          ${NS3_LIB}/libns3.30.1-point-to-point-optimized.so\
-          ${NS3_LIB}/libns3.30.1-mobility-optimized.so\
-          ${NS3_LIB}/libns3.30.1-bridge-optimized.so\
-          ${NS3_LIB}/libns3.30.1-traffic-control-optimized.so\
-          ${NS3_LIB}/libns3.30.1-stats-optimized.so\
-          ${NS3_LIB}/libns3.30.1-mpi-optimized.so\
+          ${NS3_LIB}/libns3.33-core-optimized.so\
+          ${NS3_LIB}/libns3.33-internet-optimized.so\
+          ${NS3_LIB}/libns3.33-applications-optimized.so\
+          ${NS3_LIB}/libns3.33-network-optimized.so\
+          ${NS3_LIB}/libns3.33-point-to-point-optimized.so\
+          ${NS3_LIB}/libns3.33-mobility-optimized.so\
+          ${NS3_LIB}/libns3.33-bridge-optimized.so\
+          ${NS3_LIB}/libns3.33-traffic-control-optimized.so\
+          ${NS3_LIB}/libns3.33-stats-optimized.so\
+#          ${NS3_LIB}/libns3.33-mpi-optimized.so\
 
 
 #LXFLAGS = -ljsoncpp\
-#          ${NS3_LIB}/libns3.30.1-core-debug.so\
-#          ${NS3_LIB}/libns3.30.1-internet-debug.so\
-#          ${NS3_LIB}/libns3.30.1-applications-debug.so\
-#          ${NS3_LIB}/libns3.30.1-network-debug.so\
-#          ${NS3_LIB}/libns3.30.1-point-to-point-debug.so\
-#          ${NS3_LIB}/libns3.30.1-mobility-debug.so\
-#          ${NS3_LIB}/libns3.30.1-bridge-debug.so\
-#          ${NS3_LIB}/libns3.30.1-traffic-control-debug.so\
-#          ${NS3_LIB}/libns3.30.1-stats-debug.so\
-#          ${NS3_LIB}/libns3.30.1-mpi-debug.so\
+#          ${NS3_LIB}/libns3.33-core-debug.so\
+#          ${NS3_LIB}/libns3.33-internet-debug.so\
+#          ${NS3_LIB}/libns3.33-applications-debug.so\
+#          ${NS3_LIB}/libns3.33-network-debug.so\
+#          ${NS3_LIB}/libns3.33-point-to-point-debug.so\
+#          ${NS3_LIB}/libns3.33-mobility-debug.so\
+#          ${NS3_LIB}/libns3.33-bridge-debug.so\
+#          ${NS3_LIB}/libns3.33-traffic-control-debug.so\
+#          ${NS3_LIB}/libns3.33-stats-debug.so\
+#          ${NS3_LIB}/libns3.33-mpi-debug.so\
 
 
 #------------------------#
