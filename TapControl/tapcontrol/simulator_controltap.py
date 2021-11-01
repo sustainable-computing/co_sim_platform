@@ -13,6 +13,8 @@ import mosaik_api
 
 
 META = {
+    'api_version': '3.0',
+    'type': 'event-based',
     'models': {
         'RangeControl': {
             'public': True,
@@ -37,15 +39,16 @@ class ControlSim(mosaik_api.Simulator):
         super().__init__(META)
         self.entities = {}
         self.data = {}
-        self.next = {}
         self.instances = {}
 
         
-    def init(self, sid, eid_prefix=None, step_size=1, verbose=0):
+    def init(self, sid, time_resolution, eid_prefix=None, control_delay=1, verbose=0):
         if eid_prefix is not None:
             self.eid_prefix = eid_prefix
         self.sid = sid
-        self.step_size = step_size        
+        #-- The time required to take a control decision
+        #-- by default it is the minimum unit = 1 step
+        self.control_delay = control_delay
         self.verbose = verbose
         
         return self.meta
@@ -75,16 +78,13 @@ class ControlSim(mosaik_api.Simulator):
         return entities   
     
 
-    def step(self, time, inputs):
-        if (self.verbose > 1): print('simulator_controller::step INPUT', time, inputs)
+    def step(self, time, inputs, max_advance):
+        if (self.verbose > 0): print('simulator_controller::step: ', time, ' Max Advance: ', max_advance)
+        if (self.verbose > 1): print('simulator_controller::step INPUT: ', inputs)
 
-        next_step = time + self.step_size
-        
-        #---
-        #--- prepare data to be used in get_data
-        #---   
-        self.data = {}
-        self.next = {}
+        #--- If there is a tap command to propagate, need to force step
+        next_step = time
+        self.time = time
         
         #---
         #--- prepare data to be used in get_data and calculate control action
@@ -97,8 +97,8 @@ class ControlSim(mosaik_api.Simulator):
             if (vmeas != None and vmeas != 'null' and vmeas != "None"):
                 #--- Calculate value_v
                 VAR_V = 0
-                                
-                delta_v = float(vmeas.rstrip()) - self.entities[controller_eid]['vset']
+                
+                delta_v = vmeas - self.entities[controller_eid]['vset']
                 
                 #--- check if voltage on the range or out
                 if(abs(delta_v) < (self.entities[controller_eid]['bw']/2)):
@@ -114,7 +114,7 @@ class ControlSim(mosaik_api.Simulator):
                         print("simulator_controller::step Propagation Delay", time-tmeas)
                     
                     delta_t = tmeas - self.entities[controller_eid]['tlast']
-                    #--- if the amount o ftime out of band is larger then allowed
+                    #--- if the amount of time out of band is larger then allowed
                     if (delta_t > self.entities[controller_eid]['tdelay']):
                         #--- if the Vmeas is greatar than set point, increase tap
                         if delta_v > 0:
@@ -129,18 +129,26 @@ class ControlSim(mosaik_api.Simulator):
             
             #--- time              
             if (tmeas != None and tmeas != 'null' and tmeas != "None"):                     
-                self.data[controller_eid]['t'] = next_step                      
+                self.data[controller_eid]['t'] = time
+                next_step = time + 1
             else:
                 self.data[controller_eid]['t'] = None            
           
-        return next_step
+        if(next_step > time):  return next_step
     
     
     def get_data(self, outputs):
-        if (self.verbose > 0): print('simulator_controller::get_data INPUT', outputs)      
-        if (self.verbose > 1): print('simulator_controller::get_data OUTPUT data =', self.data)
+        if (self.verbose > 0): print('simulator_controller::get_data INPUT', outputs)
 
-        return self.data
+        data = {}
+        for eid in self.data:
+            if(self.data[eid]['t'] and self.data[eid]['t'] != None):
+                time = self.data[eid]['t']
+                if(self.time >= time + self.control_delay):
+                    data[eid] = self.data[eid]
+
+        if (self.verbose > 1): print('simulator_controller::get_data OUTPUT data =', data)
+        return data
 
 
     def set_next(self, controller, instance, parameters):

@@ -21,11 +21,14 @@ import opendssdirect as dss
 import math
 
 META = {
+    'api_version': '3.0',
+    'type': 'hybrid',
     'models': {
         'Sensor': {
             'public': True,
             'params': ['idt', 'step_size', 'verbose'],
             'attrs': ['v', 't'],
+            'non-persistent': ['v', 't'],
         },
         'Actuator': {
             'public': True,
@@ -187,10 +190,11 @@ class PFlowSim(mosaik_api.Simulator):
         self.loadgen_interval = self.step_size
 
 
-    def init(self, sid, topofile, nwlfile, ilpqfile, actsfile, loadgen_interval, verbose=0):	
+    def init(self, sid, time_resolution, topofile, nwlfile, ilpqfile, actsfile, step_size, loadgen_interval, verbose=0):	
         self.sid = sid       
         self.verbose = verbose
         self.loadgen_interval = loadgen_interval
+        self.step_size = step_size
         
         self.swpos = 0
         self.swcycle = 35
@@ -266,22 +270,34 @@ class PFlowSim(mosaik_api.Simulator):
         return [{'eid': eid, 'type': model}]
 
 
-    def step(self, time, inputs):
-        if (self.verbose > 0): print('simulator_pflow::step time =', time, ' inputs = ', inputs)
+    def step(self, time, inputs, max_advance):
+        if (self.verbose > 0): print('simulator_pflow::step time =', time, ' Max Advance = ', max_advance)
+        if (self.verbose > 1): print('simulator_pflow::step inputs = ', inputs)
  
-        next_step = time + 1
+        # Based on Sensor data interval, LoadGen called accordingly
+        next_step = time + self.step_size
                
         #---
         #--- process inputs data
         #---       
 
+        #--- Calculate how many times load generator
+        #--- needs to be called
+        prev_step = time - self.step_size
+        if  (prev_step < 0):
+            loadGen_cnt = 1
+            prev_step = -1
+        else:   loadGen_cnt = math.floor(time/self.loadgen_interval) \
+                - math.floor(prev_step/self.loadgen_interval)
+
         #--- Activate load generator
-        if (0 == (time % self.loadgen_interval)):
+        for i in range(0, loadGen_cnt):
+            if (self.verbose > 1):  print("Generating load for: ", \
+                self.loadgen_interval * ( math.ceil( (prev_step+1)/self.loadgen_interval ) + i ) )
             #-- get a new sample from loadgen
             ePQ = self.objLoadGen.createLoads()
             #-- execute processing of the the new elastic load
             self.dssObj.setLoads(ePQ)
- 
 
         #--- Create step load on Bus 611
 #         if (time > 50 and time < 350):

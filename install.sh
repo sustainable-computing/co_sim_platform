@@ -33,7 +33,7 @@ echo "Building NS-3"
 cd ns-allinone-3.33/ns-3.33
 
 ./waf configure --build-profile=optimized
-#./waf configure --build-profile=debug.
+# ./waf configure --build-profile=debug
 ./waf
 
 echo "Building NS3Mosaik"
@@ -45,7 +45,7 @@ cd ../../
 mkdir virtualenv
 virtualenv -p /usr/bin/python3 virtualenv/cosimul
 source virtualenv/cosimul/bin/activate
-pip install 'mosaik<3'
+pip install mosaik
 pip install tables
 pip install scipy
 pip install matplotlib

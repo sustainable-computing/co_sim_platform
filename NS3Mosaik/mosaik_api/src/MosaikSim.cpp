@@ -270,10 +270,10 @@ MosaikSim::readSocket(void) {
 std::string
 MosaikSim::splitRequest(int bufsize) {
   if (verbose > 1)
-    std::cout << "MosaikSim::sliptRequest" << std::endl;
+    std::cout << "MosaikSim::splitRequest" << std::endl;
 
   if (verbose > 2) {
-      std::cout << "MosaikSim::sliptRequest bufsize: " << bufsize << std::endl;
+      std::cout << "MosaikSim::splitRequest bufsize: " << bufsize << std::endl;
     }
 
   std::string msgs;
@@ -282,13 +282,13 @@ MosaikSim::splitRequest(int bufsize) {
   msgs.append(buffer, bufsize);
 
   if (verbose > 2)
-    std::cout << "MosaikSim::sliptRequest msgs" << msgs << std::endl;
+    std::cout << "MosaikSim::splitRequest msgs" << msgs << std::endl;
 
   //--- remove the first four bytes (message header)
   msgs.erase(msgs.begin(), msgs.begin()+4);
 
   if (verbose > 1)
-    std::cout << "MosaikSim::sliptRequest msgs without header " << msgs << std::endl;
+    std::cout << "MosaikSim::splitRequest msgs without header " << msgs << std::endl;
 
   return msgs;
 }
