@@ -14,7 +14,12 @@ sudo apt install python3-pip -y
 sudo apt install make -y
 
 echo "Downloading NS-3"
-wget https://www.nsnam.org/releases/ns-allinone-3.33.tar.bz2
+if test -f ns-allinone-3.33.tar.bz2
+then
+	echo "File ns-allinone-3.33.tar.bz2 already exists!"
+else	wget https://www.nsnam.org/releases/ns-allinone-3.33.tar.bz2
+fi
+
 echo "Extracting NS-3"
 tar xjf ns-allinone-3.33.tar.bz2
 
@@ -33,7 +38,7 @@ echo "Building NS-3"
 cd ns-allinone-3.33/ns-3.33
 
 ./waf configure --build-profile=optimized
-#./waf configure --build-profile=debug.
+#./waf configure --build-profile=debug
 ./waf
 
 echo "Building NS3Mosaik"
@@ -45,7 +50,7 @@ cd ../../
 mkdir virtualenv
 virtualenv -p /usr/bin/python3 virtualenv/cosimul
 source virtualenv/cosimul/bin/activate
-pip install 'mosaik<3'
+pip install mosaik
 pip install tables
 pip install scipy
 pip install matplotlib

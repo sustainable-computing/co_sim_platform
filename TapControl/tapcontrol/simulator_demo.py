@@ -72,6 +72,7 @@ END_TIME =  10000	#  10 secs
 appconLinks = {}
 
 #--- Sensors and actuators parameters
+global_step_size = 100
 actParams = {}
 
 #--- Mosaik Configuration
@@ -122,12 +123,13 @@ def  create_scenario( world, args ):
     #--- Simulators configuration
     #---
 
-    pflowsim    = world.start('PFlowSim',    
+    pflowsim    = world.start('PFlowSim',
                               topofile = DSS_EXE_PATH + TOPO_RPATH_FILE,
                               nwlfile  = DSS_EXE_PATH + NWL_RPATH_FILE,
                               ilpqfile = DSS_EXE_PATH + ILPQ_RPATH_FILE,
                               actsfile = DSS_EXE_PATH + ACTS_RPATH_FILE,
-                              loadgen_interval = 80,                              
+                              step_size = global_step_size,
+                              loadgen_interval = 80,
                               verbose = 0)    
 
     pktnetsim = world.start( 'PktNetSim',
@@ -137,9 +139,8 @@ def  create_scenario( world, args ):
         coords_file     = COORDS_RPATH_FILE,
         appcon_file     = APPCON_RPATH_FILE,
         linkRate        = "512Kbps",
-        linkDelay       = "15ms",
+        linkDelay       = "5ms",
         linkErrorRate   = "0.0001",
-        step_size       = 1,
         start_time      = 0,
         random_seed     = args.random_seed,
         verbose         = 0,
@@ -148,12 +149,11 @@ def  create_scenario( world, args ):
   
     controlsim  = world.start('ControlSim',  
                               eid_prefix='Control_',   
-                              step_size = 1, 
+                              control_delay = 1,
                               verbose = 0) 
     
     collector   = world.start('Collector',   
-                              eid_prefix='Collector_', 
-                              step_size = 1, 
+                              eid_prefix='Collector_',
                               verbose = 0,
                               out_list = False,
                               h5_save = True,
@@ -175,7 +175,7 @@ def  create_scenario( world, args ):
                 if (sensor_instance == sensor.eid):
                     created_sensor = True            
             if not created_sensor:
-                sensors.append(pflowsim.Sensor(idt = client, step_size = 100, verbose = 0))
+                sensors.append(pflowsim.Sensor(idt = client, step_size = global_step_size, verbose = 0))
       
     #--- Controller instances for tap control
     controllers = []
@@ -210,17 +210,17 @@ def  create_scenario( world, args ):
                 if (actuator_instance == actuator.eid):
                     created_actuator = True            
             if not created_actuator:
-                actuators.append(pflowsim.Actuator(idt=server, step_size=100, verbose=0))   
+                actuators.append(pflowsim.Actuator(idt=server, step_size=global_step_size, verbose=0))   
  
     #--- Monitor instances
     monitor = collector.Monitor()
     
     #--- Prober instance
     probers = []
-    probers.append(pflowsim.Prober(idt = "611-V3",   step_size = 100, verbose = 0))
-    probers.append(pflowsim.Prober(idt = "650-T3",   step_size = 100, verbose = 0))      
-    probers.append(pflowsim.Prober(idt = "611-Load", step_size = 100, verbose = 0))
-    probers.append(pflowsim.Prober(idt = "650-VPu3", step_size = 100, verbose = 0))
+    probers.append(pflowsim.Prober(idt = "611-V3",   step_size = global_step_size, verbose = 0))
+    probers.append(pflowsim.Prober(idt = "650-T3",   step_size = global_step_size, verbose = 0))      
+    probers.append(pflowsim.Prober(idt = "611-Load", step_size = global_step_size, verbose = 0))
+    probers.append(pflowsim.Prober(idt = "650-VPu3", step_size = global_step_size, verbose = 0))
     
 
     #---
@@ -273,7 +273,7 @@ def  create_scenario( world, args ):
                     for transporter in transporters:
                         if (transporter_instance == transporter.eid):
                             world.connect(controller, transporter, 'v', 't',
-                                time_shifted=True, initial_data={'v': None, 't': None})
+                                weak=True, initial_data={'v': None, 't': None})
                             print('Connect', controller.eid, 'to', transporter.eid)   
         
     #--- PktNet(Transporter) to Actuator
@@ -286,7 +286,7 @@ def  create_scenario( world, args ):
                     for transporter in transporters:
                         if (transporter_instance == transporter.eid):
                             world.connect(transporter, actuator, 'v', 't',
-                                time_shifted=True, initial_data={'v': None, 't': None})
+                                weak=True, initial_data={'v': None, 't': None})
                             print('Connect', transporter.eid, 'to', actuator.eid)      
 
     #--- Controller to Actuator

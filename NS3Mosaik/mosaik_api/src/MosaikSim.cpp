@@ -270,10 +270,10 @@ MosaikSim::readSocket(void) {
 std::string
 MosaikSim::splitRequest(int bufsize) {
   if (verbose > 1)
-    std::cout << "MosaikSim::sliptRequest" << std::endl;
+    std::cout << "MosaikSim::splitRequest" << std::endl;
 
   if (verbose > 2) {
-      std::cout << "MosaikSim::sliptRequest bufsize: " << bufsize << std::endl;
+      std::cout << "MosaikSim::splitRequest bufsize: " << bufsize << std::endl;
     }
 
   std::string msgs;
@@ -282,13 +282,13 @@ MosaikSim::splitRequest(int bufsize) {
   msgs.append(buffer, bufsize);
 
   if (verbose > 2)
-    std::cout << "MosaikSim::sliptRequest msgs" << msgs << std::endl;
+    std::cout << "MosaikSim::splitRequest msgs" << msgs << std::endl;
 
   //--- remove the first four bytes (message header)
   msgs.erase(msgs.begin(), msgs.begin()+4);
 
   if (verbose > 1)
-    std::cout << "MosaikSim::sliptRequest msgs without header " << msgs << std::endl;
+    std::cout << "MosaikSim::splitRequest msgs without header " << msgs << std::endl;
 
   return msgs;
 }
@@ -432,7 +432,7 @@ MosaikSim::init(Json::Value args, Json::Value kwargs) {
         {
           netsimProp.random_seed = (*item).asDouble();
         }
-      else if (strcmp(param.c_str(), "seconds_per_mosaik_timestep") == 0)
+      else if (strcmp(param.c_str(), "time_resolution") == 0)
         {
           netsimProp.seconds_per_mosaik_timestep = (*item).asDouble();
         }
@@ -515,6 +515,7 @@ MosaikSim::meta(void)
   Json::StreamWriterBuilder wbuilder;
 
   obj["api_version"] = mosaikMeta.api_version;
+  obj["type"] = mosaikMeta.type;
   obj["models"][mosaikMeta.model]["public"] = mosaikMeta.props->access;
 
   int attr_size = sizeof(mosaikMeta.props->attrs)/sizeof(mosaikMeta.props->attrs[0]);
@@ -639,16 +640,17 @@ MosaikSim::setup_done(void)
 std::string
 MosaikSim::step(Json::Value args, Json::Value kwargs)
 {
-  if (verbose > 1) {
-      std::cout << "MosaikSim::step time, args = " << mosaikTime << "\n" << args << std::endl;
-    }
-
   //---
   //--- Calculate the next step time
   //---
   std::string time_next_step;
   mosaikTime = args[0].asUInt64();
-  time_next_step = std::to_string(mosaikTime + static_cast<int>(netsimProp.step_size));
+  uint64_t maxAdvance = args[2].asUInt64();
+  time_next_step = std::to_string(maxAdvance);
+
+  if (verbose > 1) {
+      std::cout << "MosaikSim::step time, args = " << mosaikTime << "\n" << args << std::endl;
+    }
 
   //---
   //--- Extract input data received from Mosaik and insert into a map
@@ -792,8 +794,9 @@ MosaikSim::step(Json::Value args, Json::Value kwargs)
   if (verbose > 1) {
       std::cout << "MosaikSim::step NS3_RUNUNTIL(time = " << time_next_step << ")" << std::endl;
     }
-  objNetsim->runUntil(time_next_step);
 
+  //--- Get the next event time ("null" if no events)
+  time_next_step = objNetsim->runUntil(mosaikTime, time_next_step);
 
   //---
   //--- Execute set_data to send sent new results asynchronously
@@ -801,16 +804,15 @@ MosaikSim::step(Json::Value args, Json::Value kwargs)
   //---
   //set_data();
 
-
-  //---
   //--- End of step execution. Return time of next step
-  //---
+  //--- This is the look ahead and is not supposed to be executed yet
+  //--- The output data is made available in the appropriate step
+
   if (verbose > 1) {
       std::cout << "MosaikSim::step time_next_step = " << time_next_step << std::endl;
     }
 
   return time_next_step;
-
 }
 
 
@@ -882,7 +884,6 @@ MosaikSim::get_data(Json::Value args, Json::Value kwargs)
           valOut = std::make_pair(val_v, val_t);
           mapGetData[keyOut] = valOut;
         }
-
     }
 
   //--- for each data request (remote simulator instance [RSI])
@@ -930,8 +931,8 @@ MosaikSim::get_data(Json::Value args, Json::Value kwargs)
       if ( mapGetData.find(keyOut) == mapGetData.end() ) {
           if (verbose > 2)
             std::cout << "MosaikSim::get_data No element in mapGetData " << std::endl;
-          objRes[*lsi_i]["v"] = "None";
-          objRes[*lsi_i]["t"] = "None";
+          //objRes[*lsi_i]["v"] = "None";
+          //objRes[*lsi_i]["t"] = "None";
         } else {
           if (verbose > 2)
             std::cout << "MosaikSim::get_data Element found in mapGetData " << std::endl;
@@ -945,6 +946,7 @@ MosaikSim::get_data(Json::Value args, Json::Value kwargs)
     }
 
   result = Json::writeString(wbuilder, objRes);
+  if (result == "null") result = "{}";
 
   if (verbose > 1) {
       Json::FastWriter fastWriter;
@@ -953,7 +955,6 @@ MosaikSim::get_data(Json::Value args, Json::Value kwargs)
     }
 
   return result;
-
 }
 
 

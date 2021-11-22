@@ -51,18 +51,18 @@ std::string fileNameReceived = "packets_received.pkt";
  * \param destinationNode
  */
 void sendMessageToUpperLayer(string message, Ptr<Node> sourceNode, Ptr<Node> destinationNode){
-            std::size_t current;
-            //--- get val and val_time
-            current = message.find("&");
-            string val = message.substr(0, current);
-            string val_time = message.substr(current+1);
-            //--- insert data on dataXchgOutput / give to upper layer
-            DataXCHG dataRcv = { Names::FindName(sourceNode),
-                          Names::FindName(destinationNode),
-                          val,
-                          stoll(val_time)
-            };
-            dataXchgOutput.push_back(dataRcv);
+  std::size_t current;
+  //--- get val and val_time
+  current = message.find("&");
+  string val = message.substr(0, current);
+  string val_time = message.substr(current+1);
+  //--- insert data on dataXchgOutput / give to upper layer
+  DataXCHG dataRcv = { Names::FindName(sourceNode),
+                Names::FindName(destinationNode),
+                val,
+                stoll(val_time)
+  };
+  dataXchgOutput.push_back(dataRcv);
 }
 
 
@@ -103,38 +103,42 @@ ExtractInformationFromPacketAndSendToUpperLayer (Ptr<Socket> socket)
           //If there is no entry, insert an entry with an empty string
           fragmentBuffers[srcNodeId] = "";
         }
+        //This packet is a fragment in its entirety, it can correspond to one of the middle or end fragments of 
           //This packet is a fragment in its entirety, it can correspond to one of the middle or end fragments of 
-          //a fragmented package
-          //Example packet structure: (Fragment)
-          if (item.currentSize == packetSize){
-            //concatenate the contents of this fragment to the contents of the previously received fragments
-            fragmentBuffers[srcNodeId] = fragmentBuffers[srcNodeId] + recMessage;
-            //TODO: Flush the buffer on receiving a package that just contains a fragment?
-          }
-          //This packet contains a complete payload as well as a payload fragment(s)
-          else if  (item.currentSize < packetSize){
-            //If fragment starts at 0 bits, it means that it is the begining of a fragmented package
-            //it is reasonable to assume that the corresponding data will be at the end of the packet
-            //after the complete payload
-            //Example packet structure: (Fragment)(Payload)(Fragment) or (Fragment)(Payload)
-            if (item.currentTrimedFromStart == 0){
-              string fragmentMessage = recMessage.substr(recMessage.size() - item.currentSize, item.currentSize);
-              fragmentBuffers[srcNodeId] =  fragmentBuffers[srcNodeId] + fragmentMessage;
+        //This packet is a fragment in its entirety, it can correspond to one of the middle or end fragments of 
+        //a fragmented package
+        //Example packet structure: (Fragment)
+        if (item.currentSize == packetSize){
+          //concatenate the contents of this fragment to the contents of the previously received fragments
+          fragmentBuffers[srcNodeId] = fragmentBuffers[srcNodeId] + recMessage;
+          //TODO: Flush the buffer on receiving a package that just contains a fragment?
+        }
+        //This packet contains a complete payload as well as a payload fragment(s)
+        else if  (item.currentSize < packetSize){
+          //If fragment starts at 0 bits, it means that it is the begining of a fragmented package
+          //it is reasonable to assume that the corresponding data will be at the end of the packet
+          //after the complete payload
+          //Example packet structure: (Fragment)(Payload)(Fragment) or (Fragment)(Payload)
+          if (item.currentTrimedFromStart == 0){
+            string fragmentMessage = recMessage.substr(recMessage.size() - item.currentSize, item.currentSize);
+            fragmentBuffers[srcNodeId] =  fragmentBuffers[srcNodeId] + fragmentMessage;
+            //Remove the fragment from the received message string so that we can process that fragment 
               //Remove the fragment from the received message string so that we can process that fragment 
-              recMessage = recMessage.substr(0, recMessage.size()  - item.currentSize);
-            }
-            //If fragment starts at n bits of a fragmented package and the length of the fragment is less
-            //than the total length of the package, we assume that this is the final fragment  of the fragment package
-            //which may be followed by a complete payload, which will be handled in the next iteration.
-            //Since it is the final fragment, it will be located at the start of the package.
-            //Example packet structure: (Payload)(Fragment) or (Fragment)(Payload)(Fragment)
-            else if (item.currentTrimedFromStart > 0){
-              string fragmentMessage = recMessage.substr(0, item.currentSize);
-              fragmentBuffers[srcNodeId] =  fragmentBuffers[srcNodeId] + fragmentMessage;
-              //Remove the fragment from the received message string
-              recMessage = recMessage.substr(item.currentSize);
-            }          
+            //Remove the fragment from the received message string so that we can process that fragment 
+            recMessage = recMessage.substr(0, recMessage.size()  - item.currentSize);
           }
+          //If fragment starts at n bits of a fragmented package and the length of the fragment is less
+          //than the total length of the package, we assume that this is the final fragment  of the fragment package
+          //which may be followed by a complete payload, which will be handled in the next iteration.
+          //Since it is the final fragment, it will be located at the start of the package.
+          //Example packet structure: (Payload)(Fragment) or (Fragment)(Payload)(Fragment)
+          else if (item.currentTrimedFromStart > 0){
+            string fragmentMessage = recMessage.substr(0, item.currentSize);
+            fragmentBuffers[srcNodeId] =  fragmentBuffers[srcNodeId] + fragmentMessage;
+            //Remove the fragment from the received message string
+            recMessage = recMessage.substr(item.currentSize);
+          }     
+        }
       }
     }
     else{
@@ -537,8 +541,8 @@ NS3Netsim::schedule (string src, string dst, string val, string val_time)
 }
 
 
-void
-NS3Netsim::runUntil (string nextStop)
+std::string
+NS3Netsim::runUntil (uint64_t time, string nextStop)
 {
   if (verbose > 1) {
       std::cout << "NS3Netsim::runUntil(time=" << nextStop  << ")" << std::endl;
@@ -546,7 +550,8 @@ NS3Netsim::runUntil (string nextStop)
 
   //--- run scheduler until a given time
   sim = DynamicCast<SmartgridDefaultSimulatorImpl>(Simulator::GetImplementation());
-  sim->RunUntil(MilliSeconds (stod(nextStop)));
+  uint64_t max_advance = stoul(nextStop);
+  sim->RunUntil(MilliSeconds(time+1));
 
   if (verbose > 3)
     {
@@ -561,10 +566,15 @@ NS3Netsim::runUntil (string nextStop)
         }
     }
 
+  //--- Check if there is any new event before max_advance
+  uint64_t next_step = (uint64_t)sim->Next ().GetMilliSeconds ();
   if (verbose > 1) {
       std::cout << "NS3Netsim::runUntil After_run NS3 time: " <<  Simulator::Now ().GetMilliSeconds () << std::endl;
+      std::cout << "NS3Netsim::runUntil next event: " <<  next_step << std::endl;
     }
 
+  if (next_step <= max_advance)  return std::to_string(next_step);
+  else  return "null";
 }
 
 
@@ -580,29 +590,30 @@ NS3Netsim::get_data (string &src, string &dst, string &val_v, string &val_t)
     }
 
   if (!dataXchgOutput.empty())
-    {
-      res = 1;
-      dataOut = dataXchgOutput.back();
-      dataXchgOutput.pop_back();
-      src = dataOut.src;
-      dst = dataOut.dst;
-      val_v = dataOut.val;
-      val_t = to_string(dataOut.time);
-    } else {
-      res = 0;
-    }
+  {
+    res = 1;
+    dataOut = dataXchgOutput.back();
+    dataXchgOutput.pop_back();
+    src = dataOut.src;
+    dst = dataOut.dst;
+    val_v = dataOut.val;
+    val_t = to_string(dataOut.time);
+  }
+  else {
+    res = 0;
+  }
 
   if (verbose > 2) {
-      for (auto it = dataXchgOutput.begin(); it != dataXchgOutput.end(); ++it)
-        {
-          if ((*it).src == src && (*it).dst == dst)
-            cout << "NS3Netsim::get_data NS3 OUTPUT Buffer Src: " << (*it).src
-                 << " Dst: " << (*it).dst
-                 << " Val: " << (*it).val
-                 << " Time: " << (*it).time
-                 << endl;
-        }
+    for (auto it = dataXchgOutput.begin(); it != dataXchgOutput.end(); ++it)
+    {
+      if ((*it).src == src && (*it).dst == dst)
+        cout << "NS3Netsim::get_data NS3 OUTPUT Buffer Src: " << (*it).src
+              << " Dst: " << (*it).dst
+              << " Val: " << (*it).val
+              << " Time: " << (*it).time
+              << endl;
     }
+  }
 
   return res;
 }

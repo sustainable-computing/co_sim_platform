@@ -10,9 +10,11 @@ Mosaik interface for the controller simulator.
 '''
 
 import mosaik_api
-
+import sys
 
 META = {
+    'api-version': '3.0',
+    'type': 'event-based',
     'models': {
         'RangeControl': {
             'public': True,
@@ -37,15 +39,16 @@ class ControlSim(mosaik_api.Simulator):
         super().__init__(META)
         self.entities = {}
         self.data = {}
-        self.next = {}
         self.instances = {}
 
         
-    def init(self, sid, eid_prefix=None, step_size=1, verbose=0):
+    def init(self, sid, time_resolution, eid_prefix=None, control_delay=1, verbose=0):
         if eid_prefix is not None:
             self.eid_prefix = eid_prefix
         self.sid = sid
-        self.step_size = step_size        
+        #-- The time required to take a control decision
+        #-- by default it is the minimum unit = 1 step
+        self.control_delay = control_delay    
         self.verbose = verbose
         
         return self.meta
@@ -71,20 +74,13 @@ class ControlSim(mosaik_api.Simulator):
         
         entities = []
         entities.append({'eid': eid, 'type': model})                
-
+        sys.stdout.flush()
         return entities   
     
 
-    def step(self, time, inputs):
-        if (self.verbose > 1): print('simulator_controller::step INPUT', time, inputs)
-
-        next_step = time + self.step_size
-        
-        #---
-        #--- prepare data to be used in get_data
-        #---   
-        self.data = {}
-        self.next = {}
+    def step(self, time, inputs, max_advance):
+        if (self.verbose > 0): print('simulator_controller::step: ', time, ' Max Advance: ', max_advance)
+        if (self.verbose > 1): print('simulator_controller::step INPUT: ', inputs)
         
         #---
         #--- prepare data to be used in get_data and calculate control action
@@ -114,7 +110,7 @@ class ControlSim(mosaik_api.Simulator):
                         print("simulator_controller::step Propagation Delay", time-tmeas)
                     
                     delta_t = tmeas - self.entities[controller_eid]['tlast']
-                    #--- if the amount o ftime out of band is larger then allowed
+                    #--- if the amount of time out of band is larger then allowed
                     if (delta_t > self.entities[controller_eid]['tdelay']):
                         #--- if the Vmeas is greatar than set point, increase tap
                         if delta_v > 0:
@@ -129,18 +125,24 @@ class ControlSim(mosaik_api.Simulator):
             
             #--- time              
             if (tmeas != None and tmeas != 'null' and tmeas != "None"):                     
-                self.data[controller_eid]['t'] = next_step                      
+                self.data[controller_eid]['t'] = time + self.control_delay
             else:
                 self.data[controller_eid]['t'] = None            
-          
-        return next_step
-    
+
+        sys.stdout.flush()
+        
     
     def get_data(self, outputs):
         if (self.verbose > 0): print('simulator_controller::get_data INPUT', outputs)      
-        if (self.verbose > 1): print('simulator_controller::get_data OUTPUT data =', self.data)
 
-        return self.data
+        data = {}
+        for eid in self.data:
+            if(self.data[eid]['t'] and self.data[eid]['t'] != None):
+                data[eid] = self.data[eid]
+
+        if (self.verbose > 1): print('simulator_controller::get_data OUTPUT data =', data)
+        sys.stdout.flush()
+        return data
 
 
     def set_next(self, controller, instance, parameters):

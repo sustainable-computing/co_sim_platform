@@ -21,16 +21,20 @@ import opendssdirect as dss
 import math
 
 META = {
+    'api-version': '3.0',
+    'type': 'hybrid',
     'models': {
         'Sensor': {
             'public': True,
             'params': ['idt', 'step_size', 'verbose'],
             'attrs': ['v', 't'],
+            'non-persistent': ['v', 't'],
         },
         'Actuator': {
             'public': True,
             'params': ['idt', 'step_size', 'verbose'],
             'attrs': ['v', 't'],
+            'trigger': ['v', 't'],
         },
         'Prober': {
             'public': True,
@@ -187,10 +191,11 @@ class PFlowSim(mosaik_api.Simulator):
         self.loadgen_interval = self.step_size
 
 
-    def init(self, sid, topofile, nwlfile, ilpqfile, actsfile, loadgen_interval, verbose=0):	
+    def init(self, sid, time_resolution, topofile, nwlfile, ilpqfile, actsfile, step_size, loadgen_interval, verbose=0):	
         self.sid = sid       
         self.verbose = verbose
         self.loadgen_interval = loadgen_interval
+        self.step_size = step_size
         
         self.swpos = 0
         self.swcycle = 35
@@ -223,6 +228,7 @@ class PFlowSim(mosaik_api.Simulator):
         #--- read acts file
         self.readActives(actsfile)
     
+        sys.stdout.flush()
         return self.meta
 
 
@@ -263,24 +269,41 @@ class PFlowSim(mosaik_api.Simulator):
                                            phase    = self.actives[eid]['CKTPhase'],
                                            verbose  = verbose)            
         
+        sys.stdout.flush()
         return [{'eid': eid, 'type': model}]
 
 
-    def step(self, time, inputs):
-        if (self.verbose > 0): print('simulator_pflow::step time =', time, ' inputs = ', inputs)
+    def step(self, time, inputs, max_advance):
+        if (self.verbose > 0): print('simulator_pflow::step time = ', time, ' Max Advance = ', max_advance)
+        if (self.verbose > 1): print('simulator_pflow::step inputs = ', inputs)
  
-        next_step = time + 1
+        self.time = time
+        # If this is an event-based step, only perform Actuation
+        if (time % self.step_size == 0):
+            #--- Based on Sensor data interval, LoadGen called accordingly
+            next_step = time + self.step_size
                
-        #---
-        #--- process inputs data
-        #---       
+            #---
+            #--- process inputs data
+            #--- 
 
-        #--- Activate load generator
-        if (0 == (time % self.loadgen_interval)):
-            #-- get a new sample from loadgen
-            ePQ = self.objLoadGen.createLoads()
-            #-- execute processing of the the new elastic load
-            self.dssObj.setLoads(ePQ)
+            #--- Calculate how many times load generator
+            #--- needs to be called
+            prev_step = time - self.step_size
+            if  (prev_step < 0):
+                loadGen_cnt = 1
+                prev_step = -1
+            else:   loadGen_cnt = math.floor(time/self.loadgen_interval) \
+                    - math.floor(prev_step/self.loadgen_interval)
+
+            #--- Activate load generator
+            for i in range(0, loadGen_cnt):
+                if (self.verbose > 1): print("Generating load for: ", \
+                    self.loadgen_interval * ( math.ceil( (prev_step+1)/self.loadgen_interval ) + i))
+                #-- get a new sample from loadgen
+                ePQ = self.objLoadGen.createLoads()
+                #-- execute processing of the the new elastic load
+                self.dssObj.setLoads(ePQ)
  
 
         #--- Create step load on Bus 611
@@ -338,20 +361,26 @@ class PFlowSim(mosaik_api.Simulator):
             if(instance_eid.find("Prober") > -1)  :
                 self.instances[instance_eid].updateValues(time)        
          
-        return next_step
+        sys.stdout.flush()
+        if (time % self.step_size == 0):
+            return next_step
  
  
     def get_data(self, outputs):
         if (self.verbose > 0): print('simulator_pflow::get_data INPUT', outputs)
         
-        for instance_eid in self.instances:
-            val_v, val_t = self.instances[instance_eid].getLastValue()
-            self.data[instance_eid]['v'] = val_v
-            self.data[instance_eid]['t'] = val_t 
+        data = {}
+        if (self.time % self.step_size == 0):
+            for instance_eid in self.instances:
+                val_v, val_t = self.instances[instance_eid].getLastValue()
+                self.data[instance_eid]['v'] = val_v
+                self.data[instance_eid]['t'] = val_t 
+            data = self.data
 
-        if (self.verbose > 1): print('simulator_pflow::get_data data:', self.data)
+        if (self.verbose > 1): print('simulator_pflow::get_data data:', data)
 
-        return self.data 
+        sys.stdout.flush()
+        return data 
  
  
     def set_next(self, pflow, instance, parameters):

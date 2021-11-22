@@ -14,8 +14,11 @@ import mosaik_api
 import numpy as np
 import warnings
 import pandas as pd
+import sys
 
 META = {
+	'api-version': '3.0',
+	'type': 'event-based',
 	'models': {
 		'Monitor': {
 			'public': True,
@@ -36,13 +39,12 @@ class Collector(mosaik_api.Simulator):
 		self.time_list=[]
 
 
-	def init(self, sid, eid_prefix=None, step_size=1, verbose=0, out_list = True, 
+	def init(self, sid, time_resolution, eid_prefix=None, verbose=0, out_list = True, 
 			h5_save=True, h5_panelname = None, h5_storename='collectorname'):
 		if eid_prefix is not None:
 			self.eid_prefix = eid_prefix
 		self.sid          = sid
-		self.verbose      = verbose					
-		self.step_size    = step_size
+		self.verbose      = verbose
 		self.out_list     = out_list
 		self.h5_save      = h5_save
 		self.h5_storename = h5_storename
@@ -56,11 +58,13 @@ class Collector(mosaik_api.Simulator):
 			raise RuntimeError('Can only create one instance of Monitor.')
 		self.eid = '%s%s' % (self.eid_prefix, num)
 		if self.h5_panelname is None: self.h5_panelname = self.eid
+		sys.stdout.flush()
 		return [{'eid': self.eid, 'type': model}]
 
 	
-	def step(self, time, inputs):
-		if (self.verbose > 0):  print('Collector::step time inputs', time, inputs)
+	def step(self, time, inputs, max_advance):
+		if (self.verbose > 0):  print('Collector::step time ', time, ' Max Advance ', max_advance)
+		if (self.verbose > 1): 	print('Collector::step inputs: ', inputs)
 		data = inputs[self.eid]
 		for attr, values in data.items():
 			for src, value in values.items():
@@ -74,7 +78,7 @@ class Collector(mosaik_api.Simulator):
 # 				else:
 # 					self.data[src][attr].append(np.NaN)					
 		self.time_list.append(time)
-		return time + self.step_size
+		sys.stdout.flush()
 		
 			
 	def finalize(self):

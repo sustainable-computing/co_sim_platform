@@ -88,6 +88,7 @@ public:
   // Smartgrid methods
   uint64_t NextTs (void) const;
   void RunUntil (const Time &checkTime);
+  Time Next (void) const;
 
 
 private:
@@ -98,7 +99,6 @@ private:
   void ProcessOneEvent (void);
 
   // Smartgrid methods
-  Time Next (void) const;
   bool IsLocalFinished (void) const;
   Scheduler::Event PeekNextEvent(void) const;
   Scheduler::Event RemoveNextEvent(void) const;

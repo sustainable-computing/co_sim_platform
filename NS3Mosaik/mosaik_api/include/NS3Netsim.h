@@ -145,12 +145,14 @@ class NS3Netsim {
   /**
    * \brief Execute NS3 simulation until the time established in the parameter
    *
-   * \param time: time until which NS3 can execute its simulation part
+   * \param time: current time according to Mosaik simulation
    *
-   * \returns None
+   * \param nextStop: time until which NS3 can execute its simulation part
+   *
+   * \returns The forced step required or "null"
    *
    */
-  void runUntil (string time);
+  std::string runUntil (uint64_t time, string nextStop);
 
   /**
    * \brief Check if the output buffer is empty

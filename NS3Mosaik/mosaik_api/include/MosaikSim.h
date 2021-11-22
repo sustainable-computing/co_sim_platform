@@ -110,6 +110,7 @@ struct MosaikModel {
  */
 struct MosaikMeta {
     std::string api_version;
+    std::string type;
     std::string model;
     MosaikModel props[MAX_MOSAIK_ITEMS];
     std::string extra_methods[MAX_MOSAIK_ITEMS];
@@ -235,7 +236,8 @@ class MosaikSim {
       .attrs = {"v", "t"}
   };
 
-  MosaikMeta TransporterMeta = {.api_version = {"2.4"},
+  MosaikMeta TransporterMeta = {.api_version = {"3.0"},
+      .type = "event-based",
       .model = "Transporter",
       .props = {TransporterModel}
   };
