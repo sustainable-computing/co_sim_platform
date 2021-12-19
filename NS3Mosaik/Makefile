@@ -72,6 +72,7 @@ LXFLAGS = -ljsoncpp\
           ${NS3_LIB}/libns3.33-bridge-optimized.so\
           ${NS3_LIB}/libns3.33-traffic-control-optimized.so\
           ${NS3_LIB}/libns3.33-stats-optimized.so\
+		  ${NS3_LIB}/libns3.33-csma-optimized.so\
 #          ${NS3_LIB}/libns3.33-mpi-optimized.so\
 
 

@@ -28,6 +28,7 @@
 #include <vector>
 #include <iostream>
 #include <memory>
+#include <string.h>
 
 #include "ns3/core-module.h"
 #include "ns3/network-module.h"
@@ -113,5 +114,15 @@ void PrintIpAddresses(NodeContainer nodes);
  *
  */
 map<Ipv4Address, uint32_t> CreateMapIpv4NodeId(NodeContainer nodes);
+
+/**
+ * @brief Find the next hop from given source to destination. Perform
+ * Breadth-First-Search (BFS) to find the next hop
+ * 
+ * @param clt the source of the message
+ * @param srv the destination of the message
+ * @param array the adjacency matrix of the network
+ */
+string FindNextHop(string clt, string srv, vector<vector<bool>> array);
 
 #endif /* SMARTGRID_NS3_HELPER_H_ */

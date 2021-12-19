@@ -15,6 +15,8 @@ export PYTHONPATH=$PYTHONPATH:$BASE_DIR:$BASE_DIR/co_sim_platform/OpenDSS
 
 #--- run mosaik script
 python $SGEXEC/tapcontrol/simulator_demo.py
+#--- for python debug run using PDB
+# python -m pdb $SGEXEC/tapcontrol/simulator_demo.py
 
 #--- run post analysis script
 python $SGEXEC/tapcontrol/simulator_analysis.py

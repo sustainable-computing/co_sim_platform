@@ -35,11 +35,13 @@ META = {
             'params': ['idt', 'step_size', 'verbose'],
             'attrs': ['v', 't'],
             'trigger': ['v', 't'],
+            'non-persistent': ['v', 't'],
         },
         'Prober': {
             'public': True,
             'params': ['idt', 'step_size', 'verbose'],
             'attrs': ['v', 't'],
+            'non-persistent': ['v', 't'],
         },        
     },
     'extra_methods': [
@@ -278,10 +280,12 @@ class PFlowSim(mosaik_api.Simulator):
         if (self.verbose > 1): print('simulator_pflow::step inputs = ', inputs)
  
         self.time = time
-        # If this is an event-based step, only perform Actuation
+        #--- Based on Sensor data interval, LoadGen called accordingly
+        next_step = time + self.step_size
+
+        # If this is an event-based step or duplicate step, only perform Actuation
+        # As this is a priority simulator, input only comes after the step is performed
         if (time % self.step_size == 0):
-            #--- Based on Sensor data interval, LoadGen called accordingly
-            next_step = time + self.step_size
                
             #---
             #--- process inputs data
@@ -341,11 +345,14 @@ class PFlowSim(mosaik_api.Simulator):
 
         #--- Use actuators to update opendss state with actions received by controllers (Mosaik)
         for eid, attrs in inputs.items():
-            value_v = list(attrs['v'].values())[0]
-            value_t = list(attrs['t'].values())[0]
-            if (value_v != 'None' and value_v != None):
-                if (self.verbose > 1): print('simulator_pflow::step Propagation delay =', time - value_t)
-                self.instances[eid].setControl(value_v, time)
+            vlist = list(attrs['v'].values())[0]
+            tlist = list(attrs['t'].values())[0]
+            for i in range(0, len(vlist)):
+                value_v = vlist[i]
+                value_t = tlist[i]
+                if (value_v != 'None' and value_v != None):
+                    if (self.verbose > 1): print('simulator_pflow::step Propagation delay =', time - value_t)
+                    self.instances[eid].setControl(value_v, time)
             
         #--- 
         #--- get new set of sensor data from OpenDSS
@@ -370,12 +377,28 @@ class PFlowSim(mosaik_api.Simulator):
         if (self.verbose > 0): print('simulator_pflow::get_data INPUT', outputs)
         
         data = {}
-        if (self.time % self.step_size == 0):
-            for instance_eid in self.instances:
+        for instance_eid in self.instances:
+            # Acuators provide data only when there is actuation
+            if (instance_eid.find("Actuator") > -1):
                 val_v, val_t = self.instances[instance_eid].getLastValue()
                 self.data[instance_eid]['v'] = val_v
-                self.data[instance_eid]['t'] = val_t 
-            data = self.data
+                self.data[instance_eid]['t'] = val_t
+                if (val_t != None):
+                    data[instance_eid] = {}
+                    data[instance_eid]['v'] = []
+                    data[instance_eid]['t'] = []
+                    data[instance_eid]['v'].append(self.data[instance_eid]['v'])
+                    data[instance_eid]['t'].append(self.data[instance_eid]['t'])
+            # All other models provide data at fixed intervals
+            elif (self.time % self.step_size == 0):
+                val_v, val_t = self.instances[instance_eid].getLastValue()
+                self.data[instance_eid]['v'] = val_v
+                self.data[instance_eid]['t'] = val_t
+                data[instance_eid] = {}
+                data[instance_eid]['v'] = []
+                data[instance_eid]['t'] = []
+                data[instance_eid]['v'].append(self.data[instance_eid]['v'])
+                data[instance_eid]['t'].append(self.data[instance_eid]['t'])
 
         if (self.verbose > 1): print('simulator_pflow::get_data data:', data)
 

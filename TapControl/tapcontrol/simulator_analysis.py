@@ -41,7 +41,7 @@ for i in range(len(df_sets)):
     axs[i].set_title(df_names[i])
     axs[i].plot(df_sets[i]['t'], df_sets[i]['v'], '.')
     axs[i].set_xlim(-5, max_t+5)
-    axs[i].grid(b=True, which='both', axis='both')
+    axs[i].grid(visible=True, which='both', axis='both')
 
 plt.tight_layout()
 fig.savefig('Monitor.png', dpi=100)

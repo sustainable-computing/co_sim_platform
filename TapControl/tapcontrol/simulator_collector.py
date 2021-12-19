@@ -69,6 +69,8 @@ class Collector(mosaik_api.Simulator):
 		for attr, values in data.items():
 			for src, value in values.items():
 				if (value not in ['None',  None]):
+					# For now, only using the latest data to plot and avoid overlapping data
+					value = value[len(value)-1]
 					if isinstance(value, np.float64) or isinstance(value, float):
 						value = np.around(value, decimals = 6)
 					if isinstance(value, str):
@@ -94,6 +96,7 @@ class Collector(mosaik_api.Simulator):
 				store = pd.HDFStore(self.h5_storename)
 				store[self.h5_panelname] = pd.DataFrame(self.data)
 				store.close()
+		sys.stdout.flush()
 
 
 if __name__ == '__main__':

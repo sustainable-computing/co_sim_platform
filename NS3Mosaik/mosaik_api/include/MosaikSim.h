@@ -52,8 +52,10 @@
 //--- NS3
 #include "NS3Netsim.h"
 
-
-#define BUFFER_SIZE 4194304	//--- Maximum Mosaik message size: Buffer size 1024 * 1024 * 4 bytes
+//--- NEW Maximum Mosaik message size: Buffer size 1024 * 1024 * 10 bytes = 10485760 bytes
+//--- However, this size cannot be declared (variable memory limit) so a small size is
+//--- used for now (as the current maximum message size is 635 for "init")
+#define BUFFER_SIZE 90000
 #define MAXRECV     30000   //--- Socket receiving maximum size
 
 /**
@@ -129,29 +131,6 @@ struct MosaikNextSimul {
 
 
 /**
- * \brief Network simulator properties
- */
-struct NetSimProp {
-    std::string model_name;
-    std::string eid_prefix;
-    std::string instance_name;
-    double start_time;
-    double stop_time;
-    double random_seed;
-    double seconds_per_mosaik_timestep;
-    double step_size;
-    std::string appcon_file;
-    std::string adjmat_file;
-    std::string coords_file;
-    std::string linkRate;
-    std::string linkDelay;
-    std::string linkErrorRate;
-    int verbose;
-    std::string tcpOrUdp;
-};
-
-
-/**
  * \brief Network simulator source-destination connection structure
  */
 struct NetSimConn {
@@ -217,13 +196,13 @@ class MosaikSim {
   std::map<std::string, MosaikNextSimul> mosaikNSimul;
 
   ///< Map to store extracted data from NS3
-  std::map<std::pair<std::string, std::string>, std::pair<std::string, std::string>> mapGetData;
+  std::map<std::pair<std::string, std::string>, queue<std::pair<std::string, std::string> > > mapGetData;
 
 
   //---
   //--- NetSim variables
   //---
-  NetSimProp netsimProp;                           ///< Network simulator properties
+  std::map<std::string, std::string> netsimProp;   ///< Network simulator properties
   std::map<std::string, std::string> netsimParams; ///< Network simulator parameters
   std::map<std::string, std::pair<std::string, std::string>> netsimEntities;         ///< Network simulator entities
   std::vector<NetSimConn> vecNetSimConn;           ///< Network simulator connections
@@ -344,6 +323,7 @@ class MosaikSim {
    */
   std::string simSocketReceivedRequest(Json::Value messages);
   void initMosaikCommands(void);
+  void initNetsimProps(void);
   std::string sendRequest(std::string content);
   int nextRequestID(void);
   std::string dscrListForEntities(std::string eid);
@@ -357,9 +337,7 @@ class MosaikSim {
   std::string setup_done(void);
   std::string step(Json::Value args, Json::Value kwargs);
   std::string get_data(Json::Value args, Json::Value kwargs);
-  std::string set_next(Json::Value args, Json::Value kwargs);
   std::string stop(void);
-  void set_data(void);
 
 
   /*

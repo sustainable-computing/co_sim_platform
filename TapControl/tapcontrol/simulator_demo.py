@@ -139,12 +139,14 @@ def  create_scenario( world, args ):
         coords_file     = COORDS_RPATH_FILE,
         appcon_file     = APPCON_RPATH_FILE,
         linkRate        = "512Kbps",
-        linkDelay       = "5ms",
+        linkDelay       = "15ms",
         linkErrorRate   = "0.0001",
         start_time      = 0,
+        stop_time       = END_TIME,
         random_seed     = args.random_seed,
         verbose         = 0,
-        tcpOrUdp        = "tcp"
+        tcpOrUdp        = "tcp", # transport layer protocols: tcp/udp (udp only for single client)
+        network         = "P2P" # network architecture: P2P/CSMA (supported architectures)
     )
   
     controlsim  = world.start('ControlSim',  
@@ -236,7 +238,8 @@ def  create_scenario( world, args ):
                 if (sensor_instance == sensor.eid):
                     for transporter in transporters:
                         if (transporter_instance == transporter.eid):
-                            world.connect(sensor, transporter, 'v', 't')
+                            world.connect(sensor, transporter, 'v', 't',
+                                weak=True, initial_data={'v': None, 't': None})
                             print('Connect', sensor.eid, 'to', transporter.eid)                        
         
     #--- PktNet(Transporter) to Controller
@@ -285,8 +288,7 @@ def  create_scenario( world, args ):
                 if (actuator_instance == actuator.eid):
                     for transporter in transporters:
                         if (transporter_instance == transporter.eid):
-                            world.connect(transporter, actuator, 'v', 't',
-                                weak=True, initial_data={'v': None, 't': None})
+                            world.connect(transporter, actuator, 'v', 't')
                             print('Connect', transporter.eid, 'to', actuator.eid)      
 
     #--- Controller to Actuator

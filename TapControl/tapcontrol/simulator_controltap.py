@@ -87,10 +87,17 @@ class ControlSim(mosaik_api.Simulator):
         #---
         for controller_eid, attrs in inputs.items():
             self.data[controller_eid] = {}
-            vmeas = list(attrs['v'].values())[0]
-            tmeas = list(attrs['t'].values())[0]
+            self.data[controller_eid]['v'] = []
+            self.data[controller_eid]['t'] = []
 
-            if (vmeas != None and vmeas != 'null' and vmeas != "None"):
+            vlist = list(attrs['v'].values())[0]
+            tlist = list(attrs['t'].values())[0]
+            
+            #--- Handling multiple data simultaneously (if required)
+            for i in range(0, len(vlist)):
+                vmeas = vlist[i]
+                tmeas = tlist[i]
+
                 #--- Calculate value_v
                 VAR_V = 0
                                 
@@ -119,16 +126,11 @@ class ControlSim(mosaik_api.Simulator):
                         else:  
                             VAR_V = 1
                             
-                self.data[controller_eid]['v'] = VAR_V
-            else:
-                self.data[controller_eid]['v'] = None               
-            
-            #--- time              
-            if (tmeas != None and tmeas != 'null' and tmeas != "None"):                     
-                self.data[controller_eid]['t'] = time + self.control_delay
-            else:
-                self.data[controller_eid]['t'] = None            
-
+                self.data[controller_eid]['v'].append(VAR_V)
+                
+                #--- time
+                self.data[controller_eid]['t'].append(time + self.control_delay)
+                if (self.verbose > 5):  print(self.data)
         sys.stdout.flush()
         
     
@@ -137,7 +139,7 @@ class ControlSim(mosaik_api.Simulator):
 
         data = {}
         for eid in self.data:
-            if(self.data[eid]['t'] and self.data[eid]['t'] != None):
+            if(self.data[eid]['t']):
                 data[eid] = self.data[eid]
 
         if (self.verbose > 1): print('simulator_controller::get_data OUTPUT data =', data)

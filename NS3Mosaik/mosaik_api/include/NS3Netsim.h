@@ -34,6 +34,7 @@
 #include "ns3/core-module.h"
 #include "ns3/network-module.h"
 #include "ns3/point-to-point-module.h"
+#include "ns3/csma-module.h"
 #include "ns3/internet-module.h"
 #include "ns3/mobility-module.h"
 #include "ns3/log.h"
@@ -62,7 +63,7 @@ struct DataXCHG {
 };
 
 static vector<DataXCHG> dataXchgInput;  ///< Input data exchange vector
-static vector<DataXCHG> dataXchgOutput; ///< Output data exchange vector
+static queue<DataXCHG> dataXchgOutput; ///< Output data exchange vector
 static map<Ipv4Address, uint32_t> mapIpv4NodeId; ///< Map from client Ipv4 to Node Id
 static unordered_map<uint32_t , string> fragmentBuffers;
 
@@ -97,13 +98,15 @@ class NS3Netsim {
    * \param s_linkDelay: link delay
    * \param s_linkErrorRate: link error rate on receiver
    * \param start_time: when the NS3 simulator should start (not used now)
+   * \param stop_time: when the NS3 simulator should end
    * \param verb: level of verbose mode
    *
    * \returns None
    *
    */
   void init (string f_adjmat, string f_coords, string f_appcon, string s_linkRate,
-             string s_linkDelay, string s_linkErrorRate, double start_time, int verb, string s_tcpOrUdp);
+             string s_linkDelay, string s_linkErrorRate, string start_time,
+             string stop_time, string verb, string s_tcpOrUdp, string s_net);
 
   /**
    * \brief Create Transport connection between two nodes
@@ -229,11 +232,13 @@ private:
   NodeContainer nodes;                     ///< NS3 container with simulation nodes
 
   PointToPointHelper pointToPoint;       ///< Pointer to pointTopoint helper class
+  CsmaHelper csma;                       ///< CSMA helper class
   string LinkRate;                       ///< Uniform link data rate
   string LinkDelay;                      ///< Uniform link delay
   string LinkErrorRate;				   ///< Uniform Link error rate
   uint32_t linkCount;                    ///< Network link count
-  vector<NetDeviceContainer> p2pDevices; ///< Vector with all link devices
+  vector<NetDeviceContainer> Devices; ///< Vector with all link devices
+  map<pair<string,string>, NetDeviceContainer> DeviceMap; ///< Map from node names to devices
 
   InternetStackHelper internet;  ///< Pointer to Internet helper class
   Ipv4AddressHelper ipv4Address; ///< Pointer to Ipv4 Internet helper class
@@ -254,6 +259,7 @@ private:
   CustomUdpServerHelper customUdpServerHelper = CustomUdpServerHelper(Address()); ///< Application UDP client helper
 
   double startTime; ///< Simulation start time
+  double stopTime; ///< Simulation stop time
   int verbose;      ///< Verbose level
 
   map<uint32_t, Ptr<Socket>> mapNodeSocket; ///< Map from client Nodes Id to the socket
@@ -264,6 +270,7 @@ private:
   NodeContainer allNodes;
 
   string tcpOrUdp; ///< Which network protocol should be used
+  string netArch;  ///< Which network architecture should be used
 };
 
 #endif /* NS3NETSIM_H_ */

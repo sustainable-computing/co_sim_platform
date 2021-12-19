@@ -5,9 +5,9 @@ parts of a smartgrid to allow the study of dynamics in a complex multi-domain sy
 [OpenDSS](https://smartgrid.epri.com/SimulationTool.aspx) is being used to simulate power flow. To 
 coordinate the different simulators, the [Mosaik co-simulation framework](https://mosaik.offis.de/) is being used.
 
-TapControl is working example that can be used to observe the simulator at work. It uses the IEEE13 to simulate power 
+TapControl is a working example that can be used to observe the simulator at work. It uses the IEEE13 to simulate power 
 flow and network activity between sensors and actors. Communication between nodes can be performed using TCP or UDP over
-point to point links. 
+point to point or Carrier Sense Multiple Access (CSMA) links. 
 
 ## Requirements
 * This project is being developed on linux, it has been tested on the following:
@@ -58,6 +58,7 @@ Developers:
 
 * Evandro de Souza
 * Amrinder S. Grewal
+* Talha Ibn Aziz
 
 ### Citing the Co-simulation Platform
 ```Bibtex
@@ -69,4 +70,4 @@ year={2020},
 pages={1-7},}
 ```
 
-Last Modification: 2020-09-08
+Last Modification: 2021-11-23
