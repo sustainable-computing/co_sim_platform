@@ -226,25 +226,37 @@ ReadAppConnectionsFile(string appConnectionsFilename)
   return array;
 }
 
-void PrintIpAddresses(NodeContainer nodes)
+void PrintIpAddresses(NodeContainer nodes, string network)
 {
   NS_LOG_INFO("PrintIpAddresses");
   cout << "**** Start Print IP Addresses ********" << endl;
   string nodeName;
-  Ipv4InterfaceAddress iaddr;
+  Ipv4InterfaceAddress v4iaddr;
+  Ipv6InterfaceAddress v6iaddr;
+  bool v4 = false;
+  if (network == "P2P" || network == "CSMA")  v4 = true;
   for (NodeList::Iterator i = NodeList::Begin(); i != NodeList::End(); ++i)
   {
-    int ifaces = (*i)->GetObject<Ipv4>()->GetNInterfaces();
+    int ifaces;
+    if (v4) ifaces = (*i)->GetObject<Ipv4>()->GetNInterfaces();
+    else  ifaces = (*i)->GetObject<Ipv6>()->GetNInterfaces();
+
     for (int j = 1; j < ifaces; j++)
     {
-      iaddr = (*i)->GetObject<Ipv4>()->GetAddress(j, 0);
+      if (v4) v4iaddr = (*i)->GetObject<Ipv4>()->GetAddress(j, 0);
+      else v6iaddr = (*i)->GetObject<Ipv6>()->GetAddress(j, 1);
       nodeName = Names::FindName((*i));
 
-      cout << "Node ID: " << (*i)->GetId() << " - "
-           << "Ifaces: " << (*i)->GetObject<Ipv4>()->GetNInterfaces() << " - "
-           << "Name: " << nodeName << " - "
-           << "IP Addr: " << iaddr.GetLocal() << " - "
-           << "IP Mask: " << iaddr.GetMask() << endl;
+      if (v4) cout << "Node ID: " << (*i)->GetId() << " - "
+                   << "Ifaces: " << (*i)->GetObject<Ipv4>()->GetNInterfaces() << " - "
+                   << "Name: " << nodeName << " - "
+                   << "IP Addr: " << v4iaddr.GetLocal() << " - "
+                   << "IP Mask: " << v4iaddr.GetMask() << endl;
+      else    cout << "Node ID: " << (*i)->GetId() << " - "
+                   << "Ifaces: " << (*i)->GetObject<Ipv6>()->GetNInterfaces() << " - "
+                   << "Name: " << nodeName << " - "
+                   << "IP Addr: " << v6iaddr.GetAddress() << " - "
+                   << "IP Mask: " << v6iaddr.GetPrefix() << endl;
     }
   }
   cout << "**** End Print IP Addresses ********" << endl;
@@ -273,6 +285,31 @@ CreateMapIpv4NodeId(NodeContainer nodes)
   }
 
   return mapIpv4NodeId;
+}
+
+map<Ipv6Address, uint32_t>
+CreateMapIpv6NodeId(NodeContainer nodes)
+{
+  NS_LOG_INFO("CreateMapIpv6NodeId");
+
+  map<Ipv6Address, uint32_t> mapIpv6NodeId;
+  string nodeName;
+  uint32_t nodeId;
+  Ipv6InterfaceAddress iaddr;
+  for (NodeList::Iterator i = NodeList::Begin(); i != NodeList::End(); ++i)
+  {
+    int ifaces = (*i)->GetObject<Ipv6>()->GetNInterfaces();
+    for (int j = 1; j < ifaces; j++)
+    {
+      iaddr = (*i)->GetObject<Ipv6>()->GetAddress(j, 1);
+      nodeId = (*i)->GetId();
+      nodeName = Names::FindName((*i));
+
+      mapIpv6NodeId[iaddr.GetAddress()] = nodeId;
+    }
+  }
+
+  return mapIpv6NodeId;
 }
 
 string FindNextHop(string clt, string srv, vector<vector<bool>> array)
@@ -311,4 +348,57 @@ string FindNextHop(string clt, string srv, vector<vector<bool>> array)
 
   Ptr <Node> nextHopeNode = NodeList::GetNode(parent[des][src]);
   return Names::FindName(nextHopeNode);  
+}
+
+void PrintRoutingTable (Ptr<Node>& n, bool v4)
+{
+  if (v4)
+  {
+    Ptr<Ipv4StaticRouting> routing = 0;
+    Ipv4StaticRoutingHelper routingHelper;
+    Ptr<Ipv4> ipv4 = n->GetObject<Ipv4> ();
+    uint32_t nbRoutes = 0;
+    Ipv4RoutingTableEntry route;
+
+    routing = routingHelper.GetStaticRouting (ipv4);
+
+    std::cout << "Routing table of " << Names::FindName(n) << " : " << std::endl;
+    std::cout << "Destination\t\t\t\t" << "Gateway\t\t\t\t\t" << "Interface\t" <<  "Destination Network" << std::endl;
+
+    nbRoutes = routing->GetNRoutes ();
+    for (uint32_t i = 0; i < nbRoutes; i++)
+    {
+      route = routing->GetRoute (i);
+      std::cout << route.GetDest () << "\t"
+                << route.GetGateway () << "\t"
+                << route.GetInterface () << "\t"
+                << route.GetDestNetwork () << "\t"
+                << route.GetDestNetworkMask () << "\t"
+                << std::endl;
+    }
+  }
+  else
+  {
+    Ptr<Ipv6StaticRouting> routing = 0;
+    Ipv6StaticRoutingHelper routingHelper;
+    Ptr<Ipv6> ipv6 = n->GetObject<Ipv6> ();
+    uint32_t nbRoutes = 0;
+    Ipv6RoutingTableEntry route;
+
+    routing = routingHelper.GetStaticRouting (ipv6);
+
+    std::cout << "Routing table of " << Names::FindName(n) << " : " << std::endl;
+    std::cout << "Destination\t\t\t\t" << "Gateway\t\t\t\t\t" << "Interface\t" <<  "Prefix to use" << std::endl;
+
+    nbRoutes = routing->GetNRoutes ();
+    for (uint32_t i = 0; i < nbRoutes; i++)
+    {
+      route = routing->GetRoute (i);
+      std::cout << route.GetDest () << "\t"
+                << route.GetGateway () << "\t"
+                << route.GetInterface () << "\t"
+                << route.GetPrefixToUse () << "\t"
+                << std::endl;
+    }
+  }
 }

@@ -76,7 +76,7 @@ LXFLAGS = -ljsoncpp\
 #          ${NS3_LIB}/libns3.33-mpi-optimized.so\
 
 
-#LXFLAGS = -ljsoncpp\
+# LXFLAGS = -ljsoncpp\
 #          ${NS3_LIB}/libns3.33-core-debug.so\
 #          ${NS3_LIB}/libns3.33-internet-debug.so\
 #          ${NS3_LIB}/libns3.33-applications-debug.so\
@@ -86,6 +86,7 @@ LXFLAGS = -ljsoncpp\
 #          ${NS3_LIB}/libns3.33-bridge-debug.so\
 #          ${NS3_LIB}/libns3.33-traffic-control-debug.so\
 #          ${NS3_LIB}/libns3.33-stats-debug.so\
+# 		 ${NS3_LIB}/libns3.33-csma-debug.so\
 #          ${NS3_LIB}/libns3.33-mpi-debug.so\
 
 

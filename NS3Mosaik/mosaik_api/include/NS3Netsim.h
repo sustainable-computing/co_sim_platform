@@ -65,6 +65,7 @@ struct DataXCHG {
 static vector<DataXCHG> dataXchgInput;  ///< Input data exchange vector
 static queue<DataXCHG> dataXchgOutput; ///< Output data exchange vector
 static map<Ipv4Address, uint32_t> mapIpv4NodeId; ///< Map from client Ipv4 to Node Id
+static map<Ipv6Address, uint32_t> mapIpv6NodeId; ///< Map from client Ipv6 to Node Id
 static unordered_map<uint32_t , string> fragmentBuffers;
 
 class NS3Netsim {
@@ -211,7 +212,7 @@ private:
    * \param tcpOrUdp a string that is either set to tcp or udp, indicating which kind of server will be created
    * \param server holds the server id
    */
-  void setUpServer(InetSocketAddress address, string protocol, string server);
+  void setUpServer(AddressValue address, string protocol, string server);
 
   /**
    * Sets up a tcp or udp client depending on what has been passed in
@@ -221,7 +222,7 @@ private:
    * \param server holds the server id
    * \param client holds the client id
    */
-  void setUpClient(InetSocketAddress address, string protocol, string server, string client);
+  void setUpClient(AddressValue address, string protocol, string server, string client);
 
   vector< vector<bool>> nodeAdjMatrix; ///< Node adjacency matrix
   string nodeAdjMatrixFilename;        ///< Node adjacency matrix filename
@@ -242,6 +243,7 @@ private:
 
   InternetStackHelper internet;  ///< Pointer to Internet helper class
   Ipv4AddressHelper ipv4Address; ///< Pointer to Ipv4 Internet helper class
+  Ipv6AddressHelper ipv6Address; ///< Pointer to Ipv6 Internet helper class
 
   MobilityHelper mobility;                      ///< Pointer to mobility (position) helper class
   Ptr<ListPositionAllocator> nodePositionAlloc; ///< Pointer to node position allocation

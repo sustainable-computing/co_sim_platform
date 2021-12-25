@@ -102,9 +102,10 @@ vector<vector<string> > ReadAppConnectionsFile (string nodeCoordinatesFilename);
  * Print the IP addresses
  *
  * \param nodes NodeContainer with nodes
+ * \param network P2P/CSMA/P2Pv6/CSMAv6
  *
  */
-void PrintIpAddresses(NodeContainer nodes);
+void PrintIpAddresses(NodeContainer nodes, string network);
 
 
 /**
@@ -115,6 +116,15 @@ void PrintIpAddresses(NodeContainer nodes);
  */
 map<Ipv4Address, uint32_t> CreateMapIpv4NodeId(NodeContainer nodes);
 
+
+/**
+ * Create map to associate Ipv6 address and Node Id
+ *
+ * \param nodes NodeContainer with nodes
+ *
+ */
+map<Ipv6Address, uint32_t> CreateMapIpv6NodeId(NodeContainer nodes);
+
 /**
  * @brief Find the next hop from given source to destination. Perform
  * Breadth-First-Search (BFS) to find the next hop
@@ -124,5 +134,12 @@ map<Ipv4Address, uint32_t> CreateMapIpv4NodeId(NodeContainer nodes);
  * @param array the adjacency matrix of the network
  */
 string FindNextHop(string clt, string srv, vector<vector<bool>> array);
+
+/**
+ * @brief Print the routing table.
+ * @param n the node
+ * @param v4 IPv4 or IPv6
+ */
+void PrintRoutingTable (Ptr<Node>& n, bool v4);
 
 #endif /* SMARTGRID_NS3_HELPER_H_ */

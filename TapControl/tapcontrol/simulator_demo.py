@@ -146,7 +146,7 @@ def  create_scenario( world, args ):
         random_seed     = args.random_seed,
         verbose         = 0,
         tcpOrUdp        = "tcp", # transport layer protocols: tcp/udp (udp only for single client)
-        network         = "P2P" # network architecture: P2P/CSMA (supported architectures)
+        network         = "P2P" # network architecture: P2P/CSMA/P2Pv6/CSMAv6 (supported architectures)
     )
   
     controlsim  = world.start('ControlSim',  

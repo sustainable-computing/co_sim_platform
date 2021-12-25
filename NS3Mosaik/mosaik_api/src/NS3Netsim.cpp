@@ -38,6 +38,9 @@ using namespace ns3;
 NS_LOG_COMPONENT_DEFINE("SmartgridNs3Main");
 std::string fileNameReceived = "packets_received.pkt";
 
+//--- IPv4 or IPv6 active
+bool v4;
+
 /**
  * \brief Passes a a preprocessed message of the form "<data>&<time>" to the upper layer.
  *
@@ -69,16 +72,21 @@ void ExtractInformationFromPacketAndSendToUpperLayer(Ptr<Socket> socket)
 {
   Address from;
   Ptr<Packet> packet = socket->RecvFrom(from);
-
-  Ipv4Address srcIpv4Address = InetSocketAddress::ConvertFrom(from).GetIpv4();
-  uint32_t srcNodeId = mapIpv4NodeId[srcIpv4Address];
+  uint32_t srcNodeId;
+  if (v4)
+  {
+    Ipv4Address srcIpv4Address = InetSocketAddress::ConvertFrom(from).GetIpv4();
+    srcNodeId = mapIpv4NodeId[srcIpv4Address];
+  }
+  else
+  {
+    Ipv6Address srcIpv6Address = Inet6SocketAddress::ConvertFrom(from).GetIpv6();
+    srcNodeId = mapIpv6NodeId[srcIpv6Address];
+  }
   Ptr<Node> srcNode = NodeList::GetNode(srcNodeId);
 
   packet->RemoveAllPacketTags();
   packet->RemoveAllByteTags();
-  // std::cout << "Received: ";
-  // packet->CopyData(&std::cout, packet->GetSize());
-  // std::cout << std::endl;
 
   uint32_t packetSize = packet->GetSize();
   uint8_t *buffer = new uint8_t[packetSize];
@@ -149,14 +157,24 @@ void ExtractInformationFromPacketAndSendToUpperLayer(Ptr<Socket> socket)
         string assembledFragments = fragmentBufferIterator->second;
         sendMessageToUpperLayer(assembledFragments, srcNode, socket->GetNode());
         fragmentBuffers.erase(fragmentBufferIterator);
-
-        NS_LOG_DEBUG(
-            "Fragmented Pkt Rcv at " << Simulator::Now().GetMilliSeconds()
+        
+        if (v4)
+          NS_LOG_DEBUG("Fragmented Pkt Rcv at " << Simulator::Now().GetMilliSeconds()
                                      << " by nodeName: " << Names::FindName(socket->GetNode())
                                      << " dstNodeId: " << socket->GetNode()->GetId()
                                      << " dstAddr: " << socket->GetNode()->GetObject<Ipv4>()->GetAddress(1, 0).GetLocal()
                                      << " srcNodeId: " << srcNodeId
                                      << " srcAddr: " << InetSocketAddress::ConvertFrom(from).GetIpv4()
+                                     << " Size: " << packet->GetSize()
+                                     << " Payload: " << assembledFragments
+                                     << endl;);
+        else
+          NS_LOG_DEBUG("Fragmented Pkt Rcv at " << Simulator::Now().GetMilliSeconds()
+                                     << " by nodeName: " << Names::FindName(socket->GetNode())
+                                     << " dstNodeId: " << socket->GetNode()->GetId()
+                                     << " dstAddr: " << socket->GetNode()->GetObject<Ipv6>()->GetAddress(1, 0).GetAddress()
+                                     << " srcNodeId: " << srcNodeId
+                                     << " srcAddr: " << Inet6SocketAddress::ConvertFrom(from).GetIpv6()
                                      << " Size: " << packet->GetSize()
                                      << " Payload: " << assembledFragments
                                      << endl;);
@@ -168,13 +186,23 @@ void ExtractInformationFromPacketAndSendToUpperLayer(Ptr<Socket> socket)
       sendMessageToUpperLayer(partMessage, srcNode, socket->GetNode());
       recMessage = recMessage.substr(item.currentSize);
 
-      NS_LOG_DEBUG(
-          "Unfragmented Pkt Rcv at " << Simulator::Now().GetMilliSeconds()
+      if (v4)
+        NS_LOG_DEBUG("Unfragmented Pkt Rcv at " << Simulator::Now().GetMilliSeconds()
                                      << " by nodeName: " << Names::FindName(socket->GetNode())
                                      << " dstNodeId: " << socket->GetNode()->GetId()
                                      << " dstAddr: " << socket->GetNode()->GetObject<Ipv4>()->GetAddress(1, 0).GetLocal()
                                      << " srcNodeId: " << srcNodeId
                                      << " srcAddr: " << InetSocketAddress::ConvertFrom(from).GetIpv4()
+                                     << " Size: " << packet->GetSize()
+                                     << " Payload: " << recMessage
+                                     << endl;);
+      else
+        NS_LOG_DEBUG("Unfragmented Pkt Rcv at " << Simulator::Now().GetMilliSeconds()
+                                     << " by nodeName: " << Names::FindName(socket->GetNode())
+                                     << " dstNodeId: " << socket->GetNode()->GetId()
+                                     << " dstAddr: " << socket->GetNode()->GetObject<Ipv6>()->GetAddress(1, 0).GetAddress()
+                                     << " srcNodeId: " << srcNodeId
+                                     << " srcAddr: " << Inet6SocketAddress::ConvertFrom(from).GetIpv6()
                                      << " Size: " << packet->GetSize()
                                      << " Payload: " << recMessage
                                      << endl;);
@@ -198,15 +226,20 @@ NS3Netsim::NS3Netsim() : linkCount(0), sinkPort(0), startTime(0), verbose(0)
   // LogComponentEnable("TcpSocketBase", LOG_LEVEL_ALL);
   // LogComponentEnable("TcpL4Protocol", LOG_LEVEL_ALL);
   // LogComponentEnable("IpL4Protocol", LOG_LEVEL_ALL);
+  // LogComponentEnable ("Ipv4L3Protocol", LOG_LEVEL_ALL);
   // LogComponentEnable("EventImpl", LOG_LEVEL_ALL);
   // LogComponentEnable("Node", LOG_LEVEL_ALL);
   // LogComponentEnable("Application", LOG_LEVEL_ALL);
+  // LogComponentEnable ("Ipv4StaticRouting", LOG_LEVEL_ALL);
+  // LogComponentEnable ("Ipv4Interface", LOG_LEVEL_ALL);
+  // LogComponentEnable ("Ipv6L3Protocol", LOG_LEVEL_ALL);
+  // LogComponentEnable ("Icmpv6L4Protocol", LOG_LEVEL_ALL);
+  // LogComponentEnable ("Ipv6StaticRouting", LOG_LEVEL_ALL);
+  // LogComponentEnable ("Ipv6Interface", LOG_LEVEL_ALL);
 
-  
-  // Enable or disable TCP no delay option
-  Config::SetDefault ("ns3::TcpSocket::TcpNoDelay", BooleanValue (true));
-  // This test was written with initial window of 1 segment
-  Config::SetDefault ("ns3::TcpSocket::InitialCwnd", UintegerValue (1));
+  // Config::SetDefault("ns3::TcpSocket::TcpNoDelay", BooleanValue(true));
+  //--- To set the nodes as routers for IPv6, where they are hosts by default
+  Config::SetDefault("ns3::Ipv6::IpForward", BooleanValue(true));
 }
 
 NS3Netsim::~NS3Netsim()
@@ -236,6 +269,8 @@ void NS3Netsim::init(string f_adjmat,
   // save which architecture should be used
   netArch = s_net;
   std::cout << "Network Architecture: " << netArch << std::endl;
+  if (netArch == "P2P" || netArch == "CSMA")  v4 = true;
+  else  v4 = false;
 
   NS_LOG_FUNCTION(this);
 
@@ -249,7 +284,8 @@ void NS3Netsim::init(string f_adjmat,
   linkCount = 0;
 
   //--- set devices properties
-  ipv4Address.SetBase("10.0.0.0", "255.255.255.252");
+  if (v4) ipv4Address.SetBase("10.0.0.0", "255.255.255.252");
+  else  ipv6Address.SetBase(Ipv6Address("2001:1::"), Ipv6Prefix(64));
 
   //--- set application destination port
   sinkPort = 3030;
@@ -298,12 +334,12 @@ void NS3Netsim::init(string f_adjmat,
 
   //--- create network topology
   NS_LOG_INFO("Create Links Between Nodes.");
-  if (netArch == "P2P")
+  if (netArch == "P2P" || netArch == "P2Pv6")
   {
     pointToPoint.SetDeviceAttribute("DataRate", StringValue(LinkRate));
     pointToPoint.SetChannelAttribute("Delay", StringValue(LinkDelay));
   }
-  else if (netArch == "CSMA")
+  else if (netArch == "CSMA" || netArch == "CSMAv6")
   {
     csma.SetChannelAttribute  ("DataRate", StringValue (LinkRate));
     csma.SetChannelAttribute ("Delay",    StringValue (LinkDelay));
@@ -317,9 +353,9 @@ void NS3Netsim::init(string f_adjmat,
         linkCount++;
         NodeContainer n_links = NodeContainer(nodes.Get(i), nodes.Get(j));
         NetDeviceContainer n_devs;
-        if (netArch == "P2P")
+        if (netArch == "P2P" || netArch == "P2Pv6")
           n_devs = pointToPoint.Install(n_links);
-        else if (netArch == "CSMA") 
+        else if (netArch == "CSMA" || netArch == "CSMAv6") 
           n_devs = csma.Install (n_links);
         Devices.push_back(n_devs);
         /// Store devices to be fetched using node names
@@ -354,16 +390,25 @@ void NS3Netsim::init(string f_adjmat,
   internet.Install(NodeContainer::GetGlobal());
   for (auto dev = Devices.begin(); dev != Devices.end(); ++dev)
   {
-    ipv4Address.Assign(*dev);
-    ipv4Address.NewNetwork();
+    if(v4)
+    {
+      ipv4Address.Assign(*dev);
+      ipv4Address.NewNetwork();
+    }
+    else
+    {
+      Ipv6InterfaceContainer i6 = ipv6Address.Assign(*dev);
+      ipv6Address.NewNetwork();
+    }
   }
   if (verbose > 1)
   {
-    PrintIpAddresses(nodes);
+    PrintIpAddresses(nodes, netArch);
   }
 
-  //--- create map Ipv4 address to NodeId
-  mapIpv4NodeId = CreateMapIpv4NodeId(nodes);
+  //--- create map Ipv4/Ipv6 address to NodeId
+  if (v4) mapIpv4NodeId = CreateMapIpv4NodeId(nodes);
+  else  mapIpv6NodeId = CreateMapIpv6NodeId(nodes);
 
   // --- Global routing protocol for IP version 4 stacks
   // NS_LOG_INFO("Initialize Global Routing.");
@@ -403,18 +448,19 @@ void NS3Netsim::init(string f_adjmat,
 
   //--- set regular trace file
   AsciiTraceHelper ascii;
-  if (netArch == "P2P")
+  if (netArch == "P2P" || netArch == "P2Pv6")
     pointToPoint.EnableAsciiAll(ascii.CreateFileStream("traceNS3Netsim.tr"));
-  else if (netArch == "CSMA")
+  else if (netArch == "CSMA" || netArch == "CSMAv6")
     csma.EnableAsciiAll(ascii.CreateFileStream ("traceNS3Netsim.tr"));
-  //pointToPoint.EnablePcapAll("pcapNS3Netsim.pcap");
+  // pointToPoint.EnablePcapAll("pcapNS3Netsim.pcap");
   //pointToPoint.EnablePcap("dse", 0, 0, true);
 }
 
 void NS3Netsim::create(string client, string server)
 {
   NS_LOG_FUNCTION(this);
-  bool found = false;
+  bool found = false, v4 = false;
+  if (netArch == "P2P" || netArch == "CSMA")  v4 = true;
 
   //---
   //--- update list of application connections
@@ -453,7 +499,16 @@ void NS3Netsim::create(string client, string server)
     if (it == nodeServerList.end())
     {
       // Create the server application
-      setUpServer(InetSocketAddress(Ipv4Address::GetAny(), sinkPort), tcpOrUdp, server);
+      if (v4)
+      {
+        AddressValue address = AddressValue(InetSocketAddress(Ipv4Address::GetAny(), sinkPort));
+        setUpServer(address, tcpOrUdp, server);
+      }
+      else
+      {
+        AddressValue address = AddressValue(Inet6SocketAddress(Ipv6Address::GetAny(), sinkPort));
+        setUpServer(address, tcpOrUdp, server);
+      }
       NS_LOG_DEBUG("NS3Netsim::create Server: " << *iList << endl);
     }
     else
@@ -464,14 +519,23 @@ void NS3Netsim::create(string client, string server)
     // create client socket
     NS_LOG_INFO("Create client.");
     Ptr<Node> dstNode = Names::Find<Node>(server);
-    Ipv4InterfaceAddress sink_iaddr = dstNode->GetObject<Ipv4>()->GetAddress(1, 0);
-    InetSocketAddress remote = InetSocketAddress(sink_iaddr.GetLocal(), sinkPort);
-    setUpClient(remote, tcpOrUdp, server, client);
+    if (v4)
+    {
+      Ipv4InterfaceAddress sink_iaddr = dstNode->GetObject<Ipv4>()->GetAddress(1, 0);
+      InetSocketAddress remote = InetSocketAddress(sink_iaddr.GetLocal(), sinkPort);
+      setUpClient(AddressValue(remote), tcpOrUdp, server, client);
+    }
+    else
+    {
+      Ipv6InterfaceAddress sink_v6iaddr = dstNode->GetObject<Ipv6>()->GetAddress(1, 1);
+      Inet6SocketAddress remote = Inet6SocketAddress(sink_v6iaddr.GetAddress(), sinkPort);
+      setUpClient(AddressValue(remote), tcpOrUdp, server, client);
+    }
   }
 
   // --- Static routing for IP version 4
   NS_LOG_INFO("Initialize Static Routing.");
-  if(netArch == "P2P" || netArch == "CSMA")
+  if(v4)
   {
     Ipv4StaticRoutingHelper ipv4StaticRouter;
     Ptr<Ipv4StaticRouting> staticRouting;
@@ -516,14 +580,70 @@ void NS3Netsim::create(string client, string server)
       Ipv4Address cltAddress = cltIpv4->GetAddress(hostIfIndex, 0).GetLocal();
       staticRouting = ipv4StaticRouter.GetStaticRouting (nextHopIpv4);
       staticRouting->AddHostRouteTo(srcAddress, cltAddress, hopIfIndex);
-      if (verbose > 3)  cout << "Next Hop Address: " << nextHopAddress << endl;
+      if (verbose > 3)
+      {
+        cout << "Next Hop Address: " << nextHopAddress << endl;
+        PrintRoutingTable(cltNode, v4);
+      }
       clt = nextHop;
     }
   }
-  
+  else
+  {
+    Ipv6StaticRoutingHelper ipv6StaticRouter;
+    Ptr<Ipv6StaticRouting> staticRouting;
+    string clt = client;
+    string srv = server;
+    string nextHop;
+    Ptr <Node> desNode = Names::Find<Node>(server);
+    Ptr <Ipv6> desIpv6 = desNode->GetObject<Ipv6> ();
+    Ipv6Address destAddress = desIpv6->GetAddress(1, 1).GetAddress();
+    Ptr <Node> srcNode = Names::Find<Node>(client);
+    Ptr <Ipv6> srcIpv6 = srcNode->GetObject<Ipv6> ();
+    Ipv6Address srcAddress = srcIpv6->GetAddress(1, 1).GetAddress();
+    //--- create static routes from clients to servers and vice versa
+    if (verbose > 2)  cout << "Connecting " << clt << " to " << srv << endl;
+    while(nextHop != srv)
+    {
+      nextHop = FindNextHop(clt, srv, nodeAdjMatrix);
+      if (verbose > 3)  cout << "Next hop for " << clt << " is: " << nextHop << endl;
+
+      Ptr<Node> nextHopNode = Names::Find<Node>(nextHop);
+      Ptr<Node> cltNode = Names::Find<Node>(clt);
+      Ptr<Ipv6> nextHopIpv6 = nextHopNode->GetObject<Ipv6> ();
+      Ptr<Ipv6> cltIpv6 = cltNode->GetObject<Ipv6> ();
+
+      uint32_t hostIfIndex, hopIfIndex;
+      // The interfaces are in reverse order
+      if(DeviceMap.find(make_pair(clt, nextHop)) == DeviceMap.end())
+      {
+        NetDeviceContainer link_dev = DeviceMap[make_pair(nextHop, clt)];
+        hostIfIndex = link_dev.Get(1)->GetIfIndex() + 1;
+        hopIfIndex = link_dev.Get(0)->GetIfIndex() + 1;
+      }
+      else // The interfaces are in correct order
+      {
+        NetDeviceContainer link_dev = DeviceMap[make_pair(clt, nextHop)];
+        hostIfIndex = link_dev.Get(0)->GetIfIndex() + 1;
+        hopIfIndex = link_dev.Get(1)->GetIfIndex() + 1;
+      }
+      Ipv6Address nextHopAddress = nextHopIpv6->GetAddress(hopIfIndex, 1).GetAddress();
+      staticRouting = ipv6StaticRouter.GetStaticRouting (cltIpv6);
+      staticRouting->AddHostRouteTo(destAddress, nextHopAddress, hostIfIndex);
+      Ipv6Address cltAddress = cltIpv6->GetAddress(hostIfIndex, 1).GetAddress();
+      staticRouting = ipv6StaticRouter.GetStaticRouting (nextHopIpv6);
+      staticRouting->AddHostRouteTo(srcAddress, cltAddress, hopIfIndex);
+      if (verbose > 3)
+      {
+        cout << "Next Hop Address: " << nextHopAddress << endl;
+        PrintRoutingTable(cltNode, v4);
+      }
+      clt = nextHop;
+    }
+  }
 }
 
-void NS3Netsim::setUpServer(InetSocketAddress address, string protocol, string server)
+void NS3Netsim::setUpServer(AddressValue address, string protocol, string server)
 {
   // Where the returned application will be stored
   ApplicationContainer serverAppContainer;
@@ -531,7 +651,7 @@ void NS3Netsim::setUpServer(InetSocketAddress address, string protocol, string s
   if (protocol == "tcp")
   {
     // Set the address with which the application should be created
-    multiClientTcpServerHelper.SetAttribute("Local", AddressValue(address));
+    multiClientTcpServerHelper.SetAttribute("Local", address);
     serverAppContainer = multiClientTcpServerHelper.Install(server);
     // Set the call back to extract information from a packet and sent it to the upper layer
     Ptr<MultiClientTcpServer> serverAppAsCorrectType = DynamicCast<MultiClientTcpServer>(serverAppContainer.Get(0));
@@ -541,7 +661,8 @@ void NS3Netsim::setUpServer(InetSocketAddress address, string protocol, string s
   else if (protocol == "udp")
   {
     // Set the address with which the application should be created
-    customUdpServerHelper.SetAttribute("Local", AddressValue(InetSocketAddress(Ipv4Address::GetAny(), sinkPort)));
+    if (v4) customUdpServerHelper.SetAttribute("Local", AddressValue(InetSocketAddress(Ipv4Address::GetAny(), sinkPort)));
+    else  customUdpServerHelper.SetAttribute("Local", AddressValue(Inet6SocketAddress(Ipv6Address::GetAny(), sinkPort)));
     // Create a tcp container
     serverAppContainer = customUdpServerHelper.Install(server);
     // Set the call back to extract information from a packet and sent it to the upper layer
@@ -565,7 +686,7 @@ void NS3Netsim::setUpServer(InetSocketAddress address, string protocol, string s
   sort(nodeServerList.begin(), nodeServerList.end());
 }
 
-void NS3Netsim::setUpClient(InetSocketAddress address, string protocol, string server, string client)
+void NS3Netsim::setUpClient(AddressValue address, string protocol, string server, string client)
 {
   // Get the server and the client nodes
   Ptr<Node> srcNode = Names::Find<Node>(client);
@@ -576,13 +697,13 @@ void NS3Netsim::setUpClient(InetSocketAddress address, string protocol, string s
   if (protocol == "tcp")
   {
     // Create a tcp client
-    tcpClientHelper.SetAttribute("Remote", AddressValue(address));
+    tcpClientHelper.SetAttribute("Remote", address);
     clientAppContainer = tcpClientHelper.Install(client);
   }
   else if (protocol == "udp")
   {
     // Create a udp client
-    customUdpClientHelper.SetAttribute("Remote", AddressValue(address));
+    customUdpClientHelper.SetAttribute("Remote", address);
     clientAppContainer = customUdpClientHelper.Install(client);
   }
   else
@@ -649,13 +770,12 @@ NS3Netsim::runUntil(uint64_t time, string nextStop)
   //--- run scheduler until a given time
   sim = DynamicCast<SmartgridDefaultSimulatorImpl>(Simulator::GetImplementation());
   uint64_t max_advance = stoul(nextStop);
-  //--- Do not run too close to the END_TIME to avoid Mosaik complications
-  //--- Apparently the "stop" command for Mosaik has bugs when at the END_TIME
-  //--- Details: python process socket _iowait infinite sleep for read wait
-  if (time+1 < (uint64_t)stopTime)
+  //--- "+1" because NS3 executes until a given time (not including)
+  if (time < (uint64_t)stopTime-1)
     sim->RunUntil(MilliSeconds(time + 1));
+  //--- Do not execute end time events to avoid socket wait problem
   else
-    sim->RunUntil(MilliSeconds(time));
+    sim->RunUntil(MilliSeconds((uint64_t)stopTime-1));
 
   if (verbose > 3)
   {
@@ -673,18 +793,24 @@ NS3Netsim::runUntil(uint64_t time, string nextStop)
     }
   }
 
-  //--- Check if there is any new event before max_advance
+  //--- Get the next new event
   uint64_t next_step = (uint64_t)sim->Next().GetMilliSeconds();
   if (verbose > 1)
   {
     std::cout << "NS3Netsim::runUntil After_run NS3 time: " << Simulator::Now().GetMilliSeconds() << std::endl;
     std::cout << "NS3Netsim::runUntil next event: " << next_step << std::endl;
   }
-
-  if (next_step <= max_advance && next_step+1 < (uint64_t)stopTime)
-    return std::to_string(next_step);
-  else
-    return "null";
+  //--- Return a step time so that Mosaik has to give "stop" command
+  if (next_step == (uint64_t)stopTime-1)
+    return std::to_string(next_step+1);
+  else if (next_step > (uint64_t)stopTime-1)
+  {
+    if (time == (uint64_t)stopTime-1)
+      return std::to_string((uint64_t)stopTime);
+    else
+      return std::to_string((uint64_t)stopTime-1);
+  }
+  return std::to_string(next_step);
 }
 
 int NS3Netsim::get_data(string &src, string &dst, string &val_v, string &val_t)
