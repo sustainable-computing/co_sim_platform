@@ -22,9 +22,11 @@
  */
 
 #include "ns3-helper.h"
+#include "json.hpp"
 #define MAX_NODES 100
 using namespace std;
 using namespace ns3;
+using json = nlohmann::ordered_json;
 
 int parent[MAX_NODES][MAX_NODES];
 
@@ -89,6 +91,47 @@ ReadNodeAdjMatrix(string adjMatFileName)
   }
 
   adjMatFile.close();
+  return array;
+}
+
+vector<vector<bool>>
+ReadNodeAdjListJson(string jsonFileName)
+{
+  NS_LOG_INFO("ReadNodeAdjListJson");
+  memset(parent, -1, sizeof(parent));
+
+  ifstream adjListFile;
+  adjListFile.open(jsonFileName.c_str(), std::ios::in);
+  if (adjListFile.fail())
+  {
+    NS_FATAL_ERROR("File " << jsonFileName.c_str() << " not found");
+  }
+  json config;
+  adjListFile >> config;
+
+  unsigned int num_nodes = config["nodes"].size();
+
+  vector<vector<bool>> array;
+  unordered_map<string, unsigned int> node_to_idx;
+  array.resize(num_nodes, vector<bool>(num_nodes));
+  // This will map the node to a numerical index
+  unsigned idx = 0;
+  for (auto &node : config["nodes"].items())
+  {
+    node_to_idx.emplace(node.key(), idx);
+    ++idx;
+  }
+
+  for (auto &node : config["nodes"].items())
+  {
+    unsigned int curr_idx = node_to_idx[node.key()];
+    for (auto &neighbour : node.value()["connections"])
+    {
+      array[curr_idx][node_to_idx[neighbour]] = true;
+    }
+  }
+
+  adjListFile.close();
   return array;
 }
 
@@ -166,6 +209,41 @@ ReadCoordinatesFile(string nodeCoordinatesFilename)
   return array;
 }
 
+vector<vector<string>>
+ReadCoordinatesJSONFile(string jsonFileName)
+{
+  NS_LOG_INFO("ReadCoordinatesJSONFile");
+
+  ifstream coordJSONFile;
+  coordJSONFile.open(jsonFileName.c_str(), std::ios::in);
+  if (coordJSONFile.fail())
+  {
+    NS_FATAL_ERROR("File " << jsonFileName.c_str() << " not found");
+  }
+  json config;
+  coordJSONFile >> config;
+
+  unsigned int num_nodes = config["nodes"].size();
+
+  vector<vector<string>> array;
+
+  for (auto& node : config["nodes"].items())
+  {
+    // node_id (name), x, y
+    vector<string> record;
+    // name goes first
+    record.push_back(node.key());
+    // coordinates goes second
+    record.push_back(to_string(node.value()["x"]));
+    record.push_back(to_string(node.value()["y"]));
+
+    // Insert the record into the array list
+    array.push_back(record);
+  }
+
+  return array;
+}
+
 void PrintNamesCoordinates(const char *description, vector<vector<string>> array)
 {
   NS_LOG_INFO("PrintNamesCoordinates");
@@ -234,29 +312,36 @@ void PrintIpAddresses(NodeContainer nodes, string network)
   Ipv4InterfaceAddress v4iaddr;
   Ipv6InterfaceAddress v6iaddr;
   bool v4 = false;
-  if (network == "P2P" || network == "CSMA")  v4 = true;
+  if (network == "P2P" || network == "CSMA")
+    v4 = true;
   for (NodeList::Iterator i = NodeList::Begin(); i != NodeList::End(); ++i)
   {
     int ifaces;
-    if (v4) ifaces = (*i)->GetObject<Ipv4>()->GetNInterfaces();
-    else  ifaces = (*i)->GetObject<Ipv6>()->GetNInterfaces();
+    if (v4)
+      ifaces = (*i)->GetObject<Ipv4>()->GetNInterfaces();
+    else
+      ifaces = (*i)->GetObject<Ipv6>()->GetNInterfaces();
 
     for (int j = 1; j < ifaces; j++)
     {
-      if (v4) v4iaddr = (*i)->GetObject<Ipv4>()->GetAddress(j, 0);
-      else v6iaddr = (*i)->GetObject<Ipv6>()->GetAddress(j, 1);
+      if (v4)
+        v4iaddr = (*i)->GetObject<Ipv4>()->GetAddress(j, 0);
+      else
+        v6iaddr = (*i)->GetObject<Ipv6>()->GetAddress(j, 1);
       nodeName = Names::FindName((*i));
 
-      if (v4) cout << "Node ID: " << (*i)->GetId() << " - "
-                   << "Ifaces: " << (*i)->GetObject<Ipv4>()->GetNInterfaces() << " - "
-                   << "Name: " << nodeName << " - "
-                   << "IP Addr: " << v4iaddr.GetLocal() << " - "
-                   << "IP Mask: " << v4iaddr.GetMask() << endl;
-      else    cout << "Node ID: " << (*i)->GetId() << " - "
-                   << "Ifaces: " << (*i)->GetObject<Ipv6>()->GetNInterfaces() << " - "
-                   << "Name: " << nodeName << " - "
-                   << "IP Addr: " << v6iaddr.GetAddress() << " - "
-                   << "IP Mask: " << v6iaddr.GetPrefix() << endl;
+      if (v4)
+        cout << "Node ID: " << (*i)->GetId() << " - "
+             << "Ifaces: " << (*i)->GetObject<Ipv4>()->GetNInterfaces() << " - "
+             << "Name: " << nodeName << " - "
+             << "IP Addr: " << v4iaddr.GetLocal() << " - "
+             << "IP Mask: " << v4iaddr.GetMask() << endl;
+      else
+        cout << "Node ID: " << (*i)->GetId() << " - "
+             << "Ifaces: " << (*i)->GetObject<Ipv6>()->GetNInterfaces() << " - "
+             << "Name: " << nodeName << " - "
+             << "IP Addr: " << v6iaddr.GetAddress() << " - "
+             << "IP Mask: " << v6iaddr.GetPrefix() << endl;
     }
   }
   cout << "**** End Print IP Addresses ********" << endl;
@@ -314,66 +399,72 @@ CreateMapIpv6NodeId(NodeContainer nodes)
 
 string FindNextHop(string clt, string srv, vector<vector<bool>> array)
 {
-  Ptr <Node> srcNode = Names::Find<Node>(clt);
-  Ptr <Node> desNode = Names::Find<Node>(srv);
+  Ptr<Node> srcNode = Names::Find<Node>(clt);
+  Ptr<Node> desNode = Names::Find<Node>(srv);
 
   size_t src = srcNode->GetId();
   size_t des = desNode->GetId();
 
-  if(parent[des][src] != -1)
+  if (parent[des][src] != -1)
   {
-    Ptr <Node> nextHopeNode = NodeList::GetNode(parent[des][src]);
+    Ptr<Node> nextHopeNode = NodeList::GetNode(parent[des][src]);
     return Names::FindName(nextHopeNode);
   }
   size_t nextHop;
-  queue <size_t> bfsQ;
+  queue<size_t> bfsQ;
 
   // Searching in the opposite direction so that parents are
   // actually next hops when des is the destination
   bfsQ.push(des);
   parent[des][des] = des;
-  while(!bfsQ.empty())
+  while (!bfsQ.empty())
   {
     nextHop = bfsQ.front();
     bfsQ.pop();
     for (size_t m = 0; m < array[nextHop].size(); m++)
     {
-      if(!array[nextHop][m]) continue;
-      if(parent[des][m] != -1)  continue;
+      if (!array[nextHop][m])
+        continue;
+      if (parent[des][m] != -1)
+        continue;
       bfsQ.push(m);
       parent[des][m] = nextHop;
     }
   }
-  if(parent[des][src] == -1)  cerr << "The source and destination are not connected!";
+  if (parent[des][src] == -1)
+    cerr << "The source and destination are not connected!";
 
-  Ptr <Node> nextHopeNode = NodeList::GetNode(parent[des][src]);
-  return Names::FindName(nextHopeNode);  
+  Ptr<Node> nextHopeNode = NodeList::GetNode(parent[des][src]);
+  return Names::FindName(nextHopeNode);
 }
 
-void PrintRoutingTable (Ptr<Node>& n, bool v4)
+void PrintRoutingTable(Ptr<Node> &n, bool v4)
 {
   if (v4)
   {
     Ptr<Ipv4StaticRouting> routing = 0;
     Ipv4StaticRoutingHelper routingHelper;
-    Ptr<Ipv4> ipv4 = n->GetObject<Ipv4> ();
+    Ptr<Ipv4> ipv4 = n->GetObject<Ipv4>();
     uint32_t nbRoutes = 0;
     Ipv4RoutingTableEntry route;
 
-    routing = routingHelper.GetStaticRouting (ipv4);
+    routing = routingHelper.GetStaticRouting(ipv4);
 
     std::cout << "Routing table of " << Names::FindName(n) << " : " << std::endl;
-    std::cout << "Destination\t\t\t\t" << "Gateway\t\t\t\t\t" << "Interface\t" <<  "Destination Network" << std::endl;
+    std::cout << "Destination\t\t\t\t"
+              << "Gateway\t\t\t\t\t"
+              << "Interface\t"
+              << "Destination Network" << std::endl;
 
-    nbRoutes = routing->GetNRoutes ();
+    nbRoutes = routing->GetNRoutes();
     for (uint32_t i = 0; i < nbRoutes; i++)
     {
-      route = routing->GetRoute (i);
-      std::cout << route.GetDest () << "\t"
-                << route.GetGateway () << "\t"
-                << route.GetInterface () << "\t"
-                << route.GetDestNetwork () << "\t"
-                << route.GetDestNetworkMask () << "\t"
+      route = routing->GetRoute(i);
+      std::cout << route.GetDest() << "\t"
+                << route.GetGateway() << "\t"
+                << route.GetInterface() << "\t"
+                << route.GetDestNetwork() << "\t"
+                << route.GetDestNetworkMask() << "\t"
                 << std::endl;
     }
   }
@@ -381,23 +472,26 @@ void PrintRoutingTable (Ptr<Node>& n, bool v4)
   {
     Ptr<Ipv6StaticRouting> routing = 0;
     Ipv6StaticRoutingHelper routingHelper;
-    Ptr<Ipv6> ipv6 = n->GetObject<Ipv6> ();
+    Ptr<Ipv6> ipv6 = n->GetObject<Ipv6>();
     uint32_t nbRoutes = 0;
     Ipv6RoutingTableEntry route;
 
-    routing = routingHelper.GetStaticRouting (ipv6);
+    routing = routingHelper.GetStaticRouting(ipv6);
 
     std::cout << "Routing table of " << Names::FindName(n) << " : " << std::endl;
-    std::cout << "Destination\t\t\t\t" << "Gateway\t\t\t\t\t" << "Interface\t" <<  "Prefix to use" << std::endl;
+    std::cout << "Destination\t\t\t\t"
+              << "Gateway\t\t\t\t\t"
+              << "Interface\t"
+              << "Prefix to use" << std::endl;
 
-    nbRoutes = routing->GetNRoutes ();
+    nbRoutes = routing->GetNRoutes();
     for (uint32_t i = 0; i < nbRoutes; i++)
     {
-      route = routing->GetRoute (i);
-      std::cout << route.GetDest () << "\t"
-                << route.GetGateway () << "\t"
-                << route.GetInterface () << "\t"
-                << route.GetPrefixToUse () << "\t"
+      route = routing->GetRoute(i);
+      std::cout << route.GetDest() << "\t"
+                << route.GetGateway() << "\t"
+                << route.GetInterface() << "\t"
+                << route.GetPrefixToUse() << "\t"
                 << std::endl;
     }
   }

@@ -38,6 +38,8 @@
 #include "ns3/applications-module.h"
 #include "ns3/internet-module.h"
 
+#include "json.hpp"
+
 using namespace std;
 using namespace ns3;
 
@@ -49,6 +51,13 @@ using namespace ns3;
  */
 vector< vector<bool> > ReadNodeAdjMatrix (string adjMatFileName);
 
+/**
+ * Read node adjacency list from a json file and loat into a boolean vector 
+ * 
+ * \param jsonFileName Filename of the json file that contains the adjacency list
+ * \return Boolean array with indication of node connections (adjacency matrix)
+ */
+vector< vector<bool> > ReadNodeAdjListJson (string jsonFileName);
 
 /**
  * Print the node adjacency matrix
@@ -68,6 +77,15 @@ void PrintNodeAdjMatrix (const char* description, vector<vector<bool> > array);
  *
  */
 vector<vector<string> > ReadCoordinatesFile (string nodeCoordinatesFilename);
+
+/**
+ * Read node names and coordinates from a json file
+ * 
+ * \param jsonFileName JSON filename that contains the nodes' locations
+ * \return String array with nodes names and coordinates
+ *
+ */
+vector<vector<string> > ReadCoordinatesJSONFile (string jsonFileName);
 
 /**
  * Parses coords from return of ReadCoordinatesFile

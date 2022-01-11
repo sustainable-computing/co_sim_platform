@@ -38,6 +38,7 @@ NS3_LIB_PATH = BASE_DIR + 'ns-allinone-3.33/ns-3.33/build/lib'
 ADJMAT_RPATH_FILE = DSS_EXE_PATH + 'data/IEEE13Node-adjacency_matrix.txt'
 COORDS_RPATH_FILE = DSS_EXE_PATH + 'data/IEEE13Node_BusXY.csv'
 APPCON_RPATH_FILE = DSS_EXE_PATH + 'data/IEEE13Node_AppConnections_Tap.csv'
+JSON_RPATH_FILE = DSS_EXE_PATH + 'data/Node.json'
 
 #--- Application config path
 APPCON_FILE = DSS_EXE_PATH  + 'data/IEEE13Node_AppConnections_Tap.csv'
@@ -135,7 +136,7 @@ def  create_scenario( world, args ):
     pktnetsim = world.start( 'PktNetSim',
         model_name      = 'TransporterModel',
         eid_prefix      = 'Transp_',
-        adjmat_file     = ADJMAT_RPATH_FILE,
+        adjmat_file     = JSON_RPATH_FILE,
         coords_file     = COORDS_RPATH_FILE,
         appcon_file     = APPCON_RPATH_FILE,
         linkRate        = "512Kbps",
