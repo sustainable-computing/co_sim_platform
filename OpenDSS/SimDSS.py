@@ -12,6 +12,7 @@ __version__   = "0.0.5-alpha"
 import os
 import sys
 import csv
+import json
 import opendssdirect as dss
 import numpy as np
 import logging
@@ -153,6 +154,21 @@ class SimDSS(object):
                 sys.exit()
             dss.Solution.Solve()
 
+    def _read_json(self, file_path: str):
+        """
+        Read json file from NodeWithLoad file
+        
+        args:
+            - file_path: path to the file
+        """
+
+        with open(file_path) as json_file:
+            try:
+                config = json.load(json_file)
+                return config
+            except ValueError:
+                return None
+
  
     def _readNodeWithLoad(self, nwlfile):
         '''
@@ -172,6 +188,17 @@ class SimDSS(object):
         if not os.path.isfile(pathToFile):
             print('File LoadsPerNode does not exist: ' + pathToFile)
             sys.exit()
+
+        config = self._read_json(pathToFile)
+        if config is not None:
+            self._nodewithload = {}
+            for node_id, node_attr in config["nodes"].items():
+                # Check if load is defined
+                if "loads" in node_attr:
+                    self._nNodes += len(node_attr["loads"])
+                    for load_id, load in node_attr["loads"]:
+                        load_id = node_id + '.' + node_id
+                        self._nodewithload[load_id] = load["num_of_loads"]
         else:
             with open(pathToFile, 'r') as csvFile:
                 csvobj = csv.reader(csvFile)

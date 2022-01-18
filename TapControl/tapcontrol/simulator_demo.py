@@ -12,6 +12,7 @@ Mosaik script to initialize, interconnect and manage simulators
 import os
 import sys
 import csv
+import json
 import mosaik
 import argparse
 from datetime import datetime
@@ -41,7 +42,7 @@ APPCON_RPATH_FILE = DSS_EXE_PATH + 'data/IEEE13Node_AppConnections_Tap.csv'
 JSON_RPATH_FILE = DSS_EXE_PATH + 'data/Node.json'
 
 #--- Application config path
-APPCON_FILE = DSS_EXE_PATH  + 'data/IEEE13Node_AppConnections_Tap.csv'
+APPCON_FILE = DSS_EXE_PATH + 'data/IEEE13Node_AppConnections_Tap.csv'
 ACTS_FILE = DSS_EXE_PATH + ACTS_RPATH_FILE
 
 
@@ -102,16 +103,33 @@ def readAppConnections(appcon_file):
             appconLinks = {(rows[0], rows[1], rows[2]) for rows in csvobj}
         csvFile.close()
 
+def readAppConnectionsJSON(json_file):
+    
+    global appconLinks
+    
+    current_directory = os.path.dirname(os.path.realpath(__file__))
+    pathToFile = os.path.abspath(
+        os.path.join(current_directory, json_file)
+    )
+    if not os.path.isfile(pathToFile):
+        print('File LoadsPerNode does not exist: ' + pathToFile)
+        sys.exit()
+    else:
+        with open(pathToFile, 'r') as jsonFile:
+            jsonobj = json.load(jsonFile)
+            appconLinks = {(conns["src"], conns["dst"], conns["func"]) for conns in jsonobj['app_connections']}
+
 
 def main():
     #--- Process input arguments
     parser = argparse.ArgumentParser(description='Run Smartgrid simulation')
     parser.add_argument( '--appcon_file', type=str, help='application connections file', default = APPCON_FILE )    
+    parser.add_argument( '--json_file', type=str, help='JSON config file', default = JSON_RPATH_FILE )    
     parser.add_argument( '--random_seed', type=int, help='ns-3 random generator seed', default=1 )
     args = parser.parse_args()
     print( 'Starting simulation with args: {0}'.format( vars( args ) ) )
     
-    readAppConnections(args.appcon_file)
+    readAppConnectionsJSON(args.json_file)
     #readActives(ACTS_FILE) -- not necessary in the moment
     world = mosaik.World( sim_config=SIM_CONFIG, mosaik_config=MOSAIK_CONFIG, debug=False )
     create_scenario( world, args )
@@ -137,8 +155,8 @@ def  create_scenario( world, args ):
         model_name      = 'TransporterModel',
         eid_prefix      = 'Transp_',
         adjmat_file     = JSON_RPATH_FILE,
-        coords_file     = COORDS_RPATH_FILE,
-        appcon_file     = APPCON_RPATH_FILE,
+        coords_file     = JSON_RPATH_FILE,
+        appcon_file     = JSON_RPATH_FILE,
         linkRate        = "512Kbps",
         linkDelay       = "15ms",
         linkErrorRate   = "0.0001",

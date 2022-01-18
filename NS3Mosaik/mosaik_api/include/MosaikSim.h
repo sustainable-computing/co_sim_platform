@@ -49,8 +49,9 @@
 #include <cstdint>
 
 
-//--- NS3
+//--- NS3 and json stuff
 #include "NS3Netsim.h"
+#include "json.hpp"
 
 //--- NEW Maximum Mosaik message size: Buffer size 1024 * 1024 * 10 bytes = 10485760 bytes
 //--- However, this size cannot be declared (variable memory limit) so a small size is
@@ -346,6 +347,7 @@ class MosaikSim {
   AddrPort parseAddress(std::string param);
   void printMsg(char* buffer, int len);
   std::vector<NetSimConn> readAppConnectionsFile (std::string nodeApplicationFilename);
+  std::vector<NetSimConn> readAppConnectionsJSONFile (std::string JSON_Filename);
   void tokenize(std::string const &str, const char delim, std::vector<std::string> &out);
   bool is_number(const std::string& s);
   void replaceAll(std::string& source, const std::string& from, const std::string& to);

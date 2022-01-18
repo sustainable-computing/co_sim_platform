@@ -25,6 +25,9 @@
  */
 
 #include "MosaikSim.h"
+#include "json.hpp"
+
+using json = nlohmann::ordered_json;
 
 MosaikSim::MosaikSim(std::string varargin, NS3Netsim *obj)
 {
@@ -449,7 +452,8 @@ MosaikSim::init(Json::Value args, Json::Value kwargs)
     }
   }
 
-  vecNetSimConn = readAppConnectionsFile(netsimProp["appcon_file"]);
+  // vecNetSimConn = readAppConnectionsFile(netsimProp["appcon_file"]); // Change this to read from a json file
+  vecNetSimConn = readAppConnectionsJSONFile(netsimProp["appcon_file"]);
   verbose = stoi(netsimProp["verbose"]);
   
   //--- Initialize NS3 class
@@ -1379,6 +1383,63 @@ MosaikSim::readAppConnectionsFile(std::string nodeApplicationFilename)
 
   return array;
 }
+
+std::vector<NetSimConn>
+MosaikSim::readAppConnectionsJSONFile(std::string JSON_Filename)
+{
+  NetSimConn s_record;
+  std::vector<NetSimConn> array;
+  std::vector<std::pair<std::string, std::string>> dupMap;
+
+  ifstream connsJSONFile;
+  connsJSONFile.open(JSON_Filename.c_str(), std::ios::in);
+  if (connsJSONFile.fail())
+  {
+    std::cout << "Failed to open :" << JSON_Filename.c_str() << " not found\n";
+    return array;
+  }
+
+  json config;
+  connsJSONFile >> config;
+
+  for (auto& entry: config["app_connections"])
+  {
+    // Check if record is correct
+    if (entry.size() != 3)
+    {
+      if (verbose > 2)
+        std::cout << "MosaikSim::readAppConnectionsJSONFile"
+                  << " Entry IGNORED! Number of elements invalid " << entry << std::endl;
+      
+      continue;
+    }
+    
+    if (std::find(dupMap.begin(), dupMap.end(), std::make_pair(to_string(entry["src"]), to_string(entry["dst"]))) != dupMap.end())
+    {
+      if (verbose > 2)
+        std::cout << "MosaikSim::readAppConnectionsJSONFile"
+                  << " **DUPLICATE** SRC: " << entry["src"] << " DST: " << entry["dst"] << std::endl;
+    }
+    else
+    {
+      s_record.src = to_string(entry["src"]);
+      s_record.dst = to_string(entry["dst"]);
+      array.push_back(s_record);
+      dupMap.push_back(std::make_pair(to_string(entry["src"]), to_string(entry["dst"])));
+    }
+  }
+
+  if (verbose > 2)
+  {
+    std::cout << "MosaikSim::readAppConnectionsJSONFile" << std::endl;
+    for (auto arr_i = array.begin(); arr_i != array.end(); arr_i++)
+    {
+      std::cout << "ARRAY TYPE: " << (*arr_i).type << " SRC: " << (*arr_i).src << " DST: " << (*arr_i).dst << std::endl;
+    }
+  }
+  return array;
+}
+
 
 void MosaikSim::replaceAll(std::string &source, const std::string &from, const std::string &to)
 {

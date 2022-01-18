@@ -14,6 +14,7 @@ import sys
 import numpy as np
 import logging
 import math
+import json
 import scipy.io as spio
 
 
@@ -94,6 +95,23 @@ class LoadGenerator(object):
     #- Private Methods -#
     #-------------------#
 
+    def _read_json(self, file_path: str):
+        """
+        Read json file from NodeWithLoad file
+        
+        args:
+            - file_path: path to the file
+        """
+
+        with open(file_path) as json_file:
+            try:
+                config = json.load(json_file)
+                return config
+            except ValueError:
+                return None
+
+
+
     def _readNodeWithLoad(self, nwlfile):
         '''
         Read NodeWithLoad file
@@ -112,6 +130,21 @@ class LoadGenerator(object):
         if not os.path.isfile(pathToFile):
             print('File NodeWithLoad does not exist: ' + pathToFile)
             sys.exit()
+
+        config = self._read_json(pathToFile)
+        if config is not None:
+            self._nodewithload = []
+            for node_id, node_attr in config["nodes"].items():
+                # Check if load is defined
+                if "loads" in node_attr:
+                    self._nNodes += len(node_attr["loads"])
+                    for load_id, load in node_attr["loads"]:
+                        load_id = node_id + '.' + node_id
+                        record = [load_id, load["num_of_loads"]]
+                        self._nodewithload.append(record)
+                        self._totalNumberHomes += load["num_of_loads"]
+
+
         else:
             self._nodewithload = np.genfromtxt(pathToFile, dtype="U25,f8", delimiter=",")
             self._nNodes = len(self._nodewithload)

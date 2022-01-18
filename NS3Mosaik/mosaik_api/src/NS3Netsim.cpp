@@ -302,7 +302,6 @@ void NS3Netsim::init(string f_adjmat,
 
   //--- load adjacency matrix
   NS_LOG_INFO("Load node adjacency matrix");
-  // nodeAdjMatrix = ReadNodeAdjMatrix(nodeAdjMatrixFilename); // Change this to read from a json file
   nodeAdjMatrix = ReadNodeAdjListJson(nodeJSONFilename);
   if (verbose > 8)
   {
@@ -311,7 +310,6 @@ void NS3Netsim::init(string f_adjmat,
 
   //--- load node coordinates and names
   NS_LOG_INFO("Load node names and coordinates");
-  // arrayNamesCoords = ReadCoordinatesFile(nodeCoordinatesFilename); // Change this to read from a json file
   arrayNamesCoords = ReadCoordinatesJSONFile(nodeJSONFilename);
   arrayNodeCoords = loadNodeCoords(arrayNamesCoords);
   if (verbose > 1)
