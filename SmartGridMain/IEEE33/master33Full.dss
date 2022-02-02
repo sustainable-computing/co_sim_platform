@@ -1,0 +1,19 @@
+Clear
+
+New Circuit.Master33 !To run on basecase set Bus1=1 and basekv=12.47
+~ basekv=12.66 pu=1 Bus1=1  
+~ MVASC3=5000000 MVASC1=5000000    ! stiffen the source to approximate inf source
+
+
+! Define the circuit elements
+
+Redirect lineData33Full.dss
+Redirect transData33Full.dss
+Redirect loadData33Full.dss
+!Redirect Capacitors.DSS
+!Redirect Generators.DSS
+!Let the openDSS estimate the voltage bases
+Set Voltagebases=[12.66 .416] ! voltage base in kV
+
+!calcv
+!solve

@@ -1,0 +1,6 @@
+Sensor_611,getV,Line.684611,BUS2,PHASE_3
+Actuator_650,setTap,Transformer.REG3,BUS1,PHASE_3
+Prober_611-V3,getV,Line.684611,BUS2,PHASE_3
+Prober_650-T3,getTap,Transformer.REG3,BUS1,PHASE_3
+Prober_611-Load,getLoad,Load.611.3,BUS1,PHASE_3
+Prober_650-VPu3,getVPu,650,None,PHASE_3

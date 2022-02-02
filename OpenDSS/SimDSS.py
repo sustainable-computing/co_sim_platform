@@ -183,7 +183,7 @@ class SimDSS(object):
         Read inelastic load from file
         
         The class assumes that the file is in the current directory
-        After the file is read, the load is inseted in the circuit and
+        After the file is read, the load is inserted in the circuit and
         a new solution is calculated
         
         Parameters
