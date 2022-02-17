@@ -45,8 +45,7 @@
 #include "ns3/multi-client-tcp-server.h"
 #include "ns3/tcp-client-helper.h"
 #include "ns3/tcp-client.h"
-#include "ns3/custom-udp-client-helper.h"
-#include "ns3/custom-udp-server-helper.h"
+#include "ns3/custom-udp-helper.h"
 #include <unordered_map>
 
 using namespace std;
@@ -257,8 +256,8 @@ private:
 
   MultiClientTcpServerHelper multiClientTcpServerHelper = MultiClientTcpServerHelper(Address()); ///< Application TCP server helper
   TcpClientHelper tcpClientHelper = TcpClientHelper(Address()); ///< Application TCP client helper
-  CustomUdpClientHelper customUdpClientHelper = CustomUdpClientHelper(Address()); ///< Application UDP server helper
-  CustomUdpServerHelper customUdpServerHelper = CustomUdpServerHelper(Address()); ///< Application UDP client helper
+  CustomUdpClientHelper customUdpClientHelper = CustomUdpClientHelper(Address()); ///< Application UDP client helper
+  CustomUdpServerHelper customUdpServerHelper = CustomUdpServerHelper(sinkPort); ///< Application UDP server helper
 
   double startTime; ///< Simulation start time
   double stopTime; ///< Simulation stop time

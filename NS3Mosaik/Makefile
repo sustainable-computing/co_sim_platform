@@ -63,31 +63,11 @@ CXFLAGS +=
 #--- LXFLAGS ---
 #---------------
 LXFLAGS = -ljsoncpp\
-          ${NS3_LIB}/libns3.33-core-optimized.so\
-          ${NS3_LIB}/libns3.33-internet-optimized.so\
-          ${NS3_LIB}/libns3.33-applications-optimized.so\
-          ${NS3_LIB}/libns3.33-network-optimized.so\
-          ${NS3_LIB}/libns3.33-point-to-point-optimized.so\
-          ${NS3_LIB}/libns3.33-mobility-optimized.so\
-          ${NS3_LIB}/libns3.33-bridge-optimized.so\
-          ${NS3_LIB}/libns3.33-traffic-control-optimized.so\
-          ${NS3_LIB}/libns3.33-stats-optimized.so\
-		  ${NS3_LIB}/libns3.33-csma-optimized.so\
-#          ${NS3_LIB}/libns3.33-mpi-optimized.so\
+          ${NS3_LIB}/libns3.33-*-optimized.so\
 
 
 # LXFLAGS = -ljsoncpp\
-#          ${NS3_LIB}/libns3.33-core-debug.so\
-#          ${NS3_LIB}/libns3.33-internet-debug.so\
-#          ${NS3_LIB}/libns3.33-applications-debug.so\
-#          ${NS3_LIB}/libns3.33-network-debug.so\
-#          ${NS3_LIB}/libns3.33-point-to-point-debug.so\
-#          ${NS3_LIB}/libns3.33-mobility-debug.so\
-#          ${NS3_LIB}/libns3.33-bridge-debug.so\
-#          ${NS3_LIB}/libns3.33-traffic-control-debug.so\
-#          ${NS3_LIB}/libns3.33-stats-debug.so\
-# 		 ${NS3_LIB}/libns3.33-csma-debug.so\
-#          ${NS3_LIB}/libns3.33-mpi-debug.so\
+#          ${NS3_LIB}/libns3.33-*-debug.so\
 
 
 #------------------------#

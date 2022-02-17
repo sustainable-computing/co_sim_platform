@@ -30,9 +30,8 @@ def build(bld):
         'model/tcp-client.cc',
         'model/multi-client-tcp-server-helper.cc',
         'model/multi-client-tcp-server.cc',
-        'model/custom-udp-client-helper.cc',
+        'model/custom-udp-helper.cc',
         'model/custom-udp-client.cc',
-        'model/custom-udp-server-helper.cc',
         'model/custom-udp-server.cc',
         ]
 
@@ -79,9 +78,8 @@ def build(bld):
         'model/tcp-client.h',
         'model/multi-client-tcp-server-helper.h',
         'model/multi-client-tcp-server.h',
-        'model/custom-udp-client-helper.h',
+        'model/custom-udp-helper.h',
         'model/custom-udp-client.h',
-        'model/custom-udp-server-helper.h',
         'model/custom-udp-server.h',
         ]
     

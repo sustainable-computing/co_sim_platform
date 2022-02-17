@@ -220,6 +220,8 @@ NS3Netsim::NS3Netsim() : linkCount(0), sinkPort(0), startTime(0), verbose(0)
   // LogComponentEnable("SmartgridNs3Main", LOG_LEVEL_ALL);
   // LogComponentEnable("MultiClientTcpServer", LOG_LEVEL_ALL);
   // LogComponentEnable("TcpClient", LOG_LEVEL_ALL);
+  // LogComponentEnable("CustomUdpServer", LOG_LEVEL_ALL);
+  // LogComponentEnable("CustomUdpClient", LOG_LEVEL_ALL);
   // LogComponentEnable("Socket", LOG_LEVEL_ALL);
   // LogComponentEnable("SocketFactory", LOG_LEVEL_ALL);
   // LogComponentEnable("TcpSocket", LOG_LEVEL_ALL);
@@ -236,8 +238,23 @@ NS3Netsim::NS3Netsim() : linkCount(0), sinkPort(0), startTime(0), verbose(0)
   // LogComponentEnable ("Icmpv6L4Protocol", LOG_LEVEL_ALL);
   // LogComponentEnable ("Ipv6StaticRouting", LOG_LEVEL_ALL);
   // LogComponentEnable ("Ipv6Interface", LOG_LEVEL_ALL);
+  // LogComponentEnable ("PointToPointNetDevice", LOG_LEVEL_ALL);
+  // LogComponentEnable ("SixLowPanNetDevice", LOG_LEVEL_ALL);
+  // LogComponentEnable ("LrWpanCsmaCa", LOG_LEVEL_ALL);
+  // LogComponentEnable ("LrWpanErrorModel", LOG_LEVEL_ALL);
+  // LogComponentEnable ("LrWpanInterferenceHelper", LOG_LEVEL_ALL);
+  // LogComponentEnable ("LrWpanMac", LOG_LEVEL_ALL);
+  // LogComponentEnable ("LrWpanNetDevice", LOG_LEVEL_ALL);
+  // LogComponentEnable ("LrWpanPhy", LOG_LEVEL_ALL);
+  // LogComponentEnable ("LrWpanSpectrumSignalParameters", LOG_LEVEL_ALL);
+  // LogComponentEnable ("LrWpanSpectrumValueHelper", LOG_LEVEL_ALL);
 
+  ///-- Set no or "zero" delays before sending the first TCP messages
   // Config::SetDefault("ns3::TcpSocket::TcpNoDelay", BooleanValue(true));
+  
+  ///--- Set the jitter delay before sending solication messages (default is 0 to 10 ms)
+  // Config::SetDefault("ns3::Icmpv6L4Protocol::SolicitationJitter", StringValue ("ns3::UniformRandomVariable[Min=10000.0|Max=10000.0]"));
+  
   //--- To set the nodes as routers for IPv6, where they are hosts by default
   Config::SetDefault("ns3::Ipv6::IpForward", BooleanValue(true));
 }
@@ -661,8 +678,7 @@ void NS3Netsim::setUpServer(AddressValue address, string protocol, string server
   else if (protocol == "udp")
   {
     // Set the address with which the application should be created
-    if (v4) customUdpServerHelper.SetAttribute("Local", AddressValue(InetSocketAddress(Ipv4Address::GetAny(), sinkPort)));
-    else  customUdpServerHelper.SetAttribute("Local", AddressValue(Inet6SocketAddress(Ipv6Address::GetAny(), sinkPort)));
+    customUdpServerHelper.SetAttribute("Port", UintegerValue(sinkPort));
     // Create a tcp container
     serverAppContainer = customUdpServerHelper.Install(server);
     // Set the call back to extract information from a packet and sent it to the upper layer
@@ -703,8 +719,11 @@ void NS3Netsim::setUpClient(AddressValue address, string protocol, string server
   else if (protocol == "udp")
   {
     // Create a udp client
-    customUdpClientHelper.SetAttribute("Remote", address);
+    customUdpClientHelper.SetAttribute("RemoteAddress", address);
     clientAppContainer = customUdpClientHelper.Install(client);
+
+    // CustomUdpClientHelper customUdpClient(address.Get(), sinkPort);
+    // clientAppContainer = customUdpClient.Install (srcNode);
   }
   else
   {
@@ -754,7 +773,12 @@ void NS3Netsim::schedule(string src, string dst, string val, string val_time)
     {
       clientApp = DynamicCast<CustomUdpClient>(srcNode->GetApplication(1));
     }
-    clientApp->ScheduleTransmit(val, val_time);
+    std::string msgx = val + "&" + val_time;
+    // The val_time is in milliseconds, so add "ms" before Time variable creation
+    Time schDelay = Time(to_string(stod(val_time)) + "ms") - Simulator::Now();
+    clientApp->SetFill(msgx);
+    if (schDelay.GetMilliSeconds() == (int64_t)0)  schDelay = schDelay + Time("1ms");
+    clientApp->ScheduleTransmit(schDelay);
   }
 }
 
