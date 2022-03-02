@@ -24,6 +24,7 @@
 
 #ifndef SMARTGRID_NS3_HELPER_H_
 #define SMARTGRID_NS3_HELPER_H_
+#define MAX_BACKBONE 33000
 
 #include <vector>
 #include <iostream>

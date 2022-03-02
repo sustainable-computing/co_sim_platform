@@ -38,6 +38,13 @@
 #include "ns3/internet-module.h"
 #include "ns3/mobility-module.h"
 #include "ns3/log.h"
+#include "ns3/sixlowpan-module.h"
+#include "ns3/lr-wpan-module.h"
+#include <ns3/propagation-loss-model.h>
+#include <ns3/propagation-delay-model.h>
+#include <ns3/single-model-spectrum-channel.h>
+#include <ns3/constant-position-mobility-model.h>
+#include "ns3/applications-module.h"
 
 #include "ns3/smartgrid-default-simulator-impl.h"
 

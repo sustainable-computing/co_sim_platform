@@ -212,6 +212,9 @@ class SimDSS(object):
             for i in range(len(data)):
                 nodeName = data[i][0]
                 idx = self._terminal2node[nodeName]
+                # If no such node in map, create one with zero load
+                if (nodeName not in self._nodewithload.keys()):
+                    self._nodewithload[nodeName] = 0
                 if self._nodewithload[nodeName] > 0:
                     PQ[idx][0] = float(data[i][1])
                     PQ[idx][1] = float(data[i][2])

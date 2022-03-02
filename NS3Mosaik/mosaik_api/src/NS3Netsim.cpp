@@ -248,6 +248,10 @@ NS3Netsim::NS3Netsim() : linkCount(0), sinkPort(0), startTime(0), verbose(0)
   // LogComponentEnable ("LrWpanPhy", LOG_LEVEL_ALL);
   // LogComponentEnable ("LrWpanSpectrumSignalParameters", LOG_LEVEL_ALL);
   // LogComponentEnable ("LrWpanSpectrumValueHelper", LOG_LEVEL_ALL);
+  // LogComponentEnable ("SingleModelSpectrumChannel", LOG_LEVEL_ALL);
+
+  // Print node IDs for every log message
+  // LogComponentEnableAll(LOG_PREFIX_NODE); 
 
   ///-- Set no or "zero" delays before sending the first TCP messages
   // Config::SetDefault("ns3::TcpSocket::TcpNoDelay", BooleanValue(true));
@@ -278,6 +282,8 @@ void NS3Netsim::init(string f_adjmat,
                      string s_net)
 {
   allApplications = ApplicationContainer();
+  LrWpanHelper lrwpan;
+  SixLowPanHelper sixlowpan;
   //--- verbose level
   verbose = stoi(verb);
   // save which protocol should be used
@@ -361,6 +367,7 @@ void NS3Netsim::init(string f_adjmat,
     csma.SetChannelAttribute  ("DataRate", StringValue (LinkRate));
     csma.SetChannelAttribute ("Delay",    StringValue (LinkDelay));
   }
+  int PANID = 1;
   for (size_t i = 0; i < nodeAdjMatrix.size(); i++)
   {
     for (size_t j = i; j < nodeAdjMatrix[i].size(); j++)
@@ -370,7 +377,32 @@ void NS3Netsim::init(string f_adjmat,
         linkCount++;
         NodeContainer n_links = NodeContainer(nodes.Get(i), nodes.Get(j));
         NetDeviceContainer n_devs;
-        if (netArch == "P2P" || netArch == "P2Pv6")
+        /// If IPv6 is the selected protocol and the nodes at the ends of this link
+        /// are part of the secondary network, install 6LoWPAN instead of P2P/CSMA
+        if (!v4 && (stoi(arrayNamesCoords[i][0]) > MAX_BACKBONE || stoi(arrayNamesCoords[j][0]) > MAX_BACKBONE))
+        {
+          /// Manual installation is used here
+          /// Helper installation raises some issues for some reason
+          Ptr<SingleModelSpectrumChannel> channel = CreateObject<SingleModelSpectrumChannel> ();
+          Ptr<LogDistancePropagationLossModel> propModel = CreateObject<LogDistancePropagationLossModel> ();
+          Ptr<ConstantSpeedPropagationDelayModel> delayModel = CreateObject<ConstantSpeedPropagationDelayModel> ();
+          channel->AddPropagationLossModel (propModel);
+          channel->SetPropagationDelayModel (delayModel);
+          Ptr<LrWpanNetDevice> dev0 = CreateObject<LrWpanNetDevice> ();
+          Ptr<LrWpanNetDevice> dev1 = CreateObject<LrWpanNetDevice> ();
+          dev0->SetChannel (channel);
+          dev1->SetChannel (channel);
+          n_links.Get(0)->AddDevice(dev0);
+          n_links.Get(1)->AddDevice(dev1);
+          dev0->SetNode(n_links.Get(0));
+          dev1->SetNode(n_links.Get(1));
+          n_devs.Add(dev0);
+          n_devs.Add(dev1);
+
+          lrwpan.AssociateToPan(n_devs, PANID);
+          n_devs = sixlowpan.Install(n_devs);
+        }
+        else if (netArch == "P2P" || netArch == "P2Pv6")
           n_devs = pointToPoint.Install(n_links);
         else if (netArch == "CSMA" || netArch == "CSMAv6") 
           n_devs = csma.Install (n_links);
@@ -390,15 +422,37 @@ void NS3Netsim::init(string f_adjmat,
   //--- set link error rate
   Ptr<RateErrorModel> em = CreateObject<RateErrorModel>();
   em->SetAttribute("ErrorRate", DoubleValue(stod(LinkErrorRate)));
-  for (auto dev = Devices.begin(); dev != Devices.end(); ++dev)
+  if(v4)
   {
-    (*dev).Get(1)->SetAttribute("ReceiveErrorModel", PointerValue(em));
-    if (verbose > 1)
+    for (auto dev = Devices.begin(); dev != Devices.end(); ++dev)
     {
-      std::cout << "int(0) =  " << (*dev).Get(0)->GetAddress()
-                << "  int(1) =  " << (*dev).Get(1)->GetAddress()
-                << " ID = " << (*dev).Get(1)->GetNode()->GetId()
-                << std::endl;
+      (*dev).Get(1)->SetAttribute("ReceiveErrorModel", PointerValue(em));
+      if (verbose > 1)
+      {
+        std::cout << "int(0) =  " << (*dev).Get(0)->GetAddress()
+                  << "  int(1) =  " << (*dev).Get(1)->GetAddress()
+                  << " ID = " << (*dev).Get(1)->GetNode()->GetId()
+                  << std::endl;
+      }
+    }
+  }
+  else
+  {
+    for (auto dev = Devices.begin(); dev != Devices.end(); ++dev)
+    {
+      if (verbose > 1)
+      {
+        std::cout << "int(0) =  " << (*dev).Get(0)->GetAddress()
+                  << "  int(1) =  " << (*dev).Get(1)->GetAddress()
+                  << " ID = " << (*dev).Get(1)->GetNode()->GetId()
+                  << std::endl;
+      }
+      string name1 = arrayNamesCoords[(*dev).Get(0)->GetNode()->GetId()][0];
+      string name2 = arrayNamesCoords[(*dev).Get(1)->GetNode()->GetId()][0];
+      if(stoi(name1) > MAX_BACKBONE || stoi(name2) > MAX_BACKBONE)
+        continue;
+      /// For now, no error rate customization for LR-WPAN + 6LoWPAN
+      (*dev).Get(1)->SetAttribute("ReceiveErrorModel", PointerValue(em));
     }
   }
 
@@ -414,7 +468,7 @@ void NS3Netsim::init(string f_adjmat,
     }
     else
     {
-      Ipv6InterfaceContainer i6 = ipv6Address.Assign(*dev);
+      ipv6Address.Assign(*dev);
       ipv6Address.NewNetwork();
     }
   }
@@ -469,6 +523,7 @@ void NS3Netsim::init(string f_adjmat,
     pointToPoint.EnableAsciiAll(ascii.CreateFileStream("traceNS3Netsim.tr"));
   else if (netArch == "CSMA" || netArch == "CSMAv6")
     csma.EnableAsciiAll(ascii.CreateFileStream ("traceNS3Netsim.tr"));
+  if (!v4)  lrwpan.EnableAsciiAll(ascii.CreateFileStream ("traceNS3sixlowpan.tr"));
   // pointToPoint.EnablePcapAll("pcapNS3Netsim.pcap");
   //pointToPoint.EnablePcap("dse", 0, 0, true);
 }
@@ -644,6 +699,13 @@ void NS3Netsim::create(string client, string server)
         hostIfIndex = link_dev.Get(0)->GetIfIndex() + 1;
         hopIfIndex = link_dev.Get(1)->GetIfIndex() + 1;
       }
+      if (!v4 && (stoi(clt) > MAX_BACKBONE || stoi(nextHop) > MAX_BACKBONE))
+      {
+        if(stoi(clt) > MAX_BACKBONE)  hostIfIndex /= 2;
+        else hostIfIndex = hostIfIndex - 1;
+        if(stoi(nextHop) > MAX_BACKBONE)  hopIfIndex /= 2;
+        else hopIfIndex = hopIfIndex - 1;
+      }
       Ipv6Address nextHopAddress = nextHopIpv6->GetAddress(hopIfIndex, 1).GetAddress();
       staticRouting = ipv6StaticRouter.GetStaticRouting (cltIpv6);
       staticRouting->AddHostRouteTo(destAddress, nextHopAddress, hostIfIndex);
@@ -777,7 +839,8 @@ void NS3Netsim::schedule(string src, string dst, string val, string val_time)
     // The val_time is in milliseconds, so add "ms" before Time variable creation
     Time schDelay = Time(to_string(stod(val_time)) + "ms") - Simulator::Now();
     clientApp->SetFill(msgx);
-    if (schDelay.GetMilliSeconds() == (int64_t)0)  schDelay = schDelay + Time("1ms");
+    // If asked to schedule immediately, add 1 microsecond for safety
+    if (schDelay.GetNanoSeconds() == (int64_t)0)  schDelay = schDelay + Time("1us");
     clientApp->ScheduleTransmit(schDelay);
   }
 }

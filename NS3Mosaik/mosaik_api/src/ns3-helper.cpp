@@ -22,7 +22,7 @@
  */
 
 #include "ns3-helper.h"
-#define MAX_NODES 100
+#define MAX_NODES 2000
 using namespace std;
 using namespace ns3;
 
