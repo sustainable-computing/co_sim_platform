@@ -1,0 +1,1840 @@
+<?xml version="1.0"?>
+<rdf:RDF xmlns="http://www.semanticweb.org/phoenix/ontologies/2022/0/SmartGrid"
+     xml:base="http://www.semanticweb.org/phoenix/ontologies/2022/0/SmartGrid"
+     xmlns:owl="http://www.w3.org/2002/07/owl#"
+     xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+     xmlns:xml="http://www.w3.org/XML/1998/namespace"
+     xmlns:xsd="http://www.w3.org/2001/XMLSchema#"
+     xmlns:rdfs="http://www.w3.org/2000/01/rdf-schema#"
+     xmlns:skos="http://www.w3.org/2004/02/skos/core#"
+     xmlns:smartgrid="http://www.semanticweb.org/phoenix/ontologies/2022/0/SmartGrid#">
+    <owl:Ontology rdf:about="http://www.semanticweb.org/phoenix/ontologies/2022/0/SmartGrid"/>
+    
+
+
+    <!-- 
+    ///////////////////////////////////////////////////////////////////////////////////////
+    //
+    // Annotation properties
+    //
+    ///////////////////////////////////////////////////////////////////////////////////////
+     -->
+
+    
+
+
+    <!-- http://www.semanticweb.org/phoenix/ontologies/2022/0/SmartGrid#and -->
+
+    <owl:AnnotationProperty rdf:about="http://www.semanticweb.org/phoenix/ontologies/2022/0/SmartGrid#and"/>
+    
+
+
+    <!-- http://www.semanticweb.org/phoenix/ontologies/2022/0/SmartGrid#applicableUnit -->
+
+    <owl:AnnotationProperty rdf:about="http://www.semanticweb.org/phoenix/ontologies/2022/0/SmartGrid#applicableUnit"/>
+    
+
+
+    <!-- http://www.semanticweb.org/phoenix/ontologies/2022/0/SmartGrid#class -->
+
+    <owl:AnnotationProperty rdf:about="http://www.semanticweb.org/phoenix/ontologies/2022/0/SmartGrid#class"/>
+    
+
+
+    <!-- http://www.semanticweb.org/phoenix/ontologies/2022/0/SmartGrid#datatype -->
+
+    <owl:AnnotationProperty rdf:about="http://www.semanticweb.org/phoenix/ontologies/2022/0/SmartGrid#datatype"/>
+    
+
+
+    <!-- http://www.semanticweb.org/phoenix/ontologies/2022/0/SmartGrid#in -->
+
+    <owl:AnnotationProperty rdf:about="http://www.semanticweb.org/phoenix/ontologies/2022/0/SmartGrid#in"/>
+    
+
+
+    <!-- http://www.semanticweb.org/phoenix/ontologies/2022/0/SmartGrid#not -->
+
+    <owl:AnnotationProperty rdf:about="http://www.semanticweb.org/phoenix/ontologies/2022/0/SmartGrid#not"/>
+    
+
+
+    <!-- http://www.semanticweb.org/phoenix/ontologies/2022/0/SmartGrid#or -->
+
+    <owl:AnnotationProperty rdf:about="http://www.semanticweb.org/phoenix/ontologies/2022/0/SmartGrid#or"/>
+    
+
+
+    <!-- http://www.semanticweb.org/phoenix/ontologies/2022/0/SmartGrid#property -->
+
+    <owl:AnnotationProperty rdf:about="http://www.semanticweb.org/phoenix/ontologies/2022/0/SmartGrid#property"/>
+    
+
+
+    <!-- http://www.semanticweb.org/phoenix/ontologies/2022/0/SmartGrid#targetClass -->
+
+    <owl:AnnotationProperty rdf:about="http://www.semanticweb.org/phoenix/ontologies/2022/0/SmartGrid#targetClass"/>
+    
+
+
+    <!-- http://www.semanticweb.org/phoenix/ontologies/2022/0/SmartGrid#targetSubjectOf -->
+
+    <owl:AnnotationProperty rdf:about="http://www.semanticweb.org/phoenix/ontologies/2022/0/SmartGrid#targetSubjectOf"/>
+    
+
+
+    <!-- http://www.w3.org/2004/02/skos/core#definition -->
+
+    <owl:AnnotationProperty rdf:about="http://www.w3.org/2004/02/skos/core#definition"/>
+    
+
+
+    <!-- 
+    ///////////////////////////////////////////////////////////////////////////////////////
+    //
+    // Datatypes
+    //
+    ///////////////////////////////////////////////////////////////////////////////////////
+     -->
+
+    
+
+
+    <!-- http://www.semanticweb.org/phoenix/ontologies/2022/0/SmartGrid#float_array -->
+
+    <rdfs:Datatype rdf:about="http://www.semanticweb.org/phoenix/ontologies/2022/0/SmartGrid#float_array">
+        <skos:definition>An array of float that is internally represented as a string</skos:definition>
+        <owl:equivalentClass rdf:resource="http://www.w3.org/1999/02/22-rdf-syntax-ns#PlainLiteral"/>
+    </rdfs:Datatype>
+    
+
+
+    <!-- http://www.semanticweb.org/phoenix/ontologies/2022/0/SmartGrid#int_array -->
+
+    <rdfs:Datatype rdf:about="http://www.semanticweb.org/phoenix/ontologies/2022/0/SmartGrid#int_array">
+        <skos:definition>An array of int that is internally represented as a string</skos:definition>
+        <owl:equivalentClass rdf:resource="http://www.w3.org/1999/02/22-rdf-syntax-ns#PlainLiteral"/>
+    </rdfs:Datatype>
+    
+
+
+    <!-- http://www.semanticweb.org/phoenix/ontologies/2022/0/SmartGrid#trig_matrix -->
+
+    <rdfs:Datatype rdf:about="http://www.semanticweb.org/phoenix/ontologies/2022/0/SmartGrid#trig_matrix"/>
+    
+
+
+    <!-- 
+    ///////////////////////////////////////////////////////////////////////////////////////
+    //
+    // Object Properties
+    //
+    ///////////////////////////////////////////////////////////////////////////////////////
+     -->
+
+    
+
+
+    <!-- http://www.semanticweb.org/phoenix/ontologies/2022/0/SmartGrid#attachsTo -->
+
+    <owl:ObjectProperty rdf:about="http://www.semanticweb.org/phoenix/ontologies/2022/0/SmartGrid#attachsTo">
+        <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#AsymmetricProperty"/>
+        <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#IrreflexiveProperty"/>
+        <rdfs:domain rdf:resource="http://www.semanticweb.org/phoenix/ontologies/2022/0/SmartGrid#Capacitor"/>
+        <rdfs:domain rdf:resource="http://www.semanticweb.org/phoenix/ontologies/2022/0/SmartGrid#Generator"/>
+        <rdfs:domain rdf:resource="http://www.semanticweb.org/phoenix/ontologies/2022/0/SmartGrid#Line"/>
+        <rdfs:domain rdf:resource="http://www.semanticweb.org/phoenix/ontologies/2022/0/SmartGrid#Load"/>
+        <rdfs:domain rdf:resource="http://www.semanticweb.org/phoenix/ontologies/2022/0/SmartGrid#RegControl"/>
+        <rdfs:domain rdf:resource="http://www.semanticweb.org/phoenix/ontologies/2022/0/SmartGrid#Transformer"/>
+        <rdfs:range rdf:resource="http://www.semanticweb.org/phoenix/ontologies/2022/0/SmartGrid#Bus"/>
+        <skos:definition>A electrical connection ot a bus</skos:definition>
+    </owl:ObjectProperty>
+    
+
+
+    <!-- http://www.semanticweb.org/phoenix/ontologies/2022/0/SmartGrid#connectsTo -->
+
+    <owl:ObjectProperty rdf:about="http://www.semanticweb.org/phoenix/ontologies/2022/0/SmartGrid#connectsTo">
+        <owl:inverseOf rdf:resource="http://www.semanticweb.org/phoenix/ontologies/2022/0/SmartGrid#connectsTo"/>
+        <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#SymmetricProperty"/>
+        <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#IrreflexiveProperty"/>
+        <rdfs:domain rdf:resource="http://www.semanticweb.org/phoenix/ontologies/2022/0/SmartGrid#Control_System"/>
+        <rdfs:domain rdf:resource="http://www.semanticweb.org/phoenix/ontologies/2022/0/SmartGrid#Network_Devices"/>
+        <rdfs:range rdf:resource="http://www.semanticweb.org/phoenix/ontologies/2022/0/SmartGrid#Control_System"/>
+        <rdfs:range rdf:resource="http://www.semanticweb.org/phoenix/ontologies/2022/0/SmartGrid#Network_Devices"/>
+        <skos:definition>A logical connection between two entities</skos:definition>
+    </owl:ObjectProperty>
+    
+
+
+    <!-- http://www.semanticweb.org/phoenix/ontologies/2022/0/SmartGrid#controls -->
+
+    <owl:ObjectProperty rdf:about="http://www.semanticweb.org/phoenix/ontologies/2022/0/SmartGrid#controls">
+        <owl:inverseOf rdf:resource="http://www.semanticweb.org/phoenix/ontologies/2022/0/SmartGrid#isControlledBy"/>
+        <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#AsymmetricProperty"/>
+        <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#IrreflexiveProperty"/>
+        <rdfs:domain rdf:resource="http://www.semanticweb.org/phoenix/ontologies/2022/0/SmartGrid#Actuator"/>
+        <rdfs:range rdf:resource="http://www.semanticweb.org/phoenix/ontologies/2022/0/SmartGrid#Equipment"/>
+        <skos:definition>An equipment that controls another equipment.</skos:definition>
+    </owl:ObjectProperty>
+    
+
+
+    <!-- http://www.semanticweb.org/phoenix/ontologies/2022/0/SmartGrid#feeds -->
+
+    <owl:ObjectProperty rdf:about="http://www.semanticweb.org/phoenix/ontologies/2022/0/SmartGrid#feeds">
+        <owl:inverseOf rdf:resource="http://www.semanticweb.org/phoenix/ontologies/2022/0/SmartGrid#isFedBy"/>
+        <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#AsymmetricProperty"/>
+        <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#IrreflexiveProperty"/>
+        <rdfs:domain rdf:resource="http://www.semanticweb.org/phoenix/ontologies/2022/0/SmartGrid#Equipment"/>
+        <rdfs:range rdf:resource="http://www.semanticweb.org/phoenix/ontologies/2022/0/SmartGrid#Equipment"/>
+        <skos:definition>The subject is upstream of the object in the context of some sequential process; some media is passed between them.</skos:definition>
+    </owl:ObjectProperty>
+    
+
+
+    <!-- http://www.semanticweb.org/phoenix/ontologies/2022/0/SmartGrid#isControlledBy -->
+
+    <owl:ObjectProperty rdf:about="http://www.semanticweb.org/phoenix/ontologies/2022/0/SmartGrid#isControlledBy">
+        <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#AsymmetricProperty"/>
+        <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#IrreflexiveProperty"/>
+        <rdfs:domain rdf:resource="http://www.semanticweb.org/phoenix/ontologies/2022/0/SmartGrid#Equipment"/>
+        <rdfs:range rdf:resource="http://www.semanticweb.org/phoenix/ontologies/2022/0/SmartGrid#Actuator"/>
+        <skos:definition>The inverse of controls</skos:definition>
+    </owl:ObjectProperty>
+    
+
+
+    <!-- http://www.semanticweb.org/phoenix/ontologies/2022/0/SmartGrid#isFedBy -->
+
+    <owl:ObjectProperty rdf:about="http://www.semanticweb.org/phoenix/ontologies/2022/0/SmartGrid#isFedBy">
+        <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#AsymmetricProperty"/>
+        <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#IrreflexiveProperty"/>
+        <rdfs:domain rdf:resource="http://www.semanticweb.org/phoenix/ontologies/2022/0/SmartGrid#Equipment"/>
+        <rdfs:range rdf:resource="http://www.semanticweb.org/phoenix/ontologies/2022/0/SmartGrid#Equipment"/>
+        <skos:definition>The inverse of feeds</skos:definition>
+    </owl:ObjectProperty>
+    
+
+
+    <!-- http://www.semanticweb.org/phoenix/ontologies/2022/0/SmartGrid#isLocationOf -->
+
+    <owl:ObjectProperty rdf:about="http://www.semanticweb.org/phoenix/ontologies/2022/0/SmartGrid#isLocationOf">
+        <owl:inverseOf rdf:resource="http://www.semanticweb.org/phoenix/ontologies/2022/0/SmartGrid#locatedAt"/>
+        <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#AsymmetricProperty"/>
+        <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#IrreflexiveProperty"/>
+        <rdfs:domain rdf:resource="http://www.semanticweb.org/phoenix/ontologies/2022/0/SmartGrid#Location"/>
+        <rdfs:range rdf:resource="http://www.semanticweb.org/phoenix/ontologies/2022/0/SmartGrid#Equipment"/>
+        <skos:definition>The inverse of hasLocation</skos:definition>
+    </owl:ObjectProperty>
+    
+
+
+    <!-- http://www.semanticweb.org/phoenix/ontologies/2022/0/SmartGrid#isMeasuredBy -->
+
+    <owl:ObjectProperty rdf:about="http://www.semanticweb.org/phoenix/ontologies/2022/0/SmartGrid#isMeasuredBy">
+        <owl:inverseOf rdf:resource="http://www.semanticweb.org/phoenix/ontologies/2022/0/SmartGrid#measures"/>
+        <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#AsymmetricProperty"/>
+        <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#IrreflexiveProperty"/>
+        <rdfs:domain rdf:resource="http://www.semanticweb.org/phoenix/ontologies/2022/0/SmartGrid#Measurable"/>
+        <rdfs:range rdf:resource="http://www.semanticweb.org/phoenix/ontologies/2022/0/SmartGrid#Sensor"/>
+        <skos:definition>The inverse of measures</skos:definition>
+    </owl:ObjectProperty>
+    
+
+
+    <!-- http://www.semanticweb.org/phoenix/ontologies/2022/0/SmartGrid#isMonitorBy -->
+
+    <owl:ObjectProperty rdf:about="http://www.semanticweb.org/phoenix/ontologies/2022/0/SmartGrid#isMonitorBy">
+        <owl:inverseOf rdf:resource="http://www.semanticweb.org/phoenix/ontologies/2022/0/SmartGrid#monitor"/>
+        <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#AsymmetricProperty"/>
+        <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#IrreflexiveProperty"/>
+        <rdfs:domain rdf:resource="http://www.semanticweb.org/phoenix/ontologies/2022/0/SmartGrid#Equipment"/>
+        <rdfs:range rdf:resource="http://www.semanticweb.org/phoenix/ontologies/2022/0/SmartGrid#Sensor"/>
+        <skos:definition>The inverse of monitor</skos:definition>
+    </owl:ObjectProperty>
+    
+
+
+    <!-- http://www.semanticweb.org/phoenix/ontologies/2022/0/SmartGrid#locatedAt -->
+
+    <owl:ObjectProperty rdf:about="http://www.semanticweb.org/phoenix/ontologies/2022/0/SmartGrid#locatedAt">
+        <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#AsymmetricProperty"/>
+        <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#IrreflexiveProperty"/>
+        <rdfs:domain rdf:resource="http://www.semanticweb.org/phoenix/ontologies/2022/0/SmartGrid#Equipment"/>
+        <rdfs:range rdf:resource="http://www.semanticweb.org/phoenix/ontologies/2022/0/SmartGrid#Location"/>
+        <skos:definition>The subject is located at a particular place</skos:definition>
+    </owl:ObjectProperty>
+    
+
+
+    <!-- http://www.semanticweb.org/phoenix/ontologies/2022/0/SmartGrid#measures -->
+
+    <owl:ObjectProperty rdf:about="http://www.semanticweb.org/phoenix/ontologies/2022/0/SmartGrid#measures">
+        <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#AsymmetricProperty"/>
+        <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#IrreflexiveProperty"/>
+        <rdfs:domain rdf:resource="http://www.semanticweb.org/phoenix/ontologies/2022/0/SmartGrid#Sensor"/>
+        <rdfs:range rdf:resource="http://www.semanticweb.org/phoenix/ontologies/2022/0/SmartGrid#Measurable"/>
+        <skos:definition>What measureable (unit) does the sensor measure.</skos:definition>
+    </owl:ObjectProperty>
+    
+
+
+    <!-- http://www.semanticweb.org/phoenix/ontologies/2022/0/SmartGrid#monitor -->
+
+    <owl:ObjectProperty rdf:about="http://www.semanticweb.org/phoenix/ontologies/2022/0/SmartGrid#monitor">
+        <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#AsymmetricProperty"/>
+        <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#IrreflexiveProperty"/>
+        <rdfs:domain rdf:resource="http://www.semanticweb.org/phoenix/ontologies/2022/0/SmartGrid#Sensor"/>
+        <rdfs:range rdf:resource="http://www.semanticweb.org/phoenix/ontologies/2022/0/SmartGrid#Equipment"/>
+        <skos:definition>A sensor that monitors/senses another equipment</skos:definition>
+    </owl:ObjectProperty>
+    
+
+
+    <!-- http://www.semanticweb.org/phoenix/ontologies/2022/0/SmartGrid#primaryAttachsTo -->
+
+    <owl:ObjectProperty rdf:about="http://www.semanticweb.org/phoenix/ontologies/2022/0/SmartGrid#primaryAttachsTo">
+        <rdfs:subPropertyOf rdf:resource="http://www.semanticweb.org/phoenix/ontologies/2022/0/SmartGrid#attachsTo"/>
+        <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#AsymmetricProperty"/>
+        <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#IrreflexiveProperty"/>
+        <rdfs:range rdf:resource="http://www.semanticweb.org/phoenix/ontologies/2022/0/SmartGrid#Bus"/>
+    </owl:ObjectProperty>
+    
+
+
+    <!-- 
+    ///////////////////////////////////////////////////////////////////////////////////////
+    //
+    // Data properties
+    //
+    ///////////////////////////////////////////////////////////////////////////////////////
+     -->
+
+    
+
+
+    <!-- http://www.semanticweb.org/phoenix/ontologies/2022/0/SmartGrid#Kva -->
+
+    <owl:DatatypeProperty rdf:about="http://www.semanticweb.org/phoenix/ontologies/2022/0/SmartGrid#Kva">
+        <skos:definition>Base kVA rating (OA rating)</skos:definition>
+    </owl:DatatypeProperty>
+    
+
+
+    <!-- http://www.semanticweb.org/phoenix/ontologies/2022/0/SmartGrid#MVAsc1 -->
+
+    <owl:DatatypeProperty rdf:about="http://www.semanticweb.org/phoenix/ontologies/2022/0/SmartGrid#MVAsc1">
+        <skos:definition>1-phase short circuit MVA.</skos:definition>
+    </owl:DatatypeProperty>
+    
+
+
+    <!-- http://www.semanticweb.org/phoenix/ontologies/2022/0/SmartGrid#MVAsc3 -->
+
+    <owl:DatatypeProperty rdf:about="http://www.semanticweb.org/phoenix/ontologies/2022/0/SmartGrid#MVAsc3">
+        <skos:definition>3-phase short circuit</skos:definition>
+    </owl:DatatypeProperty>
+    
+
+
+    <!-- http://www.semanticweb.org/phoenix/ontologies/2022/0/SmartGrid#R -->
+
+    <owl:DatatypeProperty rdf:about="http://www.semanticweb.org/phoenix/ontologies/2022/0/SmartGrid#R">
+        <skos:definition>R setting</skos:definition>
+    </owl:DatatypeProperty>
+    
+
+
+    <!-- http://www.semanticweb.org/phoenix/ontologies/2022/0/SmartGrid#X -->
+
+    <owl:DatatypeProperty rdf:about="http://www.semanticweb.org/phoenix/ontologies/2022/0/SmartGrid#X">
+        <skos:definition>X setting</skos:definition>
+    </owl:DatatypeProperty>
+    
+
+
+    <!-- http://www.semanticweb.org/phoenix/ontologies/2022/0/SmartGrid#XHL -->
+
+    <owl:DatatypeProperty rdf:about="http://www.semanticweb.org/phoenix/ontologies/2022/0/SmartGrid#XHL">
+        <skos:definition>percent leakage from the H-winding to the L-winding or from winding 1 to winding 2</skos:definition>
+    </owl:DatatypeProperty>
+    
+
+
+    <!-- http://www.semanticweb.org/phoenix/ontologies/2022/0/SmartGrid#XHT -->
+
+    <owl:DatatypeProperty rdf:about="http://www.semanticweb.org/phoenix/ontologies/2022/0/SmartGrid#XHT"/>
+    
+
+
+    <!-- http://www.semanticweb.org/phoenix/ontologies/2022/0/SmartGrid#XLT -->
+
+    <owl:DatatypeProperty rdf:about="http://www.semanticweb.org/phoenix/ontologies/2022/0/SmartGrid#XLT"/>
+    
+
+
+    <!-- http://www.semanticweb.org/phoenix/ontologies/2022/0/SmartGrid#angle -->
+
+    <owl:DatatypeProperty rdf:about="http://www.semanticweb.org/phoenix/ontologies/2022/0/SmartGrid#angle">
+        <skos:definition>Base angle, degrees, of the first phase</skos:definition>
+    </owl:DatatypeProperty>
+    
+
+
+    <!-- http://www.semanticweb.org/phoenix/ontologies/2022/0/SmartGrid#band -->
+
+    <owl:DatatypeProperty rdf:about="http://www.semanticweb.org/phoenix/ontologies/2022/0/SmartGrid#band"/>
+    
+
+
+    <!-- http://www.semanticweb.org/phoenix/ontologies/2022/0/SmartGrid#connection_primary -->
+
+    <owl:DatatypeProperty rdf:about="http://www.semanticweb.org/phoenix/ontologies/2022/0/SmartGrid#connection_primary">
+        <skos:definition>The connection for the first winding or bus, either detla or wye.</skos:definition>
+    </owl:DatatypeProperty>
+    
+
+
+    <!-- http://www.semanticweb.org/phoenix/ontologies/2022/0/SmartGrid#connection_secondary -->
+
+    <owl:DatatypeProperty rdf:about="http://www.semanticweb.org/phoenix/ontologies/2022/0/SmartGrid#connection_secondary">
+        <skos:definition>The connection type for the second winding or bus.</skos:definition>
+    </owl:DatatypeProperty>
+    
+
+
+    <!-- http://www.semanticweb.org/phoenix/ontologies/2022/0/SmartGrid#coord_x -->
+
+    <owl:DatatypeProperty rdf:about="http://www.semanticweb.org/phoenix/ontologies/2022/0/SmartGrid#coord_x">
+        <rdfs:subPropertyOf rdf:resource="http://www.w3.org/2002/07/owl#topDataProperty"/>
+        <rdfs:domain rdf:resource="http://www.semanticweb.org/phoenix/ontologies/2022/0/SmartGrid#Coordinates"/>
+    </owl:DatatypeProperty>
+    
+
+
+    <!-- http://www.semanticweb.org/phoenix/ontologies/2022/0/SmartGrid#coord_y -->
+
+    <owl:DatatypeProperty rdf:about="http://www.semanticweb.org/phoenix/ontologies/2022/0/SmartGrid#coord_y">
+        <rdfs:domain rdf:resource="http://www.semanticweb.org/phoenix/ontologies/2022/0/SmartGrid#Coordinates"/>
+    </owl:DatatypeProperty>
+    
+
+
+    <!-- http://www.semanticweb.org/phoenix/ontologies/2022/0/SmartGrid#ctprim -->
+
+    <owl:DatatypeProperty rdf:about="http://www.semanticweb.org/phoenix/ontologies/2022/0/SmartGrid#ctprim"/>
+    
+
+
+    <!-- http://www.semanticweb.org/phoenix/ontologies/2022/0/SmartGrid#delay -->
+
+    <owl:DatatypeProperty rdf:about="http://www.semanticweb.org/phoenix/ontologies/2022/0/SmartGrid#delay">
+        <skos:definition>The delay of processing the input</skos:definition>
+    </owl:DatatypeProperty>
+    
+
+
+    <!-- http://www.semanticweb.org/phoenix/ontologies/2022/0/SmartGrid#error_rate -->
+
+    <owl:DatatypeProperty rdf:about="http://www.semanticweb.org/phoenix/ontologies/2022/0/SmartGrid#error_rate">
+        <skos:definition>The error rate of processing for transporting</skos:definition>
+    </owl:DatatypeProperty>
+    
+
+
+    <!-- http://www.semanticweb.org/phoenix/ontologies/2022/0/SmartGrid#freq -->
+
+    <owl:DatatypeProperty rdf:about="http://www.semanticweb.org/phoenix/ontologies/2022/0/SmartGrid#freq">
+        <skos:definition>The frequency that the equipment is running on</skos:definition>
+    </owl:DatatypeProperty>
+    
+
+
+    <!-- http://www.semanticweb.org/phoenix/ontologies/2022/0/SmartGrid#kV_primary -->
+
+    <owl:DatatypeProperty rdf:about="http://www.semanticweb.org/phoenix/ontologies/2022/0/SmartGrid#kV_primary">
+        <skos:definition>The rated voltage for the primary terminal or winding</skos:definition>
+    </owl:DatatypeProperty>
+    
+
+
+    <!-- http://www.semanticweb.org/phoenix/ontologies/2022/0/SmartGrid#kV_secondary -->
+
+    <owl:DatatypeProperty rdf:about="http://www.semanticweb.org/phoenix/ontologies/2022/0/SmartGrid#kV_secondary">
+        <skos:definition>The rated voltage for the secondary terminal or winding</skos:definition>
+    </owl:DatatypeProperty>
+    
+
+
+    <!-- http://www.semanticweb.org/phoenix/ontologies/2022/0/SmartGrid#kW -->
+
+    <owl:DatatypeProperty rdf:about="http://www.semanticweb.org/phoenix/ontologies/2022/0/SmartGrid#kW">
+        <skos:definition>nominal active power, kW, for the load. Total of all phases</skos:definition>
+    </owl:DatatypeProperty>
+    
+
+
+    <!-- http://www.semanticweb.org/phoenix/ontologies/2022/0/SmartGrid#kvar -->
+
+    <owl:DatatypeProperty rdf:about="http://www.semanticweb.org/phoenix/ontologies/2022/0/SmartGrid#kvar">
+        <skos:definition>Base kvar</skos:definition>
+    </owl:DatatypeProperty>
+    
+
+
+    <!-- http://www.semanticweb.org/phoenix/ontologies/2022/0/SmartGrid#layer_1 -->
+
+    <owl:DatatypeProperty rdf:about="http://www.semanticweb.org/phoenix/ontologies/2022/0/SmartGrid#layer_1"/>
+    
+
+
+    <!-- http://www.semanticweb.org/phoenix/ontologies/2022/0/SmartGrid#layer_2 -->
+
+    <owl:DatatypeProperty rdf:about="http://www.semanticweb.org/phoenix/ontologies/2022/0/SmartGrid#layer_2"/>
+    
+
+
+    <!-- http://www.semanticweb.org/phoenix/ontologies/2022/0/SmartGrid#layer_3 -->
+
+    <owl:DatatypeProperty rdf:about="http://www.semanticweb.org/phoenix/ontologies/2022/0/SmartGrid#layer_3"/>
+    
+
+
+    <!-- http://www.semanticweb.org/phoenix/ontologies/2022/0/SmartGrid#layer_4 -->
+
+    <owl:DatatypeProperty rdf:about="http://www.semanticweb.org/phoenix/ontologies/2022/0/SmartGrid#layer_4"/>
+    
+
+
+    <!-- http://www.semanticweb.org/phoenix/ontologies/2022/0/SmartGrid#length -->
+
+    <owl:DatatypeProperty rdf:about="http://www.semanticweb.org/phoenix/ontologies/2022/0/SmartGrid#length">
+        <rdfs:subPropertyOf rdf:resource="http://www.w3.org/2002/07/owl#topDataProperty"/>
+        <rdfs:domain rdf:resource="http://www.semanticweb.org/phoenix/ontologies/2022/0/SmartGrid#Line"/>
+    </owl:DatatypeProperty>
+    
+
+
+    <!-- http://www.semanticweb.org/phoenix/ontologies/2022/0/SmartGrid#max_tap -->
+
+    <owl:DatatypeProperty rdf:about="http://www.semanticweb.org/phoenix/ontologies/2022/0/SmartGrid#max_tap"/>
+    
+
+
+    <!-- http://www.semanticweb.org/phoenix/ontologies/2022/0/SmartGrid#min_tap -->
+
+    <owl:DatatypeProperty rdf:about="http://www.semanticweb.org/phoenix/ontologies/2022/0/SmartGrid#min_tap"/>
+    
+
+
+    <!-- http://www.semanticweb.org/phoenix/ontologies/2022/0/SmartGrid#model -->
+
+    <owl:DatatypeProperty rdf:about="http://www.semanticweb.org/phoenix/ontologies/2022/0/SmartGrid#model">
+        <rdfs:domain rdf:resource="http://www.semanticweb.org/phoenix/ontologies/2022/0/SmartGrid#Load"/>
+    </owl:DatatypeProperty>
+    
+
+
+    <!-- http://www.semanticweb.org/phoenix/ontologies/2022/0/SmartGrid#nodes_primary -->
+
+    <owl:DatatypeProperty rdf:about="http://www.semanticweb.org/phoenix/ontologies/2022/0/SmartGrid#nodes_primary">
+        <rdfs:subPropertyOf rdf:resource="http://www.w3.org/2002/07/owl#topDataProperty"/>
+        <skos:definition>List of node/terminal connections for the primary side of the equipment</skos:definition>
+    </owl:DatatypeProperty>
+    
+
+
+    <!-- http://www.semanticweb.org/phoenix/ontologies/2022/0/SmartGrid#nodes_secondary -->
+
+    <owl:DatatypeProperty rdf:about="http://www.semanticweb.org/phoenix/ontologies/2022/0/SmartGrid#nodes_secondary">
+        <skos:definition>List of node/terminal connections for the secondary side of the equipment</skos:definition>
+    </owl:DatatypeProperty>
+    
+
+
+    <!-- http://www.semanticweb.org/phoenix/ontologies/2022/0/SmartGrid#normal_state -->
+
+    <owl:DatatypeProperty rdf:about="http://www.semanticweb.org/phoenix/ontologies/2022/0/SmartGrid#normal_state">
+        <rdfs:domain rdf:resource="http://www.semanticweb.org/phoenix/ontologies/2022/0/SmartGrid#Line"/>
+        <skos:definition>Is the switch normally open or closed</skos:definition>
+    </owl:DatatypeProperty>
+    
+
+
+    <!-- http://www.semanticweb.org/phoenix/ontologies/2022/0/SmartGrid#num_phases -->
+
+    <owl:DatatypeProperty rdf:about="http://www.semanticweb.org/phoenix/ontologies/2022/0/SmartGrid#num_phases">
+        <rdfs:domain rdf:resource="http://www.semanticweb.org/phoenix/ontologies/2022/0/SmartGrid#Equipment"/>
+        <skos:definition>The number of phases</skos:definition>
+    </owl:DatatypeProperty>
+    
+
+
+    <!-- http://www.semanticweb.org/phoenix/ontologies/2022/0/SmartGrid#num_taps -->
+
+    <owl:DatatypeProperty rdf:about="http://www.semanticweb.org/phoenix/ontologies/2022/0/SmartGrid#num_taps">
+        <rdfs:domain rdf:resource="http://www.semanticweb.org/phoenix/ontologies/2022/0/SmartGrid#Transformer"/>
+        <skos:definition>The number of taps on the transformer</skos:definition>
+    </owl:DatatypeProperty>
+    
+
+
+    <!-- http://www.semanticweb.org/phoenix/ontologies/2022/0/SmartGrid#percent_Load_Loss -->
+
+    <owl:DatatypeProperty rdf:about="http://www.semanticweb.org/phoenix/ontologies/2022/0/SmartGrid#percent_Load_Loss">
+        <rdfs:subPropertyOf rdf:resource="http://www.w3.org/2002/07/owl#topDataProperty"/>
+        <skos:definition>Percent Losses at rated load. Causes the %r values to be set for winding 1 and 2</skos:definition>
+    </owl:DatatypeProperty>
+    
+
+
+    <!-- http://www.semanticweb.org/phoenix/ontologies/2022/0/SmartGrid#percent_R -->
+
+    <owl:DatatypeProperty rdf:about="http://www.semanticweb.org/phoenix/ontologies/2022/0/SmartGrid#percent_R">
+        <skos:definition>Percent resistance of this equipment on the rated kVA base.</skos:definition>
+    </owl:DatatypeProperty>
+    
+
+
+    <!-- http://www.semanticweb.org/phoenix/ontologies/2022/0/SmartGrid#ptratio -->
+
+    <owl:DatatypeProperty rdf:about="http://www.semanticweb.org/phoenix/ontologies/2022/0/SmartGrid#ptratio"/>
+    
+
+
+    <!-- http://www.semanticweb.org/phoenix/ontologies/2022/0/SmartGrid#rate -->
+
+    <owl:DatatypeProperty rdf:about="http://www.semanticweb.org/phoenix/ontologies/2022/0/SmartGrid#rate">
+        <skos:definition>The bandwith for the link</skos:definition>
+    </owl:DatatypeProperty>
+    
+
+
+    <!-- http://www.semanticweb.org/phoenix/ontologies/2022/0/SmartGrid#switch_type -->
+
+    <owl:DatatypeProperty rdf:about="http://www.semanticweb.org/phoenix/ontologies/2022/0/SmartGrid#switch_type">
+        <rdfs:domain rdf:resource="http://www.semanticweb.org/phoenix/ontologies/2022/0/SmartGrid#Line"/>
+    </owl:DatatypeProperty>
+    
+
+
+    <!-- http://www.semanticweb.org/phoenix/ontologies/2022/0/SmartGrid#unit -->
+
+    <owl:DatatypeProperty rdf:about="http://www.semanticweb.org/phoenix/ontologies/2022/0/SmartGrid#unit">
+        <rdfs:domain rdf:resource="http://www.semanticweb.org/phoenix/ontologies/2022/0/SmartGrid#Equipment"/>
+        <skos:definition>The unit of measurement the equipment processes on.</skos:definition>
+    </owl:DatatypeProperty>
+    
+
+
+    <!-- http://www.semanticweb.org/phoenix/ontologies/2022/0/SmartGrid#vreg -->
+
+    <owl:DatatypeProperty rdf:about="http://www.semanticweb.org/phoenix/ontologies/2022/0/SmartGrid#vreg">
+        <skos:definition>Voltage regulator settings, in volts, for the winding being controlled. Multiplying this value times the ptratio yield the voltage across the winding of the controlled transformer</skos:definition>
+    </owl:DatatypeProperty>
+    
+
+
+    <!-- 
+    ///////////////////////////////////////////////////////////////////////////////////////
+    //
+    // Classes
+    //
+    ///////////////////////////////////////////////////////////////////////////////////////
+     -->
+
+    
+
+
+    <!-- http://www.semanticweb.org/phoenix/ontologies/2022/0/SmartGrid#Actuator -->
+
+    <owl:Class rdf:about="http://www.semanticweb.org/phoenix/ontologies/2022/0/SmartGrid#Actuator">
+        <rdfs:subClassOf rdf:resource="http://www.semanticweb.org/phoenix/ontologies/2022/0/SmartGrid#Control_System"/>
+    </owl:Class>
+    
+
+
+    <!-- http://www.semanticweb.org/phoenix/ontologies/2022/0/SmartGrid#Bus -->
+
+    <owl:Class rdf:about="http://www.semanticweb.org/phoenix/ontologies/2022/0/SmartGrid#Bus">
+        <rdfs:subClassOf rdf:resource="http://www.semanticweb.org/phoenix/ontologies/2022/0/SmartGrid#Electrical_Equipment"/>
+    </owl:Class>
+    
+
+
+    <!-- http://www.semanticweb.org/phoenix/ontologies/2022/0/SmartGrid#Capacitor -->
+
+    <owl:Class rdf:about="http://www.semanticweb.org/phoenix/ontologies/2022/0/SmartGrid#Capacitor">
+        <rdfs:subClassOf rdf:resource="http://www.semanticweb.org/phoenix/ontologies/2022/0/SmartGrid#Electrical_Equipment"/>
+    </owl:Class>
+    
+
+
+    <!-- http://www.semanticweb.org/phoenix/ontologies/2022/0/SmartGrid#Control_System -->
+
+    <owl:Class rdf:about="http://www.semanticweb.org/phoenix/ontologies/2022/0/SmartGrid#Control_System"/>
+    
+
+
+    <!-- http://www.semanticweb.org/phoenix/ontologies/2022/0/SmartGrid#Controller -->
+
+    <owl:Class rdf:about="http://www.semanticweb.org/phoenix/ontologies/2022/0/SmartGrid#Controller">
+        <rdfs:subClassOf rdf:resource="http://www.semanticweb.org/phoenix/ontologies/2022/0/SmartGrid#Processor"/>
+    </owl:Class>
+    
+
+
+    <!-- http://www.semanticweb.org/phoenix/ontologies/2022/0/SmartGrid#Coordinates -->
+
+    <owl:Class rdf:about="http://www.semanticweb.org/phoenix/ontologies/2022/0/SmartGrid#Coordinates">
+        <rdfs:subClassOf rdf:resource="http://www.semanticweb.org/phoenix/ontologies/2022/0/SmartGrid#Location"/>
+    </owl:Class>
+    
+
+
+    <!-- http://www.semanticweb.org/phoenix/ontologies/2022/0/SmartGrid#Electrical_Equipment -->
+
+    <owl:Class rdf:about="http://www.semanticweb.org/phoenix/ontologies/2022/0/SmartGrid#Electrical_Equipment">
+        <rdfs:subClassOf rdf:resource="http://www.semanticweb.org/phoenix/ontologies/2022/0/SmartGrid#Equipment"/>
+        <rdfs:subClassOf>
+            <owl:Restriction>
+                <owl:onProperty rdf:resource="http://www.semanticweb.org/phoenix/ontologies/2022/0/SmartGrid#freq"/>
+                <owl:qualifiedCardinality rdf:datatype="http://www.w3.org/2001/XMLSchema#nonNegativeInteger">60</owl:qualifiedCardinality>
+                <owl:onDataRange rdf:resource="http://www.w3.org/2001/XMLSchema#integer"/>
+            </owl:Restriction>
+        </rdfs:subClassOf>
+    </owl:Class>
+    
+
+
+    <!-- http://www.semanticweb.org/phoenix/ontologies/2022/0/SmartGrid#Equipment -->
+
+    <owl:Class rdf:about="http://www.semanticweb.org/phoenix/ontologies/2022/0/SmartGrid#Equipment"/>
+    
+
+
+    <!-- http://www.semanticweb.org/phoenix/ontologies/2022/0/SmartGrid#Generator -->
+
+    <owl:Class rdf:about="http://www.semanticweb.org/phoenix/ontologies/2022/0/SmartGrid#Generator">
+        <rdfs:subClassOf rdf:resource="http://www.semanticweb.org/phoenix/ontologies/2022/0/SmartGrid#Electrical_Equipment"/>
+    </owl:Class>
+    
+
+
+    <!-- http://www.semanticweb.org/phoenix/ontologies/2022/0/SmartGrid#Line -->
+
+    <owl:Class rdf:about="http://www.semanticweb.org/phoenix/ontologies/2022/0/SmartGrid#Line">
+        <rdfs:subClassOf rdf:resource="http://www.semanticweb.org/phoenix/ontologies/2022/0/SmartGrid#Electrical_Equipment"/>
+    </owl:Class>
+    
+
+
+    <!-- http://www.semanticweb.org/phoenix/ontologies/2022/0/SmartGrid#Line_Code -->
+
+    <owl:Class rdf:about="http://www.semanticweb.org/phoenix/ontologies/2022/0/SmartGrid#Line_Code">
+        <rdfs:subClassOf rdf:resource="http://www.semanticweb.org/phoenix/ontologies/2022/0/SmartGrid#Line"/>
+    </owl:Class>
+    
+
+
+    <!-- http://www.semanticweb.org/phoenix/ontologies/2022/0/SmartGrid#Load -->
+
+    <owl:Class rdf:about="http://www.semanticweb.org/phoenix/ontologies/2022/0/SmartGrid#Load">
+        <rdfs:subClassOf rdf:resource="http://www.semanticweb.org/phoenix/ontologies/2022/0/SmartGrid#Electrical_Equipment"/>
+    </owl:Class>
+    
+
+
+    <!-- http://www.semanticweb.org/phoenix/ontologies/2022/0/SmartGrid#Location -->
+
+    <owl:Class rdf:about="http://www.semanticweb.org/phoenix/ontologies/2022/0/SmartGrid#Location"/>
+    
+
+
+    <!-- http://www.semanticweb.org/phoenix/ontologies/2022/0/SmartGrid#Measurable -->
+
+    <owl:Class rdf:about="http://www.semanticweb.org/phoenix/ontologies/2022/0/SmartGrid#Measurable"/>
+    
+
+
+    <!-- http://www.semanticweb.org/phoenix/ontologies/2022/0/SmartGrid#Network_Devices -->
+
+    <owl:Class rdf:about="http://www.semanticweb.org/phoenix/ontologies/2022/0/SmartGrid#Network_Devices">
+        <rdfs:subClassOf rdf:resource="http://www.semanticweb.org/phoenix/ontologies/2022/0/SmartGrid#Equipment"/>
+    </owl:Class>
+    
+
+
+    <!-- http://www.semanticweb.org/phoenix/ontologies/2022/0/SmartGrid#Network_Endpoint -->
+
+    <owl:Class rdf:about="http://www.semanticweb.org/phoenix/ontologies/2022/0/SmartGrid#Network_Endpoint">
+        <rdfs:subClassOf rdf:resource="http://www.semanticweb.org/phoenix/ontologies/2022/0/SmartGrid#Network_Devices"/>
+    </owl:Class>
+    
+
+
+    <!-- http://www.semanticweb.org/phoenix/ontologies/2022/0/SmartGrid#Processor -->
+
+    <owl:Class rdf:about="http://www.semanticweb.org/phoenix/ontologies/2022/0/SmartGrid#Processor">
+        <rdfs:subClassOf rdf:resource="http://www.semanticweb.org/phoenix/ontologies/2022/0/SmartGrid#Control_System"/>
+    </owl:Class>
+    
+
+
+    <!-- http://www.semanticweb.org/phoenix/ontologies/2022/0/SmartGrid#Quantity -->
+
+    <owl:Class rdf:about="http://www.semanticweb.org/phoenix/ontologies/2022/0/SmartGrid#Quantity">
+        <rdfs:subClassOf rdf:resource="http://www.semanticweb.org/phoenix/ontologies/2022/0/SmartGrid#Measurable"/>
+    </owl:Class>
+    
+
+
+    <!-- http://www.semanticweb.org/phoenix/ontologies/2022/0/SmartGrid#RegControl -->
+
+    <owl:Class rdf:about="http://www.semanticweb.org/phoenix/ontologies/2022/0/SmartGrid#RegControl">
+        <rdfs:subClassOf rdf:resource="http://www.semanticweb.org/phoenix/ontologies/2022/0/SmartGrid#Transformer"/>
+    </owl:Class>
+    
+
+
+    <!-- http://www.semanticweb.org/phoenix/ontologies/2022/0/SmartGrid#Sensor -->
+
+    <owl:Class rdf:about="http://www.semanticweb.org/phoenix/ontologies/2022/0/SmartGrid#Sensor">
+        <rdfs:subClassOf rdf:resource="http://www.semanticweb.org/phoenix/ontologies/2022/0/SmartGrid#Control_System"/>
+    </owl:Class>
+    
+
+
+    <!-- http://www.semanticweb.org/phoenix/ontologies/2022/0/SmartGrid#Switch -->
+
+    <owl:Class rdf:about="http://www.semanticweb.org/phoenix/ontologies/2022/0/SmartGrid#Switch">
+        <rdfs:subClassOf rdf:resource="http://www.semanticweb.org/phoenix/ontologies/2022/0/SmartGrid#Line"/>
+    </owl:Class>
+    
+
+
+    <!-- http://www.semanticweb.org/phoenix/ontologies/2022/0/SmartGrid#Transformer -->
+
+    <owl:Class rdf:about="http://www.semanticweb.org/phoenix/ontologies/2022/0/SmartGrid#Transformer">
+        <rdfs:subClassOf rdf:resource="http://www.semanticweb.org/phoenix/ontologies/2022/0/SmartGrid#Electrical_Equipment"/>
+        <skos:definition>Transformer that changes the voltage from bus1 to bus2</skos:definition>
+    </owl:Class>
+    
+
+
+    <!-- http://www.semanticweb.org/phoenix/ontologies/2022/0/SmartGrid#Transporter -->
+
+    <owl:Class rdf:about="http://www.semanticweb.org/phoenix/ontologies/2022/0/SmartGrid#Transporter">
+        <rdfs:subClassOf rdf:resource="http://www.semanticweb.org/phoenix/ontologies/2022/0/SmartGrid#Network_Devices"/>
+    </owl:Class>
+    
+
+
+    <!-- http://www.semanticweb.org/phoenix/ontologies/2022/0/SmartGrid#Voltage_Sensor -->
+
+    <owl:Class rdf:about="http://www.semanticweb.org/phoenix/ontologies/2022/0/SmartGrid#Voltage_Sensor">
+        <rdfs:subClassOf rdf:resource="http://www.semanticweb.org/phoenix/ontologies/2022/0/SmartGrid#Sensor"/>
+    </owl:Class>
+    
+
+
+    <!-- 
+    ///////////////////////////////////////////////////////////////////////////////////////
+    //
+    // Individuals
+    //
+    ///////////////////////////////////////////////////////////////////////////////////////
+     -->
+
+    
+
+
+    <!-- http://www.semanticweb.org/phoenix/ontologies/2022/0/SmartGrid#Bus_611 -->
+
+    <owl:NamedIndividual rdf:about="http://www.semanticweb.org/phoenix/ontologies/2022/0/SmartGrid#Bus_611">
+        <rdf:type rdf:resource="http://www.semanticweb.org/phoenix/ontologies/2022/0/SmartGrid#Bus"/>
+        <smartgrid:locatedAt rdf:resource="http://www.semanticweb.org/phoenix/ontologies/2022/0/SmartGrid#Coord_0_100"/>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://www.semanticweb.org/phoenix/ontologies/2022/0/SmartGrid#Bus_632 -->
+
+    <owl:NamedIndividual rdf:about="http://www.semanticweb.org/phoenix/ontologies/2022/0/SmartGrid#Bus_632">
+        <rdf:type rdf:resource="http://www.semanticweb.org/phoenix/ontologies/2022/0/SmartGrid#Bus"/>
+        <smartgrid:locatedAt rdf:resource="http://www.semanticweb.org/phoenix/ontologies/2022/0/SmartGrid#Coord_200_250"/>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://www.semanticweb.org/phoenix/ontologies/2022/0/SmartGrid#Bus_633 -->
+
+    <owl:NamedIndividual rdf:about="http://www.semanticweb.org/phoenix/ontologies/2022/0/SmartGrid#Bus_633">
+        <rdf:type rdf:resource="http://www.semanticweb.org/phoenix/ontologies/2022/0/SmartGrid#Bus"/>
+        <smartgrid:locatedAt rdf:resource="http://www.semanticweb.org/phoenix/ontologies/2022/0/SmartGrid#Coord_350_250"/>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://www.semanticweb.org/phoenix/ontologies/2022/0/SmartGrid#Bus_634 -->
+
+    <owl:NamedIndividual rdf:about="http://www.semanticweb.org/phoenix/ontologies/2022/0/SmartGrid#Bus_634">
+        <rdf:type rdf:resource="http://www.semanticweb.org/phoenix/ontologies/2022/0/SmartGrid#Bus"/>
+        <smartgrid:locatedAt rdf:resource="http://www.semanticweb.org/phoenix/ontologies/2022/0/SmartGrid#Coord_400_250"/>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://www.semanticweb.org/phoenix/ontologies/2022/0/SmartGrid#Bus_645 -->
+
+    <owl:NamedIndividual rdf:about="http://www.semanticweb.org/phoenix/ontologies/2022/0/SmartGrid#Bus_645">
+        <rdf:type rdf:resource="http://www.semanticweb.org/phoenix/ontologies/2022/0/SmartGrid#Bus"/>
+        <smartgrid:locatedAt rdf:resource="http://www.semanticweb.org/phoenix/ontologies/2022/0/SmartGrid#Coord_100_250"/>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://www.semanticweb.org/phoenix/ontologies/2022/0/SmartGrid#Bus_646 -->
+
+    <owl:NamedIndividual rdf:about="http://www.semanticweb.org/phoenix/ontologies/2022/0/SmartGrid#Bus_646">
+        <rdf:type rdf:resource="http://www.semanticweb.org/phoenix/ontologies/2022/0/SmartGrid#Bus"/>
+        <smartgrid:locatedAt rdf:resource="http://www.semanticweb.org/phoenix/ontologies/2022/0/SmartGrid#Coord_0_250"/>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://www.semanticweb.org/phoenix/ontologies/2022/0/SmartGrid#Bus_650 -->
+
+    <owl:NamedIndividual rdf:about="http://www.semanticweb.org/phoenix/ontologies/2022/0/SmartGrid#Bus_650">
+        <rdf:type rdf:resource="http://www.semanticweb.org/phoenix/ontologies/2022/0/SmartGrid#Bus"/>
+        <smartgrid:locatedAt rdf:resource="http://www.semanticweb.org/phoenix/ontologies/2022/0/SmartGrid#Coord_200_350"/>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://www.semanticweb.org/phoenix/ontologies/2022/0/SmartGrid#Bus_652 -->
+
+    <owl:NamedIndividual rdf:about="http://www.semanticweb.org/phoenix/ontologies/2022/0/SmartGrid#Bus_652">
+        <rdf:type rdf:resource="http://www.semanticweb.org/phoenix/ontologies/2022/0/SmartGrid#Bus"/>
+        <smartgrid:locatedAt rdf:resource="http://www.semanticweb.org/phoenix/ontologies/2022/0/SmartGrid#Coord_100_0"/>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://www.semanticweb.org/phoenix/ontologies/2022/0/SmartGrid#Bus_670 -->
+
+    <owl:NamedIndividual rdf:about="http://www.semanticweb.org/phoenix/ontologies/2022/0/SmartGrid#Bus_670">
+        <rdf:type rdf:resource="http://www.semanticweb.org/phoenix/ontologies/2022/0/SmartGrid#Bus"/>
+        <smartgrid:locatedAt rdf:resource="http://www.semanticweb.org/phoenix/ontologies/2022/0/SmartGrid#Coord_200_200"/>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://www.semanticweb.org/phoenix/ontologies/2022/0/SmartGrid#Bus_671 -->
+
+    <owl:NamedIndividual rdf:about="http://www.semanticweb.org/phoenix/ontologies/2022/0/SmartGrid#Bus_671">
+        <rdf:type rdf:resource="http://www.semanticweb.org/phoenix/ontologies/2022/0/SmartGrid#Bus"/>
+        <smartgrid:locatedAt rdf:resource="http://www.semanticweb.org/phoenix/ontologies/2022/0/SmartGrid#Coord_200_100"/>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://www.semanticweb.org/phoenix/ontologies/2022/0/SmartGrid#Bus_675 -->
+
+    <owl:NamedIndividual rdf:about="http://www.semanticweb.org/phoenix/ontologies/2022/0/SmartGrid#Bus_675">
+        <rdf:type rdf:resource="http://www.semanticweb.org/phoenix/ontologies/2022/0/SmartGrid#Bus"/>
+        <smartgrid:locatedAt rdf:resource="http://www.semanticweb.org/phoenix/ontologies/2022/0/SmartGrid#Coord_400_100"/>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://www.semanticweb.org/phoenix/ontologies/2022/0/SmartGrid#Bus_680 -->
+
+    <owl:NamedIndividual rdf:about="http://www.semanticweb.org/phoenix/ontologies/2022/0/SmartGrid#Bus_680">
+        <rdf:type rdf:resource="http://www.semanticweb.org/phoenix/ontologies/2022/0/SmartGrid#Bus"/>
+        <smartgrid:locatedAt rdf:resource="http://www.semanticweb.org/phoenix/ontologies/2022/0/SmartGrid#Coord_200_0"/>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://www.semanticweb.org/phoenix/ontologies/2022/0/SmartGrid#Bus_684 -->
+
+    <owl:NamedIndividual rdf:about="http://www.semanticweb.org/phoenix/ontologies/2022/0/SmartGrid#Bus_684">
+        <rdf:type rdf:resource="http://www.semanticweb.org/phoenix/ontologies/2022/0/SmartGrid#Bus"/>
+        <smartgrid:locatedAt rdf:resource="http://www.semanticweb.org/phoenix/ontologies/2022/0/SmartGrid#Coord_100_100"/>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://www.semanticweb.org/phoenix/ontologies/2022/0/SmartGrid#Bus_692 -->
+
+    <owl:NamedIndividual rdf:about="http://www.semanticweb.org/phoenix/ontologies/2022/0/SmartGrid#Bus_692">
+        <rdf:type rdf:resource="http://www.semanticweb.org/phoenix/ontologies/2022/0/SmartGrid#Bus"/>
+        <smartgrid:locatedAt rdf:resource="http://www.semanticweb.org/phoenix/ontologies/2022/0/SmartGrid#Coord_250_100"/>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://www.semanticweb.org/phoenix/ontologies/2022/0/SmartGrid#Bus_RG60 -->
+
+    <owl:NamedIndividual rdf:about="http://www.semanticweb.org/phoenix/ontologies/2022/0/SmartGrid#Bus_RG60">
+        <rdf:type rdf:resource="http://www.semanticweb.org/phoenix/ontologies/2022/0/SmartGrid#Bus"/>
+        <smartgrid:locatedAt rdf:resource="http://www.semanticweb.org/phoenix/ontologies/2022/0/SmartGrid#Coord_200_300"/>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://www.semanticweb.org/phoenix/ontologies/2022/0/SmartGrid#Bus_Source -->
+
+    <owl:NamedIndividual rdf:about="http://www.semanticweb.org/phoenix/ontologies/2022/0/SmartGrid#Bus_Source">
+        <rdf:type rdf:resource="http://www.semanticweb.org/phoenix/ontologies/2022/0/SmartGrid#Bus"/>
+        <smartgrid:locatedAt rdf:resource="http://www.semanticweb.org/phoenix/ontologies/2022/0/SmartGrid#Coord_200_400"/>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://www.semanticweb.org/phoenix/ontologies/2022/0/SmartGrid#Capacitor_Cap1 -->
+
+    <owl:NamedIndividual rdf:about="http://www.semanticweb.org/phoenix/ontologies/2022/0/SmartGrid#Capacitor_Cap1">
+        <rdf:type rdf:resource="http://www.semanticweb.org/phoenix/ontologies/2022/0/SmartGrid#Capacitor"/>
+        <smartgrid:attachsTo rdf:resource="http://www.semanticweb.org/phoenix/ontologies/2022/0/SmartGrid#Bus_675"/>
+        <smartgrid:kvar rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">600</smartgrid:kvar>
+        <smartgrid:num_phases rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">3</smartgrid:num_phases>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://www.semanticweb.org/phoenix/ontologies/2022/0/SmartGrid#Capacitor_Cap2 -->
+
+    <owl:NamedIndividual rdf:about="http://www.semanticweb.org/phoenix/ontologies/2022/0/SmartGrid#Capacitor_Cap2">
+        <rdf:type rdf:resource="http://www.semanticweb.org/phoenix/ontologies/2022/0/SmartGrid#Capacitor"/>
+        <smartgrid:attachsTo rdf:resource="http://www.semanticweb.org/phoenix/ontologies/2022/0/SmartGrid#Bus_611"/>
+        <smartgrid:kvar rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">100</smartgrid:kvar>
+        <smartgrid:nodes_primary rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">1</smartgrid:nodes_primary>
+        <smartgrid:num_phases rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">1</smartgrid:num_phases>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://www.semanticweb.org/phoenix/ontologies/2022/0/SmartGrid#Coord_0_100 -->
+
+    <owl:NamedIndividual rdf:about="http://www.semanticweb.org/phoenix/ontologies/2022/0/SmartGrid#Coord_0_100">
+        <rdf:type rdf:resource="http://www.semanticweb.org/phoenix/ontologies/2022/0/SmartGrid#Coordinates"/>
+        <smartgrid:coord_x rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">0</smartgrid:coord_x>
+        <smartgrid:coord_y rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">100</smartgrid:coord_y>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://www.semanticweb.org/phoenix/ontologies/2022/0/SmartGrid#Coord_0_250 -->
+
+    <owl:NamedIndividual rdf:about="http://www.semanticweb.org/phoenix/ontologies/2022/0/SmartGrid#Coord_0_250">
+        <rdf:type rdf:resource="http://www.semanticweb.org/phoenix/ontologies/2022/0/SmartGrid#Coordinates"/>
+        <smartgrid:coord_x rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">0</smartgrid:coord_x>
+        <smartgrid:coord_y rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">250</smartgrid:coord_y>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://www.semanticweb.org/phoenix/ontologies/2022/0/SmartGrid#Coord_100_0 -->
+
+    <owl:NamedIndividual rdf:about="http://www.semanticweb.org/phoenix/ontologies/2022/0/SmartGrid#Coord_100_0">
+        <rdf:type rdf:resource="http://www.semanticweb.org/phoenix/ontologies/2022/0/SmartGrid#Coordinates"/>
+        <smartgrid:coord_x rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">100</smartgrid:coord_x>
+        <smartgrid:coord_y rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">0</smartgrid:coord_y>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://www.semanticweb.org/phoenix/ontologies/2022/0/SmartGrid#Coord_100_100 -->
+
+    <owl:NamedIndividual rdf:about="http://www.semanticweb.org/phoenix/ontologies/2022/0/SmartGrid#Coord_100_100">
+        <rdf:type rdf:resource="http://www.semanticweb.org/phoenix/ontologies/2022/0/SmartGrid#Coordinates"/>
+        <smartgrid:coord_x rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">100</smartgrid:coord_x>
+        <smartgrid:coord_y rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">100</smartgrid:coord_y>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://www.semanticweb.org/phoenix/ontologies/2022/0/SmartGrid#Coord_100_250 -->
+
+    <owl:NamedIndividual rdf:about="http://www.semanticweb.org/phoenix/ontologies/2022/0/SmartGrid#Coord_100_250">
+        <rdf:type rdf:resource="http://www.semanticweb.org/phoenix/ontologies/2022/0/SmartGrid#Coordinates"/>
+        <smartgrid:coord_x rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">100</smartgrid:coord_x>
+        <smartgrid:coord_y rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">250</smartgrid:coord_y>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://www.semanticweb.org/phoenix/ontologies/2022/0/SmartGrid#Coord_200_0 -->
+
+    <owl:NamedIndividual rdf:about="http://www.semanticweb.org/phoenix/ontologies/2022/0/SmartGrid#Coord_200_0">
+        <rdf:type rdf:resource="http://www.semanticweb.org/phoenix/ontologies/2022/0/SmartGrid#Coordinates"/>
+        <smartgrid:coord_x rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">200</smartgrid:coord_x>
+        <smartgrid:coord_y rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">0</smartgrid:coord_y>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://www.semanticweb.org/phoenix/ontologies/2022/0/SmartGrid#Coord_200_100 -->
+
+    <owl:NamedIndividual rdf:about="http://www.semanticweb.org/phoenix/ontologies/2022/0/SmartGrid#Coord_200_100">
+        <rdf:type rdf:resource="http://www.semanticweb.org/phoenix/ontologies/2022/0/SmartGrid#Coordinates"/>
+        <smartgrid:coord_x rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">200</smartgrid:coord_x>
+        <smartgrid:coord_y rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">100</smartgrid:coord_y>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://www.semanticweb.org/phoenix/ontologies/2022/0/SmartGrid#Coord_200_200 -->
+
+    <owl:NamedIndividual rdf:about="http://www.semanticweb.org/phoenix/ontologies/2022/0/SmartGrid#Coord_200_200">
+        <rdf:type rdf:resource="http://www.semanticweb.org/phoenix/ontologies/2022/0/SmartGrid#Coordinates"/>
+        <smartgrid:coord_x rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">200</smartgrid:coord_x>
+        <smartgrid:coord_y rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">200</smartgrid:coord_y>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://www.semanticweb.org/phoenix/ontologies/2022/0/SmartGrid#Coord_200_250 -->
+
+    <owl:NamedIndividual rdf:about="http://www.semanticweb.org/phoenix/ontologies/2022/0/SmartGrid#Coord_200_250">
+        <rdf:type rdf:resource="http://www.semanticweb.org/phoenix/ontologies/2022/0/SmartGrid#Coordinates"/>
+        <smartgrid:coord_x rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">200</smartgrid:coord_x>
+        <smartgrid:coord_y rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">250</smartgrid:coord_y>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://www.semanticweb.org/phoenix/ontologies/2022/0/SmartGrid#Coord_200_300 -->
+
+    <owl:NamedIndividual rdf:about="http://www.semanticweb.org/phoenix/ontologies/2022/0/SmartGrid#Coord_200_300">
+        <rdf:type rdf:resource="http://www.semanticweb.org/phoenix/ontologies/2022/0/SmartGrid#Coordinates"/>
+        <smartgrid:coord_x rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">200</smartgrid:coord_x>
+        <smartgrid:coord_y rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">300</smartgrid:coord_y>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://www.semanticweb.org/phoenix/ontologies/2022/0/SmartGrid#Coord_200_350 -->
+
+    <owl:NamedIndividual rdf:about="http://www.semanticweb.org/phoenix/ontologies/2022/0/SmartGrid#Coord_200_350">
+        <rdf:type rdf:resource="http://www.semanticweb.org/phoenix/ontologies/2022/0/SmartGrid#Coordinates"/>
+        <smartgrid:coord_x rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">200</smartgrid:coord_x>
+        <smartgrid:coord_y rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">350</smartgrid:coord_y>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://www.semanticweb.org/phoenix/ontologies/2022/0/SmartGrid#Coord_200_400 -->
+
+    <owl:NamedIndividual rdf:about="http://www.semanticweb.org/phoenix/ontologies/2022/0/SmartGrid#Coord_200_400">
+        <rdf:type rdf:resource="http://www.semanticweb.org/phoenix/ontologies/2022/0/SmartGrid#Coordinates"/>
+        <smartgrid:coord_x rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">200</smartgrid:coord_x>
+        <smartgrid:coord_y rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">400</smartgrid:coord_y>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://www.semanticweb.org/phoenix/ontologies/2022/0/SmartGrid#Coord_250_100 -->
+
+    <owl:NamedIndividual rdf:about="http://www.semanticweb.org/phoenix/ontologies/2022/0/SmartGrid#Coord_250_100">
+        <rdf:type rdf:resource="http://www.semanticweb.org/phoenix/ontologies/2022/0/SmartGrid#Coordinates"/>
+        <smartgrid:coord_x rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">250</smartgrid:coord_x>
+        <smartgrid:coord_y rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">100</smartgrid:coord_y>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://www.semanticweb.org/phoenix/ontologies/2022/0/SmartGrid#Coord_350_250 -->
+
+    <owl:NamedIndividual rdf:about="http://www.semanticweb.org/phoenix/ontologies/2022/0/SmartGrid#Coord_350_250">
+        <rdf:type rdf:resource="http://www.semanticweb.org/phoenix/ontologies/2022/0/SmartGrid#Coordinates"/>
+        <smartgrid:coord_x rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">350</smartgrid:coord_x>
+        <smartgrid:coord_y rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">250</smartgrid:coord_y>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://www.semanticweb.org/phoenix/ontologies/2022/0/SmartGrid#Coord_400_100 -->
+
+    <owl:NamedIndividual rdf:about="http://www.semanticweb.org/phoenix/ontologies/2022/0/SmartGrid#Coord_400_100">
+        <rdf:type rdf:resource="http://www.semanticweb.org/phoenix/ontologies/2022/0/SmartGrid#Coordinates"/>
+        <smartgrid:coord_x rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">400</smartgrid:coord_x>
+        <smartgrid:coord_y rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">100</smartgrid:coord_y>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://www.semanticweb.org/phoenix/ontologies/2022/0/SmartGrid#Coord_400_250 -->
+
+    <owl:NamedIndividual rdf:about="http://www.semanticweb.org/phoenix/ontologies/2022/0/SmartGrid#Coord_400_250">
+        <rdf:type rdf:resource="http://www.semanticweb.org/phoenix/ontologies/2022/0/SmartGrid#Coordinates"/>
+        <smartgrid:coord_x rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">400</smartgrid:coord_x>
+        <smartgrid:coord_y rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">250</smartgrid:coord_y>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://www.semanticweb.org/phoenix/ontologies/2022/0/SmartGrid#Endpoint_Controller -->
+
+    <owl:NamedIndividual rdf:about="http://www.semanticweb.org/phoenix/ontologies/2022/0/SmartGrid#Endpoint_Controller">
+        <rdf:type rdf:resource="http://www.semanticweb.org/phoenix/ontologies/2022/0/SmartGrid#Network_Endpoint"/>
+        <smartgrid:connectsTo rdf:resource="http://www.semanticweb.org/phoenix/ontologies/2022/0/SmartGrid#Voltage_Controller"/>
+        <smartgrid:locatedAt rdf:resource="http://www.semanticweb.org/phoenix/ontologies/2022/0/SmartGrid#Bus_632"/>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://www.semanticweb.org/phoenix/ontologies/2022/0/SmartGrid#Generator -->
+
+    <owl:NamedIndividual rdf:about="http://www.semanticweb.org/phoenix/ontologies/2022/0/SmartGrid#Generator">
+        <rdf:type rdf:resource="http://www.semanticweb.org/phoenix/ontologies/2022/0/SmartGrid#Generator"/>
+        <smartgrid:attachsTo rdf:resource="http://www.semanticweb.org/phoenix/ontologies/2022/0/SmartGrid#Bus_Source"/>
+        <smartgrid:MVAsc1 rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">21000</smartgrid:MVAsc1>
+        <smartgrid:MVAsc3 rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">20000</smartgrid:MVAsc3>
+        <smartgrid:angle rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">30</smartgrid:angle>
+        <smartgrid:kV_secondary rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">115</smartgrid:kV_secondary>
+        <smartgrid:num_phases rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">3</smartgrid:num_phases>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://www.semanticweb.org/phoenix/ontologies/2022/0/SmartGrid#Line_632633 -->
+
+    <owl:NamedIndividual rdf:about="http://www.semanticweb.org/phoenix/ontologies/2022/0/SmartGrid#Line_632633">
+        <rdf:type rdf:resource="http://www.semanticweb.org/phoenix/ontologies/2022/0/SmartGrid#Line"/>
+        <smartgrid:attachsTo rdf:resource="http://www.semanticweb.org/phoenix/ontologies/2022/0/SmartGrid#Bus_633"/>
+        <smartgrid:connection_primary>1 2 3</smartgrid:connection_primary>
+        <smartgrid:connection_secondary>1 2 3</smartgrid:connection_secondary>
+        <smartgrid:length rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">500</smartgrid:length>
+        <smartgrid:num_phases rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">3</smartgrid:num_phases>
+        <smartgrid:unit>ft</smartgrid:unit>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://www.semanticweb.org/phoenix/ontologies/2022/0/SmartGrid#Line_632645 -->
+
+    <owl:NamedIndividual rdf:about="http://www.semanticweb.org/phoenix/ontologies/2022/0/SmartGrid#Line_632645">
+        <rdf:type rdf:resource="http://www.semanticweb.org/phoenix/ontologies/2022/0/SmartGrid#Line"/>
+        <smartgrid:attachsTo rdf:resource="http://www.semanticweb.org/phoenix/ontologies/2022/0/SmartGrid#Bus_632"/>
+        <smartgrid:attachsTo rdf:resource="http://www.semanticweb.org/phoenix/ontologies/2022/0/SmartGrid#Bus_645"/>
+        <smartgrid:connection_primary>3 2</smartgrid:connection_primary>
+        <smartgrid:connection_secondary>3 2</smartgrid:connection_secondary>
+        <smartgrid:length rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">500</smartgrid:length>
+        <smartgrid:num_phases rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">2</smartgrid:num_phases>
+        <smartgrid:unit>ft</smartgrid:unit>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://www.semanticweb.org/phoenix/ontologies/2022/0/SmartGrid#Line_632670 -->
+
+    <owl:NamedIndividual rdf:about="http://www.semanticweb.org/phoenix/ontologies/2022/0/SmartGrid#Line_632670">
+        <rdf:type rdf:resource="http://www.semanticweb.org/phoenix/ontologies/2022/0/SmartGrid#Line"/>
+        <smartgrid:attachsTo rdf:resource="http://www.semanticweb.org/phoenix/ontologies/2022/0/SmartGrid#Bus_670"/>
+        <smartgrid:connection_primary>1 2 3</smartgrid:connection_primary>
+        <smartgrid:connection_secondary>1 2 3</smartgrid:connection_secondary>
+        <smartgrid:length rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">667</smartgrid:length>
+        <smartgrid:num_phases rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">3</smartgrid:num_phases>
+        <smartgrid:unit>ft</smartgrid:unit>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://www.semanticweb.org/phoenix/ontologies/2022/0/SmartGrid#Line_645646 -->
+
+    <owl:NamedIndividual rdf:about="http://www.semanticweb.org/phoenix/ontologies/2022/0/SmartGrid#Line_645646">
+        <rdf:type rdf:resource="http://www.semanticweb.org/phoenix/ontologies/2022/0/SmartGrid#Line"/>
+        <smartgrid:attachsTo rdf:resource="http://www.semanticweb.org/phoenix/ontologies/2022/0/SmartGrid#Bus_645"/>
+        <smartgrid:connection_primary>3 2</smartgrid:connection_primary>
+        <smartgrid:connection_secondary>3 2</smartgrid:connection_secondary>
+        <smartgrid:length rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">300</smartgrid:length>
+        <smartgrid:num_phases rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">2</smartgrid:num_phases>
+        <smartgrid:unit>ft</smartgrid:unit>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://www.semanticweb.org/phoenix/ontologies/2022/0/SmartGrid#Line_650632 -->
+
+    <owl:NamedIndividual rdf:about="http://www.semanticweb.org/phoenix/ontologies/2022/0/SmartGrid#Line_650632">
+        <rdf:type rdf:resource="http://www.semanticweb.org/phoenix/ontologies/2022/0/SmartGrid#Line"/>
+        <smartgrid:attachsTo rdf:resource="http://www.semanticweb.org/phoenix/ontologies/2022/0/SmartGrid#Bus_632"/>
+        <smartgrid:connection_primary>1 2 3</smartgrid:connection_primary>
+        <smartgrid:connection_secondary>1 2 3</smartgrid:connection_secondary>
+        <smartgrid:length rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">2000</smartgrid:length>
+        <smartgrid:num_phases rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">3</smartgrid:num_phases>
+        <smartgrid:unit>ft</smartgrid:unit>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://www.semanticweb.org/phoenix/ontologies/2022/0/SmartGrid#Line_670671 -->
+
+    <owl:NamedIndividual rdf:about="http://www.semanticweb.org/phoenix/ontologies/2022/0/SmartGrid#Line_670671">
+        <rdf:type rdf:resource="http://www.semanticweb.org/phoenix/ontologies/2022/0/SmartGrid#Line"/>
+        <smartgrid:attachsTo rdf:resource="http://www.semanticweb.org/phoenix/ontologies/2022/0/SmartGrid#Bus_671"/>
+        <smartgrid:connection_primary>1 2 3</smartgrid:connection_primary>
+        <smartgrid:connection_secondary>1 2 3</smartgrid:connection_secondary>
+        <smartgrid:length rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">1333</smartgrid:length>
+        <smartgrid:num_phases rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">3</smartgrid:num_phases>
+        <smartgrid:unit>ft</smartgrid:unit>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://www.semanticweb.org/phoenix/ontologies/2022/0/SmartGrid#Line_671680 -->
+
+    <owl:NamedIndividual rdf:about="http://www.semanticweb.org/phoenix/ontologies/2022/0/SmartGrid#Line_671680">
+        <rdf:type rdf:resource="http://www.semanticweb.org/phoenix/ontologies/2022/0/SmartGrid#Line"/>
+        <smartgrid:attachsTo rdf:resource="http://www.semanticweb.org/phoenix/ontologies/2022/0/SmartGrid#Bus_680"/>
+        <smartgrid:connection_primary>1 2 3</smartgrid:connection_primary>
+        <smartgrid:connection_secondary>1 2 3</smartgrid:connection_secondary>
+        <smartgrid:length rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">1000</smartgrid:length>
+        <smartgrid:num_phases rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">3</smartgrid:num_phases>
+        <smartgrid:unit>ft</smartgrid:unit>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://www.semanticweb.org/phoenix/ontologies/2022/0/SmartGrid#Line_671684 -->
+
+    <owl:NamedIndividual rdf:about="http://www.semanticweb.org/phoenix/ontologies/2022/0/SmartGrid#Line_671684">
+        <rdf:type rdf:resource="http://www.semanticweb.org/phoenix/ontologies/2022/0/SmartGrid#Line"/>
+        <smartgrid:attachsTo rdf:resource="http://www.semanticweb.org/phoenix/ontologies/2022/0/SmartGrid#Bus_684"/>
+        <smartgrid:connection_primary>1 3</smartgrid:connection_primary>
+        <smartgrid:connection_secondary>1 3</smartgrid:connection_secondary>
+        <smartgrid:length rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">300</smartgrid:length>
+        <smartgrid:num_phases rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">2</smartgrid:num_phases>
+        <smartgrid:unit>ft</smartgrid:unit>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://www.semanticweb.org/phoenix/ontologies/2022/0/SmartGrid#Line_671692 -->
+
+    <owl:NamedIndividual rdf:about="http://www.semanticweb.org/phoenix/ontologies/2022/0/SmartGrid#Line_671692">
+        <rdf:type rdf:resource="http://www.semanticweb.org/phoenix/ontologies/2022/0/SmartGrid#Switch"/>
+        <smartgrid:attachsTo rdf:resource="http://www.semanticweb.org/phoenix/ontologies/2022/0/SmartGrid#Bus_692"/>
+        <smartgrid:normal_state>open</smartgrid:normal_state>
+        <smartgrid:num_phases rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">3</smartgrid:num_phases>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://www.semanticweb.org/phoenix/ontologies/2022/0/SmartGrid#Line_684611 -->
+
+    <owl:NamedIndividual rdf:about="http://www.semanticweb.org/phoenix/ontologies/2022/0/SmartGrid#Line_684611">
+        <rdf:type rdf:resource="http://www.semanticweb.org/phoenix/ontologies/2022/0/SmartGrid#Line"/>
+        <smartgrid:attachsTo rdf:resource="http://www.semanticweb.org/phoenix/ontologies/2022/0/SmartGrid#Bus_611"/>
+        <smartgrid:connection_primary>3</smartgrid:connection_primary>
+        <smartgrid:connection_secondary>3</smartgrid:connection_secondary>
+        <smartgrid:length rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">300</smartgrid:length>
+        <smartgrid:num_phases rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">1</smartgrid:num_phases>
+        <smartgrid:unit>ft</smartgrid:unit>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://www.semanticweb.org/phoenix/ontologies/2022/0/SmartGrid#Line_684652 -->
+
+    <owl:NamedIndividual rdf:about="http://www.semanticweb.org/phoenix/ontologies/2022/0/SmartGrid#Line_684652">
+        <rdf:type rdf:resource="http://www.semanticweb.org/phoenix/ontologies/2022/0/SmartGrid#Line"/>
+        <smartgrid:attachsTo rdf:resource="http://www.semanticweb.org/phoenix/ontologies/2022/0/SmartGrid#Bus_652"/>
+        <smartgrid:connection_primary>1</smartgrid:connection_primary>
+        <smartgrid:connection_secondary>1</smartgrid:connection_secondary>
+        <smartgrid:length rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">800</smartgrid:length>
+        <smartgrid:num_phases rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">1</smartgrid:num_phases>
+        <smartgrid:unit>ft</smartgrid:unit>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://www.semanticweb.org/phoenix/ontologies/2022/0/SmartGrid#Line_692675 -->
+
+    <owl:NamedIndividual rdf:about="http://www.semanticweb.org/phoenix/ontologies/2022/0/SmartGrid#Line_692675">
+        <rdf:type rdf:resource="http://www.semanticweb.org/phoenix/ontologies/2022/0/SmartGrid#Line"/>
+        <smartgrid:attachsTo rdf:resource="http://www.semanticweb.org/phoenix/ontologies/2022/0/SmartGrid#Bus_675"/>
+        <smartgrid:connection_primary>1 2 3</smartgrid:connection_primary>
+        <smartgrid:connection_secondary>1 2 3</smartgrid:connection_secondary>
+        <smartgrid:length rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">500</smartgrid:length>
+        <smartgrid:num_phases rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">3</smartgrid:num_phases>
+        <smartgrid:unit>ft</smartgrid:unit>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://www.semanticweb.org/phoenix/ontologies/2022/0/SmartGrid#Line_Code_mtx601 -->
+
+    <owl:NamedIndividual rdf:about="http://www.semanticweb.org/phoenix/ontologies/2022/0/SmartGrid#Line_Code_mtx601">
+        <rdf:type rdf:resource="http://www.semanticweb.org/phoenix/ontologies/2022/0/SmartGrid#Line_Code"/>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://www.semanticweb.org/phoenix/ontologies/2022/0/SmartGrid#Line_Code_mtx602 -->
+
+    <owl:NamedIndividual rdf:about="http://www.semanticweb.org/phoenix/ontologies/2022/0/SmartGrid#Line_Code_mtx602">
+        <rdf:type rdf:resource="http://www.semanticweb.org/phoenix/ontologies/2022/0/SmartGrid#Line_Code"/>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://www.semanticweb.org/phoenix/ontologies/2022/0/SmartGrid#Line_Code_mtx603 -->
+
+    <owl:NamedIndividual rdf:about="http://www.semanticweb.org/phoenix/ontologies/2022/0/SmartGrid#Line_Code_mtx603">
+        <rdf:type rdf:resource="http://www.semanticweb.org/phoenix/ontologies/2022/0/SmartGrid#Line_Code"/>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://www.semanticweb.org/phoenix/ontologies/2022/0/SmartGrid#Line_Code_mtx604 -->
+
+    <owl:NamedIndividual rdf:about="http://www.semanticweb.org/phoenix/ontologies/2022/0/SmartGrid#Line_Code_mtx604">
+        <rdf:type rdf:resource="http://www.semanticweb.org/phoenix/ontologies/2022/0/SmartGrid#Line_Code"/>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://www.semanticweb.org/phoenix/ontologies/2022/0/SmartGrid#Line_Code_mtx605 -->
+
+    <owl:NamedIndividual rdf:about="http://www.semanticweb.org/phoenix/ontologies/2022/0/SmartGrid#Line_Code_mtx605">
+        <rdf:type rdf:resource="http://www.semanticweb.org/phoenix/ontologies/2022/0/SmartGrid#Line_Code"/>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://www.semanticweb.org/phoenix/ontologies/2022/0/SmartGrid#Line_Code_mtx606 -->
+
+    <owl:NamedIndividual rdf:about="http://www.semanticweb.org/phoenix/ontologies/2022/0/SmartGrid#Line_Code_mtx606">
+        <rdf:type rdf:resource="http://www.semanticweb.org/phoenix/ontologies/2022/0/SmartGrid#Line_Code"/>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://www.semanticweb.org/phoenix/ontologies/2022/0/SmartGrid#Line_Code_mtx607 -->
+
+    <owl:NamedIndividual rdf:about="http://www.semanticweb.org/phoenix/ontologies/2022/0/SmartGrid#Line_Code_mtx607">
+        <rdf:type rdf:resource="http://www.semanticweb.org/phoenix/ontologies/2022/0/SmartGrid#Line_Code"/>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://www.semanticweb.org/phoenix/ontologies/2022/0/SmartGrid#Load_611_3 -->
+
+    <owl:NamedIndividual rdf:about="http://www.semanticweb.org/phoenix/ontologies/2022/0/SmartGrid#Load_611_3">
+        <rdf:type rdf:resource="http://www.semanticweb.org/phoenix/ontologies/2022/0/SmartGrid#Load"/>
+        <smartgrid:attachsTo rdf:resource="http://www.semanticweb.org/phoenix/ontologies/2022/0/SmartGrid#Bus_611"/>
+        <smartgrid:connection_primary>Wye</smartgrid:connection_primary>
+        <smartgrid:kW rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">170</smartgrid:kW>
+        <smartgrid:kvar rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">80</smartgrid:kvar>
+        <smartgrid:model rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">1</smartgrid:model>
+        <smartgrid:nodes_primary>3</smartgrid:nodes_primary>
+        <smartgrid:num_phases rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">1</smartgrid:num_phases>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://www.semanticweb.org/phoenix/ontologies/2022/0/SmartGrid#Load_634_1 -->
+
+    <owl:NamedIndividual rdf:about="http://www.semanticweb.org/phoenix/ontologies/2022/0/SmartGrid#Load_634_1">
+        <rdf:type rdf:resource="http://www.semanticweb.org/phoenix/ontologies/2022/0/SmartGrid#Load"/>
+        <smartgrid:attachsTo rdf:resource="http://www.semanticweb.org/phoenix/ontologies/2022/0/SmartGrid#Bus_634"/>
+        <smartgrid:connection_primary>Wye</smartgrid:connection_primary>
+        <smartgrid:kW rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">160</smartgrid:kW>
+        <smartgrid:kvar rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">110</smartgrid:kvar>
+        <smartgrid:model rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">1</smartgrid:model>
+        <smartgrid:nodes_primary>1</smartgrid:nodes_primary>
+        <smartgrid:num_phases rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">1</smartgrid:num_phases>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://www.semanticweb.org/phoenix/ontologies/2022/0/SmartGrid#Load_634_2 -->
+
+    <owl:NamedIndividual rdf:about="http://www.semanticweb.org/phoenix/ontologies/2022/0/SmartGrid#Load_634_2">
+        <rdf:type rdf:resource="http://www.semanticweb.org/phoenix/ontologies/2022/0/SmartGrid#Load"/>
+        <smartgrid:attachsTo rdf:resource="http://www.semanticweb.org/phoenix/ontologies/2022/0/SmartGrid#Bus_634"/>
+        <smartgrid:connection_primary>Wye</smartgrid:connection_primary>
+        <smartgrid:kW rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">120</smartgrid:kW>
+        <smartgrid:kvar rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">90</smartgrid:kvar>
+        <smartgrid:model rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">1</smartgrid:model>
+        <smartgrid:nodes_primary>2</smartgrid:nodes_primary>
+        <smartgrid:num_phases rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">1</smartgrid:num_phases>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://www.semanticweb.org/phoenix/ontologies/2022/0/SmartGrid#Load_634_3 -->
+
+    <owl:NamedIndividual rdf:about="http://www.semanticweb.org/phoenix/ontologies/2022/0/SmartGrid#Load_634_3">
+        <rdf:type rdf:resource="http://www.semanticweb.org/phoenix/ontologies/2022/0/SmartGrid#Load"/>
+        <smartgrid:attachsTo rdf:resource="http://www.semanticweb.org/phoenix/ontologies/2022/0/SmartGrid#Bus_634"/>
+        <smartgrid:connection_primary>Wye</smartgrid:connection_primary>
+        <smartgrid:kW rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">120</smartgrid:kW>
+        <smartgrid:kvar rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">90</smartgrid:kvar>
+        <smartgrid:model rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">1</smartgrid:model>
+        <smartgrid:nodes_primary>3</smartgrid:nodes_primary>
+        <smartgrid:num_phases rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">1</smartgrid:num_phases>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://www.semanticweb.org/phoenix/ontologies/2022/0/SmartGrid#Load_645_2 -->
+
+    <owl:NamedIndividual rdf:about="http://www.semanticweb.org/phoenix/ontologies/2022/0/SmartGrid#Load_645_2">
+        <rdf:type rdf:resource="http://www.semanticweb.org/phoenix/ontologies/2022/0/SmartGrid#Load"/>
+        <smartgrid:attachsTo rdf:resource="http://www.semanticweb.org/phoenix/ontologies/2022/0/SmartGrid#Bus_645"/>
+        <smartgrid:connection_primary>Wye</smartgrid:connection_primary>
+        <smartgrid:kW rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">170</smartgrid:kW>
+        <smartgrid:kvar rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">125</smartgrid:kvar>
+        <smartgrid:model rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">1</smartgrid:model>
+        <smartgrid:nodes_primary>2</smartgrid:nodes_primary>
+        <smartgrid:num_phases rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">1</smartgrid:num_phases>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://www.semanticweb.org/phoenix/ontologies/2022/0/SmartGrid#Load_646_2 -->
+
+    <owl:NamedIndividual rdf:about="http://www.semanticweb.org/phoenix/ontologies/2022/0/SmartGrid#Load_646_2">
+        <rdf:type rdf:resource="http://www.semanticweb.org/phoenix/ontologies/2022/0/SmartGrid#Load"/>
+        <smartgrid:attachsTo rdf:resource="http://www.semanticweb.org/phoenix/ontologies/2022/0/SmartGrid#Bus_646"/>
+        <smartgrid:connection_primary>Delta</smartgrid:connection_primary>
+        <smartgrid:kW rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">230</smartgrid:kW>
+        <smartgrid:kvar rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">132</smartgrid:kvar>
+        <smartgrid:model rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">2</smartgrid:model>
+        <smartgrid:nodes_primary>2 3</smartgrid:nodes_primary>
+        <smartgrid:num_phases rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">1</smartgrid:num_phases>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://www.semanticweb.org/phoenix/ontologies/2022/0/SmartGrid#Load_652_1 -->
+
+    <owl:NamedIndividual rdf:about="http://www.semanticweb.org/phoenix/ontologies/2022/0/SmartGrid#Load_652_1">
+        <rdf:type rdf:resource="http://www.semanticweb.org/phoenix/ontologies/2022/0/SmartGrid#Load"/>
+        <smartgrid:attachsTo rdf:resource="http://www.semanticweb.org/phoenix/ontologies/2022/0/SmartGrid#Bus_652"/>
+        <smartgrid:connection_primary>Wye</smartgrid:connection_primary>
+        <smartgrid:kW rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">128</smartgrid:kW>
+        <smartgrid:kvar rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">86</smartgrid:kvar>
+        <smartgrid:model rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">2</smartgrid:model>
+        <smartgrid:nodes_primary>1</smartgrid:nodes_primary>
+        <smartgrid:num_phases rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">1</smartgrid:num_phases>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://www.semanticweb.org/phoenix/ontologies/2022/0/SmartGrid#Load_670_1 -->
+
+    <owl:NamedIndividual rdf:about="http://www.semanticweb.org/phoenix/ontologies/2022/0/SmartGrid#Load_670_1">
+        <rdf:type rdf:resource="http://www.semanticweb.org/phoenix/ontologies/2022/0/SmartGrid#Load"/>
+        <smartgrid:attachsTo rdf:resource="http://www.semanticweb.org/phoenix/ontologies/2022/0/SmartGrid#Bus_670"/>
+        <smartgrid:connection_primary>Wye</smartgrid:connection_primary>
+        <smartgrid:kW rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">17</smartgrid:kW>
+        <smartgrid:kvar rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">10</smartgrid:kvar>
+        <smartgrid:model rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">1</smartgrid:model>
+        <smartgrid:nodes_primary>1</smartgrid:nodes_primary>
+        <smartgrid:num_phases rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">1</smartgrid:num_phases>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://www.semanticweb.org/phoenix/ontologies/2022/0/SmartGrid#Load_670_2 -->
+
+    <owl:NamedIndividual rdf:about="http://www.semanticweb.org/phoenix/ontologies/2022/0/SmartGrid#Load_670_2">
+        <rdf:type rdf:resource="http://www.semanticweb.org/phoenix/ontologies/2022/0/SmartGrid#Load"/>
+        <smartgrid:attachsTo rdf:resource="http://www.semanticweb.org/phoenix/ontologies/2022/0/SmartGrid#Bus_670"/>
+        <smartgrid:connection_primary>Wye</smartgrid:connection_primary>
+        <smartgrid:kW rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">66</smartgrid:kW>
+        <smartgrid:kvar rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">38</smartgrid:kvar>
+        <smartgrid:model rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">1</smartgrid:model>
+        <smartgrid:nodes_primary>2</smartgrid:nodes_primary>
+        <smartgrid:num_phases rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">1</smartgrid:num_phases>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://www.semanticweb.org/phoenix/ontologies/2022/0/SmartGrid#Load_670_3 -->
+
+    <owl:NamedIndividual rdf:about="http://www.semanticweb.org/phoenix/ontologies/2022/0/SmartGrid#Load_670_3">
+        <rdf:type rdf:resource="http://www.semanticweb.org/phoenix/ontologies/2022/0/SmartGrid#Load"/>
+        <smartgrid:attachsTo rdf:resource="http://www.semanticweb.org/phoenix/ontologies/2022/0/SmartGrid#Bus_670"/>
+        <smartgrid:connection_primary>Wye</smartgrid:connection_primary>
+        <smartgrid:kW rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">117</smartgrid:kW>
+        <smartgrid:kvar rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">68</smartgrid:kvar>
+        <smartgrid:model rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">1</smartgrid:model>
+        <smartgrid:nodes_primary>3</smartgrid:nodes_primary>
+        <smartgrid:num_phases rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">1</smartgrid:num_phases>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://www.semanticweb.org/phoenix/ontologies/2022/0/SmartGrid#Load_671 -->
+
+    <owl:NamedIndividual rdf:about="http://www.semanticweb.org/phoenix/ontologies/2022/0/SmartGrid#Load_671">
+        <rdf:type rdf:resource="http://www.semanticweb.org/phoenix/ontologies/2022/0/SmartGrid#Load"/>
+        <smartgrid:attachsTo rdf:resource="http://www.semanticweb.org/phoenix/ontologies/2022/0/SmartGrid#Bus_671"/>
+        <smartgrid:connection_primary>Delta</smartgrid:connection_primary>
+        <smartgrid:kW rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">1155</smartgrid:kW>
+        <smartgrid:kvar rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">660</smartgrid:kvar>
+        <smartgrid:model rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">1</smartgrid:model>
+        <smartgrid:nodes_primary>1 2 3</smartgrid:nodes_primary>
+        <smartgrid:num_phases rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">3</smartgrid:num_phases>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://www.semanticweb.org/phoenix/ontologies/2022/0/SmartGrid#Load_675_1 -->
+
+    <owl:NamedIndividual rdf:about="http://www.semanticweb.org/phoenix/ontologies/2022/0/SmartGrid#Load_675_1">
+        <rdf:type rdf:resource="http://www.semanticweb.org/phoenix/ontologies/2022/0/SmartGrid#Load"/>
+        <smartgrid:attachsTo rdf:resource="http://www.semanticweb.org/phoenix/ontologies/2022/0/SmartGrid#Bus_675"/>
+        <smartgrid:connection_primary>Wye</smartgrid:connection_primary>
+        <smartgrid:kW rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">485</smartgrid:kW>
+        <smartgrid:kvar rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">190</smartgrid:kvar>
+        <smartgrid:model rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">1</smartgrid:model>
+        <smartgrid:nodes_primary>1</smartgrid:nodes_primary>
+        <smartgrid:num_phases rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">1</smartgrid:num_phases>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://www.semanticweb.org/phoenix/ontologies/2022/0/SmartGrid#Load_675_2 -->
+
+    <owl:NamedIndividual rdf:about="http://www.semanticweb.org/phoenix/ontologies/2022/0/SmartGrid#Load_675_2">
+        <rdf:type rdf:resource="http://www.semanticweb.org/phoenix/ontologies/2022/0/SmartGrid#Load"/>
+        <smartgrid:attachsTo rdf:resource="http://www.semanticweb.org/phoenix/ontologies/2022/0/SmartGrid#Bus_675"/>
+        <smartgrid:connection_primary>Wye</smartgrid:connection_primary>
+        <smartgrid:kW rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">68</smartgrid:kW>
+        <smartgrid:kvar rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">60</smartgrid:kvar>
+        <smartgrid:model rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">1</smartgrid:model>
+        <smartgrid:nodes_primary>2</smartgrid:nodes_primary>
+        <smartgrid:num_phases rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">1</smartgrid:num_phases>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://www.semanticweb.org/phoenix/ontologies/2022/0/SmartGrid#Load_675_3 -->
+
+    <owl:NamedIndividual rdf:about="http://www.semanticweb.org/phoenix/ontologies/2022/0/SmartGrid#Load_675_3">
+        <rdf:type rdf:resource="http://www.semanticweb.org/phoenix/ontologies/2022/0/SmartGrid#Load"/>
+        <smartgrid:attachsTo rdf:resource="http://www.semanticweb.org/phoenix/ontologies/2022/0/SmartGrid#Bus_675"/>
+        <smartgrid:connection_primary>Wye</smartgrid:connection_primary>
+        <smartgrid:kW rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">290</smartgrid:kW>
+        <smartgrid:kvar rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">212</smartgrid:kvar>
+        <smartgrid:model rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">1</smartgrid:model>
+        <smartgrid:nodes_primary>3</smartgrid:nodes_primary>
+        <smartgrid:num_phases rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">1</smartgrid:num_phases>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://www.semanticweb.org/phoenix/ontologies/2022/0/SmartGrid#Load_692_3 -->
+
+    <owl:NamedIndividual rdf:about="http://www.semanticweb.org/phoenix/ontologies/2022/0/SmartGrid#Load_692_3">
+        <rdf:type rdf:resource="http://www.semanticweb.org/phoenix/ontologies/2022/0/SmartGrid#Load"/>
+        <smartgrid:attachsTo rdf:resource="http://www.semanticweb.org/phoenix/ontologies/2022/0/SmartGrid#Bus_692"/>
+        <smartgrid:connection_primary>Delta</smartgrid:connection_primary>
+        <smartgrid:kW rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">170</smartgrid:kW>
+        <smartgrid:kvar rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">151</smartgrid:kvar>
+        <smartgrid:model rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">5</smartgrid:model>
+        <smartgrid:nodes_primary>3 1</smartgrid:nodes_primary>
+        <smartgrid:num_phases rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">1</smartgrid:num_phases>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://www.semanticweb.org/phoenix/ontologies/2022/0/SmartGrid#Transformer_1 -->
+
+    <owl:NamedIndividual rdf:about="http://www.semanticweb.org/phoenix/ontologies/2022/0/SmartGrid#Transformer_1">
+        <rdf:type rdf:resource="http://www.semanticweb.org/phoenix/ontologies/2022/0/SmartGrid#Transformer"/>
+        <smartgrid:attachsTo rdf:resource="http://www.semanticweb.org/phoenix/ontologies/2022/0/SmartGrid#Bus_634"/>
+        <smartgrid:primaryAttachsTo rdf:resource="http://www.semanticweb.org/phoenix/ontologies/2022/0/SmartGrid#Bus_633"/>
+        <smartgrid:Kva rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">500</smartgrid:Kva>
+        <smartgrid:XHL rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">2</smartgrid:XHL>
+        <smartgrid:XHT rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">1</smartgrid:XHT>
+        <smartgrid:XLT rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">1</smartgrid:XLT>
+        <smartgrid:connection_primary>Wye</smartgrid:connection_primary>
+        <smartgrid:connection_secondary>Wye</smartgrid:connection_secondary>
+        <smartgrid:kV_primary rdf:datatype="http://www.w3.org/2001/XMLSchema#decimal">4.16</smartgrid:kV_primary>
+        <smartgrid:kV_secondary rdf:datatype="http://www.w3.org/2001/XMLSchema#decimal">0.480</smartgrid:kV_secondary>
+        <smartgrid:num_phases rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">3</smartgrid:num_phases>
+        <smartgrid:percent_R rdf:datatype="http://www.w3.org/2001/XMLSchema#decimal">0.55</smartgrid:percent_R>
+        <rdfs:comment>This is the transformer labelled XFM-1</rdfs:comment>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://www.semanticweb.org/phoenix/ontologies/2022/0/SmartGrid#Transformer_Sub -->
+
+    <owl:NamedIndividual rdf:about="http://www.semanticweb.org/phoenix/ontologies/2022/0/SmartGrid#Transformer_Sub">
+        <rdf:type rdf:resource="http://www.semanticweb.org/phoenix/ontologies/2022/0/SmartGrid#Transformer"/>
+        <smartgrid:attachsTo rdf:resource="http://www.semanticweb.org/phoenix/ontologies/2022/0/SmartGrid#Bus_650"/>
+        <smartgrid:primaryAttachsTo rdf:resource="http://www.semanticweb.org/phoenix/ontologies/2022/0/SmartGrid#Bus_Source"/>
+        <smartgrid:Kva rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">5000</smartgrid:Kva>
+        <smartgrid:connection_primary>Delta</smartgrid:connection_primary>
+        <smartgrid:connection_secondary>Wye</smartgrid:connection_secondary>
+        <smartgrid:kV_primary rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">115</smartgrid:kV_primary>
+        <smartgrid:kV_secondary rdf:datatype="http://www.w3.org/2001/XMLSchema#decimal">4.16</smartgrid:kV_secondary>
+        <smartgrid:percent_R>(.5 1000 /)</smartgrid:percent_R>
+        <rdfs:comment>This is the transformer at the generating station</rdfs:comment>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://www.semanticweb.org/phoenix/ontologies/2022/0/SmartGrid#Transporter_Controller_Actuator -->
+
+    <owl:NamedIndividual rdf:about="http://www.semanticweb.org/phoenix/ontologies/2022/0/SmartGrid#Transporter_Controller_Actuator">
+        <rdf:type rdf:resource="http://www.semanticweb.org/phoenix/ontologies/2022/0/SmartGrid#Transporter"/>
+        <smartgrid:connectsTo rdf:resource="http://www.semanticweb.org/phoenix/ontologies/2022/0/SmartGrid#Endpoint_Controller"/>
+        <smartgrid:delay>15 ms</smartgrid:delay>
+        <smartgrid:error_rate rdf:datatype="http://www.w3.org/2001/XMLSchema#decimal">0.0001</smartgrid:error_rate>
+        <smartgrid:layer_4>TCP</smartgrid:layer_4>
+        <smartgrid:rate>512 Kbps</smartgrid:rate>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://www.semanticweb.org/phoenix/ontologies/2022/0/SmartGrid#Transporter_Sensor_Controller -->
+
+    <owl:NamedIndividual rdf:about="http://www.semanticweb.org/phoenix/ontologies/2022/0/SmartGrid#Transporter_Sensor_Controller">
+        <rdf:type rdf:resource="http://www.semanticweb.org/phoenix/ontologies/2022/0/SmartGrid#Transporter"/>
+        <smartgrid:connectsTo rdf:resource="http://www.semanticweb.org/phoenix/ontologies/2022/0/SmartGrid#Endpoint_Controller"/>
+        <smartgrid:delay>15 ms</smartgrid:delay>
+        <smartgrid:error_rate rdf:datatype="http://www.w3.org/2001/XMLSchema#decimal">0.0001</smartgrid:error_rate>
+        <smartgrid:layer_4>TCP</smartgrid:layer_4>
+        <smartgrid:rate>512 Kbps</smartgrid:rate>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://www.semanticweb.org/phoenix/ontologies/2022/0/SmartGrid#Voltage -->
+
+    <owl:NamedIndividual rdf:about="http://www.semanticweb.org/phoenix/ontologies/2022/0/SmartGrid#Voltage">
+        <rdf:type rdf:resource="http://www.semanticweb.org/phoenix/ontologies/2022/0/SmartGrid#Quantity"/>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://www.semanticweb.org/phoenix/ontologies/2022/0/SmartGrid#Voltage_Actuator -->
+
+    <owl:NamedIndividual rdf:about="http://www.semanticweb.org/phoenix/ontologies/2022/0/SmartGrid#Voltage_Actuator">
+        <rdf:type rdf:resource="http://www.semanticweb.org/phoenix/ontologies/2022/0/SmartGrid#Actuator"/>
+        <smartgrid:connectsTo rdf:resource="http://www.semanticweb.org/phoenix/ontologies/2022/0/SmartGrid#Transporter_Controller_Actuator"/>
+        <smartgrid:controls rdf:resource="http://www.semanticweb.org/phoenix/ontologies/2022/0/SmartGrid#Voltage_Regulator_1"/>
+        <smartgrid:isFedBy rdf:resource="http://www.semanticweb.org/phoenix/ontologies/2022/0/SmartGrid#Voltage_Controller"/>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://www.semanticweb.org/phoenix/ontologies/2022/0/SmartGrid#Voltage_Controller -->
+
+    <owl:NamedIndividual rdf:about="http://www.semanticweb.org/phoenix/ontologies/2022/0/SmartGrid#Voltage_Controller">
+        <rdf:type rdf:resource="http://www.semanticweb.org/phoenix/ontologies/2022/0/SmartGrid#Controller"/>
+        <smartgrid:feeds rdf:resource="http://www.semanticweb.org/phoenix/ontologies/2022/0/SmartGrid#Voltage_Actuator"/>
+        <smartgrid:delay rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">1</smartgrid:delay>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://www.semanticweb.org/phoenix/ontologies/2022/0/SmartGrid#Voltage_Regulator_1 -->
+
+    <owl:NamedIndividual rdf:about="http://www.semanticweb.org/phoenix/ontologies/2022/0/SmartGrid#Voltage_Regulator_1">
+        <rdf:type rdf:resource="http://www.semanticweb.org/phoenix/ontologies/2022/0/SmartGrid#RegControl"/>
+        <smartgrid:attachsTo rdf:resource="http://www.semanticweb.org/phoenix/ontologies/2022/0/SmartGrid#Bus_RG60"/>
+        <smartgrid:primaryAttachsTo rdf:resource="http://www.semanticweb.org/phoenix/ontologies/2022/0/SmartGrid#Bus_650"/>
+        <smartgrid:Kva rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">1666</smartgrid:Kva>
+        <smartgrid:R rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">3</smartgrid:R>
+        <smartgrid:X rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">9</smartgrid:X>
+        <smartgrid:XHL rdf:datatype="http://www.w3.org/2001/XMLSchema#decimal">0.01</smartgrid:XHL>
+        <smartgrid:band rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">2</smartgrid:band>
+        <smartgrid:ctprim rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">700</smartgrid:ctprim>
+        <smartgrid:kV_primary rdf:datatype="http://www.w3.org/2001/XMLSchema#decimal">2.4</smartgrid:kV_primary>
+        <smartgrid:kV_secondary rdf:datatype="http://www.w3.org/2001/XMLSchema#decimal">2.4</smartgrid:kV_secondary>
+        <smartgrid:max_tap rdf:datatype="http://www.w3.org/2001/XMLSchema#decimal">1.05</smartgrid:max_tap>
+        <smartgrid:min_tap rdf:datatype="http://www.w3.org/2001/XMLSchema#decimal">0.95</smartgrid:min_tap>
+        <smartgrid:nodes_primary rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">1</smartgrid:nodes_primary>
+        <smartgrid:nodes_secondary rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">1</smartgrid:nodes_secondary>
+        <smartgrid:num_phases rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">1</smartgrid:num_phases>
+        <smartgrid:num_taps rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">32</smartgrid:num_taps>
+        <smartgrid:percent_Load_Loss rdf:datatype="http://www.w3.org/2001/XMLSchema#decimal">0.01</smartgrid:percent_Load_Loss>
+        <smartgrid:ptratio rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">20</smartgrid:ptratio>
+        <smartgrid:vreg rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">122</smartgrid:vreg>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://www.semanticweb.org/phoenix/ontologies/2022/0/SmartGrid#Voltage_Regulator_2 -->
+
+    <owl:NamedIndividual rdf:about="http://www.semanticweb.org/phoenix/ontologies/2022/0/SmartGrid#Voltage_Regulator_2">
+        <rdf:type rdf:resource="http://www.semanticweb.org/phoenix/ontologies/2022/0/SmartGrid#RegControl"/>
+        <smartgrid:attachsTo rdf:resource="http://www.semanticweb.org/phoenix/ontologies/2022/0/SmartGrid#Bus_RG60"/>
+        <smartgrid:primaryAttachsTo rdf:resource="http://www.semanticweb.org/phoenix/ontologies/2022/0/SmartGrid#Bus_650"/>
+        <smartgrid:Kva rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">1666</smartgrid:Kva>
+        <smartgrid:R rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">3</smartgrid:R>
+        <smartgrid:X rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">9</smartgrid:X>
+        <smartgrid:XHL rdf:datatype="http://www.w3.org/2001/XMLSchema#decimal">0.01</smartgrid:XHL>
+        <smartgrid:band rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">2</smartgrid:band>
+        <smartgrid:ctprim rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">700</smartgrid:ctprim>
+        <smartgrid:kV_primary rdf:datatype="http://www.w3.org/2001/XMLSchema#decimal">2.4</smartgrid:kV_primary>
+        <smartgrid:kV_secondary rdf:datatype="http://www.w3.org/2001/XMLSchema#decimal">2.4</smartgrid:kV_secondary>
+        <smartgrid:max_tap rdf:datatype="http://www.w3.org/2001/XMLSchema#decimal">1.05</smartgrid:max_tap>
+        <smartgrid:min_tap rdf:datatype="http://www.w3.org/2001/XMLSchema#decimal">0.95</smartgrid:min_tap>
+        <smartgrid:nodes_primary rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">2</smartgrid:nodes_primary>
+        <smartgrid:nodes_secondary rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">2</smartgrid:nodes_secondary>
+        <smartgrid:num_phases rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">1</smartgrid:num_phases>
+        <smartgrid:num_taps rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">32</smartgrid:num_taps>
+        <smartgrid:percent_Load_Loss rdf:datatype="http://www.w3.org/2001/XMLSchema#decimal">0.01</smartgrid:percent_Load_Loss>
+        <smartgrid:ptratio rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">20</smartgrid:ptratio>
+        <smartgrid:vreg rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">122</smartgrid:vreg>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://www.semanticweb.org/phoenix/ontologies/2022/0/SmartGrid#Voltage_Regulator_3 -->
+
+    <owl:NamedIndividual rdf:about="http://www.semanticweb.org/phoenix/ontologies/2022/0/SmartGrid#Voltage_Regulator_3">
+        <rdf:type rdf:resource="http://www.semanticweb.org/phoenix/ontologies/2022/0/SmartGrid#RegControl"/>
+        <smartgrid:attachsTo rdf:resource="http://www.semanticweb.org/phoenix/ontologies/2022/0/SmartGrid#Bus_RG60"/>
+        <smartgrid:primaryAttachsTo rdf:resource="http://www.semanticweb.org/phoenix/ontologies/2022/0/SmartGrid#Bus_650"/>
+        <smartgrid:Kva rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">1666</smartgrid:Kva>
+        <smartgrid:R rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">3</smartgrid:R>
+        <smartgrid:X rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">9</smartgrid:X>
+        <smartgrid:XHL rdf:datatype="http://www.w3.org/2001/XMLSchema#decimal">0.01</smartgrid:XHL>
+        <smartgrid:band rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">2</smartgrid:band>
+        <smartgrid:ctprim rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">700</smartgrid:ctprim>
+        <smartgrid:kV_primary rdf:datatype="http://www.w3.org/2001/XMLSchema#decimal">2.4</smartgrid:kV_primary>
+        <smartgrid:kV_secondary rdf:datatype="http://www.w3.org/2001/XMLSchema#decimal">2.4</smartgrid:kV_secondary>
+        <smartgrid:max_tap rdf:datatype="http://www.w3.org/2001/XMLSchema#decimal">1.05</smartgrid:max_tap>
+        <smartgrid:min_tap rdf:datatype="http://www.w3.org/2001/XMLSchema#decimal">0.95</smartgrid:min_tap>
+        <smartgrid:nodes_primary rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">3</smartgrid:nodes_primary>
+        <smartgrid:nodes_secondary rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">3</smartgrid:nodes_secondary>
+        <smartgrid:num_phases rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">1</smartgrid:num_phases>
+        <smartgrid:num_taps rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">32</smartgrid:num_taps>
+        <smartgrid:percent_Load_Loss rdf:datatype="http://www.w3.org/2001/XMLSchema#decimal">0.01</smartgrid:percent_Load_Loss>
+        <smartgrid:ptratio rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">20</smartgrid:ptratio>
+        <smartgrid:vreg rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">122</smartgrid:vreg>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://www.semanticweb.org/phoenix/ontologies/2022/0/SmartGrid#Voltage_Sensor -->
+
+    <owl:NamedIndividual rdf:about="http://www.semanticweb.org/phoenix/ontologies/2022/0/SmartGrid#Voltage_Sensor">
+        <rdf:type rdf:resource="http://www.semanticweb.org/phoenix/ontologies/2022/0/SmartGrid#Voltage_Sensor"/>
+        <smartgrid:connectsTo rdf:resource="http://www.semanticweb.org/phoenix/ontologies/2022/0/SmartGrid#Transporter_Sensor_Controller"/>
+        <smartgrid:feeds rdf:resource="http://www.semanticweb.org/phoenix/ontologies/2022/0/SmartGrid#Voltage_Controller"/>
+        <smartgrid:measures rdf:resource="http://www.semanticweb.org/phoenix/ontologies/2022/0/SmartGrid#Voltage"/>
+        <smartgrid:monitor rdf:resource="http://www.semanticweb.org/phoenix/ontologies/2022/0/SmartGrid#Bus_611"/>
+        <smartgrid:rate rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">120</smartgrid:rate>
+    </owl:NamedIndividual>
+</rdf:RDF>
+
+
+
+<!-- Generated by the OWL API (version 4.5.9.2019-02-01T07:24:44Z) https://github.com/owlcs/owlapi -->
+

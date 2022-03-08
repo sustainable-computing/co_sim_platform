@@ -1,0 +1,3136 @@
+<?xml version="1.0"?>
+<Ontology xmlns="http://www.w3.org/2002/07/owl#"
+     xml:base="http://www.semanticweb.org/phoenix/ontologies/2022/0/SmartGrid"
+     xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+     xmlns:xml="http://www.w3.org/XML/1998/namespace"
+     xmlns:xsd="http://www.w3.org/2001/XMLSchema#"
+     xmlns:rdfs="http://www.w3.org/2000/01/rdf-schema#"
+     ontologyIRI="http://www.semanticweb.org/phoenix/ontologies/2022/0/SmartGrid">
+    <Prefix name="owl" IRI="http://www.w3.org/2002/07/owl#"/>
+    <Prefix name="rdf" IRI="http://www.w3.org/1999/02/22-rdf-syntax-ns#"/>
+    <Prefix name="xml" IRI="http://www.w3.org/XML/1998/namespace"/>
+    <Prefix name="xsd" IRI="http://www.w3.org/2001/XMLSchema#"/>
+    <Prefix name="rdfs" IRI="http://www.w3.org/2000/01/rdf-schema#"/>
+    <Declaration>
+        <Class IRI="#Actuator"/>
+    </Declaration>
+    <Declaration>
+        <Class IRI="#Bus"/>
+    </Declaration>
+    <Declaration>
+        <Class IRI="#Capacitor"/>
+    </Declaration>
+    <Declaration>
+        <Class IRI="#Control_System"/>
+    </Declaration>
+    <Declaration>
+        <Class IRI="#Controller"/>
+    </Declaration>
+    <Declaration>
+        <Class IRI="#Coordinates"/>
+    </Declaration>
+    <Declaration>
+        <Class IRI="#Electrical_Equipment"/>
+    </Declaration>
+    <Declaration>
+        <Class IRI="#Equipment"/>
+    </Declaration>
+    <Declaration>
+        <Class IRI="#Generator"/>
+    </Declaration>
+    <Declaration>
+        <Class IRI="#Line"/>
+    </Declaration>
+    <Declaration>
+        <Class IRI="#Line_Code"/>
+    </Declaration>
+    <Declaration>
+        <Class IRI="#Load"/>
+    </Declaration>
+    <Declaration>
+        <Class IRI="#Location"/>
+    </Declaration>
+    <Declaration>
+        <Class IRI="#Measurable"/>
+    </Declaration>
+    <Declaration>
+        <Class IRI="#Network_Devices"/>
+    </Declaration>
+    <Declaration>
+        <Class IRI="#Network_Endpoint"/>
+    </Declaration>
+    <Declaration>
+        <Class IRI="#Processor"/>
+    </Declaration>
+    <Declaration>
+        <Class IRI="#Quantity"/>
+    </Declaration>
+    <Declaration>
+        <Class IRI="#RegControl"/>
+    </Declaration>
+    <Declaration>
+        <Class IRI="#Sensor"/>
+    </Declaration>
+    <Declaration>
+        <Class IRI="#Switch"/>
+    </Declaration>
+    <Declaration>
+        <Class IRI="#Transformer"/>
+    </Declaration>
+    <Declaration>
+        <Class IRI="#Transporter"/>
+    </Declaration>
+    <Declaration>
+        <Class IRI="#Voltage_Sensor"/>
+    </Declaration>
+    <Declaration>
+        <ObjectProperty IRI="#attachsTo"/>
+    </Declaration>
+    <Declaration>
+        <ObjectProperty IRI="#connectsTo"/>
+    </Declaration>
+    <Declaration>
+        <ObjectProperty IRI="#controls"/>
+    </Declaration>
+    <Declaration>
+        <ObjectProperty IRI="#feeds"/>
+    </Declaration>
+    <Declaration>
+        <ObjectProperty IRI="#isControlledBy"/>
+    </Declaration>
+    <Declaration>
+        <ObjectProperty IRI="#isFedBy"/>
+    </Declaration>
+    <Declaration>
+        <ObjectProperty IRI="#isLocationOf"/>
+    </Declaration>
+    <Declaration>
+        <ObjectProperty IRI="#isMeasuredBy"/>
+    </Declaration>
+    <Declaration>
+        <ObjectProperty IRI="#isMonitorBy"/>
+    </Declaration>
+    <Declaration>
+        <ObjectProperty IRI="#locatedAt"/>
+    </Declaration>
+    <Declaration>
+        <ObjectProperty IRI="#measures"/>
+    </Declaration>
+    <Declaration>
+        <ObjectProperty IRI="#monitor"/>
+    </Declaration>
+    <Declaration>
+        <ObjectProperty IRI="#primaryAttachsTo"/>
+    </Declaration>
+    <Declaration>
+        <DataProperty IRI="#Kva"/>
+    </Declaration>
+    <Declaration>
+        <DataProperty IRI="#MVAsc1"/>
+    </Declaration>
+    <Declaration>
+        <DataProperty IRI="#MVAsc3"/>
+    </Declaration>
+    <Declaration>
+        <DataProperty IRI="#R"/>
+    </Declaration>
+    <Declaration>
+        <DataProperty IRI="#X"/>
+    </Declaration>
+    <Declaration>
+        <DataProperty IRI="#XHL"/>
+    </Declaration>
+    <Declaration>
+        <DataProperty IRI="#XHT"/>
+    </Declaration>
+    <Declaration>
+        <DataProperty IRI="#XLT"/>
+    </Declaration>
+    <Declaration>
+        <DataProperty IRI="#angle"/>
+    </Declaration>
+    <Declaration>
+        <DataProperty IRI="#band"/>
+    </Declaration>
+    <Declaration>
+        <DataProperty IRI="#connection_primary"/>
+    </Declaration>
+    <Declaration>
+        <DataProperty IRI="#connection_secondary"/>
+    </Declaration>
+    <Declaration>
+        <DataProperty IRI="#coord_x"/>
+    </Declaration>
+    <Declaration>
+        <DataProperty IRI="#coord_y"/>
+    </Declaration>
+    <Declaration>
+        <DataProperty IRI="#ctprim"/>
+    </Declaration>
+    <Declaration>
+        <DataProperty IRI="#delay"/>
+    </Declaration>
+    <Declaration>
+        <DataProperty IRI="#error_rate"/>
+    </Declaration>
+    <Declaration>
+        <DataProperty IRI="#freq"/>
+    </Declaration>
+    <Declaration>
+        <DataProperty IRI="#kV_primary"/>
+    </Declaration>
+    <Declaration>
+        <DataProperty IRI="#kV_secondary"/>
+    </Declaration>
+    <Declaration>
+        <DataProperty IRI="#kW"/>
+    </Declaration>
+    <Declaration>
+        <DataProperty IRI="#kvar"/>
+    </Declaration>
+    <Declaration>
+        <DataProperty IRI="#layer_1"/>
+    </Declaration>
+    <Declaration>
+        <DataProperty IRI="#layer_2"/>
+    </Declaration>
+    <Declaration>
+        <DataProperty IRI="#layer_3"/>
+    </Declaration>
+    <Declaration>
+        <DataProperty IRI="#layer_4"/>
+    </Declaration>
+    <Declaration>
+        <DataProperty IRI="#length"/>
+    </Declaration>
+    <Declaration>
+        <DataProperty IRI="#max_tap"/>
+    </Declaration>
+    <Declaration>
+        <DataProperty IRI="#min_tap"/>
+    </Declaration>
+    <Declaration>
+        <DataProperty IRI="#model"/>
+    </Declaration>
+    <Declaration>
+        <DataProperty IRI="#nodes_primary"/>
+    </Declaration>
+    <Declaration>
+        <DataProperty IRI="#nodes_secondary"/>
+    </Declaration>
+    <Declaration>
+        <DataProperty IRI="#normal_state"/>
+    </Declaration>
+    <Declaration>
+        <DataProperty IRI="#num_phases"/>
+    </Declaration>
+    <Declaration>
+        <DataProperty IRI="#num_taps"/>
+    </Declaration>
+    <Declaration>
+        <DataProperty IRI="#percent_Load_Loss"/>
+    </Declaration>
+    <Declaration>
+        <DataProperty IRI="#percent_R"/>
+    </Declaration>
+    <Declaration>
+        <DataProperty IRI="#ptratio"/>
+    </Declaration>
+    <Declaration>
+        <DataProperty IRI="#rate"/>
+    </Declaration>
+    <Declaration>
+        <DataProperty IRI="#switch_type"/>
+    </Declaration>
+    <Declaration>
+        <DataProperty IRI="#unit"/>
+    </Declaration>
+    <Declaration>
+        <DataProperty IRI="#vreg"/>
+    </Declaration>
+    <Declaration>
+        <NamedIndividual IRI="#Bus_611"/>
+    </Declaration>
+    <Declaration>
+        <NamedIndividual IRI="#Bus_632"/>
+    </Declaration>
+    <Declaration>
+        <NamedIndividual IRI="#Bus_633"/>
+    </Declaration>
+    <Declaration>
+        <NamedIndividual IRI="#Bus_634"/>
+    </Declaration>
+    <Declaration>
+        <NamedIndividual IRI="#Bus_645"/>
+    </Declaration>
+    <Declaration>
+        <NamedIndividual IRI="#Bus_646"/>
+    </Declaration>
+    <Declaration>
+        <NamedIndividual IRI="#Bus_650"/>
+    </Declaration>
+    <Declaration>
+        <NamedIndividual IRI="#Bus_652"/>
+    </Declaration>
+    <Declaration>
+        <NamedIndividual IRI="#Bus_670"/>
+    </Declaration>
+    <Declaration>
+        <NamedIndividual IRI="#Bus_671"/>
+    </Declaration>
+    <Declaration>
+        <NamedIndividual IRI="#Bus_675"/>
+    </Declaration>
+    <Declaration>
+        <NamedIndividual IRI="#Bus_680"/>
+    </Declaration>
+    <Declaration>
+        <NamedIndividual IRI="#Bus_684"/>
+    </Declaration>
+    <Declaration>
+        <NamedIndividual IRI="#Bus_692"/>
+    </Declaration>
+    <Declaration>
+        <NamedIndividual IRI="#Bus_RG60"/>
+    </Declaration>
+    <Declaration>
+        <NamedIndividual IRI="#Bus_Source"/>
+    </Declaration>
+    <Declaration>
+        <NamedIndividual IRI="#Capacitor_Cap1"/>
+    </Declaration>
+    <Declaration>
+        <NamedIndividual IRI="#Capacitor_Cap2"/>
+    </Declaration>
+    <Declaration>
+        <NamedIndividual IRI="#Coord_0_100"/>
+    </Declaration>
+    <Declaration>
+        <NamedIndividual IRI="#Coord_0_250"/>
+    </Declaration>
+    <Declaration>
+        <NamedIndividual IRI="#Coord_100_0"/>
+    </Declaration>
+    <Declaration>
+        <NamedIndividual IRI="#Coord_100_100"/>
+    </Declaration>
+    <Declaration>
+        <NamedIndividual IRI="#Coord_100_250"/>
+    </Declaration>
+    <Declaration>
+        <NamedIndividual IRI="#Coord_200_0"/>
+    </Declaration>
+    <Declaration>
+        <NamedIndividual IRI="#Coord_200_100"/>
+    </Declaration>
+    <Declaration>
+        <NamedIndividual IRI="#Coord_200_200"/>
+    </Declaration>
+    <Declaration>
+        <NamedIndividual IRI="#Coord_200_250"/>
+    </Declaration>
+    <Declaration>
+        <NamedIndividual IRI="#Coord_200_300"/>
+    </Declaration>
+    <Declaration>
+        <NamedIndividual IRI="#Coord_200_350"/>
+    </Declaration>
+    <Declaration>
+        <NamedIndividual IRI="#Coord_200_400"/>
+    </Declaration>
+    <Declaration>
+        <NamedIndividual IRI="#Coord_250_100"/>
+    </Declaration>
+    <Declaration>
+        <NamedIndividual IRI="#Coord_350_250"/>
+    </Declaration>
+    <Declaration>
+        <NamedIndividual IRI="#Coord_400_100"/>
+    </Declaration>
+    <Declaration>
+        <NamedIndividual IRI="#Coord_400_250"/>
+    </Declaration>
+    <Declaration>
+        <NamedIndividual IRI="#Endpoint_Controller"/>
+    </Declaration>
+    <Declaration>
+        <NamedIndividual IRI="#Generator"/>
+    </Declaration>
+    <Declaration>
+        <NamedIndividual IRI="#Line_632633"/>
+    </Declaration>
+    <Declaration>
+        <NamedIndividual IRI="#Line_632645"/>
+    </Declaration>
+    <Declaration>
+        <NamedIndividual IRI="#Line_632670"/>
+    </Declaration>
+    <Declaration>
+        <NamedIndividual IRI="#Line_645646"/>
+    </Declaration>
+    <Declaration>
+        <NamedIndividual IRI="#Line_650632"/>
+    </Declaration>
+    <Declaration>
+        <NamedIndividual IRI="#Line_670671"/>
+    </Declaration>
+    <Declaration>
+        <NamedIndividual IRI="#Line_671680"/>
+    </Declaration>
+    <Declaration>
+        <NamedIndividual IRI="#Line_671684"/>
+    </Declaration>
+    <Declaration>
+        <NamedIndividual IRI="#Line_671692"/>
+    </Declaration>
+    <Declaration>
+        <NamedIndividual IRI="#Line_684611"/>
+    </Declaration>
+    <Declaration>
+        <NamedIndividual IRI="#Line_684652"/>
+    </Declaration>
+    <Declaration>
+        <NamedIndividual IRI="#Line_692675"/>
+    </Declaration>
+    <Declaration>
+        <NamedIndividual IRI="#Line_Code_mtx601"/>
+    </Declaration>
+    <Declaration>
+        <NamedIndividual IRI="#Line_Code_mtx602"/>
+    </Declaration>
+    <Declaration>
+        <NamedIndividual IRI="#Line_Code_mtx603"/>
+    </Declaration>
+    <Declaration>
+        <NamedIndividual IRI="#Line_Code_mtx604"/>
+    </Declaration>
+    <Declaration>
+        <NamedIndividual IRI="#Line_Code_mtx605"/>
+    </Declaration>
+    <Declaration>
+        <NamedIndividual IRI="#Line_Code_mtx606"/>
+    </Declaration>
+    <Declaration>
+        <NamedIndividual IRI="#Line_Code_mtx607"/>
+    </Declaration>
+    <Declaration>
+        <NamedIndividual IRI="#Load_611_3"/>
+    </Declaration>
+    <Declaration>
+        <NamedIndividual IRI="#Load_634_1"/>
+    </Declaration>
+    <Declaration>
+        <NamedIndividual IRI="#Load_634_2"/>
+    </Declaration>
+    <Declaration>
+        <NamedIndividual IRI="#Load_634_3"/>
+    </Declaration>
+    <Declaration>
+        <NamedIndividual IRI="#Load_645_2"/>
+    </Declaration>
+    <Declaration>
+        <NamedIndividual IRI="#Load_646_2"/>
+    </Declaration>
+    <Declaration>
+        <NamedIndividual IRI="#Load_652_1"/>
+    </Declaration>
+    <Declaration>
+        <NamedIndividual IRI="#Load_670_1"/>
+    </Declaration>
+    <Declaration>
+        <NamedIndividual IRI="#Load_670_2"/>
+    </Declaration>
+    <Declaration>
+        <NamedIndividual IRI="#Load_670_3"/>
+    </Declaration>
+    <Declaration>
+        <NamedIndividual IRI="#Load_671"/>
+    </Declaration>
+    <Declaration>
+        <NamedIndividual IRI="#Load_675_1"/>
+    </Declaration>
+    <Declaration>
+        <NamedIndividual IRI="#Load_675_2"/>
+    </Declaration>
+    <Declaration>
+        <NamedIndividual IRI="#Load_675_3"/>
+    </Declaration>
+    <Declaration>
+        <NamedIndividual IRI="#Load_692_3"/>
+    </Declaration>
+    <Declaration>
+        <NamedIndividual IRI="#Transformer_1"/>
+    </Declaration>
+    <Declaration>
+        <NamedIndividual IRI="#Transformer_Sub"/>
+    </Declaration>
+    <Declaration>
+        <NamedIndividual IRI="#Transporter_Controller_Actuator"/>
+    </Declaration>
+    <Declaration>
+        <NamedIndividual IRI="#Transporter_Sensor_Controller"/>
+    </Declaration>
+    <Declaration>
+        <NamedIndividual IRI="#Voltage"/>
+    </Declaration>
+    <Declaration>
+        <NamedIndividual IRI="#Voltage_Actuator"/>
+    </Declaration>
+    <Declaration>
+        <NamedIndividual IRI="#Voltage_Controller"/>
+    </Declaration>
+    <Declaration>
+        <NamedIndividual IRI="#Voltage_Regulator_1"/>
+    </Declaration>
+    <Declaration>
+        <NamedIndividual IRI="#Voltage_Regulator_2"/>
+    </Declaration>
+    <Declaration>
+        <NamedIndividual IRI="#Voltage_Regulator_3"/>
+    </Declaration>
+    <Declaration>
+        <NamedIndividual IRI="#Voltage_Sensor"/>
+    </Declaration>
+    <Declaration>
+        <AnnotationProperty IRI="#and"/>
+    </Declaration>
+    <Declaration>
+        <AnnotationProperty IRI="#applicableUnit"/>
+    </Declaration>
+    <Declaration>
+        <AnnotationProperty IRI="#class"/>
+    </Declaration>
+    <Declaration>
+        <AnnotationProperty IRI="#datatype"/>
+    </Declaration>
+    <Declaration>
+        <AnnotationProperty IRI="#in"/>
+    </Declaration>
+    <Declaration>
+        <AnnotationProperty IRI="#not"/>
+    </Declaration>
+    <Declaration>
+        <AnnotationProperty IRI="#or"/>
+    </Declaration>
+    <Declaration>
+        <AnnotationProperty IRI="#property"/>
+    </Declaration>
+    <Declaration>
+        <AnnotationProperty IRI="#targetClass"/>
+    </Declaration>
+    <Declaration>
+        <AnnotationProperty IRI="#targetSubjectOf"/>
+    </Declaration>
+    <Declaration>
+        <AnnotationProperty IRI="http://www.w3.org/2004/02/skos/core#definition"/>
+    </Declaration>
+    <Declaration>
+        <Datatype IRI="#float_array"/>
+    </Declaration>
+    <Declaration>
+        <Datatype IRI="#int_array"/>
+    </Declaration>
+    <Declaration>
+        <Datatype IRI="#trig_matrix"/>
+    </Declaration>
+    <SubClassOf>
+        <Class IRI="#Actuator"/>
+        <Class IRI="#Control_System"/>
+    </SubClassOf>
+    <SubClassOf>
+        <Class IRI="#Bus"/>
+        <Class IRI="#Electrical_Equipment"/>
+    </SubClassOf>
+    <SubClassOf>
+        <Class IRI="#Capacitor"/>
+        <Class IRI="#Electrical_Equipment"/>
+    </SubClassOf>
+    <SubClassOf>
+        <Class IRI="#Controller"/>
+        <Class IRI="#Processor"/>
+    </SubClassOf>
+    <SubClassOf>
+        <Class IRI="#Coordinates"/>
+        <Class IRI="#Location"/>
+    </SubClassOf>
+    <SubClassOf>
+        <Class IRI="#Electrical_Equipment"/>
+        <Class IRI="#Equipment"/>
+    </SubClassOf>
+    <SubClassOf>
+        <Class IRI="#Electrical_Equipment"/>
+        <DataExactCardinality cardinality="60">
+            <DataProperty IRI="#freq"/>
+            <Datatype abbreviatedIRI="xsd:integer"/>
+        </DataExactCardinality>
+    </SubClassOf>
+    <SubClassOf>
+        <Class IRI="#Generator"/>
+        <Class IRI="#Electrical_Equipment"/>
+    </SubClassOf>
+    <SubClassOf>
+        <Class IRI="#Line"/>
+        <Class IRI="#Electrical_Equipment"/>
+    </SubClassOf>
+    <SubClassOf>
+        <Class IRI="#Line_Code"/>
+        <Class IRI="#Line"/>
+    </SubClassOf>
+    <SubClassOf>
+        <Class IRI="#Load"/>
+        <Class IRI="#Electrical_Equipment"/>
+    </SubClassOf>
+    <SubClassOf>
+        <Class IRI="#Network_Devices"/>
+        <Class IRI="#Equipment"/>
+    </SubClassOf>
+    <SubClassOf>
+        <Class IRI="#Network_Endpoint"/>
+        <Class IRI="#Network_Devices"/>
+    </SubClassOf>
+    <SubClassOf>
+        <Class IRI="#Processor"/>
+        <Class IRI="#Control_System"/>
+    </SubClassOf>
+    <SubClassOf>
+        <Class IRI="#Quantity"/>
+        <Class IRI="#Measurable"/>
+    </SubClassOf>
+    <SubClassOf>
+        <Class IRI="#RegControl"/>
+        <Class IRI="#Transformer"/>
+    </SubClassOf>
+    <SubClassOf>
+        <Class IRI="#Sensor"/>
+        <Class IRI="#Control_System"/>
+    </SubClassOf>
+    <SubClassOf>
+        <Class IRI="#Switch"/>
+        <Class IRI="#Line"/>
+    </SubClassOf>
+    <SubClassOf>
+        <Class IRI="#Transformer"/>
+        <Class IRI="#Electrical_Equipment"/>
+    </SubClassOf>
+    <SubClassOf>
+        <Class IRI="#Transporter"/>
+        <Class IRI="#Network_Devices"/>
+    </SubClassOf>
+    <SubClassOf>
+        <Class IRI="#Voltage_Sensor"/>
+        <Class IRI="#Sensor"/>
+    </SubClassOf>
+    <ClassAssertion>
+        <Class IRI="#Bus"/>
+        <NamedIndividual IRI="#Bus_611"/>
+    </ClassAssertion>
+    <ClassAssertion>
+        <Class IRI="#Bus"/>
+        <NamedIndividual IRI="#Bus_632"/>
+    </ClassAssertion>
+    <ClassAssertion>
+        <Class IRI="#Bus"/>
+        <NamedIndividual IRI="#Bus_633"/>
+    </ClassAssertion>
+    <ClassAssertion>
+        <Class IRI="#Bus"/>
+        <NamedIndividual IRI="#Bus_634"/>
+    </ClassAssertion>
+    <ClassAssertion>
+        <Class IRI="#Bus"/>
+        <NamedIndividual IRI="#Bus_645"/>
+    </ClassAssertion>
+    <ClassAssertion>
+        <Class IRI="#Bus"/>
+        <NamedIndividual IRI="#Bus_646"/>
+    </ClassAssertion>
+    <ClassAssertion>
+        <Class IRI="#Bus"/>
+        <NamedIndividual IRI="#Bus_650"/>
+    </ClassAssertion>
+    <ClassAssertion>
+        <Class IRI="#Bus"/>
+        <NamedIndividual IRI="#Bus_652"/>
+    </ClassAssertion>
+    <ClassAssertion>
+        <Class IRI="#Bus"/>
+        <NamedIndividual IRI="#Bus_670"/>
+    </ClassAssertion>
+    <ClassAssertion>
+        <Class IRI="#Bus"/>
+        <NamedIndividual IRI="#Bus_671"/>
+    </ClassAssertion>
+    <ClassAssertion>
+        <Class IRI="#Bus"/>
+        <NamedIndividual IRI="#Bus_675"/>
+    </ClassAssertion>
+    <ClassAssertion>
+        <Class IRI="#Bus"/>
+        <NamedIndividual IRI="#Bus_680"/>
+    </ClassAssertion>
+    <ClassAssertion>
+        <Class IRI="#Bus"/>
+        <NamedIndividual IRI="#Bus_684"/>
+    </ClassAssertion>
+    <ClassAssertion>
+        <Class IRI="#Bus"/>
+        <NamedIndividual IRI="#Bus_692"/>
+    </ClassAssertion>
+    <ClassAssertion>
+        <Class IRI="#Bus"/>
+        <NamedIndividual IRI="#Bus_RG60"/>
+    </ClassAssertion>
+    <ClassAssertion>
+        <Class IRI="#Bus"/>
+        <NamedIndividual IRI="#Bus_Source"/>
+    </ClassAssertion>
+    <ClassAssertion>
+        <Class IRI="#Capacitor"/>
+        <NamedIndividual IRI="#Capacitor_Cap1"/>
+    </ClassAssertion>
+    <ClassAssertion>
+        <Class IRI="#Capacitor"/>
+        <NamedIndividual IRI="#Capacitor_Cap2"/>
+    </ClassAssertion>
+    <ClassAssertion>
+        <Class IRI="#Coordinates"/>
+        <NamedIndividual IRI="#Coord_0_100"/>
+    </ClassAssertion>
+    <ClassAssertion>
+        <Class IRI="#Coordinates"/>
+        <NamedIndividual IRI="#Coord_0_250"/>
+    </ClassAssertion>
+    <ClassAssertion>
+        <Class IRI="#Coordinates"/>
+        <NamedIndividual IRI="#Coord_100_0"/>
+    </ClassAssertion>
+    <ClassAssertion>
+        <Class IRI="#Coordinates"/>
+        <NamedIndividual IRI="#Coord_100_100"/>
+    </ClassAssertion>
+    <ClassAssertion>
+        <Class IRI="#Coordinates"/>
+        <NamedIndividual IRI="#Coord_100_250"/>
+    </ClassAssertion>
+    <ClassAssertion>
+        <Class IRI="#Coordinates"/>
+        <NamedIndividual IRI="#Coord_200_0"/>
+    </ClassAssertion>
+    <ClassAssertion>
+        <Class IRI="#Coordinates"/>
+        <NamedIndividual IRI="#Coord_200_100"/>
+    </ClassAssertion>
+    <ClassAssertion>
+        <Class IRI="#Coordinates"/>
+        <NamedIndividual IRI="#Coord_200_200"/>
+    </ClassAssertion>
+    <ClassAssertion>
+        <Class IRI="#Coordinates"/>
+        <NamedIndividual IRI="#Coord_200_250"/>
+    </ClassAssertion>
+    <ClassAssertion>
+        <Class IRI="#Coordinates"/>
+        <NamedIndividual IRI="#Coord_200_300"/>
+    </ClassAssertion>
+    <ClassAssertion>
+        <Class IRI="#Coordinates"/>
+        <NamedIndividual IRI="#Coord_200_350"/>
+    </ClassAssertion>
+    <ClassAssertion>
+        <Class IRI="#Coordinates"/>
+        <NamedIndividual IRI="#Coord_200_400"/>
+    </ClassAssertion>
+    <ClassAssertion>
+        <Class IRI="#Coordinates"/>
+        <NamedIndividual IRI="#Coord_250_100"/>
+    </ClassAssertion>
+    <ClassAssertion>
+        <Class IRI="#Coordinates"/>
+        <NamedIndividual IRI="#Coord_350_250"/>
+    </ClassAssertion>
+    <ClassAssertion>
+        <Class IRI="#Coordinates"/>
+        <NamedIndividual IRI="#Coord_400_100"/>
+    </ClassAssertion>
+    <ClassAssertion>
+        <Class IRI="#Coordinates"/>
+        <NamedIndividual IRI="#Coord_400_250"/>
+    </ClassAssertion>
+    <ClassAssertion>
+        <Class IRI="#Network_Endpoint"/>
+        <NamedIndividual IRI="#Endpoint_Controller"/>
+    </ClassAssertion>
+    <ClassAssertion>
+        <Class IRI="#Generator"/>
+        <NamedIndividual IRI="#Generator"/>
+    </ClassAssertion>
+    <ClassAssertion>
+        <Class IRI="#Line"/>
+        <NamedIndividual IRI="#Line_632633"/>
+    </ClassAssertion>
+    <ClassAssertion>
+        <Class IRI="#Line"/>
+        <NamedIndividual IRI="#Line_632645"/>
+    </ClassAssertion>
+    <ClassAssertion>
+        <Class IRI="#Line"/>
+        <NamedIndividual IRI="#Line_632670"/>
+    </ClassAssertion>
+    <ClassAssertion>
+        <Class IRI="#Line"/>
+        <NamedIndividual IRI="#Line_645646"/>
+    </ClassAssertion>
+    <ClassAssertion>
+        <Class IRI="#Line"/>
+        <NamedIndividual IRI="#Line_650632"/>
+    </ClassAssertion>
+    <ClassAssertion>
+        <Class IRI="#Line"/>
+        <NamedIndividual IRI="#Line_670671"/>
+    </ClassAssertion>
+    <ClassAssertion>
+        <Class IRI="#Line"/>
+        <NamedIndividual IRI="#Line_671680"/>
+    </ClassAssertion>
+    <ClassAssertion>
+        <Class IRI="#Line"/>
+        <NamedIndividual IRI="#Line_671684"/>
+    </ClassAssertion>
+    <ClassAssertion>
+        <Class IRI="#Switch"/>
+        <NamedIndividual IRI="#Line_671692"/>
+    </ClassAssertion>
+    <ClassAssertion>
+        <Class IRI="#Line"/>
+        <NamedIndividual IRI="#Line_684611"/>
+    </ClassAssertion>
+    <ClassAssertion>
+        <Class IRI="#Line"/>
+        <NamedIndividual IRI="#Line_684652"/>
+    </ClassAssertion>
+    <ClassAssertion>
+        <Class IRI="#Line"/>
+        <NamedIndividual IRI="#Line_692675"/>
+    </ClassAssertion>
+    <ClassAssertion>
+        <Class IRI="#Line_Code"/>
+        <NamedIndividual IRI="#Line_Code_mtx601"/>
+    </ClassAssertion>
+    <ClassAssertion>
+        <Class IRI="#Line_Code"/>
+        <NamedIndividual IRI="#Line_Code_mtx602"/>
+    </ClassAssertion>
+    <ClassAssertion>
+        <Class IRI="#Line_Code"/>
+        <NamedIndividual IRI="#Line_Code_mtx603"/>
+    </ClassAssertion>
+    <ClassAssertion>
+        <Class IRI="#Line_Code"/>
+        <NamedIndividual IRI="#Line_Code_mtx604"/>
+    </ClassAssertion>
+    <ClassAssertion>
+        <Class IRI="#Line_Code"/>
+        <NamedIndividual IRI="#Line_Code_mtx605"/>
+    </ClassAssertion>
+    <ClassAssertion>
+        <Class IRI="#Line_Code"/>
+        <NamedIndividual IRI="#Line_Code_mtx606"/>
+    </ClassAssertion>
+    <ClassAssertion>
+        <Class IRI="#Line_Code"/>
+        <NamedIndividual IRI="#Line_Code_mtx607"/>
+    </ClassAssertion>
+    <ClassAssertion>
+        <Class IRI="#Load"/>
+        <NamedIndividual IRI="#Load_611_3"/>
+    </ClassAssertion>
+    <ClassAssertion>
+        <Class IRI="#Load"/>
+        <NamedIndividual IRI="#Load_634_1"/>
+    </ClassAssertion>
+    <ClassAssertion>
+        <Class IRI="#Load"/>
+        <NamedIndividual IRI="#Load_634_2"/>
+    </ClassAssertion>
+    <ClassAssertion>
+        <Class IRI="#Load"/>
+        <NamedIndividual IRI="#Load_634_3"/>
+    </ClassAssertion>
+    <ClassAssertion>
+        <Class IRI="#Load"/>
+        <NamedIndividual IRI="#Load_645_2"/>
+    </ClassAssertion>
+    <ClassAssertion>
+        <Class IRI="#Load"/>
+        <NamedIndividual IRI="#Load_646_2"/>
+    </ClassAssertion>
+    <ClassAssertion>
+        <Class IRI="#Load"/>
+        <NamedIndividual IRI="#Load_652_1"/>
+    </ClassAssertion>
+    <ClassAssertion>
+        <Class IRI="#Load"/>
+        <NamedIndividual IRI="#Load_670_1"/>
+    </ClassAssertion>
+    <ClassAssertion>
+        <Class IRI="#Load"/>
+        <NamedIndividual IRI="#Load_670_2"/>
+    </ClassAssertion>
+    <ClassAssertion>
+        <Class IRI="#Load"/>
+        <NamedIndividual IRI="#Load_670_3"/>
+    </ClassAssertion>
+    <ClassAssertion>
+        <Class IRI="#Load"/>
+        <NamedIndividual IRI="#Load_671"/>
+    </ClassAssertion>
+    <ClassAssertion>
+        <Class IRI="#Load"/>
+        <NamedIndividual IRI="#Load_675_1"/>
+    </ClassAssertion>
+    <ClassAssertion>
+        <Class IRI="#Load"/>
+        <NamedIndividual IRI="#Load_675_2"/>
+    </ClassAssertion>
+    <ClassAssertion>
+        <Class IRI="#Load"/>
+        <NamedIndividual IRI="#Load_675_3"/>
+    </ClassAssertion>
+    <ClassAssertion>
+        <Class IRI="#Load"/>
+        <NamedIndividual IRI="#Load_692_3"/>
+    </ClassAssertion>
+    <ClassAssertion>
+        <Class IRI="#Transformer"/>
+        <NamedIndividual IRI="#Transformer_1"/>
+    </ClassAssertion>
+    <ClassAssertion>
+        <Class IRI="#Transformer"/>
+        <NamedIndividual IRI="#Transformer_Sub"/>
+    </ClassAssertion>
+    <ClassAssertion>
+        <Class IRI="#Transporter"/>
+        <NamedIndividual IRI="#Transporter_Controller_Actuator"/>
+    </ClassAssertion>
+    <ClassAssertion>
+        <Class IRI="#Transporter"/>
+        <NamedIndividual IRI="#Transporter_Sensor_Controller"/>
+    </ClassAssertion>
+    <ClassAssertion>
+        <Class IRI="#Quantity"/>
+        <NamedIndividual IRI="#Voltage"/>
+    </ClassAssertion>
+    <ClassAssertion>
+        <Class IRI="#Actuator"/>
+        <NamedIndividual IRI="#Voltage_Actuator"/>
+    </ClassAssertion>
+    <ClassAssertion>
+        <Class IRI="#Controller"/>
+        <NamedIndividual IRI="#Voltage_Controller"/>
+    </ClassAssertion>
+    <ClassAssertion>
+        <Class IRI="#RegControl"/>
+        <NamedIndividual IRI="#Voltage_Regulator_1"/>
+    </ClassAssertion>
+    <ClassAssertion>
+        <Class IRI="#RegControl"/>
+        <NamedIndividual IRI="#Voltage_Regulator_2"/>
+    </ClassAssertion>
+    <ClassAssertion>
+        <Class IRI="#RegControl"/>
+        <NamedIndividual IRI="#Voltage_Regulator_3"/>
+    </ClassAssertion>
+    <ClassAssertion>
+        <Class IRI="#Voltage_Sensor"/>
+        <NamedIndividual IRI="#Voltage_Sensor"/>
+    </ClassAssertion>
+    <ObjectPropertyAssertion>
+        <ObjectProperty IRI="#locatedAt"/>
+        <NamedIndividual IRI="#Bus_611"/>
+        <NamedIndividual IRI="#Coord_0_100"/>
+    </ObjectPropertyAssertion>
+    <ObjectPropertyAssertion>
+        <ObjectProperty IRI="#locatedAt"/>
+        <NamedIndividual IRI="#Bus_632"/>
+        <NamedIndividual IRI="#Coord_200_250"/>
+    </ObjectPropertyAssertion>
+    <ObjectPropertyAssertion>
+        <ObjectProperty IRI="#locatedAt"/>
+        <NamedIndividual IRI="#Bus_633"/>
+        <NamedIndividual IRI="#Coord_350_250"/>
+    </ObjectPropertyAssertion>
+    <ObjectPropertyAssertion>
+        <ObjectProperty IRI="#locatedAt"/>
+        <NamedIndividual IRI="#Bus_634"/>
+        <NamedIndividual IRI="#Coord_400_250"/>
+    </ObjectPropertyAssertion>
+    <ObjectPropertyAssertion>
+        <ObjectProperty IRI="#locatedAt"/>
+        <NamedIndividual IRI="#Bus_645"/>
+        <NamedIndividual IRI="#Coord_100_250"/>
+    </ObjectPropertyAssertion>
+    <ObjectPropertyAssertion>
+        <ObjectProperty IRI="#locatedAt"/>
+        <NamedIndividual IRI="#Bus_646"/>
+        <NamedIndividual IRI="#Coord_0_250"/>
+    </ObjectPropertyAssertion>
+    <ObjectPropertyAssertion>
+        <ObjectProperty IRI="#locatedAt"/>
+        <NamedIndividual IRI="#Bus_650"/>
+        <NamedIndividual IRI="#Coord_200_350"/>
+    </ObjectPropertyAssertion>
+    <ObjectPropertyAssertion>
+        <ObjectProperty IRI="#locatedAt"/>
+        <NamedIndividual IRI="#Bus_652"/>
+        <NamedIndividual IRI="#Coord_100_0"/>
+    </ObjectPropertyAssertion>
+    <ObjectPropertyAssertion>
+        <ObjectProperty IRI="#locatedAt"/>
+        <NamedIndividual IRI="#Bus_670"/>
+        <NamedIndividual IRI="#Coord_200_200"/>
+    </ObjectPropertyAssertion>
+    <ObjectPropertyAssertion>
+        <ObjectProperty IRI="#locatedAt"/>
+        <NamedIndividual IRI="#Bus_671"/>
+        <NamedIndividual IRI="#Coord_200_100"/>
+    </ObjectPropertyAssertion>
+    <ObjectPropertyAssertion>
+        <ObjectProperty IRI="#locatedAt"/>
+        <NamedIndividual IRI="#Bus_675"/>
+        <NamedIndividual IRI="#Coord_400_100"/>
+    </ObjectPropertyAssertion>
+    <ObjectPropertyAssertion>
+        <ObjectProperty IRI="#locatedAt"/>
+        <NamedIndividual IRI="#Bus_680"/>
+        <NamedIndividual IRI="#Coord_200_0"/>
+    </ObjectPropertyAssertion>
+    <ObjectPropertyAssertion>
+        <ObjectProperty IRI="#locatedAt"/>
+        <NamedIndividual IRI="#Bus_684"/>
+        <NamedIndividual IRI="#Coord_100_100"/>
+    </ObjectPropertyAssertion>
+    <ObjectPropertyAssertion>
+        <ObjectProperty IRI="#locatedAt"/>
+        <NamedIndividual IRI="#Bus_692"/>
+        <NamedIndividual IRI="#Coord_250_100"/>
+    </ObjectPropertyAssertion>
+    <ObjectPropertyAssertion>
+        <ObjectProperty IRI="#locatedAt"/>
+        <NamedIndividual IRI="#Bus_RG60"/>
+        <NamedIndividual IRI="#Coord_200_300"/>
+    </ObjectPropertyAssertion>
+    <ObjectPropertyAssertion>
+        <ObjectProperty IRI="#locatedAt"/>
+        <NamedIndividual IRI="#Bus_Source"/>
+        <NamedIndividual IRI="#Coord_200_400"/>
+    </ObjectPropertyAssertion>
+    <ObjectPropertyAssertion>
+        <ObjectProperty IRI="#attachsTo"/>
+        <NamedIndividual IRI="#Capacitor_Cap1"/>
+        <NamedIndividual IRI="#Bus_675"/>
+    </ObjectPropertyAssertion>
+    <ObjectPropertyAssertion>
+        <ObjectProperty IRI="#attachsTo"/>
+        <NamedIndividual IRI="#Capacitor_Cap2"/>
+        <NamedIndividual IRI="#Bus_611"/>
+    </ObjectPropertyAssertion>
+    <ObjectPropertyAssertion>
+        <ObjectProperty IRI="#connectsTo"/>
+        <NamedIndividual IRI="#Endpoint_Controller"/>
+        <NamedIndividual IRI="#Voltage_Controller"/>
+    </ObjectPropertyAssertion>
+    <ObjectPropertyAssertion>
+        <ObjectProperty IRI="#locatedAt"/>
+        <NamedIndividual IRI="#Endpoint_Controller"/>
+        <NamedIndividual IRI="#Bus_632"/>
+    </ObjectPropertyAssertion>
+    <ObjectPropertyAssertion>
+        <ObjectProperty IRI="#attachsTo"/>
+        <NamedIndividual IRI="#Generator"/>
+        <NamedIndividual IRI="#Bus_Source"/>
+    </ObjectPropertyAssertion>
+    <ObjectPropertyAssertion>
+        <ObjectProperty IRI="#attachsTo"/>
+        <NamedIndividual IRI="#Line_632633"/>
+        <NamedIndividual IRI="#Bus_633"/>
+    </ObjectPropertyAssertion>
+    <ObjectPropertyAssertion>
+        <ObjectProperty IRI="#attachsTo"/>
+        <NamedIndividual IRI="#Line_632645"/>
+        <NamedIndividual IRI="#Bus_632"/>
+    </ObjectPropertyAssertion>
+    <ObjectPropertyAssertion>
+        <ObjectProperty IRI="#attachsTo"/>
+        <NamedIndividual IRI="#Line_632645"/>
+        <NamedIndividual IRI="#Bus_645"/>
+    </ObjectPropertyAssertion>
+    <ObjectPropertyAssertion>
+        <ObjectProperty IRI="#attachsTo"/>
+        <NamedIndividual IRI="#Line_632670"/>
+        <NamedIndividual IRI="#Bus_670"/>
+    </ObjectPropertyAssertion>
+    <ObjectPropertyAssertion>
+        <ObjectProperty IRI="#attachsTo"/>
+        <NamedIndividual IRI="#Line_645646"/>
+        <NamedIndividual IRI="#Bus_645"/>
+    </ObjectPropertyAssertion>
+    <ObjectPropertyAssertion>
+        <ObjectProperty IRI="#attachsTo"/>
+        <NamedIndividual IRI="#Line_650632"/>
+        <NamedIndividual IRI="#Bus_632"/>
+    </ObjectPropertyAssertion>
+    <ObjectPropertyAssertion>
+        <ObjectProperty IRI="#attachsTo"/>
+        <NamedIndividual IRI="#Line_670671"/>
+        <NamedIndividual IRI="#Bus_671"/>
+    </ObjectPropertyAssertion>
+    <ObjectPropertyAssertion>
+        <ObjectProperty IRI="#attachsTo"/>
+        <NamedIndividual IRI="#Line_671680"/>
+        <NamedIndividual IRI="#Bus_680"/>
+    </ObjectPropertyAssertion>
+    <ObjectPropertyAssertion>
+        <ObjectProperty IRI="#attachsTo"/>
+        <NamedIndividual IRI="#Line_671684"/>
+        <NamedIndividual IRI="#Bus_684"/>
+    </ObjectPropertyAssertion>
+    <ObjectPropertyAssertion>
+        <ObjectProperty IRI="#attachsTo"/>
+        <NamedIndividual IRI="#Line_671692"/>
+        <NamedIndividual IRI="#Bus_692"/>
+    </ObjectPropertyAssertion>
+    <ObjectPropertyAssertion>
+        <ObjectProperty IRI="#attachsTo"/>
+        <NamedIndividual IRI="#Line_684611"/>
+        <NamedIndividual IRI="#Bus_611"/>
+    </ObjectPropertyAssertion>
+    <ObjectPropertyAssertion>
+        <ObjectProperty IRI="#attachsTo"/>
+        <NamedIndividual IRI="#Line_684652"/>
+        <NamedIndividual IRI="#Bus_652"/>
+    </ObjectPropertyAssertion>
+    <ObjectPropertyAssertion>
+        <ObjectProperty IRI="#attachsTo"/>
+        <NamedIndividual IRI="#Line_692675"/>
+        <NamedIndividual IRI="#Bus_675"/>
+    </ObjectPropertyAssertion>
+    <ObjectPropertyAssertion>
+        <ObjectProperty IRI="#attachsTo"/>
+        <NamedIndividual IRI="#Load_611_3"/>
+        <NamedIndividual IRI="#Bus_611"/>
+    </ObjectPropertyAssertion>
+    <ObjectPropertyAssertion>
+        <ObjectProperty IRI="#attachsTo"/>
+        <NamedIndividual IRI="#Load_634_1"/>
+        <NamedIndividual IRI="#Bus_634"/>
+    </ObjectPropertyAssertion>
+    <ObjectPropertyAssertion>
+        <ObjectProperty IRI="#attachsTo"/>
+        <NamedIndividual IRI="#Load_634_2"/>
+        <NamedIndividual IRI="#Bus_634"/>
+    </ObjectPropertyAssertion>
+    <ObjectPropertyAssertion>
+        <ObjectProperty IRI="#attachsTo"/>
+        <NamedIndividual IRI="#Load_634_3"/>
+        <NamedIndividual IRI="#Bus_634"/>
+    </ObjectPropertyAssertion>
+    <ObjectPropertyAssertion>
+        <ObjectProperty IRI="#attachsTo"/>
+        <NamedIndividual IRI="#Load_645_2"/>
+        <NamedIndividual IRI="#Bus_645"/>
+    </ObjectPropertyAssertion>
+    <ObjectPropertyAssertion>
+        <ObjectProperty IRI="#attachsTo"/>
+        <NamedIndividual IRI="#Load_646_2"/>
+        <NamedIndividual IRI="#Bus_646"/>
+    </ObjectPropertyAssertion>
+    <ObjectPropertyAssertion>
+        <ObjectProperty IRI="#attachsTo"/>
+        <NamedIndividual IRI="#Load_652_1"/>
+        <NamedIndividual IRI="#Bus_652"/>
+    </ObjectPropertyAssertion>
+    <ObjectPropertyAssertion>
+        <ObjectProperty IRI="#attachsTo"/>
+        <NamedIndividual IRI="#Load_670_1"/>
+        <NamedIndividual IRI="#Bus_670"/>
+    </ObjectPropertyAssertion>
+    <ObjectPropertyAssertion>
+        <ObjectProperty IRI="#attachsTo"/>
+        <NamedIndividual IRI="#Load_670_2"/>
+        <NamedIndividual IRI="#Bus_670"/>
+    </ObjectPropertyAssertion>
+    <ObjectPropertyAssertion>
+        <ObjectProperty IRI="#attachsTo"/>
+        <NamedIndividual IRI="#Load_670_3"/>
+        <NamedIndividual IRI="#Bus_670"/>
+    </ObjectPropertyAssertion>
+    <ObjectPropertyAssertion>
+        <ObjectProperty IRI="#attachsTo"/>
+        <NamedIndividual IRI="#Load_671"/>
+        <NamedIndividual IRI="#Bus_671"/>
+    </ObjectPropertyAssertion>
+    <ObjectPropertyAssertion>
+        <ObjectProperty IRI="#attachsTo"/>
+        <NamedIndividual IRI="#Load_675_1"/>
+        <NamedIndividual IRI="#Bus_675"/>
+    </ObjectPropertyAssertion>
+    <ObjectPropertyAssertion>
+        <ObjectProperty IRI="#attachsTo"/>
+        <NamedIndividual IRI="#Load_675_2"/>
+        <NamedIndividual IRI="#Bus_675"/>
+    </ObjectPropertyAssertion>
+    <ObjectPropertyAssertion>
+        <ObjectProperty IRI="#attachsTo"/>
+        <NamedIndividual IRI="#Load_675_3"/>
+        <NamedIndividual IRI="#Bus_675"/>
+    </ObjectPropertyAssertion>
+    <ObjectPropertyAssertion>
+        <ObjectProperty IRI="#attachsTo"/>
+        <NamedIndividual IRI="#Load_692_3"/>
+        <NamedIndividual IRI="#Bus_692"/>
+    </ObjectPropertyAssertion>
+    <ObjectPropertyAssertion>
+        <ObjectProperty IRI="#attachsTo"/>
+        <NamedIndividual IRI="#Transformer_1"/>
+        <NamedIndividual IRI="#Bus_634"/>
+    </ObjectPropertyAssertion>
+    <ObjectPropertyAssertion>
+        <ObjectProperty IRI="#primaryAttachsTo"/>
+        <NamedIndividual IRI="#Transformer_1"/>
+        <NamedIndividual IRI="#Bus_633"/>
+    </ObjectPropertyAssertion>
+    <ObjectPropertyAssertion>
+        <ObjectProperty IRI="#attachsTo"/>
+        <NamedIndividual IRI="#Transformer_Sub"/>
+        <NamedIndividual IRI="#Bus_650"/>
+    </ObjectPropertyAssertion>
+    <ObjectPropertyAssertion>
+        <ObjectProperty IRI="#primaryAttachsTo"/>
+        <NamedIndividual IRI="#Transformer_Sub"/>
+        <NamedIndividual IRI="#Bus_Source"/>
+    </ObjectPropertyAssertion>
+    <ObjectPropertyAssertion>
+        <ObjectProperty IRI="#connectsTo"/>
+        <NamedIndividual IRI="#Transporter_Controller_Actuator"/>
+        <NamedIndividual IRI="#Endpoint_Controller"/>
+    </ObjectPropertyAssertion>
+    <ObjectPropertyAssertion>
+        <ObjectProperty IRI="#connectsTo"/>
+        <NamedIndividual IRI="#Transporter_Sensor_Controller"/>
+        <NamedIndividual IRI="#Endpoint_Controller"/>
+    </ObjectPropertyAssertion>
+    <ObjectPropertyAssertion>
+        <ObjectProperty IRI="#connectsTo"/>
+        <NamedIndividual IRI="#Voltage_Actuator"/>
+        <NamedIndividual IRI="#Transporter_Controller_Actuator"/>
+    </ObjectPropertyAssertion>
+    <ObjectPropertyAssertion>
+        <ObjectProperty IRI="#controls"/>
+        <NamedIndividual IRI="#Voltage_Actuator"/>
+        <NamedIndividual IRI="#Voltage_Regulator_1"/>
+    </ObjectPropertyAssertion>
+    <ObjectPropertyAssertion>
+        <ObjectProperty IRI="#isFedBy"/>
+        <NamedIndividual IRI="#Voltage_Actuator"/>
+        <NamedIndividual IRI="#Voltage_Controller"/>
+    </ObjectPropertyAssertion>
+    <ObjectPropertyAssertion>
+        <ObjectProperty IRI="#feeds"/>
+        <NamedIndividual IRI="#Voltage_Controller"/>
+        <NamedIndividual IRI="#Voltage_Actuator"/>
+    </ObjectPropertyAssertion>
+    <ObjectPropertyAssertion>
+        <ObjectProperty IRI="#attachsTo"/>
+        <NamedIndividual IRI="#Voltage_Regulator_1"/>
+        <NamedIndividual IRI="#Bus_RG60"/>
+    </ObjectPropertyAssertion>
+    <ObjectPropertyAssertion>
+        <ObjectProperty IRI="#primaryAttachsTo"/>
+        <NamedIndividual IRI="#Voltage_Regulator_1"/>
+        <NamedIndividual IRI="#Bus_650"/>
+    </ObjectPropertyAssertion>
+    <ObjectPropertyAssertion>
+        <ObjectProperty IRI="#attachsTo"/>
+        <NamedIndividual IRI="#Voltage_Regulator_2"/>
+        <NamedIndividual IRI="#Bus_RG60"/>
+    </ObjectPropertyAssertion>
+    <ObjectPropertyAssertion>
+        <ObjectProperty IRI="#primaryAttachsTo"/>
+        <NamedIndividual IRI="#Voltage_Regulator_2"/>
+        <NamedIndividual IRI="#Bus_650"/>
+    </ObjectPropertyAssertion>
+    <ObjectPropertyAssertion>
+        <ObjectProperty IRI="#attachsTo"/>
+        <NamedIndividual IRI="#Voltage_Regulator_3"/>
+        <NamedIndividual IRI="#Bus_RG60"/>
+    </ObjectPropertyAssertion>
+    <ObjectPropertyAssertion>
+        <ObjectProperty IRI="#primaryAttachsTo"/>
+        <NamedIndividual IRI="#Voltage_Regulator_3"/>
+        <NamedIndividual IRI="#Bus_650"/>
+    </ObjectPropertyAssertion>
+    <ObjectPropertyAssertion>
+        <ObjectProperty IRI="#connectsTo"/>
+        <NamedIndividual IRI="#Voltage_Sensor"/>
+        <NamedIndividual IRI="#Transporter_Sensor_Controller"/>
+    </ObjectPropertyAssertion>
+    <ObjectPropertyAssertion>
+        <ObjectProperty IRI="#feeds"/>
+        <NamedIndividual IRI="#Voltage_Sensor"/>
+        <NamedIndividual IRI="#Voltage_Controller"/>
+    </ObjectPropertyAssertion>
+    <ObjectPropertyAssertion>
+        <ObjectProperty IRI="#measures"/>
+        <NamedIndividual IRI="#Voltage_Sensor"/>
+        <NamedIndividual IRI="#Voltage"/>
+    </ObjectPropertyAssertion>
+    <ObjectPropertyAssertion>
+        <ObjectProperty IRI="#monitor"/>
+        <NamedIndividual IRI="#Voltage_Sensor"/>
+        <NamedIndividual IRI="#Bus_611"/>
+    </ObjectPropertyAssertion>
+    <DataPropertyAssertion>
+        <DataProperty IRI="#kvar"/>
+        <NamedIndividual IRI="#Capacitor_Cap1"/>
+        <Literal datatypeIRI="http://www.w3.org/2001/XMLSchema#integer">600</Literal>
+    </DataPropertyAssertion>
+    <DataPropertyAssertion>
+        <DataProperty IRI="#num_phases"/>
+        <NamedIndividual IRI="#Capacitor_Cap1"/>
+        <Literal datatypeIRI="http://www.w3.org/2001/XMLSchema#integer">3</Literal>
+    </DataPropertyAssertion>
+    <DataPropertyAssertion>
+        <DataProperty IRI="#kvar"/>
+        <NamedIndividual IRI="#Capacitor_Cap2"/>
+        <Literal datatypeIRI="http://www.w3.org/2001/XMLSchema#integer">100</Literal>
+    </DataPropertyAssertion>
+    <DataPropertyAssertion>
+        <DataProperty IRI="#nodes_primary"/>
+        <NamedIndividual IRI="#Capacitor_Cap2"/>
+        <Literal datatypeIRI="http://www.w3.org/2001/XMLSchema#integer">1</Literal>
+    </DataPropertyAssertion>
+    <DataPropertyAssertion>
+        <DataProperty IRI="#num_phases"/>
+        <NamedIndividual IRI="#Capacitor_Cap2"/>
+        <Literal datatypeIRI="http://www.w3.org/2001/XMLSchema#integer">1</Literal>
+    </DataPropertyAssertion>
+    <DataPropertyAssertion>
+        <DataProperty IRI="#coord_x"/>
+        <NamedIndividual IRI="#Coord_0_100"/>
+        <Literal datatypeIRI="http://www.w3.org/2001/XMLSchema#integer">0</Literal>
+    </DataPropertyAssertion>
+    <DataPropertyAssertion>
+        <DataProperty IRI="#coord_y"/>
+        <NamedIndividual IRI="#Coord_0_100"/>
+        <Literal datatypeIRI="http://www.w3.org/2001/XMLSchema#integer">100</Literal>
+    </DataPropertyAssertion>
+    <DataPropertyAssertion>
+        <DataProperty IRI="#coord_x"/>
+        <NamedIndividual IRI="#Coord_0_250"/>
+        <Literal datatypeIRI="http://www.w3.org/2001/XMLSchema#integer">0</Literal>
+    </DataPropertyAssertion>
+    <DataPropertyAssertion>
+        <DataProperty IRI="#coord_y"/>
+        <NamedIndividual IRI="#Coord_0_250"/>
+        <Literal datatypeIRI="http://www.w3.org/2001/XMLSchema#integer">250</Literal>
+    </DataPropertyAssertion>
+    <DataPropertyAssertion>
+        <DataProperty IRI="#coord_x"/>
+        <NamedIndividual IRI="#Coord_100_0"/>
+        <Literal datatypeIRI="http://www.w3.org/2001/XMLSchema#integer">100</Literal>
+    </DataPropertyAssertion>
+    <DataPropertyAssertion>
+        <DataProperty IRI="#coord_y"/>
+        <NamedIndividual IRI="#Coord_100_0"/>
+        <Literal datatypeIRI="http://www.w3.org/2001/XMLSchema#integer">0</Literal>
+    </DataPropertyAssertion>
+    <DataPropertyAssertion>
+        <DataProperty IRI="#coord_x"/>
+        <NamedIndividual IRI="#Coord_100_100"/>
+        <Literal datatypeIRI="http://www.w3.org/2001/XMLSchema#integer">100</Literal>
+    </DataPropertyAssertion>
+    <DataPropertyAssertion>
+        <DataProperty IRI="#coord_y"/>
+        <NamedIndividual IRI="#Coord_100_100"/>
+        <Literal datatypeIRI="http://www.w3.org/2001/XMLSchema#integer">100</Literal>
+    </DataPropertyAssertion>
+    <DataPropertyAssertion>
+        <DataProperty IRI="#coord_x"/>
+        <NamedIndividual IRI="#Coord_100_250"/>
+        <Literal datatypeIRI="http://www.w3.org/2001/XMLSchema#integer">100</Literal>
+    </DataPropertyAssertion>
+    <DataPropertyAssertion>
+        <DataProperty IRI="#coord_y"/>
+        <NamedIndividual IRI="#Coord_100_250"/>
+        <Literal datatypeIRI="http://www.w3.org/2001/XMLSchema#integer">250</Literal>
+    </DataPropertyAssertion>
+    <DataPropertyAssertion>
+        <DataProperty IRI="#coord_x"/>
+        <NamedIndividual IRI="#Coord_200_0"/>
+        <Literal datatypeIRI="http://www.w3.org/2001/XMLSchema#integer">200</Literal>
+    </DataPropertyAssertion>
+    <DataPropertyAssertion>
+        <DataProperty IRI="#coord_y"/>
+        <NamedIndividual IRI="#Coord_200_0"/>
+        <Literal datatypeIRI="http://www.w3.org/2001/XMLSchema#integer">0</Literal>
+    </DataPropertyAssertion>
+    <DataPropertyAssertion>
+        <DataProperty IRI="#coord_x"/>
+        <NamedIndividual IRI="#Coord_200_100"/>
+        <Literal datatypeIRI="http://www.w3.org/2001/XMLSchema#integer">200</Literal>
+    </DataPropertyAssertion>
+    <DataPropertyAssertion>
+        <DataProperty IRI="#coord_y"/>
+        <NamedIndividual IRI="#Coord_200_100"/>
+        <Literal datatypeIRI="http://www.w3.org/2001/XMLSchema#integer">100</Literal>
+    </DataPropertyAssertion>
+    <DataPropertyAssertion>
+        <DataProperty IRI="#coord_x"/>
+        <NamedIndividual IRI="#Coord_200_200"/>
+        <Literal datatypeIRI="http://www.w3.org/2001/XMLSchema#integer">200</Literal>
+    </DataPropertyAssertion>
+    <DataPropertyAssertion>
+        <DataProperty IRI="#coord_y"/>
+        <NamedIndividual IRI="#Coord_200_200"/>
+        <Literal datatypeIRI="http://www.w3.org/2001/XMLSchema#integer">200</Literal>
+    </DataPropertyAssertion>
+    <DataPropertyAssertion>
+        <DataProperty IRI="#coord_x"/>
+        <NamedIndividual IRI="#Coord_200_250"/>
+        <Literal datatypeIRI="http://www.w3.org/2001/XMLSchema#integer">200</Literal>
+    </DataPropertyAssertion>
+    <DataPropertyAssertion>
+        <DataProperty IRI="#coord_y"/>
+        <NamedIndividual IRI="#Coord_200_250"/>
+        <Literal datatypeIRI="http://www.w3.org/2001/XMLSchema#integer">250</Literal>
+    </DataPropertyAssertion>
+    <DataPropertyAssertion>
+        <DataProperty IRI="#coord_x"/>
+        <NamedIndividual IRI="#Coord_200_300"/>
+        <Literal datatypeIRI="http://www.w3.org/2001/XMLSchema#integer">200</Literal>
+    </DataPropertyAssertion>
+    <DataPropertyAssertion>
+        <DataProperty IRI="#coord_y"/>
+        <NamedIndividual IRI="#Coord_200_300"/>
+        <Literal datatypeIRI="http://www.w3.org/2001/XMLSchema#integer">300</Literal>
+    </DataPropertyAssertion>
+    <DataPropertyAssertion>
+        <DataProperty IRI="#coord_x"/>
+        <NamedIndividual IRI="#Coord_200_350"/>
+        <Literal datatypeIRI="http://www.w3.org/2001/XMLSchema#integer">200</Literal>
+    </DataPropertyAssertion>
+    <DataPropertyAssertion>
+        <DataProperty IRI="#coord_y"/>
+        <NamedIndividual IRI="#Coord_200_350"/>
+        <Literal datatypeIRI="http://www.w3.org/2001/XMLSchema#integer">350</Literal>
+    </DataPropertyAssertion>
+    <DataPropertyAssertion>
+        <DataProperty IRI="#coord_x"/>
+        <NamedIndividual IRI="#Coord_200_400"/>
+        <Literal datatypeIRI="http://www.w3.org/2001/XMLSchema#integer">200</Literal>
+    </DataPropertyAssertion>
+    <DataPropertyAssertion>
+        <DataProperty IRI="#coord_y"/>
+        <NamedIndividual IRI="#Coord_200_400"/>
+        <Literal datatypeIRI="http://www.w3.org/2001/XMLSchema#integer">400</Literal>
+    </DataPropertyAssertion>
+    <DataPropertyAssertion>
+        <DataProperty IRI="#coord_x"/>
+        <NamedIndividual IRI="#Coord_250_100"/>
+        <Literal datatypeIRI="http://www.w3.org/2001/XMLSchema#integer">250</Literal>
+    </DataPropertyAssertion>
+    <DataPropertyAssertion>
+        <DataProperty IRI="#coord_y"/>
+        <NamedIndividual IRI="#Coord_250_100"/>
+        <Literal datatypeIRI="http://www.w3.org/2001/XMLSchema#integer">100</Literal>
+    </DataPropertyAssertion>
+    <DataPropertyAssertion>
+        <DataProperty IRI="#coord_x"/>
+        <NamedIndividual IRI="#Coord_350_250"/>
+        <Literal datatypeIRI="http://www.w3.org/2001/XMLSchema#integer">350</Literal>
+    </DataPropertyAssertion>
+    <DataPropertyAssertion>
+        <DataProperty IRI="#coord_y"/>
+        <NamedIndividual IRI="#Coord_350_250"/>
+        <Literal datatypeIRI="http://www.w3.org/2001/XMLSchema#integer">250</Literal>
+    </DataPropertyAssertion>
+    <DataPropertyAssertion>
+        <DataProperty IRI="#coord_x"/>
+        <NamedIndividual IRI="#Coord_400_100"/>
+        <Literal datatypeIRI="http://www.w3.org/2001/XMLSchema#integer">400</Literal>
+    </DataPropertyAssertion>
+    <DataPropertyAssertion>
+        <DataProperty IRI="#coord_y"/>
+        <NamedIndividual IRI="#Coord_400_100"/>
+        <Literal datatypeIRI="http://www.w3.org/2001/XMLSchema#integer">100</Literal>
+    </DataPropertyAssertion>
+    <DataPropertyAssertion>
+        <DataProperty IRI="#coord_x"/>
+        <NamedIndividual IRI="#Coord_400_250"/>
+        <Literal datatypeIRI="http://www.w3.org/2001/XMLSchema#integer">400</Literal>
+    </DataPropertyAssertion>
+    <DataPropertyAssertion>
+        <DataProperty IRI="#coord_y"/>
+        <NamedIndividual IRI="#Coord_400_250"/>
+        <Literal datatypeIRI="http://www.w3.org/2001/XMLSchema#integer">250</Literal>
+    </DataPropertyAssertion>
+    <DataPropertyAssertion>
+        <DataProperty IRI="#MVAsc1"/>
+        <NamedIndividual IRI="#Generator"/>
+        <Literal datatypeIRI="http://www.w3.org/2001/XMLSchema#integer">21000</Literal>
+    </DataPropertyAssertion>
+    <DataPropertyAssertion>
+        <DataProperty IRI="#MVAsc3"/>
+        <NamedIndividual IRI="#Generator"/>
+        <Literal datatypeIRI="http://www.w3.org/2001/XMLSchema#integer">20000</Literal>
+    </DataPropertyAssertion>
+    <DataPropertyAssertion>
+        <DataProperty IRI="#angle"/>
+        <NamedIndividual IRI="#Generator"/>
+        <Literal datatypeIRI="http://www.w3.org/2001/XMLSchema#integer">30</Literal>
+    </DataPropertyAssertion>
+    <DataPropertyAssertion>
+        <DataProperty IRI="#kV_secondary"/>
+        <NamedIndividual IRI="#Generator"/>
+        <Literal datatypeIRI="http://www.w3.org/2001/XMLSchema#integer">115</Literal>
+    </DataPropertyAssertion>
+    <DataPropertyAssertion>
+        <DataProperty IRI="#num_phases"/>
+        <NamedIndividual IRI="#Generator"/>
+        <Literal datatypeIRI="http://www.w3.org/2001/XMLSchema#integer">3</Literal>
+    </DataPropertyAssertion>
+    <DataPropertyAssertion>
+        <DataProperty IRI="#connection_primary"/>
+        <NamedIndividual IRI="#Line_632633"/>
+        <Literal>1 2 3</Literal>
+    </DataPropertyAssertion>
+    <DataPropertyAssertion>
+        <DataProperty IRI="#connection_secondary"/>
+        <NamedIndividual IRI="#Line_632633"/>
+        <Literal>1 2 3</Literal>
+    </DataPropertyAssertion>
+    <DataPropertyAssertion>
+        <DataProperty IRI="#length"/>
+        <NamedIndividual IRI="#Line_632633"/>
+        <Literal datatypeIRI="http://www.w3.org/2001/XMLSchema#integer">500</Literal>
+    </DataPropertyAssertion>
+    <DataPropertyAssertion>
+        <DataProperty IRI="#num_phases"/>
+        <NamedIndividual IRI="#Line_632633"/>
+        <Literal datatypeIRI="http://www.w3.org/2001/XMLSchema#integer">3</Literal>
+    </DataPropertyAssertion>
+    <DataPropertyAssertion>
+        <DataProperty IRI="#unit"/>
+        <NamedIndividual IRI="#Line_632633"/>
+        <Literal>ft</Literal>
+    </DataPropertyAssertion>
+    <DataPropertyAssertion>
+        <DataProperty IRI="#connection_primary"/>
+        <NamedIndividual IRI="#Line_632645"/>
+        <Literal>3 2</Literal>
+    </DataPropertyAssertion>
+    <DataPropertyAssertion>
+        <DataProperty IRI="#connection_secondary"/>
+        <NamedIndividual IRI="#Line_632645"/>
+        <Literal>3 2</Literal>
+    </DataPropertyAssertion>
+    <DataPropertyAssertion>
+        <DataProperty IRI="#length"/>
+        <NamedIndividual IRI="#Line_632645"/>
+        <Literal datatypeIRI="http://www.w3.org/2001/XMLSchema#integer">500</Literal>
+    </DataPropertyAssertion>
+    <DataPropertyAssertion>
+        <DataProperty IRI="#num_phases"/>
+        <NamedIndividual IRI="#Line_632645"/>
+        <Literal datatypeIRI="http://www.w3.org/2001/XMLSchema#integer">2</Literal>
+    </DataPropertyAssertion>
+    <DataPropertyAssertion>
+        <DataProperty IRI="#unit"/>
+        <NamedIndividual IRI="#Line_632645"/>
+        <Literal>ft</Literal>
+    </DataPropertyAssertion>
+    <DataPropertyAssertion>
+        <DataProperty IRI="#connection_primary"/>
+        <NamedIndividual IRI="#Line_632670"/>
+        <Literal>1 2 3</Literal>
+    </DataPropertyAssertion>
+    <DataPropertyAssertion>
+        <DataProperty IRI="#connection_secondary"/>
+        <NamedIndividual IRI="#Line_632670"/>
+        <Literal>1 2 3</Literal>
+    </DataPropertyAssertion>
+    <DataPropertyAssertion>
+        <DataProperty IRI="#length"/>
+        <NamedIndividual IRI="#Line_632670"/>
+        <Literal datatypeIRI="http://www.w3.org/2001/XMLSchema#integer">667</Literal>
+    </DataPropertyAssertion>
+    <DataPropertyAssertion>
+        <DataProperty IRI="#num_phases"/>
+        <NamedIndividual IRI="#Line_632670"/>
+        <Literal datatypeIRI="http://www.w3.org/2001/XMLSchema#integer">3</Literal>
+    </DataPropertyAssertion>
+    <DataPropertyAssertion>
+        <DataProperty IRI="#unit"/>
+        <NamedIndividual IRI="#Line_632670"/>
+        <Literal>ft</Literal>
+    </DataPropertyAssertion>
+    <DataPropertyAssertion>
+        <DataProperty IRI="#connection_primary"/>
+        <NamedIndividual IRI="#Line_645646"/>
+        <Literal>3 2</Literal>
+    </DataPropertyAssertion>
+    <DataPropertyAssertion>
+        <DataProperty IRI="#connection_secondary"/>
+        <NamedIndividual IRI="#Line_645646"/>
+        <Literal>3 2</Literal>
+    </DataPropertyAssertion>
+    <DataPropertyAssertion>
+        <DataProperty IRI="#length"/>
+        <NamedIndividual IRI="#Line_645646"/>
+        <Literal datatypeIRI="http://www.w3.org/2001/XMLSchema#integer">300</Literal>
+    </DataPropertyAssertion>
+    <DataPropertyAssertion>
+        <DataProperty IRI="#num_phases"/>
+        <NamedIndividual IRI="#Line_645646"/>
+        <Literal datatypeIRI="http://www.w3.org/2001/XMLSchema#integer">2</Literal>
+    </DataPropertyAssertion>
+    <DataPropertyAssertion>
+        <DataProperty IRI="#unit"/>
+        <NamedIndividual IRI="#Line_645646"/>
+        <Literal>ft</Literal>
+    </DataPropertyAssertion>
+    <DataPropertyAssertion>
+        <DataProperty IRI="#connection_primary"/>
+        <NamedIndividual IRI="#Line_650632"/>
+        <Literal>1 2 3</Literal>
+    </DataPropertyAssertion>
+    <DataPropertyAssertion>
+        <DataProperty IRI="#connection_secondary"/>
+        <NamedIndividual IRI="#Line_650632"/>
+        <Literal>1 2 3</Literal>
+    </DataPropertyAssertion>
+    <DataPropertyAssertion>
+        <DataProperty IRI="#length"/>
+        <NamedIndividual IRI="#Line_650632"/>
+        <Literal datatypeIRI="http://www.w3.org/2001/XMLSchema#integer">2000</Literal>
+    </DataPropertyAssertion>
+    <DataPropertyAssertion>
+        <DataProperty IRI="#num_phases"/>
+        <NamedIndividual IRI="#Line_650632"/>
+        <Literal datatypeIRI="http://www.w3.org/2001/XMLSchema#integer">3</Literal>
+    </DataPropertyAssertion>
+    <DataPropertyAssertion>
+        <DataProperty IRI="#unit"/>
+        <NamedIndividual IRI="#Line_650632"/>
+        <Literal>ft</Literal>
+    </DataPropertyAssertion>
+    <DataPropertyAssertion>
+        <DataProperty IRI="#connection_primary"/>
+        <NamedIndividual IRI="#Line_670671"/>
+        <Literal>1 2 3</Literal>
+    </DataPropertyAssertion>
+    <DataPropertyAssertion>
+        <DataProperty IRI="#connection_secondary"/>
+        <NamedIndividual IRI="#Line_670671"/>
+        <Literal>1 2 3</Literal>
+    </DataPropertyAssertion>
+    <DataPropertyAssertion>
+        <DataProperty IRI="#length"/>
+        <NamedIndividual IRI="#Line_670671"/>
+        <Literal datatypeIRI="http://www.w3.org/2001/XMLSchema#integer">1333</Literal>
+    </DataPropertyAssertion>
+    <DataPropertyAssertion>
+        <DataProperty IRI="#num_phases"/>
+        <NamedIndividual IRI="#Line_670671"/>
+        <Literal datatypeIRI="http://www.w3.org/2001/XMLSchema#integer">3</Literal>
+    </DataPropertyAssertion>
+    <DataPropertyAssertion>
+        <DataProperty IRI="#unit"/>
+        <NamedIndividual IRI="#Line_670671"/>
+        <Literal>ft</Literal>
+    </DataPropertyAssertion>
+    <DataPropertyAssertion>
+        <DataProperty IRI="#connection_primary"/>
+        <NamedIndividual IRI="#Line_671680"/>
+        <Literal>1 2 3</Literal>
+    </DataPropertyAssertion>
+    <DataPropertyAssertion>
+        <DataProperty IRI="#connection_secondary"/>
+        <NamedIndividual IRI="#Line_671680"/>
+        <Literal>1 2 3</Literal>
+    </DataPropertyAssertion>
+    <DataPropertyAssertion>
+        <DataProperty IRI="#length"/>
+        <NamedIndividual IRI="#Line_671680"/>
+        <Literal datatypeIRI="http://www.w3.org/2001/XMLSchema#integer">1000</Literal>
+    </DataPropertyAssertion>
+    <DataPropertyAssertion>
+        <DataProperty IRI="#num_phases"/>
+        <NamedIndividual IRI="#Line_671680"/>
+        <Literal datatypeIRI="http://www.w3.org/2001/XMLSchema#integer">3</Literal>
+    </DataPropertyAssertion>
+    <DataPropertyAssertion>
+        <DataProperty IRI="#unit"/>
+        <NamedIndividual IRI="#Line_671680"/>
+        <Literal>ft</Literal>
+    </DataPropertyAssertion>
+    <DataPropertyAssertion>
+        <DataProperty IRI="#connection_primary"/>
+        <NamedIndividual IRI="#Line_671684"/>
+        <Literal>1 3</Literal>
+    </DataPropertyAssertion>
+    <DataPropertyAssertion>
+        <DataProperty IRI="#connection_secondary"/>
+        <NamedIndividual IRI="#Line_671684"/>
+        <Literal>1 3</Literal>
+    </DataPropertyAssertion>
+    <DataPropertyAssertion>
+        <DataProperty IRI="#length"/>
+        <NamedIndividual IRI="#Line_671684"/>
+        <Literal datatypeIRI="http://www.w3.org/2001/XMLSchema#integer">300</Literal>
+    </DataPropertyAssertion>
+    <DataPropertyAssertion>
+        <DataProperty IRI="#num_phases"/>
+        <NamedIndividual IRI="#Line_671684"/>
+        <Literal datatypeIRI="http://www.w3.org/2001/XMLSchema#integer">2</Literal>
+    </DataPropertyAssertion>
+    <DataPropertyAssertion>
+        <DataProperty IRI="#unit"/>
+        <NamedIndividual IRI="#Line_671684"/>
+        <Literal>ft</Literal>
+    </DataPropertyAssertion>
+    <DataPropertyAssertion>
+        <DataProperty IRI="#normal_state"/>
+        <NamedIndividual IRI="#Line_671692"/>
+        <Literal>open</Literal>
+    </DataPropertyAssertion>
+    <DataPropertyAssertion>
+        <DataProperty IRI="#num_phases"/>
+        <NamedIndividual IRI="#Line_671692"/>
+        <Literal datatypeIRI="http://www.w3.org/2001/XMLSchema#integer">3</Literal>
+    </DataPropertyAssertion>
+    <DataPropertyAssertion>
+        <DataProperty IRI="#connection_primary"/>
+        <NamedIndividual IRI="#Line_684611"/>
+        <Literal>3</Literal>
+    </DataPropertyAssertion>
+    <DataPropertyAssertion>
+        <DataProperty IRI="#connection_secondary"/>
+        <NamedIndividual IRI="#Line_684611"/>
+        <Literal>3</Literal>
+    </DataPropertyAssertion>
+    <DataPropertyAssertion>
+        <DataProperty IRI="#length"/>
+        <NamedIndividual IRI="#Line_684611"/>
+        <Literal datatypeIRI="http://www.w3.org/2001/XMLSchema#integer">300</Literal>
+    </DataPropertyAssertion>
+    <DataPropertyAssertion>
+        <DataProperty IRI="#num_phases"/>
+        <NamedIndividual IRI="#Line_684611"/>
+        <Literal datatypeIRI="http://www.w3.org/2001/XMLSchema#integer">1</Literal>
+    </DataPropertyAssertion>
+    <DataPropertyAssertion>
+        <DataProperty IRI="#unit"/>
+        <NamedIndividual IRI="#Line_684611"/>
+        <Literal>ft</Literal>
+    </DataPropertyAssertion>
+    <DataPropertyAssertion>
+        <DataProperty IRI="#connection_primary"/>
+        <NamedIndividual IRI="#Line_684652"/>
+        <Literal>1</Literal>
+    </DataPropertyAssertion>
+    <DataPropertyAssertion>
+        <DataProperty IRI="#connection_secondary"/>
+        <NamedIndividual IRI="#Line_684652"/>
+        <Literal>1</Literal>
+    </DataPropertyAssertion>
+    <DataPropertyAssertion>
+        <DataProperty IRI="#length"/>
+        <NamedIndividual IRI="#Line_684652"/>
+        <Literal datatypeIRI="http://www.w3.org/2001/XMLSchema#integer">800</Literal>
+    </DataPropertyAssertion>
+    <DataPropertyAssertion>
+        <DataProperty IRI="#num_phases"/>
+        <NamedIndividual IRI="#Line_684652"/>
+        <Literal datatypeIRI="http://www.w3.org/2001/XMLSchema#integer">1</Literal>
+    </DataPropertyAssertion>
+    <DataPropertyAssertion>
+        <DataProperty IRI="#unit"/>
+        <NamedIndividual IRI="#Line_684652"/>
+        <Literal>ft</Literal>
+    </DataPropertyAssertion>
+    <DataPropertyAssertion>
+        <DataProperty IRI="#connection_primary"/>
+        <NamedIndividual IRI="#Line_692675"/>
+        <Literal>1 2 3</Literal>
+    </DataPropertyAssertion>
+    <DataPropertyAssertion>
+        <DataProperty IRI="#connection_secondary"/>
+        <NamedIndividual IRI="#Line_692675"/>
+        <Literal>1 2 3</Literal>
+    </DataPropertyAssertion>
+    <DataPropertyAssertion>
+        <DataProperty IRI="#length"/>
+        <NamedIndividual IRI="#Line_692675"/>
+        <Literal datatypeIRI="http://www.w3.org/2001/XMLSchema#integer">500</Literal>
+    </DataPropertyAssertion>
+    <DataPropertyAssertion>
+        <DataProperty IRI="#num_phases"/>
+        <NamedIndividual IRI="#Line_692675"/>
+        <Literal datatypeIRI="http://www.w3.org/2001/XMLSchema#integer">3</Literal>
+    </DataPropertyAssertion>
+    <DataPropertyAssertion>
+        <DataProperty IRI="#unit"/>
+        <NamedIndividual IRI="#Line_692675"/>
+        <Literal>ft</Literal>
+    </DataPropertyAssertion>
+    <DataPropertyAssertion>
+        <DataProperty IRI="#connection_primary"/>
+        <NamedIndividual IRI="#Load_611_3"/>
+        <Literal>Wye</Literal>
+    </DataPropertyAssertion>
+    <DataPropertyAssertion>
+        <DataProperty IRI="#kW"/>
+        <NamedIndividual IRI="#Load_611_3"/>
+        <Literal datatypeIRI="http://www.w3.org/2001/XMLSchema#integer">170</Literal>
+    </DataPropertyAssertion>
+    <DataPropertyAssertion>
+        <DataProperty IRI="#kvar"/>
+        <NamedIndividual IRI="#Load_611_3"/>
+        <Literal datatypeIRI="http://www.w3.org/2001/XMLSchema#integer">80</Literal>
+    </DataPropertyAssertion>
+    <DataPropertyAssertion>
+        <DataProperty IRI="#model"/>
+        <NamedIndividual IRI="#Load_611_3"/>
+        <Literal datatypeIRI="http://www.w3.org/2001/XMLSchema#integer">1</Literal>
+    </DataPropertyAssertion>
+    <DataPropertyAssertion>
+        <DataProperty IRI="#nodes_primary"/>
+        <NamedIndividual IRI="#Load_611_3"/>
+        <Literal>3</Literal>
+    </DataPropertyAssertion>
+    <DataPropertyAssertion>
+        <DataProperty IRI="#num_phases"/>
+        <NamedIndividual IRI="#Load_611_3"/>
+        <Literal datatypeIRI="http://www.w3.org/2001/XMLSchema#integer">1</Literal>
+    </DataPropertyAssertion>
+    <DataPropertyAssertion>
+        <DataProperty IRI="#connection_primary"/>
+        <NamedIndividual IRI="#Load_634_1"/>
+        <Literal>Wye</Literal>
+    </DataPropertyAssertion>
+    <DataPropertyAssertion>
+        <DataProperty IRI="#kW"/>
+        <NamedIndividual IRI="#Load_634_1"/>
+        <Literal datatypeIRI="http://www.w3.org/2001/XMLSchema#integer">160</Literal>
+    </DataPropertyAssertion>
+    <DataPropertyAssertion>
+        <DataProperty IRI="#kvar"/>
+        <NamedIndividual IRI="#Load_634_1"/>
+        <Literal datatypeIRI="http://www.w3.org/2001/XMLSchema#integer">110</Literal>
+    </DataPropertyAssertion>
+    <DataPropertyAssertion>
+        <DataProperty IRI="#model"/>
+        <NamedIndividual IRI="#Load_634_1"/>
+        <Literal datatypeIRI="http://www.w3.org/2001/XMLSchema#integer">1</Literal>
+    </DataPropertyAssertion>
+    <DataPropertyAssertion>
+        <DataProperty IRI="#nodes_primary"/>
+        <NamedIndividual IRI="#Load_634_1"/>
+        <Literal>1</Literal>
+    </DataPropertyAssertion>
+    <DataPropertyAssertion>
+        <DataProperty IRI="#num_phases"/>
+        <NamedIndividual IRI="#Load_634_1"/>
+        <Literal datatypeIRI="http://www.w3.org/2001/XMLSchema#integer">1</Literal>
+    </DataPropertyAssertion>
+    <DataPropertyAssertion>
+        <DataProperty IRI="#connection_primary"/>
+        <NamedIndividual IRI="#Load_634_2"/>
+        <Literal>Wye</Literal>
+    </DataPropertyAssertion>
+    <DataPropertyAssertion>
+        <DataProperty IRI="#kW"/>
+        <NamedIndividual IRI="#Load_634_2"/>
+        <Literal datatypeIRI="http://www.w3.org/2001/XMLSchema#integer">120</Literal>
+    </DataPropertyAssertion>
+    <DataPropertyAssertion>
+        <DataProperty IRI="#kvar"/>
+        <NamedIndividual IRI="#Load_634_2"/>
+        <Literal datatypeIRI="http://www.w3.org/2001/XMLSchema#integer">90</Literal>
+    </DataPropertyAssertion>
+    <DataPropertyAssertion>
+        <DataProperty IRI="#model"/>
+        <NamedIndividual IRI="#Load_634_2"/>
+        <Literal datatypeIRI="http://www.w3.org/2001/XMLSchema#integer">1</Literal>
+    </DataPropertyAssertion>
+    <DataPropertyAssertion>
+        <DataProperty IRI="#nodes_primary"/>
+        <NamedIndividual IRI="#Load_634_2"/>
+        <Literal>2</Literal>
+    </DataPropertyAssertion>
+    <DataPropertyAssertion>
+        <DataProperty IRI="#num_phases"/>
+        <NamedIndividual IRI="#Load_634_2"/>
+        <Literal datatypeIRI="http://www.w3.org/2001/XMLSchema#integer">1</Literal>
+    </DataPropertyAssertion>
+    <DataPropertyAssertion>
+        <DataProperty IRI="#connection_primary"/>
+        <NamedIndividual IRI="#Load_634_3"/>
+        <Literal>Wye</Literal>
+    </DataPropertyAssertion>
+    <DataPropertyAssertion>
+        <DataProperty IRI="#kW"/>
+        <NamedIndividual IRI="#Load_634_3"/>
+        <Literal datatypeIRI="http://www.w3.org/2001/XMLSchema#integer">120</Literal>
+    </DataPropertyAssertion>
+    <DataPropertyAssertion>
+        <DataProperty IRI="#kvar"/>
+        <NamedIndividual IRI="#Load_634_3"/>
+        <Literal datatypeIRI="http://www.w3.org/2001/XMLSchema#integer">90</Literal>
+    </DataPropertyAssertion>
+    <DataPropertyAssertion>
+        <DataProperty IRI="#model"/>
+        <NamedIndividual IRI="#Load_634_3"/>
+        <Literal datatypeIRI="http://www.w3.org/2001/XMLSchema#integer">1</Literal>
+    </DataPropertyAssertion>
+    <DataPropertyAssertion>
+        <DataProperty IRI="#nodes_primary"/>
+        <NamedIndividual IRI="#Load_634_3"/>
+        <Literal>3</Literal>
+    </DataPropertyAssertion>
+    <DataPropertyAssertion>
+        <DataProperty IRI="#num_phases"/>
+        <NamedIndividual IRI="#Load_634_3"/>
+        <Literal datatypeIRI="http://www.w3.org/2001/XMLSchema#integer">1</Literal>
+    </DataPropertyAssertion>
+    <DataPropertyAssertion>
+        <DataProperty IRI="#connection_primary"/>
+        <NamedIndividual IRI="#Load_645_2"/>
+        <Literal>Wye</Literal>
+    </DataPropertyAssertion>
+    <DataPropertyAssertion>
+        <DataProperty IRI="#kW"/>
+        <NamedIndividual IRI="#Load_645_2"/>
+        <Literal datatypeIRI="http://www.w3.org/2001/XMLSchema#integer">170</Literal>
+    </DataPropertyAssertion>
+    <DataPropertyAssertion>
+        <DataProperty IRI="#kvar"/>
+        <NamedIndividual IRI="#Load_645_2"/>
+        <Literal datatypeIRI="http://www.w3.org/2001/XMLSchema#integer">125</Literal>
+    </DataPropertyAssertion>
+    <DataPropertyAssertion>
+        <DataProperty IRI="#model"/>
+        <NamedIndividual IRI="#Load_645_2"/>
+        <Literal datatypeIRI="http://www.w3.org/2001/XMLSchema#integer">1</Literal>
+    </DataPropertyAssertion>
+    <DataPropertyAssertion>
+        <DataProperty IRI="#nodes_primary"/>
+        <NamedIndividual IRI="#Load_645_2"/>
+        <Literal>2</Literal>
+    </DataPropertyAssertion>
+    <DataPropertyAssertion>
+        <DataProperty IRI="#num_phases"/>
+        <NamedIndividual IRI="#Load_645_2"/>
+        <Literal datatypeIRI="http://www.w3.org/2001/XMLSchema#integer">1</Literal>
+    </DataPropertyAssertion>
+    <DataPropertyAssertion>
+        <DataProperty IRI="#connection_primary"/>
+        <NamedIndividual IRI="#Load_646_2"/>
+        <Literal>Delta</Literal>
+    </DataPropertyAssertion>
+    <DataPropertyAssertion>
+        <DataProperty IRI="#kW"/>
+        <NamedIndividual IRI="#Load_646_2"/>
+        <Literal datatypeIRI="http://www.w3.org/2001/XMLSchema#integer">230</Literal>
+    </DataPropertyAssertion>
+    <DataPropertyAssertion>
+        <DataProperty IRI="#kvar"/>
+        <NamedIndividual IRI="#Load_646_2"/>
+        <Literal datatypeIRI="http://www.w3.org/2001/XMLSchema#integer">132</Literal>
+    </DataPropertyAssertion>
+    <DataPropertyAssertion>
+        <DataProperty IRI="#model"/>
+        <NamedIndividual IRI="#Load_646_2"/>
+        <Literal datatypeIRI="http://www.w3.org/2001/XMLSchema#integer">2</Literal>
+    </DataPropertyAssertion>
+    <DataPropertyAssertion>
+        <DataProperty IRI="#nodes_primary"/>
+        <NamedIndividual IRI="#Load_646_2"/>
+        <Literal>2 3</Literal>
+    </DataPropertyAssertion>
+    <DataPropertyAssertion>
+        <DataProperty IRI="#num_phases"/>
+        <NamedIndividual IRI="#Load_646_2"/>
+        <Literal datatypeIRI="http://www.w3.org/2001/XMLSchema#integer">1</Literal>
+    </DataPropertyAssertion>
+    <DataPropertyAssertion>
+        <DataProperty IRI="#connection_primary"/>
+        <NamedIndividual IRI="#Load_652_1"/>
+        <Literal>Wye</Literal>
+    </DataPropertyAssertion>
+    <DataPropertyAssertion>
+        <DataProperty IRI="#kW"/>
+        <NamedIndividual IRI="#Load_652_1"/>
+        <Literal datatypeIRI="http://www.w3.org/2001/XMLSchema#integer">128</Literal>
+    </DataPropertyAssertion>
+    <DataPropertyAssertion>
+        <DataProperty IRI="#kvar"/>
+        <NamedIndividual IRI="#Load_652_1"/>
+        <Literal datatypeIRI="http://www.w3.org/2001/XMLSchema#integer">86</Literal>
+    </DataPropertyAssertion>
+    <DataPropertyAssertion>
+        <DataProperty IRI="#model"/>
+        <NamedIndividual IRI="#Load_652_1"/>
+        <Literal datatypeIRI="http://www.w3.org/2001/XMLSchema#integer">2</Literal>
+    </DataPropertyAssertion>
+    <DataPropertyAssertion>
+        <DataProperty IRI="#nodes_primary"/>
+        <NamedIndividual IRI="#Load_652_1"/>
+        <Literal>1</Literal>
+    </DataPropertyAssertion>
+    <DataPropertyAssertion>
+        <DataProperty IRI="#num_phases"/>
+        <NamedIndividual IRI="#Load_652_1"/>
+        <Literal datatypeIRI="http://www.w3.org/2001/XMLSchema#integer">1</Literal>
+    </DataPropertyAssertion>
+    <DataPropertyAssertion>
+        <DataProperty IRI="#connection_primary"/>
+        <NamedIndividual IRI="#Load_670_1"/>
+        <Literal>Wye</Literal>
+    </DataPropertyAssertion>
+    <DataPropertyAssertion>
+        <DataProperty IRI="#kW"/>
+        <NamedIndividual IRI="#Load_670_1"/>
+        <Literal datatypeIRI="http://www.w3.org/2001/XMLSchema#integer">17</Literal>
+    </DataPropertyAssertion>
+    <DataPropertyAssertion>
+        <DataProperty IRI="#kvar"/>
+        <NamedIndividual IRI="#Load_670_1"/>
+        <Literal datatypeIRI="http://www.w3.org/2001/XMLSchema#integer">10</Literal>
+    </DataPropertyAssertion>
+    <DataPropertyAssertion>
+        <DataProperty IRI="#model"/>
+        <NamedIndividual IRI="#Load_670_1"/>
+        <Literal datatypeIRI="http://www.w3.org/2001/XMLSchema#integer">1</Literal>
+    </DataPropertyAssertion>
+    <DataPropertyAssertion>
+        <DataProperty IRI="#nodes_primary"/>
+        <NamedIndividual IRI="#Load_670_1"/>
+        <Literal>1</Literal>
+    </DataPropertyAssertion>
+    <DataPropertyAssertion>
+        <DataProperty IRI="#num_phases"/>
+        <NamedIndividual IRI="#Load_670_1"/>
+        <Literal datatypeIRI="http://www.w3.org/2001/XMLSchema#integer">1</Literal>
+    </DataPropertyAssertion>
+    <DataPropertyAssertion>
+        <DataProperty IRI="#connection_primary"/>
+        <NamedIndividual IRI="#Load_670_2"/>
+        <Literal>Wye</Literal>
+    </DataPropertyAssertion>
+    <DataPropertyAssertion>
+        <DataProperty IRI="#kW"/>
+        <NamedIndividual IRI="#Load_670_2"/>
+        <Literal datatypeIRI="http://www.w3.org/2001/XMLSchema#integer">66</Literal>
+    </DataPropertyAssertion>
+    <DataPropertyAssertion>
+        <DataProperty IRI="#kvar"/>
+        <NamedIndividual IRI="#Load_670_2"/>
+        <Literal datatypeIRI="http://www.w3.org/2001/XMLSchema#integer">38</Literal>
+    </DataPropertyAssertion>
+    <DataPropertyAssertion>
+        <DataProperty IRI="#model"/>
+        <NamedIndividual IRI="#Load_670_2"/>
+        <Literal datatypeIRI="http://www.w3.org/2001/XMLSchema#integer">1</Literal>
+    </DataPropertyAssertion>
+    <DataPropertyAssertion>
+        <DataProperty IRI="#nodes_primary"/>
+        <NamedIndividual IRI="#Load_670_2"/>
+        <Literal>2</Literal>
+    </DataPropertyAssertion>
+    <DataPropertyAssertion>
+        <DataProperty IRI="#num_phases"/>
+        <NamedIndividual IRI="#Load_670_2"/>
+        <Literal datatypeIRI="http://www.w3.org/2001/XMLSchema#integer">1</Literal>
+    </DataPropertyAssertion>
+    <DataPropertyAssertion>
+        <DataProperty IRI="#connection_primary"/>
+        <NamedIndividual IRI="#Load_670_3"/>
+        <Literal>Wye</Literal>
+    </DataPropertyAssertion>
+    <DataPropertyAssertion>
+        <DataProperty IRI="#kW"/>
+        <NamedIndividual IRI="#Load_670_3"/>
+        <Literal datatypeIRI="http://www.w3.org/2001/XMLSchema#integer">117</Literal>
+    </DataPropertyAssertion>
+    <DataPropertyAssertion>
+        <DataProperty IRI="#kvar"/>
+        <NamedIndividual IRI="#Load_670_3"/>
+        <Literal datatypeIRI="http://www.w3.org/2001/XMLSchema#integer">68</Literal>
+    </DataPropertyAssertion>
+    <DataPropertyAssertion>
+        <DataProperty IRI="#model"/>
+        <NamedIndividual IRI="#Load_670_3"/>
+        <Literal datatypeIRI="http://www.w3.org/2001/XMLSchema#integer">1</Literal>
+    </DataPropertyAssertion>
+    <DataPropertyAssertion>
+        <DataProperty IRI="#nodes_primary"/>
+        <NamedIndividual IRI="#Load_670_3"/>
+        <Literal>3</Literal>
+    </DataPropertyAssertion>
+    <DataPropertyAssertion>
+        <DataProperty IRI="#num_phases"/>
+        <NamedIndividual IRI="#Load_670_3"/>
+        <Literal datatypeIRI="http://www.w3.org/2001/XMLSchema#integer">1</Literal>
+    </DataPropertyAssertion>
+    <DataPropertyAssertion>
+        <DataProperty IRI="#connection_primary"/>
+        <NamedIndividual IRI="#Load_671"/>
+        <Literal>Delta</Literal>
+    </DataPropertyAssertion>
+    <DataPropertyAssertion>
+        <DataProperty IRI="#kW"/>
+        <NamedIndividual IRI="#Load_671"/>
+        <Literal datatypeIRI="http://www.w3.org/2001/XMLSchema#integer">1155</Literal>
+    </DataPropertyAssertion>
+    <DataPropertyAssertion>
+        <DataProperty IRI="#kvar"/>
+        <NamedIndividual IRI="#Load_671"/>
+        <Literal datatypeIRI="http://www.w3.org/2001/XMLSchema#integer">660</Literal>
+    </DataPropertyAssertion>
+    <DataPropertyAssertion>
+        <DataProperty IRI="#model"/>
+        <NamedIndividual IRI="#Load_671"/>
+        <Literal datatypeIRI="http://www.w3.org/2001/XMLSchema#integer">1</Literal>
+    </DataPropertyAssertion>
+    <DataPropertyAssertion>
+        <DataProperty IRI="#nodes_primary"/>
+        <NamedIndividual IRI="#Load_671"/>
+        <Literal>1 2 3</Literal>
+    </DataPropertyAssertion>
+    <DataPropertyAssertion>
+        <DataProperty IRI="#num_phases"/>
+        <NamedIndividual IRI="#Load_671"/>
+        <Literal datatypeIRI="http://www.w3.org/2001/XMLSchema#integer">3</Literal>
+    </DataPropertyAssertion>
+    <DataPropertyAssertion>
+        <DataProperty IRI="#connection_primary"/>
+        <NamedIndividual IRI="#Load_675_1"/>
+        <Literal>Wye</Literal>
+    </DataPropertyAssertion>
+    <DataPropertyAssertion>
+        <DataProperty IRI="#kW"/>
+        <NamedIndividual IRI="#Load_675_1"/>
+        <Literal datatypeIRI="http://www.w3.org/2001/XMLSchema#integer">485</Literal>
+    </DataPropertyAssertion>
+    <DataPropertyAssertion>
+        <DataProperty IRI="#kvar"/>
+        <NamedIndividual IRI="#Load_675_1"/>
+        <Literal datatypeIRI="http://www.w3.org/2001/XMLSchema#integer">190</Literal>
+    </DataPropertyAssertion>
+    <DataPropertyAssertion>
+        <DataProperty IRI="#model"/>
+        <NamedIndividual IRI="#Load_675_1"/>
+        <Literal datatypeIRI="http://www.w3.org/2001/XMLSchema#integer">1</Literal>
+    </DataPropertyAssertion>
+    <DataPropertyAssertion>
+        <DataProperty IRI="#nodes_primary"/>
+        <NamedIndividual IRI="#Load_675_1"/>
+        <Literal>1</Literal>
+    </DataPropertyAssertion>
+    <DataPropertyAssertion>
+        <DataProperty IRI="#num_phases"/>
+        <NamedIndividual IRI="#Load_675_1"/>
+        <Literal datatypeIRI="http://www.w3.org/2001/XMLSchema#integer">1</Literal>
+    </DataPropertyAssertion>
+    <DataPropertyAssertion>
+        <DataProperty IRI="#connection_primary"/>
+        <NamedIndividual IRI="#Load_675_2"/>
+        <Literal>Wye</Literal>
+    </DataPropertyAssertion>
+    <DataPropertyAssertion>
+        <DataProperty IRI="#kW"/>
+        <NamedIndividual IRI="#Load_675_2"/>
+        <Literal datatypeIRI="http://www.w3.org/2001/XMLSchema#integer">68</Literal>
+    </DataPropertyAssertion>
+    <DataPropertyAssertion>
+        <DataProperty IRI="#kvar"/>
+        <NamedIndividual IRI="#Load_675_2"/>
+        <Literal datatypeIRI="http://www.w3.org/2001/XMLSchema#integer">60</Literal>
+    </DataPropertyAssertion>
+    <DataPropertyAssertion>
+        <DataProperty IRI="#model"/>
+        <NamedIndividual IRI="#Load_675_2"/>
+        <Literal datatypeIRI="http://www.w3.org/2001/XMLSchema#integer">1</Literal>
+    </DataPropertyAssertion>
+    <DataPropertyAssertion>
+        <DataProperty IRI="#nodes_primary"/>
+        <NamedIndividual IRI="#Load_675_2"/>
+        <Literal>2</Literal>
+    </DataPropertyAssertion>
+    <DataPropertyAssertion>
+        <DataProperty IRI="#num_phases"/>
+        <NamedIndividual IRI="#Load_675_2"/>
+        <Literal datatypeIRI="http://www.w3.org/2001/XMLSchema#integer">1</Literal>
+    </DataPropertyAssertion>
+    <DataPropertyAssertion>
+        <DataProperty IRI="#connection_primary"/>
+        <NamedIndividual IRI="#Load_675_3"/>
+        <Literal>Wye</Literal>
+    </DataPropertyAssertion>
+    <DataPropertyAssertion>
+        <DataProperty IRI="#kW"/>
+        <NamedIndividual IRI="#Load_675_3"/>
+        <Literal datatypeIRI="http://www.w3.org/2001/XMLSchema#integer">290</Literal>
+    </DataPropertyAssertion>
+    <DataPropertyAssertion>
+        <DataProperty IRI="#kvar"/>
+        <NamedIndividual IRI="#Load_675_3"/>
+        <Literal datatypeIRI="http://www.w3.org/2001/XMLSchema#integer">212</Literal>
+    </DataPropertyAssertion>
+    <DataPropertyAssertion>
+        <DataProperty IRI="#model"/>
+        <NamedIndividual IRI="#Load_675_3"/>
+        <Literal datatypeIRI="http://www.w3.org/2001/XMLSchema#integer">1</Literal>
+    </DataPropertyAssertion>
+    <DataPropertyAssertion>
+        <DataProperty IRI="#nodes_primary"/>
+        <NamedIndividual IRI="#Load_675_3"/>
+        <Literal>3</Literal>
+    </DataPropertyAssertion>
+    <DataPropertyAssertion>
+        <DataProperty IRI="#num_phases"/>
+        <NamedIndividual IRI="#Load_675_3"/>
+        <Literal datatypeIRI="http://www.w3.org/2001/XMLSchema#integer">1</Literal>
+    </DataPropertyAssertion>
+    <DataPropertyAssertion>
+        <DataProperty IRI="#connection_primary"/>
+        <NamedIndividual IRI="#Load_692_3"/>
+        <Literal>Delta</Literal>
+    </DataPropertyAssertion>
+    <DataPropertyAssertion>
+        <DataProperty IRI="#kW"/>
+        <NamedIndividual IRI="#Load_692_3"/>
+        <Literal datatypeIRI="http://www.w3.org/2001/XMLSchema#integer">170</Literal>
+    </DataPropertyAssertion>
+    <DataPropertyAssertion>
+        <DataProperty IRI="#kvar"/>
+        <NamedIndividual IRI="#Load_692_3"/>
+        <Literal datatypeIRI="http://www.w3.org/2001/XMLSchema#integer">151</Literal>
+    </DataPropertyAssertion>
+    <DataPropertyAssertion>
+        <DataProperty IRI="#model"/>
+        <NamedIndividual IRI="#Load_692_3"/>
+        <Literal datatypeIRI="http://www.w3.org/2001/XMLSchema#integer">5</Literal>
+    </DataPropertyAssertion>
+    <DataPropertyAssertion>
+        <DataProperty IRI="#nodes_primary"/>
+        <NamedIndividual IRI="#Load_692_3"/>
+        <Literal>3 1</Literal>
+    </DataPropertyAssertion>
+    <DataPropertyAssertion>
+        <DataProperty IRI="#num_phases"/>
+        <NamedIndividual IRI="#Load_692_3"/>
+        <Literal datatypeIRI="http://www.w3.org/2001/XMLSchema#integer">1</Literal>
+    </DataPropertyAssertion>
+    <DataPropertyAssertion>
+        <DataProperty IRI="#Kva"/>
+        <NamedIndividual IRI="#Transformer_1"/>
+        <Literal datatypeIRI="http://www.w3.org/2001/XMLSchema#integer">500</Literal>
+    </DataPropertyAssertion>
+    <DataPropertyAssertion>
+        <DataProperty IRI="#XHL"/>
+        <NamedIndividual IRI="#Transformer_1"/>
+        <Literal datatypeIRI="http://www.w3.org/2001/XMLSchema#integer">2</Literal>
+    </DataPropertyAssertion>
+    <DataPropertyAssertion>
+        <DataProperty IRI="#XHT"/>
+        <NamedIndividual IRI="#Transformer_1"/>
+        <Literal datatypeIRI="http://www.w3.org/2001/XMLSchema#integer">1</Literal>
+    </DataPropertyAssertion>
+    <DataPropertyAssertion>
+        <DataProperty IRI="#XLT"/>
+        <NamedIndividual IRI="#Transformer_1"/>
+        <Literal datatypeIRI="http://www.w3.org/2001/XMLSchema#integer">1</Literal>
+    </DataPropertyAssertion>
+    <DataPropertyAssertion>
+        <DataProperty IRI="#connection_primary"/>
+        <NamedIndividual IRI="#Transformer_1"/>
+        <Literal>Wye</Literal>
+    </DataPropertyAssertion>
+    <DataPropertyAssertion>
+        <DataProperty IRI="#connection_secondary"/>
+        <NamedIndividual IRI="#Transformer_1"/>
+        <Literal>Wye</Literal>
+    </DataPropertyAssertion>
+    <DataPropertyAssertion>
+        <DataProperty IRI="#kV_primary"/>
+        <NamedIndividual IRI="#Transformer_1"/>
+        <Literal datatypeIRI="http://www.w3.org/2001/XMLSchema#decimal">4.16</Literal>
+    </DataPropertyAssertion>
+    <DataPropertyAssertion>
+        <DataProperty IRI="#kV_secondary"/>
+        <NamedIndividual IRI="#Transformer_1"/>
+        <Literal datatypeIRI="http://www.w3.org/2001/XMLSchema#decimal">0.480</Literal>
+    </DataPropertyAssertion>
+    <DataPropertyAssertion>
+        <DataProperty IRI="#num_phases"/>
+        <NamedIndividual IRI="#Transformer_1"/>
+        <Literal datatypeIRI="http://www.w3.org/2001/XMLSchema#integer">3</Literal>
+    </DataPropertyAssertion>
+    <DataPropertyAssertion>
+        <DataProperty IRI="#percent_R"/>
+        <NamedIndividual IRI="#Transformer_1"/>
+        <Literal datatypeIRI="http://www.w3.org/2001/XMLSchema#decimal">0.55</Literal>
+    </DataPropertyAssertion>
+    <DataPropertyAssertion>
+        <DataProperty IRI="#Kva"/>
+        <NamedIndividual IRI="#Transformer_Sub"/>
+        <Literal datatypeIRI="http://www.w3.org/2001/XMLSchema#integer">5000</Literal>
+    </DataPropertyAssertion>
+    <DataPropertyAssertion>
+        <DataProperty IRI="#connection_primary"/>
+        <NamedIndividual IRI="#Transformer_Sub"/>
+        <Literal>Delta</Literal>
+    </DataPropertyAssertion>
+    <DataPropertyAssertion>
+        <DataProperty IRI="#connection_secondary"/>
+        <NamedIndividual IRI="#Transformer_Sub"/>
+        <Literal>Wye</Literal>
+    </DataPropertyAssertion>
+    <DataPropertyAssertion>
+        <DataProperty IRI="#kV_primary"/>
+        <NamedIndividual IRI="#Transformer_Sub"/>
+        <Literal datatypeIRI="http://www.w3.org/2001/XMLSchema#integer">115</Literal>
+    </DataPropertyAssertion>
+    <DataPropertyAssertion>
+        <DataProperty IRI="#kV_secondary"/>
+        <NamedIndividual IRI="#Transformer_Sub"/>
+        <Literal datatypeIRI="http://www.w3.org/2001/XMLSchema#decimal">4.16</Literal>
+    </DataPropertyAssertion>
+    <DataPropertyAssertion>
+        <DataProperty IRI="#percent_R"/>
+        <NamedIndividual IRI="#Transformer_Sub"/>
+        <Literal>(.5 1000 /)</Literal>
+    </DataPropertyAssertion>
+    <DataPropertyAssertion>
+        <DataProperty IRI="#delay"/>
+        <NamedIndividual IRI="#Transporter_Controller_Actuator"/>
+        <Literal>15 ms</Literal>
+    </DataPropertyAssertion>
+    <DataPropertyAssertion>
+        <DataProperty IRI="#error_rate"/>
+        <NamedIndividual IRI="#Transporter_Controller_Actuator"/>
+        <Literal datatypeIRI="http://www.w3.org/2001/XMLSchema#decimal">0.0001</Literal>
+    </DataPropertyAssertion>
+    <DataPropertyAssertion>
+        <DataProperty IRI="#layer_4"/>
+        <NamedIndividual IRI="#Transporter_Controller_Actuator"/>
+        <Literal>TCP</Literal>
+    </DataPropertyAssertion>
+    <DataPropertyAssertion>
+        <DataProperty IRI="#rate"/>
+        <NamedIndividual IRI="#Transporter_Controller_Actuator"/>
+        <Literal>512 Kbps</Literal>
+    </DataPropertyAssertion>
+    <DataPropertyAssertion>
+        <DataProperty IRI="#delay"/>
+        <NamedIndividual IRI="#Transporter_Sensor_Controller"/>
+        <Literal>15 ms</Literal>
+    </DataPropertyAssertion>
+    <DataPropertyAssertion>
+        <DataProperty IRI="#error_rate"/>
+        <NamedIndividual IRI="#Transporter_Sensor_Controller"/>
+        <Literal datatypeIRI="http://www.w3.org/2001/XMLSchema#decimal">0.0001</Literal>
+    </DataPropertyAssertion>
+    <DataPropertyAssertion>
+        <DataProperty IRI="#layer_4"/>
+        <NamedIndividual IRI="#Transporter_Sensor_Controller"/>
+        <Literal>TCP</Literal>
+    </DataPropertyAssertion>
+    <DataPropertyAssertion>
+        <DataProperty IRI="#rate"/>
+        <NamedIndividual IRI="#Transporter_Sensor_Controller"/>
+        <Literal>512 Kbps</Literal>
+    </DataPropertyAssertion>
+    <DataPropertyAssertion>
+        <DataProperty IRI="#delay"/>
+        <NamedIndividual IRI="#Voltage_Controller"/>
+        <Literal datatypeIRI="http://www.w3.org/2001/XMLSchema#integer">1</Literal>
+    </DataPropertyAssertion>
+    <DataPropertyAssertion>
+        <DataProperty IRI="#Kva"/>
+        <NamedIndividual IRI="#Voltage_Regulator_1"/>
+        <Literal datatypeIRI="http://www.w3.org/2001/XMLSchema#integer">1666</Literal>
+    </DataPropertyAssertion>
+    <DataPropertyAssertion>
+        <DataProperty IRI="#R"/>
+        <NamedIndividual IRI="#Voltage_Regulator_1"/>
+        <Literal datatypeIRI="http://www.w3.org/2001/XMLSchema#integer">3</Literal>
+    </DataPropertyAssertion>
+    <DataPropertyAssertion>
+        <DataProperty IRI="#X"/>
+        <NamedIndividual IRI="#Voltage_Regulator_1"/>
+        <Literal datatypeIRI="http://www.w3.org/2001/XMLSchema#integer">9</Literal>
+    </DataPropertyAssertion>
+    <DataPropertyAssertion>
+        <DataProperty IRI="#XHL"/>
+        <NamedIndividual IRI="#Voltage_Regulator_1"/>
+        <Literal datatypeIRI="http://www.w3.org/2001/XMLSchema#decimal">0.01</Literal>
+    </DataPropertyAssertion>
+    <DataPropertyAssertion>
+        <DataProperty IRI="#band"/>
+        <NamedIndividual IRI="#Voltage_Regulator_1"/>
+        <Literal datatypeIRI="http://www.w3.org/2001/XMLSchema#integer">2</Literal>
+    </DataPropertyAssertion>
+    <DataPropertyAssertion>
+        <DataProperty IRI="#ctprim"/>
+        <NamedIndividual IRI="#Voltage_Regulator_1"/>
+        <Literal datatypeIRI="http://www.w3.org/2001/XMLSchema#integer">700</Literal>
+    </DataPropertyAssertion>
+    <DataPropertyAssertion>
+        <DataProperty IRI="#kV_primary"/>
+        <NamedIndividual IRI="#Voltage_Regulator_1"/>
+        <Literal datatypeIRI="http://www.w3.org/2001/XMLSchema#decimal">2.4</Literal>
+    </DataPropertyAssertion>
+    <DataPropertyAssertion>
+        <DataProperty IRI="#kV_secondary"/>
+        <NamedIndividual IRI="#Voltage_Regulator_1"/>
+        <Literal datatypeIRI="http://www.w3.org/2001/XMLSchema#decimal">2.4</Literal>
+    </DataPropertyAssertion>
+    <DataPropertyAssertion>
+        <DataProperty IRI="#max_tap"/>
+        <NamedIndividual IRI="#Voltage_Regulator_1"/>
+        <Literal datatypeIRI="http://www.w3.org/2001/XMLSchema#decimal">1.05</Literal>
+    </DataPropertyAssertion>
+    <DataPropertyAssertion>
+        <DataProperty IRI="#min_tap"/>
+        <NamedIndividual IRI="#Voltage_Regulator_1"/>
+        <Literal datatypeIRI="http://www.w3.org/2001/XMLSchema#decimal">0.95</Literal>
+    </DataPropertyAssertion>
+    <DataPropertyAssertion>
+        <DataProperty IRI="#nodes_primary"/>
+        <NamedIndividual IRI="#Voltage_Regulator_1"/>
+        <Literal datatypeIRI="http://www.w3.org/2001/XMLSchema#integer">1</Literal>
+    </DataPropertyAssertion>
+    <DataPropertyAssertion>
+        <DataProperty IRI="#nodes_secondary"/>
+        <NamedIndividual IRI="#Voltage_Regulator_1"/>
+        <Literal datatypeIRI="http://www.w3.org/2001/XMLSchema#integer">1</Literal>
+    </DataPropertyAssertion>
+    <DataPropertyAssertion>
+        <DataProperty IRI="#num_phases"/>
+        <NamedIndividual IRI="#Voltage_Regulator_1"/>
+        <Literal datatypeIRI="http://www.w3.org/2001/XMLSchema#integer">1</Literal>
+    </DataPropertyAssertion>
+    <DataPropertyAssertion>
+        <DataProperty IRI="#num_taps"/>
+        <NamedIndividual IRI="#Voltage_Regulator_1"/>
+        <Literal datatypeIRI="http://www.w3.org/2001/XMLSchema#integer">32</Literal>
+    </DataPropertyAssertion>
+    <DataPropertyAssertion>
+        <DataProperty IRI="#percent_Load_Loss"/>
+        <NamedIndividual IRI="#Voltage_Regulator_1"/>
+        <Literal datatypeIRI="http://www.w3.org/2001/XMLSchema#decimal">0.01</Literal>
+    </DataPropertyAssertion>
+    <DataPropertyAssertion>
+        <DataProperty IRI="#ptratio"/>
+        <NamedIndividual IRI="#Voltage_Regulator_1"/>
+        <Literal datatypeIRI="http://www.w3.org/2001/XMLSchema#integer">20</Literal>
+    </DataPropertyAssertion>
+    <DataPropertyAssertion>
+        <DataProperty IRI="#vreg"/>
+        <NamedIndividual IRI="#Voltage_Regulator_1"/>
+        <Literal datatypeIRI="http://www.w3.org/2001/XMLSchema#integer">122</Literal>
+    </DataPropertyAssertion>
+    <DataPropertyAssertion>
+        <DataProperty IRI="#Kva"/>
+        <NamedIndividual IRI="#Voltage_Regulator_2"/>
+        <Literal datatypeIRI="http://www.w3.org/2001/XMLSchema#integer">1666</Literal>
+    </DataPropertyAssertion>
+    <DataPropertyAssertion>
+        <DataProperty IRI="#R"/>
+        <NamedIndividual IRI="#Voltage_Regulator_2"/>
+        <Literal datatypeIRI="http://www.w3.org/2001/XMLSchema#integer">3</Literal>
+    </DataPropertyAssertion>
+    <DataPropertyAssertion>
+        <DataProperty IRI="#X"/>
+        <NamedIndividual IRI="#Voltage_Regulator_2"/>
+        <Literal datatypeIRI="http://www.w3.org/2001/XMLSchema#integer">9</Literal>
+    </DataPropertyAssertion>
+    <DataPropertyAssertion>
+        <DataProperty IRI="#XHL"/>
+        <NamedIndividual IRI="#Voltage_Regulator_2"/>
+        <Literal datatypeIRI="http://www.w3.org/2001/XMLSchema#decimal">0.01</Literal>
+    </DataPropertyAssertion>
+    <DataPropertyAssertion>
+        <DataProperty IRI="#band"/>
+        <NamedIndividual IRI="#Voltage_Regulator_2"/>
+        <Literal datatypeIRI="http://www.w3.org/2001/XMLSchema#integer">2</Literal>
+    </DataPropertyAssertion>
+    <DataPropertyAssertion>
+        <DataProperty IRI="#ctprim"/>
+        <NamedIndividual IRI="#Voltage_Regulator_2"/>
+        <Literal datatypeIRI="http://www.w3.org/2001/XMLSchema#integer">700</Literal>
+    </DataPropertyAssertion>
+    <DataPropertyAssertion>
+        <DataProperty IRI="#kV_primary"/>
+        <NamedIndividual IRI="#Voltage_Regulator_2"/>
+        <Literal datatypeIRI="http://www.w3.org/2001/XMLSchema#decimal">2.4</Literal>
+    </DataPropertyAssertion>
+    <DataPropertyAssertion>
+        <DataProperty IRI="#kV_secondary"/>
+        <NamedIndividual IRI="#Voltage_Regulator_2"/>
+        <Literal datatypeIRI="http://www.w3.org/2001/XMLSchema#decimal">2.4</Literal>
+    </DataPropertyAssertion>
+    <DataPropertyAssertion>
+        <DataProperty IRI="#max_tap"/>
+        <NamedIndividual IRI="#Voltage_Regulator_2"/>
+        <Literal datatypeIRI="http://www.w3.org/2001/XMLSchema#decimal">1.05</Literal>
+    </DataPropertyAssertion>
+    <DataPropertyAssertion>
+        <DataProperty IRI="#min_tap"/>
+        <NamedIndividual IRI="#Voltage_Regulator_2"/>
+        <Literal datatypeIRI="http://www.w3.org/2001/XMLSchema#decimal">0.95</Literal>
+    </DataPropertyAssertion>
+    <DataPropertyAssertion>
+        <DataProperty IRI="#nodes_primary"/>
+        <NamedIndividual IRI="#Voltage_Regulator_2"/>
+        <Literal datatypeIRI="http://www.w3.org/2001/XMLSchema#integer">2</Literal>
+    </DataPropertyAssertion>
+    <DataPropertyAssertion>
+        <DataProperty IRI="#nodes_secondary"/>
+        <NamedIndividual IRI="#Voltage_Regulator_2"/>
+        <Literal datatypeIRI="http://www.w3.org/2001/XMLSchema#integer">2</Literal>
+    </DataPropertyAssertion>
+    <DataPropertyAssertion>
+        <DataProperty IRI="#num_phases"/>
+        <NamedIndividual IRI="#Voltage_Regulator_2"/>
+        <Literal datatypeIRI="http://www.w3.org/2001/XMLSchema#integer">1</Literal>
+    </DataPropertyAssertion>
+    <DataPropertyAssertion>
+        <DataProperty IRI="#num_taps"/>
+        <NamedIndividual IRI="#Voltage_Regulator_2"/>
+        <Literal datatypeIRI="http://www.w3.org/2001/XMLSchema#integer">32</Literal>
+    </DataPropertyAssertion>
+    <DataPropertyAssertion>
+        <DataProperty IRI="#percent_Load_Loss"/>
+        <NamedIndividual IRI="#Voltage_Regulator_2"/>
+        <Literal datatypeIRI="http://www.w3.org/2001/XMLSchema#decimal">0.01</Literal>
+    </DataPropertyAssertion>
+    <DataPropertyAssertion>
+        <DataProperty IRI="#ptratio"/>
+        <NamedIndividual IRI="#Voltage_Regulator_2"/>
+        <Literal datatypeIRI="http://www.w3.org/2001/XMLSchema#integer">20</Literal>
+    </DataPropertyAssertion>
+    <DataPropertyAssertion>
+        <DataProperty IRI="#vreg"/>
+        <NamedIndividual IRI="#Voltage_Regulator_2"/>
+        <Literal datatypeIRI="http://www.w3.org/2001/XMLSchema#integer">122</Literal>
+    </DataPropertyAssertion>
+    <DataPropertyAssertion>
+        <DataProperty IRI="#Kva"/>
+        <NamedIndividual IRI="#Voltage_Regulator_3"/>
+        <Literal datatypeIRI="http://www.w3.org/2001/XMLSchema#integer">1666</Literal>
+    </DataPropertyAssertion>
+    <DataPropertyAssertion>
+        <DataProperty IRI="#R"/>
+        <NamedIndividual IRI="#Voltage_Regulator_3"/>
+        <Literal datatypeIRI="http://www.w3.org/2001/XMLSchema#integer">3</Literal>
+    </DataPropertyAssertion>
+    <DataPropertyAssertion>
+        <DataProperty IRI="#X"/>
+        <NamedIndividual IRI="#Voltage_Regulator_3"/>
+        <Literal datatypeIRI="http://www.w3.org/2001/XMLSchema#integer">9</Literal>
+    </DataPropertyAssertion>
+    <DataPropertyAssertion>
+        <DataProperty IRI="#XHL"/>
+        <NamedIndividual IRI="#Voltage_Regulator_3"/>
+        <Literal datatypeIRI="http://www.w3.org/2001/XMLSchema#decimal">0.01</Literal>
+    </DataPropertyAssertion>
+    <DataPropertyAssertion>
+        <DataProperty IRI="#band"/>
+        <NamedIndividual IRI="#Voltage_Regulator_3"/>
+        <Literal datatypeIRI="http://www.w3.org/2001/XMLSchema#integer">2</Literal>
+    </DataPropertyAssertion>
+    <DataPropertyAssertion>
+        <DataProperty IRI="#ctprim"/>
+        <NamedIndividual IRI="#Voltage_Regulator_3"/>
+        <Literal datatypeIRI="http://www.w3.org/2001/XMLSchema#integer">700</Literal>
+    </DataPropertyAssertion>
+    <DataPropertyAssertion>
+        <DataProperty IRI="#kV_primary"/>
+        <NamedIndividual IRI="#Voltage_Regulator_3"/>
+        <Literal datatypeIRI="http://www.w3.org/2001/XMLSchema#decimal">2.4</Literal>
+    </DataPropertyAssertion>
+    <DataPropertyAssertion>
+        <DataProperty IRI="#kV_secondary"/>
+        <NamedIndividual IRI="#Voltage_Regulator_3"/>
+        <Literal datatypeIRI="http://www.w3.org/2001/XMLSchema#decimal">2.4</Literal>
+    </DataPropertyAssertion>
+    <DataPropertyAssertion>
+        <DataProperty IRI="#max_tap"/>
+        <NamedIndividual IRI="#Voltage_Regulator_3"/>
+        <Literal datatypeIRI="http://www.w3.org/2001/XMLSchema#decimal">1.05</Literal>
+    </DataPropertyAssertion>
+    <DataPropertyAssertion>
+        <DataProperty IRI="#min_tap"/>
+        <NamedIndividual IRI="#Voltage_Regulator_3"/>
+        <Literal datatypeIRI="http://www.w3.org/2001/XMLSchema#decimal">0.95</Literal>
+    </DataPropertyAssertion>
+    <DataPropertyAssertion>
+        <DataProperty IRI="#nodes_primary"/>
+        <NamedIndividual IRI="#Voltage_Regulator_3"/>
+        <Literal datatypeIRI="http://www.w3.org/2001/XMLSchema#integer">3</Literal>
+    </DataPropertyAssertion>
+    <DataPropertyAssertion>
+        <DataProperty IRI="#nodes_secondary"/>
+        <NamedIndividual IRI="#Voltage_Regulator_3"/>
+        <Literal datatypeIRI="http://www.w3.org/2001/XMLSchema#integer">3</Literal>
+    </DataPropertyAssertion>
+    <DataPropertyAssertion>
+        <DataProperty IRI="#num_phases"/>
+        <NamedIndividual IRI="#Voltage_Regulator_3"/>
+        <Literal datatypeIRI="http://www.w3.org/2001/XMLSchema#integer">1</Literal>
+    </DataPropertyAssertion>
+    <DataPropertyAssertion>
+        <DataProperty IRI="#num_taps"/>
+        <NamedIndividual IRI="#Voltage_Regulator_3"/>
+        <Literal datatypeIRI="http://www.w3.org/2001/XMLSchema#integer">32</Literal>
+    </DataPropertyAssertion>
+    <DataPropertyAssertion>
+        <DataProperty IRI="#percent_Load_Loss"/>
+        <NamedIndividual IRI="#Voltage_Regulator_3"/>
+        <Literal datatypeIRI="http://www.w3.org/2001/XMLSchema#decimal">0.01</Literal>
+    </DataPropertyAssertion>
+    <DataPropertyAssertion>
+        <DataProperty IRI="#ptratio"/>
+        <NamedIndividual IRI="#Voltage_Regulator_3"/>
+        <Literal datatypeIRI="http://www.w3.org/2001/XMLSchema#integer">20</Literal>
+    </DataPropertyAssertion>
+    <DataPropertyAssertion>
+        <DataProperty IRI="#vreg"/>
+        <NamedIndividual IRI="#Voltage_Regulator_3"/>
+        <Literal datatypeIRI="http://www.w3.org/2001/XMLSchema#integer">122</Literal>
+    </DataPropertyAssertion>
+    <DataPropertyAssertion>
+        <DataProperty IRI="#rate"/>
+        <NamedIndividual IRI="#Voltage_Sensor"/>
+        <Literal datatypeIRI="http://www.w3.org/2001/XMLSchema#integer">120</Literal>
+    </DataPropertyAssertion>
+    <SubObjectPropertyOf>
+        <ObjectProperty IRI="#primaryAttachsTo"/>
+        <ObjectProperty IRI="#attachsTo"/>
+    </SubObjectPropertyOf>
+    <InverseObjectProperties>
+        <ObjectProperty IRI="#connectsTo"/>
+        <ObjectProperty IRI="#connectsTo"/>
+    </InverseObjectProperties>
+    <InverseObjectProperties>
+        <ObjectProperty IRI="#controls"/>
+        <ObjectProperty IRI="#isControlledBy"/>
+    </InverseObjectProperties>
+    <InverseObjectProperties>
+        <ObjectProperty IRI="#feeds"/>
+        <ObjectProperty IRI="#isFedBy"/>
+    </InverseObjectProperties>
+    <InverseObjectProperties>
+        <ObjectProperty IRI="#isLocationOf"/>
+        <ObjectProperty IRI="#locatedAt"/>
+    </InverseObjectProperties>
+    <InverseObjectProperties>
+        <ObjectProperty IRI="#isMeasuredBy"/>
+        <ObjectProperty IRI="#measures"/>
+    </InverseObjectProperties>
+    <InverseObjectProperties>
+        <ObjectProperty IRI="#isMonitorBy"/>
+        <ObjectProperty IRI="#monitor"/>
+    </InverseObjectProperties>
+    <SymmetricObjectProperty>
+        <ObjectProperty IRI="#connectsTo"/>
+    </SymmetricObjectProperty>
+    <AsymmetricObjectProperty>
+        <ObjectProperty IRI="#attachsTo"/>
+    </AsymmetricObjectProperty>
+    <AsymmetricObjectProperty>
+        <ObjectProperty IRI="#controls"/>
+    </AsymmetricObjectProperty>
+    <AsymmetricObjectProperty>
+        <ObjectProperty IRI="#feeds"/>
+    </AsymmetricObjectProperty>
+    <AsymmetricObjectProperty>
+        <ObjectProperty IRI="#isControlledBy"/>
+    </AsymmetricObjectProperty>
+    <AsymmetricObjectProperty>
+        <ObjectProperty IRI="#isFedBy"/>
+    </AsymmetricObjectProperty>
+    <AsymmetricObjectProperty>
+        <ObjectProperty IRI="#isLocationOf"/>
+    </AsymmetricObjectProperty>
+    <AsymmetricObjectProperty>
+        <ObjectProperty IRI="#isMeasuredBy"/>
+    </AsymmetricObjectProperty>
+    <AsymmetricObjectProperty>
+        <ObjectProperty IRI="#isMonitorBy"/>
+    </AsymmetricObjectProperty>
+    <AsymmetricObjectProperty>
+        <ObjectProperty IRI="#locatedAt"/>
+    </AsymmetricObjectProperty>
+    <AsymmetricObjectProperty>
+        <ObjectProperty IRI="#measures"/>
+    </AsymmetricObjectProperty>
+    <AsymmetricObjectProperty>
+        <ObjectProperty IRI="#monitor"/>
+    </AsymmetricObjectProperty>
+    <AsymmetricObjectProperty>
+        <ObjectProperty IRI="#primaryAttachsTo"/>
+    </AsymmetricObjectProperty>
+    <IrreflexiveObjectProperty>
+        <ObjectProperty IRI="#attachsTo"/>
+    </IrreflexiveObjectProperty>
+    <IrreflexiveObjectProperty>
+        <ObjectProperty IRI="#connectsTo"/>
+    </IrreflexiveObjectProperty>
+    <IrreflexiveObjectProperty>
+        <ObjectProperty IRI="#controls"/>
+    </IrreflexiveObjectProperty>
+    <IrreflexiveObjectProperty>
+        <ObjectProperty IRI="#feeds"/>
+    </IrreflexiveObjectProperty>
+    <IrreflexiveObjectProperty>
+        <ObjectProperty IRI="#isControlledBy"/>
+    </IrreflexiveObjectProperty>
+    <IrreflexiveObjectProperty>
+        <ObjectProperty IRI="#isFedBy"/>
+    </IrreflexiveObjectProperty>
+    <IrreflexiveObjectProperty>
+        <ObjectProperty IRI="#isLocationOf"/>
+    </IrreflexiveObjectProperty>
+    <IrreflexiveObjectProperty>
+        <ObjectProperty IRI="#isMeasuredBy"/>
+    </IrreflexiveObjectProperty>
+    <IrreflexiveObjectProperty>
+        <ObjectProperty IRI="#isMonitorBy"/>
+    </IrreflexiveObjectProperty>
+    <IrreflexiveObjectProperty>
+        <ObjectProperty IRI="#locatedAt"/>
+    </IrreflexiveObjectProperty>
+    <IrreflexiveObjectProperty>
+        <ObjectProperty IRI="#measures"/>
+    </IrreflexiveObjectProperty>
+    <IrreflexiveObjectProperty>
+        <ObjectProperty IRI="#monitor"/>
+    </IrreflexiveObjectProperty>
+    <IrreflexiveObjectProperty>
+        <ObjectProperty IRI="#primaryAttachsTo"/>
+    </IrreflexiveObjectProperty>
+    <ObjectPropertyDomain>
+        <ObjectProperty IRI="#attachsTo"/>
+        <Class IRI="#Capacitor"/>
+    </ObjectPropertyDomain>
+    <ObjectPropertyDomain>
+        <ObjectProperty IRI="#attachsTo"/>
+        <Class IRI="#Generator"/>
+    </ObjectPropertyDomain>
+    <ObjectPropertyDomain>
+        <ObjectProperty IRI="#attachsTo"/>
+        <Class IRI="#Line"/>
+    </ObjectPropertyDomain>
+    <ObjectPropertyDomain>
+        <ObjectProperty IRI="#attachsTo"/>
+        <Class IRI="#Load"/>
+    </ObjectPropertyDomain>
+    <ObjectPropertyDomain>
+        <ObjectProperty IRI="#attachsTo"/>
+        <Class IRI="#RegControl"/>
+    </ObjectPropertyDomain>
+    <ObjectPropertyDomain>
+        <ObjectProperty IRI="#attachsTo"/>
+        <Class IRI="#Transformer"/>
+    </ObjectPropertyDomain>
+    <ObjectPropertyDomain>
+        <ObjectProperty IRI="#connectsTo"/>
+        <Class IRI="#Control_System"/>
+    </ObjectPropertyDomain>
+    <ObjectPropertyDomain>
+        <ObjectProperty IRI="#connectsTo"/>
+        <Class IRI="#Network_Devices"/>
+    </ObjectPropertyDomain>
+    <ObjectPropertyDomain>
+        <ObjectProperty IRI="#controls"/>
+        <Class IRI="#Actuator"/>
+    </ObjectPropertyDomain>
+    <ObjectPropertyDomain>
+        <ObjectProperty IRI="#feeds"/>
+        <Class IRI="#Equipment"/>
+    </ObjectPropertyDomain>
+    <ObjectPropertyDomain>
+        <ObjectProperty IRI="#isControlledBy"/>
+        <Class IRI="#Equipment"/>
+    </ObjectPropertyDomain>
+    <ObjectPropertyDomain>
+        <ObjectProperty IRI="#isFedBy"/>
+        <Class IRI="#Equipment"/>
+    </ObjectPropertyDomain>
+    <ObjectPropertyDomain>
+        <ObjectProperty IRI="#isLocationOf"/>
+        <Class IRI="#Location"/>
+    </ObjectPropertyDomain>
+    <ObjectPropertyDomain>
+        <ObjectProperty IRI="#isMeasuredBy"/>
+        <Class IRI="#Measurable"/>
+    </ObjectPropertyDomain>
+    <ObjectPropertyDomain>
+        <ObjectProperty IRI="#isMonitorBy"/>
+        <Class IRI="#Equipment"/>
+    </ObjectPropertyDomain>
+    <ObjectPropertyDomain>
+        <ObjectProperty IRI="#locatedAt"/>
+        <Class IRI="#Equipment"/>
+    </ObjectPropertyDomain>
+    <ObjectPropertyDomain>
+        <ObjectProperty IRI="#measures"/>
+        <Class IRI="#Sensor"/>
+    </ObjectPropertyDomain>
+    <ObjectPropertyDomain>
+        <ObjectProperty IRI="#monitor"/>
+        <Class IRI="#Sensor"/>
+    </ObjectPropertyDomain>
+    <ObjectPropertyRange>
+        <ObjectProperty IRI="#attachsTo"/>
+        <Class IRI="#Bus"/>
+    </ObjectPropertyRange>
+    <ObjectPropertyRange>
+        <ObjectProperty IRI="#connectsTo"/>
+        <Class IRI="#Control_System"/>
+    </ObjectPropertyRange>
+    <ObjectPropertyRange>
+        <ObjectProperty IRI="#connectsTo"/>
+        <Class IRI="#Network_Devices"/>
+    </ObjectPropertyRange>
+    <ObjectPropertyRange>
+        <ObjectProperty IRI="#controls"/>
+        <Class IRI="#Equipment"/>
+    </ObjectPropertyRange>
+    <ObjectPropertyRange>
+        <ObjectProperty IRI="#feeds"/>
+        <Class IRI="#Equipment"/>
+    </ObjectPropertyRange>
+    <ObjectPropertyRange>
+        <ObjectProperty IRI="#isControlledBy"/>
+        <Class IRI="#Actuator"/>
+    </ObjectPropertyRange>
+    <ObjectPropertyRange>
+        <ObjectProperty IRI="#isFedBy"/>
+        <Class IRI="#Equipment"/>
+    </ObjectPropertyRange>
+    <ObjectPropertyRange>
+        <ObjectProperty IRI="#isLocationOf"/>
+        <Class IRI="#Equipment"/>
+    </ObjectPropertyRange>
+    <ObjectPropertyRange>
+        <ObjectProperty IRI="#isMeasuredBy"/>
+        <Class IRI="#Sensor"/>
+    </ObjectPropertyRange>
+    <ObjectPropertyRange>
+        <ObjectProperty IRI="#isMonitorBy"/>
+        <Class IRI="#Sensor"/>
+    </ObjectPropertyRange>
+    <ObjectPropertyRange>
+        <ObjectProperty IRI="#locatedAt"/>
+        <Class IRI="#Location"/>
+    </ObjectPropertyRange>
+    <ObjectPropertyRange>
+        <ObjectProperty IRI="#measures"/>
+        <Class IRI="#Measurable"/>
+    </ObjectPropertyRange>
+    <ObjectPropertyRange>
+        <ObjectProperty IRI="#monitor"/>
+        <Class IRI="#Equipment"/>
+    </ObjectPropertyRange>
+    <ObjectPropertyRange>
+        <ObjectProperty IRI="#primaryAttachsTo"/>
+        <Class IRI="#Bus"/>
+    </ObjectPropertyRange>
+    <SubDataPropertyOf>
+        <DataProperty IRI="#coord_x"/>
+        <DataProperty abbreviatedIRI="owl:topDataProperty"/>
+    </SubDataPropertyOf>
+    <SubDataPropertyOf>
+        <DataProperty IRI="#length"/>
+        <DataProperty abbreviatedIRI="owl:topDataProperty"/>
+    </SubDataPropertyOf>
+    <SubDataPropertyOf>
+        <DataProperty IRI="#nodes_primary"/>
+        <DataProperty abbreviatedIRI="owl:topDataProperty"/>
+    </SubDataPropertyOf>
+    <SubDataPropertyOf>
+        <DataProperty IRI="#percent_Load_Loss"/>
+        <DataProperty abbreviatedIRI="owl:topDataProperty"/>
+    </SubDataPropertyOf>
+    <DataPropertyDomain>
+        <DataProperty IRI="#coord_x"/>
+        <Class IRI="#Coordinates"/>
+    </DataPropertyDomain>
+    <DataPropertyDomain>
+        <DataProperty IRI="#coord_y"/>
+        <Class IRI="#Coordinates"/>
+    </DataPropertyDomain>
+    <DataPropertyDomain>
+        <DataProperty IRI="#length"/>
+        <Class IRI="#Line"/>
+    </DataPropertyDomain>
+    <DataPropertyDomain>
+        <DataProperty IRI="#model"/>
+        <Class IRI="#Load"/>
+    </DataPropertyDomain>
+    <DataPropertyDomain>
+        <DataProperty IRI="#normal_state"/>
+        <Class IRI="#Line"/>
+    </DataPropertyDomain>
+    <DataPropertyDomain>
+        <DataProperty IRI="#num_phases"/>
+        <Class IRI="#Equipment"/>
+    </DataPropertyDomain>
+    <DataPropertyDomain>
+        <DataProperty IRI="#num_taps"/>
+        <Class IRI="#Transformer"/>
+    </DataPropertyDomain>
+    <DataPropertyDomain>
+        <DataProperty IRI="#switch_type"/>
+        <Class IRI="#Line"/>
+    </DataPropertyDomain>
+    <DataPropertyDomain>
+        <DataProperty IRI="#unit"/>
+        <Class IRI="#Equipment"/>
+    </DataPropertyDomain>
+    <AnnotationAssertion>
+        <AnnotationProperty IRI="http://www.w3.org/2004/02/skos/core#definition"/>
+        <IRI>#Kva</IRI>
+        <Literal>Base kVA rating (OA rating)</Literal>
+    </AnnotationAssertion>
+    <AnnotationAssertion>
+        <AnnotationProperty IRI="http://www.w3.org/2004/02/skos/core#definition"/>
+        <IRI>#MVAsc1</IRI>
+        <Literal>1-phase short circuit MVA.</Literal>
+    </AnnotationAssertion>
+    <AnnotationAssertion>
+        <AnnotationProperty IRI="http://www.w3.org/2004/02/skos/core#definition"/>
+        <IRI>#MVAsc3</IRI>
+        <Literal>3-phase short circuit</Literal>
+    </AnnotationAssertion>
+    <AnnotationAssertion>
+        <AnnotationProperty IRI="http://www.w3.org/2004/02/skos/core#definition"/>
+        <IRI>#R</IRI>
+        <Literal>R setting</Literal>
+    </AnnotationAssertion>
+    <AnnotationAssertion>
+        <AnnotationProperty IRI="http://www.w3.org/2004/02/skos/core#definition"/>
+        <IRI>#Transformer</IRI>
+        <Literal>Transformer that changes the voltage from bus1 to bus2</Literal>
+    </AnnotationAssertion>
+    <AnnotationAssertion>
+        <AnnotationProperty abbreviatedIRI="rdfs:comment"/>
+        <IRI>#Transformer_1</IRI>
+        <Literal>This is the transformer labelled XFM-1</Literal>
+    </AnnotationAssertion>
+    <AnnotationAssertion>
+        <AnnotationProperty abbreviatedIRI="rdfs:comment"/>
+        <IRI>#Transformer_Sub</IRI>
+        <Literal>This is the transformer at the generating station</Literal>
+    </AnnotationAssertion>
+    <AnnotationAssertion>
+        <AnnotationProperty IRI="http://www.w3.org/2004/02/skos/core#definition"/>
+        <IRI>#X</IRI>
+        <Literal>X setting</Literal>
+    </AnnotationAssertion>
+    <AnnotationAssertion>
+        <AnnotationProperty IRI="http://www.w3.org/2004/02/skos/core#definition"/>
+        <IRI>#XHL</IRI>
+        <Literal>percent leakage from the H-winding to the L-winding or from winding 1 to winding 2</Literal>
+    </AnnotationAssertion>
+    <AnnotationAssertion>
+        <AnnotationProperty IRI="http://www.w3.org/2004/02/skos/core#definition"/>
+        <IRI>#angle</IRI>
+        <Literal>Base angle, degrees, of the first phase</Literal>
+    </AnnotationAssertion>
+    <AnnotationAssertion>
+        <AnnotationProperty IRI="http://www.w3.org/2004/02/skos/core#definition"/>
+        <IRI>#attachsTo</IRI>
+        <Literal>A electrical connection ot a bus</Literal>
+    </AnnotationAssertion>
+    <AnnotationAssertion>
+        <AnnotationProperty IRI="http://www.w3.org/2004/02/skos/core#definition"/>
+        <IRI>#connection_primary</IRI>
+        <Literal>The connection for the first winding or bus, either detla or wye.</Literal>
+    </AnnotationAssertion>
+    <AnnotationAssertion>
+        <AnnotationProperty IRI="http://www.w3.org/2004/02/skos/core#definition"/>
+        <IRI>#connection_secondary</IRI>
+        <Literal>The connection type for the second winding or bus.</Literal>
+    </AnnotationAssertion>
+    <AnnotationAssertion>
+        <AnnotationProperty IRI="http://www.w3.org/2004/02/skos/core#definition"/>
+        <IRI>#connectsTo</IRI>
+        <Literal>A logical connection between two entities</Literal>
+    </AnnotationAssertion>
+    <AnnotationAssertion>
+        <AnnotationProperty IRI="http://www.w3.org/2004/02/skos/core#definition"/>
+        <IRI>#controls</IRI>
+        <Literal>An equipment that controls another equipment.</Literal>
+    </AnnotationAssertion>
+    <AnnotationAssertion>
+        <AnnotationProperty IRI="http://www.w3.org/2004/02/skos/core#definition"/>
+        <IRI>#delay</IRI>
+        <Literal>The delay of processing the input</Literal>
+    </AnnotationAssertion>
+    <AnnotationAssertion>
+        <AnnotationProperty IRI="http://www.w3.org/2004/02/skos/core#definition"/>
+        <IRI>#error_rate</IRI>
+        <Literal>The error rate of processing for transporting</Literal>
+    </AnnotationAssertion>
+    <AnnotationAssertion>
+        <AnnotationProperty IRI="http://www.w3.org/2004/02/skos/core#definition"/>
+        <IRI>#feeds</IRI>
+        <Literal>The subject is upstream of the object in the context of some sequential process; some media is passed between them.</Literal>
+    </AnnotationAssertion>
+    <AnnotationAssertion>
+        <AnnotationProperty IRI="http://www.w3.org/2004/02/skos/core#definition"/>
+        <IRI>#float_array</IRI>
+        <Literal>An array of float that is internally represented as a string</Literal>
+    </AnnotationAssertion>
+    <AnnotationAssertion>
+        <AnnotationProperty IRI="http://www.w3.org/2004/02/skos/core#definition"/>
+        <IRI>#freq</IRI>
+        <Literal>The frequency that the equipment is running on</Literal>
+    </AnnotationAssertion>
+    <AnnotationAssertion>
+        <AnnotationProperty IRI="http://www.w3.org/2004/02/skos/core#definition"/>
+        <IRI>#int_array</IRI>
+        <Literal>An array of int that is internally represented as a string</Literal>
+    </AnnotationAssertion>
+    <AnnotationAssertion>
+        <AnnotationProperty IRI="http://www.w3.org/2004/02/skos/core#definition"/>
+        <IRI>#isControlledBy</IRI>
+        <Literal>The inverse of controls</Literal>
+    </AnnotationAssertion>
+    <AnnotationAssertion>
+        <AnnotationProperty IRI="http://www.w3.org/2004/02/skos/core#definition"/>
+        <IRI>#isFedBy</IRI>
+        <Literal>The inverse of feeds</Literal>
+    </AnnotationAssertion>
+    <AnnotationAssertion>
+        <AnnotationProperty IRI="http://www.w3.org/2004/02/skos/core#definition"/>
+        <IRI>#isLocationOf</IRI>
+        <Literal>The inverse of hasLocation</Literal>
+    </AnnotationAssertion>
+    <AnnotationAssertion>
+        <AnnotationProperty IRI="http://www.w3.org/2004/02/skos/core#definition"/>
+        <IRI>#isMeasuredBy</IRI>
+        <Literal>The inverse of measures</Literal>
+    </AnnotationAssertion>
+    <AnnotationAssertion>
+        <AnnotationProperty IRI="http://www.w3.org/2004/02/skos/core#definition"/>
+        <IRI>#isMonitorBy</IRI>
+        <Literal>The inverse of monitor</Literal>
+    </AnnotationAssertion>
+    <AnnotationAssertion>
+        <AnnotationProperty IRI="http://www.w3.org/2004/02/skos/core#definition"/>
+        <IRI>#kV_primary</IRI>
+        <Literal>The rated voltage for the primary terminal or winding</Literal>
+    </AnnotationAssertion>
+    <AnnotationAssertion>
+        <AnnotationProperty IRI="http://www.w3.org/2004/02/skos/core#definition"/>
+        <IRI>#kV_secondary</IRI>
+        <Literal>The rated voltage for the secondary terminal or winding</Literal>
+    </AnnotationAssertion>
+    <AnnotationAssertion>
+        <AnnotationProperty IRI="http://www.w3.org/2004/02/skos/core#definition"/>
+        <IRI>#kW</IRI>
+        <Literal>nominal active power, kW, for the load. Total of all phases</Literal>
+    </AnnotationAssertion>
+    <AnnotationAssertion>
+        <AnnotationProperty IRI="http://www.w3.org/2004/02/skos/core#definition"/>
+        <IRI>#kvar</IRI>
+        <Literal>Base kvar</Literal>
+    </AnnotationAssertion>
+    <AnnotationAssertion>
+        <AnnotationProperty IRI="http://www.w3.org/2004/02/skos/core#definition"/>
+        <IRI>#locatedAt</IRI>
+        <Literal>The subject is located at a particular place</Literal>
+    </AnnotationAssertion>
+    <AnnotationAssertion>
+        <AnnotationProperty IRI="http://www.w3.org/2004/02/skos/core#definition"/>
+        <IRI>#measures</IRI>
+        <Literal>What measureable (unit) does the sensor measure.</Literal>
+    </AnnotationAssertion>
+    <AnnotationAssertion>
+        <AnnotationProperty IRI="http://www.w3.org/2004/02/skos/core#definition"/>
+        <IRI>#monitor</IRI>
+        <Literal>A sensor that monitors/senses another equipment</Literal>
+    </AnnotationAssertion>
+    <AnnotationAssertion>
+        <AnnotationProperty IRI="http://www.w3.org/2004/02/skos/core#definition"/>
+        <IRI>#nodes_primary</IRI>
+        <Literal>List of node/terminal connections for the primary side of the equipment</Literal>
+    </AnnotationAssertion>
+    <AnnotationAssertion>
+        <AnnotationProperty IRI="http://www.w3.org/2004/02/skos/core#definition"/>
+        <IRI>#nodes_secondary</IRI>
+        <Literal>List of node/terminal connections for the secondary side of the equipment</Literal>
+    </AnnotationAssertion>
+    <AnnotationAssertion>
+        <AnnotationProperty IRI="http://www.w3.org/2004/02/skos/core#definition"/>
+        <IRI>#normal_state</IRI>
+        <Literal>Is the switch normally open or closed</Literal>
+    </AnnotationAssertion>
+    <AnnotationAssertion>
+        <AnnotationProperty IRI="http://www.w3.org/2004/02/skos/core#definition"/>
+        <IRI>#num_phases</IRI>
+        <Literal>The number of phases</Literal>
+    </AnnotationAssertion>
+    <AnnotationAssertion>
+        <AnnotationProperty IRI="http://www.w3.org/2004/02/skos/core#definition"/>
+        <IRI>#num_taps</IRI>
+        <Literal>The number of taps on the transformer</Literal>
+    </AnnotationAssertion>
+    <AnnotationAssertion>
+        <AnnotationProperty IRI="http://www.w3.org/2004/02/skos/core#definition"/>
+        <IRI>#percent_Load_Loss</IRI>
+        <Literal>Percent Losses at rated load. Causes the %r values to be set for winding 1 and 2</Literal>
+    </AnnotationAssertion>
+    <AnnotationAssertion>
+        <AnnotationProperty IRI="http://www.w3.org/2004/02/skos/core#definition"/>
+        <IRI>#percent_R</IRI>
+        <Literal>Percent resistance of this equipment on the rated kVA base.</Literal>
+    </AnnotationAssertion>
+    <AnnotationAssertion>
+        <AnnotationProperty IRI="http://www.w3.org/2004/02/skos/core#definition"/>
+        <IRI>#rate</IRI>
+        <Literal>The bandwith for the link</Literal>
+    </AnnotationAssertion>
+    <AnnotationAssertion>
+        <AnnotationProperty IRI="http://www.w3.org/2004/02/skos/core#definition"/>
+        <IRI>#unit</IRI>
+        <Literal>The unit of measurement the equipment processes on.</Literal>
+    </AnnotationAssertion>
+    <AnnotationAssertion>
+        <AnnotationProperty IRI="http://www.w3.org/2004/02/skos/core#definition"/>
+        <IRI>#vreg</IRI>
+        <Literal>Voltage regulator settings, in volts, for the winding being controlled. Multiplying this value times the ptratio yield the voltage across the winding of the controlled transformer</Literal>
+    </AnnotationAssertion>
+    <DatatypeDefinition>
+        <Datatype IRI="#float_array"/>
+        <Datatype abbreviatedIRI="rdf:PlainLiteral"/>
+    </DatatypeDefinition>
+    <DatatypeDefinition>
+        <Datatype IRI="#int_array"/>
+        <Datatype abbreviatedIRI="rdf:PlainLiteral"/>
+    </DatatypeDefinition>
+</Ontology>
+
+
+
+<!-- Generated by the OWL API (version 4.5.9.2019-02-01T07:24:44Z) https://github.com/owlcs/owlapi -->
+

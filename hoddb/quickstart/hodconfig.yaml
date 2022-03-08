@@ -1,0 +1,28 @@
+### HodDB Configuration
+# commented out lines are default configuration options
+
+####
+# Location and structure of database
+####
+
+Buildings:
+    soda: /etc/hod/buildings/berkeley.ttl
+    ciee: /etc/hod/buildings/ciee.ttl
+    smartgrid: /etc/hod/SmartGrid.ttl
+
+# the location of the database files
+DBPath: _hoddb
+
+# list of links to ontology files to load before each building
+Ontologies:
+    -  "/etc/hod/BrickFrame.ttl"
+    -  "/etc/hod/Brick.ttl"
+    -  "/etc/hod/BrickUse.ttl"
+    -  "/etc/hod/BrickTag.ttl"
+    -  "/etc/hod/SmartGrid.ttl"
+
+EnableHTTP: true
+LogLevel: Debug
+
+ServerPort: 47808
+ListenAddress: 0.0.0.0
