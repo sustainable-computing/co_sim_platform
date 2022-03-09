@@ -48,10 +48,7 @@
 
 #include "ns3/smartgrid-default-simulator-impl.h"
 
-#include "ns3/multi-client-tcp-server-helper.h"
-#include "ns3/multi-client-tcp-server.h"
-#include "ns3/tcp-client-helper.h"
-#include "ns3/tcp-client.h"
+#include "ns3/tcp-helper.h"
 #include "ns3/custom-udp-helper.h"
 #include <unordered_map>
 
@@ -261,7 +258,7 @@ private:
   vector<string>::iterator iList; ///< Application servers vector iterator
   uint16_t sinkPort;              ///< Application port for all server nodes
 
-  MultiClientTcpServerHelper multiClientTcpServerHelper = MultiClientTcpServerHelper(Address()); ///< Application TCP server helper
+  TcpServerHelper tcpServerHelper = TcpServerHelper(sinkPort); ///< Application TCP server helper
   TcpClientHelper tcpClientHelper = TcpClientHelper(Address()); ///< Application TCP client helper
   CustomUdpClientHelper customUdpClientHelper = CustomUdpClientHelper(Address()); ///< Application UDP client helper
   CustomUdpServerHelper customUdpServerHelper = CustomUdpServerHelper(sinkPort); ///< Application UDP server helper

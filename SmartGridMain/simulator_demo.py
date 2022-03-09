@@ -157,7 +157,7 @@ def  create_scenario( world, args ):
         stop_time       = END_TIME,
         random_seed     = args.random_seed,
         verbose         = 0,
-        tcpOrUdp        = "udp", # transport layer protocols: tcp/udp
+        tcpOrUdp        = "tcp", # transport layer protocols: tcp/udp
         # network architecture: P2P/CSMA/P2Pv6/CSMAv6 (supported backbone architectures)
         # When P2Pv6 or CSMAv6 is selected, secondary network is automatically fitted with
         # LR-WPAN and 6LoWPAN (make the distance between two nodes is set accordingly)
@@ -241,6 +241,8 @@ def  create_scenario( world, args ):
 
     probers.append(pflowsim.Prober(idt = "33101-V1",   step_size = global_step_size, verbose = 0))
     probers.append(pflowsim.Prober(idt = "33101-Load", step_size = global_step_size, verbose = 0))
+    probers.append(pflowsim.Prober(idt = "33080-V1",   step_size = global_step_size, verbose = 0))
+    probers.append(pflowsim.Prober(idt = "33080-Load", step_size = global_step_size, verbose = 0))
     
 
     #---
@@ -286,7 +288,7 @@ def  create_scenario( world, args ):
 
     #--- Controller to PktNet
     for client, server, role in appconLinks:    
-        if (role == 'acting'):
+        if (role == 'acting1'):
             controller_instance  = 'Control_' + str(client)          
             transporter_instance = 'Transp_' + str(client) + '-' + str(server)              
             for controller in controllers:

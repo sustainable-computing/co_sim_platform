@@ -1,7 +1,7 @@
-
+/* -*- Mode:C++; c-file-style:"gnu"; indent-tabs-mode:nil; -*- */
 /*
- * Copyright (c) 2020 Amrinder S. Grewal
- *
+ * Copyright (c) 2022 Talha Ibn Aziz
+ * 
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 2 as
  * published by the Free Software Foundation;
@@ -14,46 +14,49 @@
  * You should have received a copy of the GNU General Public License
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
- *
- * Author:  Amrinder S. Grewal <asgrewal@ualberta.ca>
- * Date:    2020.05.13
+ * 
+ * Author:  Talha Ibn Aziz <taziz@ualberta.ca> <talhaibnaziz6343@gmail.com>
+ * Date:    2022.03.03
  * Company: University of Alberta/Canada - Computing Science
- *
- * Modelled after packet-sink.h
+ * 
+ * Modelled after udp-echo-server.h
  */
 
-#ifndef _MULTI_CLIENT_TCP_SERVER_H_
-#define _MULTI_CLIENT_TCP_SERVER_H_
+#ifndef TCP_SERVER_H
+#define TCP_SERVER_H
 
-#include "ns3/core-module.h"
-#include "ns3/socket.h"
 #include "ns3/application.h"
-#include "ns3/address.h"
+#include "ns3/event-id.h"
 #include "ns3/ptr.h"
+#include "ns3/address.h"
+#include "ns3/traced-callback.h"
 
-using namespace ns3;
+namespace ns3 {
+
+class Socket;
+class Packet;
+
 /**
- * \brief Application server that allows multiple simultaneous TCP connection.
- *
- * A single TCP socket is used to listen to incoming connections, then a new
- * socket is created after a connection has been accepted to continue
- * communicating with a client whose connection has already been accepted.
- *
- * This application was created to work with co_sim_platform to allow
- * reception of TCP packets from multiple sensors.
- *
- * Modelled after packet-sink.h
+ * \ingroup applications 
+ * \defgroup udpecho UdpEcho
  */
-class MultiClientTcpServer : public Application {
- public:
+
+/**
+ * \ingroup udpecho
+ * \brief A Udp Echo server
+ *
+ * Every packet received is sent back.
+ */
+class TcpServer : public Application 
+{
+public:
   /**
    * \brief Get the type ID.
-   * \return the object TypeID
+   * \return the object TypeId
    */
-  static TypeId GetTypeId(void);
+  static TypeId GetTypeId (void);
 
-  MultiClientTcpServer();
-  virtual ~MultiClientTcpServer();
+  TcpServer ();
 
   /**
    * \return pointer to the listening socket.
@@ -70,13 +73,26 @@ class MultiClientTcpServer : public Application {
    * \param callback the function to which the callback is set.
    */
   void SetPacketReceivedCallBack(void (*callback)(Ptr<Socket> socket));
- protected:
-  virtual void DoDispose(void);
+  virtual ~TcpServer ();
 
- private:
-  // inherited from Application base class.
-  virtual void StartApplication(void);    // Called at time specified by Start
-  virtual void StopApplication(void);     // Called at time specified by Stop
+
+
+protected:
+  virtual void DoDispose (void);
+
+private:
+
+  virtual void StartApplication (void);
+  virtual void StopApplication (void);
+
+  /**
+   * \brief Handle a packet reception.
+   *
+   * This function is called by lower layers.
+   *
+   * \param socket the socket the packet was received to.
+   */
+  void HandleRead (Ptr<Socket> socket);
 
   /**
    * \brief Handle a connection request received by the application.
@@ -93,12 +109,6 @@ class MultiClientTcpServer : public Application {
   void HandleAccept(Ptr<Socket> socket, const Address &from);
 
   /**
-   * \brief Handle a packet received by the application
-   * \param socket the receiving socket
-   */
-  void HandleRead(Ptr<Socket> socket);
-
-  /**
    * \brief Handle an connection close
    * \param socket the connected socket
    */
@@ -110,22 +120,24 @@ class MultiClientTcpServer : public Application {
    */
   void HandlePeerError(Ptr<Socket> socket);
 
-  // When a connection is accepted in TCP, a new socket is returned
-  // So we need to store a listening socket for this class
-  Ptr<Socket> m_listeningSocket; //!< Listening socket
-  // And a list of sockets that have been accepted
+  // A list of sockets that have been accepted
   std::list<Ptr<Socket>> m_acceptedSocketList; //!< the accepted sockets
 
-  Address m_local;         //!< Local address to bind to
-
-  /// Traced Callback: received packets, source address.
-  TracedCallback<Ptr<const Packet>, const Address &> m_rxTrace;
-
-  /// Callback for tracing the packet Rx events, includes source and destination addresses
-  TracedCallback<Ptr<const Packet>, const Address &, const Address &> m_rxTraceWithAddresses;
-
+  uint16_t m_port; //!< Port on which we listen for incoming packets.
+  Ptr<Socket> m_socket; //!< IPv4 Socket
+  Ptr<Socket> m_socket6; //!< IPv6 Socket
+  Address m_local; //!< local multicast address
   /// The function that will be called when a packet is received
   void (*m_packetReceivedCallback)(Ptr<Socket> socket);
+
+  /// Callbacks for tracing the packet Rx events
+  TracedCallback<Ptr<const Packet> > m_rxTrace;
+
+  /// Callbacks for tracing the packet Rx events, includes source and destination addresses
+  TracedCallback<Ptr<const Packet>, const Address &, const Address &> m_rxTraceWithAddresses;
 };
 
-#endif //_MULTI_CLIENT_TCP_SERVER_H_
+} // namespace ns3
+
+#endif /* TCP_SERVER_H */
+

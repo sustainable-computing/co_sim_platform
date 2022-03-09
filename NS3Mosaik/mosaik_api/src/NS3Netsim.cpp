@@ -218,7 +218,7 @@ NS3Netsim::NS3Netsim() : linkCount(0), sinkPort(0), startTime(0), verbose(0)
   // LogComponentEnable("Simulator", LOG_LEVEL_ALL);
   // LogComponentEnable("SmartgridDefaultSimulatorImpl", LOG_LEVEL_ALL);
   // LogComponentEnable("SmartgridNs3Main", LOG_LEVEL_ALL);
-  // LogComponentEnable("MultiClientTcpServer", LOG_LEVEL_ALL);
+  // LogComponentEnable("TcpServer", LOG_LEVEL_ALL);
   // LogComponentEnable("TcpClient", LOG_LEVEL_ALL);
   // LogComponentEnable("CustomUdpServer", LOG_LEVEL_ALL);
   // LogComponentEnable("CustomUdpClient", LOG_LEVEL_ALL);
@@ -226,6 +226,8 @@ NS3Netsim::NS3Netsim() : linkCount(0), sinkPort(0), startTime(0), verbose(0)
   // LogComponentEnable("SocketFactory", LOG_LEVEL_ALL);
   // LogComponentEnable("TcpSocket", LOG_LEVEL_ALL);
   // LogComponentEnable("TcpSocketBase", LOG_LEVEL_ALL);
+  // LogComponentEnable("UdpSocket", LOG_LEVEL_ALL);
+  // LogComponentEnable("UdpSocketBase", LOG_LEVEL_ALL);
   // LogComponentEnable("TcpL4Protocol", LOG_LEVEL_ALL);
   // LogComponentEnable("IpL4Protocol", LOG_LEVEL_ALL);
   // LogComponentEnable ("Ipv4L3Protocol", LOG_LEVEL_ALL);
@@ -288,10 +290,10 @@ void NS3Netsim::init(string f_adjmat,
   verbose = stoi(verb);
   // save which protocol should be used
   tcpOrUdp = s_tcpOrUdp;
-  std::cout << "Network Mode: " << tcpOrUdp << std::endl;
+  std::cout << "NS3Netsim::init Network Mode: " << tcpOrUdp << std::endl;
   // save which architecture should be used
   netArch = s_net;
-  std::cout << "Network Architecture: " << netArch << std::endl;
+  std::cout << "NS3Netsim::init Network Architecture: " << netArch << std::endl;
   if (netArch == "P2P" || netArch == "CSMA")  v4 = true;
   else  v4 = false;
 
@@ -730,10 +732,11 @@ void NS3Netsim::setUpServer(AddressValue address, string protocol, string server
   if (protocol == "tcp")
   {
     // Set the address with which the application should be created
-    multiClientTcpServerHelper.SetAttribute("Local", address);
-    serverAppContainer = multiClientTcpServerHelper.Install(server);
+    tcpServerHelper.SetAttribute("Port", UintegerValue(sinkPort));
+    // Create a tcp container
+    serverAppContainer = tcpServerHelper.Install(server);
     // Set the call back to extract information from a packet and sent it to the upper layer
-    Ptr<MultiClientTcpServer> serverAppAsCorrectType = DynamicCast<MultiClientTcpServer>(serverAppContainer.Get(0));
+    Ptr<TcpServer> serverAppAsCorrectType = DynamicCast<TcpServer>(serverAppContainer.Get(0));
     // Set the function that should be called when the server receives a packet
     serverAppAsCorrectType->SetPacketReceivedCallBack(ExtractInformationFromPacketAndSendToUpperLayer);
   }
@@ -741,7 +744,7 @@ void NS3Netsim::setUpServer(AddressValue address, string protocol, string server
   {
     // Set the address with which the application should be created
     customUdpServerHelper.SetAttribute("Port", UintegerValue(sinkPort));
-    // Create a tcp container
+    // Create a udp container
     serverAppContainer = customUdpServerHelper.Install(server);
     // Set the call back to extract information from a packet and sent it to the upper layer
     Ptr<CustomUdpServer> serverAppAsCorrectType = DynamicCast<CustomUdpServer>(serverAppContainer.Get(0));
@@ -775,7 +778,7 @@ void NS3Netsim::setUpClient(AddressValue address, string protocol, string server
   if (protocol == "tcp")
   {
     // Create a tcp client
-    tcpClientHelper.SetAttribute("Remote", address);
+    tcpClientHelper.SetAttribute("RemoteAddress", address);
     clientAppContainer = tcpClientHelper.Install(client);
   }
   else if (protocol == "udp")
@@ -783,9 +786,6 @@ void NS3Netsim::setUpClient(AddressValue address, string protocol, string server
     // Create a udp client
     customUdpClientHelper.SetAttribute("RemoteAddress", address);
     clientAppContainer = customUdpClientHelper.Install(client);
-
-    // CustomUdpClientHelper customUdpClient(address.Get(), sinkPort);
-    // clientAppContainer = customUdpClient.Install (srcNode);
   }
   else
   {
@@ -825,7 +825,13 @@ void NS3Netsim::schedule(string src, string dst, string val, string val_time)
     {
       clientApp = DynamicCast<TcpClient>(srcNode->GetApplication(1));
     }
-    clientApp->ScheduleTransmit(val, val_time);
+    std::string msgx = val + "&" + val_time;
+    // The val_time is in milliseconds, so add "ms" before Time variable creation
+    Time schDelay = Time(to_string(stod(val_time)) + "ms") - Simulator::Now();
+    clientApp->SetFill(msgx);
+    // If asked to schedule immediately, add 1 microsecond for safety
+    if (schDelay.GetNanoSeconds() == (int64_t)0)  schDelay = schDelay + Time("1us");
+    clientApp->ScheduleTransmit(schDelay);
   }
   else if (tcpOrUdp == "udp")
   {
