@@ -24,7 +24,6 @@
 
 #ifndef SMARTGRID_NS3_HELPER_H_
 #define SMARTGRID_NS3_HELPER_H_
-#define MAX_BACKBONE 33000
 
 #include <vector>
 #include <iostream>
@@ -142,5 +141,15 @@ string FindNextHop(string clt, string srv, vector<vector<bool>> array);
  * @param v4 IPv4 or IPv6
  */
 void PrintRoutingTable (Ptr<Node>& n, bool v4);
+
+/**
+ * @brief Check if the node is part of the secondary network
+ * or primary network - based on the node name
+ * 
+ * @param nodeName name of the node to be determined
+ * @return true if it is in the secondary network
+ * @return false if it is in the primary network
+ */
+bool isSecondary(string nodeName);
 
 #endif /* SMARTGRID_NS3_HELPER_H_ */

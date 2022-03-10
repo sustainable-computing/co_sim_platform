@@ -9,6 +9,7 @@ OpenDSS Mosaik interface, and Sensor/Actuator Models
 @company University of Alberta - Computing Science
 '''
 
+from tabnanny import verbose
 import mosaik_api
 import os
 import sys
@@ -187,7 +188,7 @@ class PFlowSim(mosaik_api.Simulator):
         self.data = {}
         self.actives = {}
         self.entities = {}
-        self.next = {}
+        self.next_step = 0
         self.instances = {}
         self.step_size = 1
         self.loadgen_interval = self.step_size
@@ -281,11 +282,11 @@ class PFlowSim(mosaik_api.Simulator):
  
         self.time = time
         #--- Based on Sensor data interval, LoadGen called accordingly
-        next_step = time + self.step_size
 
         # If this is an event-based step or duplicate step, only perform Actuation
         # As this is a priority simulator, input only comes after the step is performed
         if (time % self.step_size == 0):
+            self.next_step = time + self.step_size
                
             #---
             #--- process inputs data
@@ -367,10 +368,11 @@ class PFlowSim(mosaik_api.Simulator):
         for instance_eid in self.instances:
             if(instance_eid.find("Prober") > -1)  :
                 self.instances[instance_eid].updateValues(time)        
-         
+
+        if(self.verbose > 1):
+            print('simulator_pflow::step next_step = ', self.next_step)
         sys.stdout.flush()
-        if (time % self.step_size == 0):
-            return next_step
+        return self.next_step
  
  
     def get_data(self, outputs):

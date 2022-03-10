@@ -381,7 +381,7 @@ void NS3Netsim::init(string f_adjmat,
         NetDeviceContainer n_devs;
         /// If IPv6 is the selected protocol and the nodes at the ends of this link
         /// are part of the secondary network, install 6LoWPAN instead of P2P/CSMA
-        if (!v4 && (stoi(arrayNamesCoords[i][0]) > MAX_BACKBONE || stoi(arrayNamesCoords[j][0]) > MAX_BACKBONE))
+        if (!v4 && isSecondary(arrayNamesCoords[i][0]) || isSecondary(arrayNamesCoords[j][0]))
         {
           /// Manual installation is used here
           /// Helper installation raises some issues for some reason
@@ -451,7 +451,7 @@ void NS3Netsim::init(string f_adjmat,
       }
       string name1 = arrayNamesCoords[(*dev).Get(0)->GetNode()->GetId()][0];
       string name2 = arrayNamesCoords[(*dev).Get(1)->GetNode()->GetId()][0];
-      if(stoi(name1) > MAX_BACKBONE || stoi(name2) > MAX_BACKBONE)
+      if(isSecondary(name1) || isSecondary(name2))
         continue;
       /// For now, no error rate customization for LR-WPAN + 6LoWPAN
       (*dev).Get(1)->SetAttribute("ReceiveErrorModel", PointerValue(em));
@@ -701,11 +701,11 @@ void NS3Netsim::create(string client, string server)
         hostIfIndex = link_dev.Get(0)->GetIfIndex() + 1;
         hopIfIndex = link_dev.Get(1)->GetIfIndex() + 1;
       }
-      if (!v4 && (stoi(clt) > MAX_BACKBONE || stoi(nextHop) > MAX_BACKBONE))
+      if (!v4 && (isSecondary(clt) || isSecondary(nextHop)))
       {
-        if(stoi(clt) > MAX_BACKBONE)  hostIfIndex /= 2;
+        if(isSecondary(clt))  hostIfIndex /= 2;
         else hostIfIndex = hostIfIndex - 1;
-        if(stoi(nextHop) > MAX_BACKBONE)  hopIfIndex /= 2;
+        if(isSecondary(nextHop))  hopIfIndex /= 2;
         else hopIfIndex = hopIfIndex - 1;
       }
       Ipv6Address nextHopAddress = nextHopIpv6->GetAddress(hopIfIndex, 1).GetAddress();
@@ -829,8 +829,9 @@ void NS3Netsim::schedule(string src, string dst, string val, string val_time)
     // The val_time is in milliseconds, so add "ms" before Time variable creation
     Time schDelay = Time(to_string(stod(val_time)) + "ms") - Simulator::Now();
     clientApp->SetFill(msgx);
-    // If asked to schedule immediately, add 1 microsecond for safety
-    if (schDelay.GetNanoSeconds() == (int64_t)0)  schDelay = schDelay + Time("1us");
+    // If asked to schedule immediately or in the past due to Mosaik calling the
+    // same time again, add 1 microsecond for safety
+    if (schDelay.GetNanoSeconds() <= (int64_t)0)  schDelay = Simulator::Now() + Time("1us");
     clientApp->ScheduleTransmit(schDelay);
   }
   else if (tcpOrUdp == "udp")
@@ -845,8 +846,9 @@ void NS3Netsim::schedule(string src, string dst, string val, string val_time)
     // The val_time is in milliseconds, so add "ms" before Time variable creation
     Time schDelay = Time(to_string(stod(val_time)) + "ms") - Simulator::Now();
     clientApp->SetFill(msgx);
-    // If asked to schedule immediately, add 1 microsecond for safety
-    if (schDelay.GetNanoSeconds() == (int64_t)0)  schDelay = schDelay + Time("1us");
+    // If asked to schedule immediately or in the past due to Mosaik calling the
+    // same time again, add 1 microsecond for safety
+    if (schDelay.GetNanoSeconds() <= (int64_t)0)  schDelay = Simulator::Now() + Time("1us");
     clientApp->ScheduleTransmit(schDelay);
   }
 }

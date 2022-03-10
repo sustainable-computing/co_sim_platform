@@ -26,15 +26,15 @@ DSS_EXE_PATH = BASE_DIR + 'SmartGridMain/'
 
 #--- Path relative to OpenDSS scripts directory 
 # IEEE13
-# TOPO_RPATH_FILE = 'IEEE13/IEEE13Nodeckt.dss'
-# NWL_RPATH_FILE  = 'IEEE13/IEEE13Nodeckt_NodeWithLoad.csv'
-# ILPQ_RPATH_FILE = 'IEEE13/IEEE13Nodeckt_InelasticLoadPQ.csv'
-# ACTS_RPATH_FILE = 'IEEE13/IEEE13Nodeckt_Actives_Tap.csv'
+TOPO_RPATH_FILE = 'IEEE13/IEEE13Nodeckt.dss'
+NWL_RPATH_FILE  = 'IEEE13/IEEE13Nodeckt_NodeWithLoad.csv'
+ILPQ_RPATH_FILE = 'IEEE13/IEEE13Nodeckt_InelasticLoadPQ.csv'
+ACTS_RPATH_FILE = 'IEEE13/IEEE13Nodeckt_Actives_Tap.csv'
 # IEEE33
-TOPO_RPATH_FILE = 'IEEE33/master33Full.dss'
-NWL_RPATH_FILE  = 'IEEE33/IEEE33_NodeWithLoadFull.csv'
-ILPQ_RPATH_FILE = 'IEEE33/IEEE33_InelasticLoadPQ.csv'
-ACTS_RPATH_FILE = 'IEEE33/IEEE33_Nodeckt_Actives_Tap.csv'
+# TOPO_RPATH_FILE = 'IEEE33/master33Full.dss'
+# NWL_RPATH_FILE  = 'IEEE33/IEEE33_NodeWithLoadFull.csv'
+# ILPQ_RPATH_FILE = 'IEEE33/IEEE33_InelasticLoadPQ.csv'
+# ACTS_RPATH_FILE = 'IEEE33/IEEE33_Nodeckt_Actives_Tap.csv'
 
 #--- NS3 executables and library directory
 NS3_EXE_PATH = BASE_DIR + 'NS3Mosaik'
@@ -42,19 +42,19 @@ NS3_LIB_PATH = BASE_DIR + 'ns-allinone-3.33/ns-3.33/build/lib'
 
 #--- Paths relative to NS3 exec program directory
 # IEEE13
-# ADJMAT_RPATH_FILE = DSS_EXE_PATH + 'IEEE13/IEEE13Node-adjacency_matrix.txt'
-# COORDS_RPATH_FILE = DSS_EXE_PATH + 'IEEE13/IEEE13Node_BusXY.csv'
-# APPCON_RPATH_FILE = DSS_EXE_PATH + 'IEEE13/IEEE13Node_AppConnections_Tap.csv'
+ADJMAT_RPATH_FILE = DSS_EXE_PATH + 'IEEE13/IEEE13Node-adjacency_matrix.txt'
+COORDS_RPATH_FILE = DSS_EXE_PATH + 'IEEE13/IEEE13Node_BusXY.csv'
+APPCON_RPATH_FILE = DSS_EXE_PATH + 'IEEE13/IEEE13Node_AppConnections_Tap.csv'
 # IEEE33
-ADJMAT_RPATH_FILE   = DSS_EXE_PATH + 'IEEE33/IEEE33_AdjMatrixFull.txt'
-COORDS_RPATH_FILE   = DSS_EXE_PATH + 'IEEE33/IEEE33_BusXYFull.csv'
-APPCON_RPATH_FILE   = DSS_EXE_PATH + 'IEEE33/IEEE33_NodeAppConnections_Tap.csv'
+# ADJMAT_RPATH_FILE   = DSS_EXE_PATH + 'IEEE33/IEEE33_AdjMatrixFull.txt'
+# COORDS_RPATH_FILE   = DSS_EXE_PATH + 'IEEE33/IEEE33_BusXYFull.csv'
+# APPCON_RPATH_FILE   = DSS_EXE_PATH + 'IEEE33/IEEE33_NodeAppConnections_Tap.csv'
 
 #--- Application config path
 # IEEE13
-# APPCON_FILE = DSS_EXE_PATH  + 'IEEE13/IEEE13Node_AppConnections_Tap.csv'
+APPCON_FILE = DSS_EXE_PATH  + 'IEEE13/IEEE13Node_AppConnections_Tap.csv'
 # IEEE33
-APPCON_FILE = DSS_EXE_PATH + 'IEEE33/IEEE33_NodeAppConnections_Tap.csv'
+# APPCON_FILE = DSS_EXE_PATH + 'IEEE33/IEEE33_NodeAppConnections_Tap.csv'
 
 
 #--- Simulators configuration
@@ -114,16 +114,34 @@ def readAppConnections(appcon_file):
             appconLinks = {(rows[0], rows[1], rows[2]) for rows in csvobj}
         csvFile.close()
 
+def readActives(actives_tap):
+
+    global activesTap
+
+    current_directory = os.path.dirname(os.path.realpath(__file__))
+    pathToFile = os.path.abspath(
+        os.path.join(current_directory, actives_tap)
+    )
+    if not os.path.isfile(pathToFile):
+        print('File does not exist: ' + pathToFile)
+        sys.exit()
+    else:
+        with open(pathToFile, 'r') as csvFile:
+            csvobj = csv.reader(csvFile)
+            activesTap = {(rows[0], rows[1], rows[2], rows[3], rows[4]) for rows in csvobj}
+        csvFile.close()
 
 def main():
     #--- Process input arguments
     parser = argparse.ArgumentParser(description='Run Smartgrid simulation')
-    parser.add_argument( '--appcon_file', type=str, help='application connections file', default = APPCON_FILE )    
+    parser.add_argument( '--appcon_file', type=str, help='application connections file', default = APPCON_FILE )
+    parser.add_argument( '--actives_file', type=str, help='OpenDSS actives file', default = ACTS_RPATH_FILE )
     parser.add_argument( '--random_seed', type=int, help='ns-3 random generator seed', default=1 )
     args = parser.parse_args()
     print( 'Starting simulation with args: {0}'.format( vars( args ) ) )
     
     readAppConnections(args.appcon_file)
+    readActives(args.actives_file)
     world = mosaik.World( sim_config=SIM_CONFIG, mosaik_config=MOSAIK_CONFIG, debug=False )
     create_scenario( world, args )
     
@@ -197,7 +215,7 @@ def  create_scenario( world, args ):
     #--- Controller instances for tap control
     controllers = []
     for client, server, role in appconLinks:
-        if (role == 'acting1'):
+        if (role == 'acting'):
             created_control = False
             for controller in controllers:
                 controller_instance = 'Control_' + str(client)
@@ -232,17 +250,23 @@ def  create_scenario( world, args ):
     #--- Monitor instances
     monitor = collector.Monitor()
     
-    #--- Prober instance
+    #--- Prober instances
     probers = []
+    for actives, function, name, location, phase in activesTap:
+        prober_pos = actives.find('Prober')
+        if(prober_pos != -1):
+            model_name = actives.split('_')[1]
+            probers.append(pflowsim.Prober(idt = model_name,   step_size = global_step_size, verbose = 0))
+
     # probers.append(pflowsim.Prober(idt = "611-V3",   step_size = global_step_size, verbose = 0))
     # probers.append(pflowsim.Prober(idt = "650-T3",   step_size = global_step_size, verbose = 0))      
     # probers.append(pflowsim.Prober(idt = "611-Load", step_size = global_step_size, verbose = 0))
     # probers.append(pflowsim.Prober(idt = "650-VPu3", step_size = global_step_size, verbose = 0))
 
-    probers.append(pflowsim.Prober(idt = "33101-V1",   step_size = global_step_size, verbose = 0))
-    probers.append(pflowsim.Prober(idt = "33101-Load", step_size = global_step_size, verbose = 0))
-    probers.append(pflowsim.Prober(idt = "33080-V1",   step_size = global_step_size, verbose = 0))
-    probers.append(pflowsim.Prober(idt = "33080-Load", step_size = global_step_size, verbose = 0))
+    # probers.append(pflowsim.Prober(idt = "33101-V1",   step_size = global_step_size, verbose = 0))
+    # probers.append(pflowsim.Prober(idt = "33101-Load", step_size = global_step_size, verbose = 0))
+    # probers.append(pflowsim.Prober(idt = "33080-V1",   step_size = global_step_size, verbose = 0))
+    # probers.append(pflowsim.Prober(idt = "33080-Load", step_size = global_step_size, verbose = 0))
     
 
     #---
@@ -258,8 +282,7 @@ def  create_scenario( world, args ):
                 if (sensor_instance == sensor.eid):
                     for transporter in transporters:
                         if (transporter_instance == transporter.eid):
-                            world.connect(sensor, transporter, 'v', 't',
-                                weak=True, initial_data={'v': None, 't': None})
+                            world.connect(sensor, transporter, 'v', 't')
                             print('Connect', sensor.eid, 'to', transporter.eid)                        
         
     #--- PktNet(Transporter) to Controller
@@ -288,7 +311,7 @@ def  create_scenario( world, args ):
 
     #--- Controller to PktNet
     for client, server, role in appconLinks:    
-        if (role == 'acting1'):
+        if (role == 'acting'):
             controller_instance  = 'Control_' + str(client)          
             transporter_instance = 'Transp_' + str(client) + '-' + str(server)              
             for controller in controllers:
@@ -308,7 +331,8 @@ def  create_scenario( world, args ):
                 if (actuator_instance == actuator.eid):
                     for transporter in transporters:
                         if (transporter_instance == transporter.eid):
-                            world.connect(transporter, actuator, 'v', 't')
+                            world.connect(transporter, actuator, 'v', 't',
+                                weak=True, initial_data={'v': None, 't': None})
                             print('Connect', transporter.eid, 'to', actuator.eid)      
 
     #--- Controller to Actuator
