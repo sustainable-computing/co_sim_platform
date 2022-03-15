@@ -176,3 +176,62 @@ class Capacitor():
 
     def __str__(self):
         return self.name
+
+class Switch():
+    def __init__(self, **kwargs):
+        self.name = kwargs['switch'].split('#')[1].split('_')[1]
+        self.bus1 = kwargs['bus1'].split('#')[1].split('_')[1]
+        self.bus2 = kwargs['bus2'].split('#')[1].split('_')[1]
+        self.num_phases = kwargs['num_phases']
+        self.c0 = kwargs['c0']
+        self.c1 = kwargs['x1']
+        self.r0 = kwargs['r0']
+        self.r1 = kwargs['r1']
+        self.x0 = kwargs['x0']
+        self.x1 = kwargs['x1']
+
+    def get_opendss(self):
+        opendss_str = f"New Line.{self.name} "
+        opendss_str += f"Phases={self.num_phases} "
+        opendss_str += f"Bus1={self.bus1} "
+        opendss_str += f"Bus2={self.bus2} "
+        opendss_str += "Switch=y "
+        opendss_str += f"c0={self.c0} c1={self.c1} "
+        opendss_str += f"r0={self.r0} r1={self.r1} "
+        opendss_str += f"x0={self.x0} x1={self.x1} "
+        return opendss_str
+
+    def __str__(self):
+        return self.name
+
+class VoltageRegulator():
+    """
+    A Voltage Regular is a transformer with regcontrol as a component.
+    An instance of VoltageRegulator will produce a new transformer and a new regcontrol
+    """
+
+    def __init__(self, **kwargs):
+        self.name = kwargs['regcontrol'].split('#')[1].split('_')[1]
+        self.bus1 = kwargs['bus1']
+        self.bus2 = kwargs['bus2']
+        self.num_phases = kwargs['num_phases']
+        self.bank = kwargs['bank']
+        self.XHL = kwargs['XHL']
+        self.kva = kwargs['kva']
+        self.primary_kv = kwargs['primary_kv']
+        self.secondary_kv = kwargs['secondary_kv']
+        self.num_taps = kwargs['num_taps']
+        self.max_tap = kwargs['max_tap']
+        self.min_tap = kwargs['min_tap']
+        self.load_loss = kwargs['load_loss']
+        self.vreg = kwargs['vreg']
+        self.band = kwargs['band'] 
+        self.ptratio = kwargs['ptratio']
+        self.ctprim = kwargs['ctprim']
+        self.R = kwargs['R']
+        self.X = kwargs['X']
+    
+    def __str__(self):
+        return self.name
+
+    

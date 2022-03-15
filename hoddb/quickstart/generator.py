@@ -240,10 +240,43 @@ WHERE {
         )
         print(linecode.get_opendss())
 
-query_transformers()
-query_loads()
-query_buses()
-query_linecode()
-query_lines()
-query_capacitors()
+def query_switches():
+    query_str = """
+SELECT *
+WHERE {
+    ?switch a :Switch .
+    ?switch :primaryAttachsTo ?bus1 .
+    ?switch :attachsTo ?bus2 .
+    ?switch :num_phases ?num_phases .
+    ?switch :c0 ?c0 .
+    ?switch :c1 ?c1 .
+    ?switch :r0 ?r0 .
+    ?switch :r1 ?r1 .
+    ?switch :x0 ?x0 .
+    ?switch :x1 ?x1 .
+}    
+"""
+    res = g.query(query_str)
+    for row in res:
+        switch = SmartGrid.Switch(
+            switch = row['switch'],
+            bus1 = row['bus1'],
+            bus2 = row['bus2'],
+            num_phases = row['num_phases'],
+            c0 = row['c0'],
+            c1 = row['c1'],
+            r0 = row['r0'],
+            r1 = row['r1'],
+            x0 = row['x0'],
+            x1 = row['x1']
+        )
+        print(switch.get_opendss())
+
+# query_transformers()
+# query_loads()
+# query_buses()
+# query_linecode()
+# query_lines()
+# query_capacitors()
+query_switches()
 # print(node_buses)

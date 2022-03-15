@@ -1254,6 +1254,7 @@
                :c0 0.0 ;
                :c1 0.0 ;
                :normal_state "open" ;
+               :num_phases 3 ;
                :r0 0.0001 ;
                :r1 0.0001 ;
                :x0 0.0 ;
