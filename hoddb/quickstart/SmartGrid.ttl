@@ -264,6 +264,10 @@
 :band rdf:type owl:DatatypeProperty .
 
 
+###  http://www.semanticweb.org/phoenix/ontologies/2022/0/SmartGrid#bank
+:bank rdf:type owl:DatatypeProperty .
+
+
 ###  http://www.semanticweb.org/phoenix/ontologies/2022/0/SmartGrid#c0
 :c0 rdf:type owl:DatatypeProperty .
 
@@ -1246,6 +1250,81 @@
             :num_phases 1 .
 
 
+###  http://www.semanticweb.org/phoenix/ontologies/2022/0/SmartGrid#RegControl_Reg1
+:RegControl_Reg1 rdf:type owl:NamedIndividual ,
+                          :RegControl ;
+                 :attachsTo :Bus_RG60 ;
+                 :primaryAttachsTo :Bus_650 ;
+                 :Kva 1666 ;
+                 :R 3 ;
+                 :X 9 ;
+                 :XHL 0.01 ;
+                 :band 2 ;
+                 :bank "reg1" ;
+                 :ctprim 700 ;
+                 :kV_primary 2.4 ;
+                 :kV_secondary 2.4 ;
+                 :max_tap 1.05 ;
+                 :min_tap 0.95 ;
+                 :nodes_primary 1 ;
+                 :nodes_secondary 1 ;
+                 :num_phases 1 ;
+                 :num_taps 32 ;
+                 :percent_Load_Loss 0.01 ;
+                 :ptratio 20 ;
+                 :vreg 122 .
+
+
+###  http://www.semanticweb.org/phoenix/ontologies/2022/0/SmartGrid#RegControl_Reg2
+:RegControl_Reg2 rdf:type owl:NamedIndividual ,
+                          :RegControl ;
+                 :attachsTo :Bus_RG60 ;
+                 :primaryAttachsTo :Bus_650 ;
+                 :Kva 1666 ;
+                 :R 3 ;
+                 :X 9 ;
+                 :XHL 0.01 ;
+                 :band 2 ;
+                 :bank "reg1" ;
+                 :ctprim 700 ;
+                 :kV_primary 2.4 ;
+                 :kV_secondary 2.4 ;
+                 :max_tap 1.05 ;
+                 :min_tap 0.95 ;
+                 :nodes_primary 2 ;
+                 :nodes_secondary 2 ;
+                 :num_phases 1 ;
+                 :num_taps 32 ;
+                 :percent_Load_Loss 0.01 ;
+                 :ptratio 20 ;
+                 :vreg 122 .
+
+
+###  http://www.semanticweb.org/phoenix/ontologies/2022/0/SmartGrid#RegControl_Reg3
+:RegControl_Reg3 rdf:type owl:NamedIndividual ,
+                          :RegControl ;
+                 :attachsTo :Bus_RG60 ;
+                 :primaryAttachsTo :Bus_650 ;
+                 :Kva 1666 ;
+                 :R 3 ;
+                 :X 9 ;
+                 :XHL 0.01 ;
+                 :band 2 ;
+                 :bank "reg1" ;
+                 :ctprim 700 ;
+                 :kV_primary 2.4 ;
+                 :kV_secondary 2.4 ;
+                 :max_tap 1.05 ;
+                 :min_tap 0.95 ;
+                 :nodes_primary 3 ;
+                 :nodes_secondary 3 ;
+                 :num_phases 1 ;
+                 :num_taps 32 ;
+                 :percent_Load_Loss 0.01 ;
+                 :ptratio 20 ;
+                 :vreg 122 .
+
+
 ###  http://www.semanticweb.org/phoenix/ontologies/2022/0/SmartGrid#Switch_671692
 :Switch_671692 rdf:type owl:NamedIndividual ,
                         :Switch ;
@@ -1323,7 +1402,7 @@
 :Voltage_Actuator rdf:type owl:NamedIndividual ,
                            :Actuator ;
                   :connectsTo :Transporter_Controller_Actuator ;
-                  :controls :Voltage_Regulator_1 ;
+                  :controls :RegControl_Reg1 ;
                   :isFedBy :Voltage_Controller .
 
 
@@ -1332,78 +1411,6 @@
                              :Controller ;
                     :feeds :Voltage_Actuator ;
                     :delay 1 .
-
-
-###  http://www.semanticweb.org/phoenix/ontologies/2022/0/SmartGrid#Voltage_Regulator_1
-:Voltage_Regulator_1 rdf:type owl:NamedIndividual ,
-                              :RegControl ;
-                     :attachsTo :Bus_RG60 ;
-                     :primaryAttachsTo :Bus_650 ;
-                     :Kva 1666 ;
-                     :R 3 ;
-                     :X 9 ;
-                     :XHL 0.01 ;
-                     :band 2 ;
-                     :ctprim 700 ;
-                     :kV_primary 2.4 ;
-                     :kV_secondary 2.4 ;
-                     :max_tap 1.05 ;
-                     :min_tap 0.95 ;
-                     :nodes_primary 1 ;
-                     :nodes_secondary 1 ;
-                     :num_phases 1 ;
-                     :num_taps 32 ;
-                     :percent_Load_Loss 0.01 ;
-                     :ptratio 20 ;
-                     :vreg 122 .
-
-
-###  http://www.semanticweb.org/phoenix/ontologies/2022/0/SmartGrid#Voltage_Regulator_2
-:Voltage_Regulator_2 rdf:type owl:NamedIndividual ,
-                              :RegControl ;
-                     :attachsTo :Bus_RG60 ;
-                     :primaryAttachsTo :Bus_650 ;
-                     :Kva 1666 ;
-                     :R 3 ;
-                     :X 9 ;
-                     :XHL 0.01 ;
-                     :band 2 ;
-                     :ctprim 700 ;
-                     :kV_primary 2.4 ;
-                     :kV_secondary 2.4 ;
-                     :max_tap 1.05 ;
-                     :min_tap 0.95 ;
-                     :nodes_primary 2 ;
-                     :nodes_secondary 2 ;
-                     :num_phases 1 ;
-                     :num_taps 32 ;
-                     :percent_Load_Loss 0.01 ;
-                     :ptratio 20 ;
-                     :vreg 122 .
-
-
-###  http://www.semanticweb.org/phoenix/ontologies/2022/0/SmartGrid#Voltage_Regulator_3
-:Voltage_Regulator_3 rdf:type owl:NamedIndividual ,
-                              :RegControl ;
-                     :attachsTo :Bus_RG60 ;
-                     :primaryAttachsTo :Bus_650 ;
-                     :Kva 1666 ;
-                     :R 3 ;
-                     :X 9 ;
-                     :XHL 0.01 ;
-                     :band 2 ;
-                     :ctprim 700 ;
-                     :kV_primary 2.4 ;
-                     :kV_secondary 2.4 ;
-                     :max_tap 1.05 ;
-                     :min_tap 0.95 ;
-                     :nodes_primary 3 ;
-                     :nodes_secondary 3 ;
-                     :num_phases 1 ;
-                     :num_taps 32 ;
-                     :percent_Load_Loss 0.01 ;
-                     :ptratio 20 ;
-                     :vreg 122 .
 
 
 ###  http://www.semanticweb.org/phoenix/ontologies/2022/0/SmartGrid#Voltage_Sensor

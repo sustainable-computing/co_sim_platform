@@ -212,14 +212,16 @@ class VoltageRegulator():
 
     def __init__(self, **kwargs):
         self.name = kwargs['regcontrol'].split('#')[1].split('_')[1]
-        self.bus1 = kwargs['bus1']
-        self.bus2 = kwargs['bus2']
+        self.bus1 = kwargs['bus1'].split('#')[1].split('_')[1]
+        self.bus2 = kwargs['bus2'].split('#')[1].split('_')[1]
         self.num_phases = kwargs['num_phases']
         self.bank = kwargs['bank']
         self.XHL = kwargs['XHL']
         self.kva = kwargs['kva']
         self.primary_kv = kwargs['primary_kv']
+        self.nodes_primary = kwargs['nodes_primary'].strip().replace(' ','.')
         self.secondary_kv = kwargs['secondary_kv']
+        self.nodes_secondary = kwargs['nodes_secondary'].strip().replace(' ','.')
         self.num_taps = kwargs['num_taps']
         self.max_tap = kwargs['max_tap']
         self.min_tap = kwargs['min_tap']
@@ -233,5 +235,27 @@ class VoltageRegulator():
     
     def __str__(self):
         return self.name
+
+    def get_opendss(self):
+        opendss_str = f"New Transformer.{self.name} "
+        opendss_str += f"phases={self.num_phases} "
+        opendss_str += f"bank={self.bank} "
+        opendss_str += f"XHL={self.XHL} "
+        opendss_str += f"kVAs=[{self.primary_kv} {self.secondary_kv}] "
+        opendss_str += f"NumTaps={self.num_taps} "
+        opendss_str += f"maxtap={self.max_tap} "
+        opendss_str += f"mintap={self.min_tap}\n"
+        opendss_str += f"~ Buses=[{self.bus1}.{self.nodes_primary} {self.bus2}.{self.nodes_secondary}] "
+        opendss_str += f"kVs=[{self.primary_kv} {self.secondary_kv}] "
+        opendss_str += f"%LoadLoss={self.load_loss}\n"
+        # The winding is always 2
+        opendss_str += f"new regcontrol.{self.name} transformer={self.name} windings=2 "
+        opendss_str += f"vreg={self.vreg} "
+        opendss_str += f"band={self.band} "
+        opendss_str += f"ptratio={self.ptratio} "
+        opendss_str += f"ctprim={self.ctprim} "
+        opendss_str += f"R={self.R} "
+        opendss_str += f"X={self.X} "
+        return opendss_str
 
     

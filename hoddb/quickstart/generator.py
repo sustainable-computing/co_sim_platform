@@ -272,11 +272,93 @@ WHERE {
         )
         print(switch.get_opendss())
 
-# query_transformers()
-# query_loads()
+def query_regcontrol():
+    query_str = """
+SELECT *
+WHERE {
+    ?reg a :RegControl .
+    ?reg :primaryAttachsTo ?bus1 .
+    ?reg :attachsTo ?bus2 .
+    ?reg :Kva ?kva .
+    ?reg :R ?R .
+    ?reg :X ?X.
+    ?reg :XHL ?XHL .
+    ?reg :band ?band .
+    ?reg :bank ?bank . 
+    ?reg :ctprim ?ctprim .
+    ?reg :kV_primary ?kv_prim .
+    ?reg :kV_secondary ?kv_sec .
+    ?reg :max_tap ?max_tap .
+    ?reg :min_tap ?min_tap .
+    ?reg :nodes_primary ?nodes_primary .
+    ?reg :nodes_secondary ?nodes_secondary .
+    ?reg :num_phases ?num_phases .
+    ?reg :num_taps ?num_taps .
+    ?reg :percent_Load_Loss ?percent_load_loss .
+    ?reg :ptratio ?ptratio .
+    ?reg :vreg ?vreg .
+}    
+"""
+    res = g.query(query_str)
+    for row in res:
+        reg_control = SmartGrid.VoltageRegulator(
+            regcontrol = row['reg'],
+            bus1 = row['bus1'],
+            bus2 = row['bus2'],
+            num_phases = row['num_phases'],
+            bank = row['bank'],
+            XHL = row['XHL'],
+            kva = row['kva'],
+            primary_kv = row['kv_prim'],
+            nodes_primary = row['nodes_primary'],
+            secondary_kv = row['kv_sec'],
+            nodes_secondary = row['nodes_secondary'],
+            num_taps = row['num_taps'],
+            max_tap = row['max_tap'], 
+            min_tap = row['min_tap'],
+            load_loss = row['percent_load_loss'],
+            vreg = row['vreg'],
+            band = row['band'],
+            ptratio = row['ptratio'],
+            ctprim = row['ctprim'],
+            R = row['R'],
+            X = row['X']
+        )
+        print(reg_control.get_opendss())
+
+def post_object_opendss():
+    """
+    This will write code post object definition
+    """
+    query_str = """ 
+SELECT DISTINCT ?kv
+WHERE {
+    ?trans a :Transformer . 
+    {
+        ?trans :kV_primary ?kv.
+
+    }
+    UNION 
+    {
+        ?trans :kV_secondary ?kv    
+    }
+}
+"""
+    res = g.query(query_str)
+    voltages = []
+    for row in res:
+        voltages.append(float(row['kv']))
+
+    opendss_str = f"Set VoltageBases={voltages}\n"
+    opendss_str += "calcv\nSolve"
+    return opendss_str
+# query_regcontrol()
 # query_buses()
-# query_linecode()
-# query_lines()
-# query_capacitors()
-query_switches()
 # print(node_buses)
+query_transformers()
+query_linecode()
+query_loads()
+query_capacitors()
+query_lines()
+query_switches()
+print(post_object_opendss())
