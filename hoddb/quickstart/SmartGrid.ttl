@@ -126,6 +126,10 @@
        <http://www.w3.org/2004/02/skos/core#definition> "The subject is upstream of the object in the context of some sequential process; some media is passed between them." .
 
 
+###  http://www.semanticweb.org/phoenix/ontologies/2022/0/SmartGrid#hasComponent
+:hasComponent rdf:type owl:ObjectProperty .
+
+
 ###  http://www.semanticweb.org/phoenix/ontologies/2022/0/SmartGrid#isControlledBy
 :isControlledBy rdf:type owl:ObjectProperty ,
                          owl:AsymmetricProperty ,
@@ -260,6 +264,18 @@
 :band rdf:type owl:DatatypeProperty .
 
 
+###  http://www.semanticweb.org/phoenix/ontologies/2022/0/SmartGrid#c0
+:c0 rdf:type owl:DatatypeProperty .
+
+
+###  http://www.semanticweb.org/phoenix/ontologies/2022/0/SmartGrid#c1
+:c1 rdf:type owl:DatatypeProperty .
+
+
+###  http://www.semanticweb.org/phoenix/ontologies/2022/0/SmartGrid#cmat
+:cmat rdf:type owl:DatatypeProperty .
+
+
 ###  http://www.semanticweb.org/phoenix/ontologies/2022/0/SmartGrid#connection_primary
 :connection_primary rdf:type owl:DatatypeProperty ;
                     <http://www.w3.org/2004/02/skos/core#definition> "The connection for the first winding or bus, either detla or wye." .
@@ -297,6 +313,7 @@
 
 ###  http://www.semanticweb.org/phoenix/ontologies/2022/0/SmartGrid#freq
 :freq rdf:type owl:DatatypeProperty ;
+      rdfs:subPropertyOf owl:topDataProperty ;
       <http://www.w3.org/2004/02/skos/core#definition> "The frequency that the equipment is running on" .
 
 
@@ -399,9 +416,21 @@
 :ptratio rdf:type owl:DatatypeProperty .
 
 
+###  http://www.semanticweb.org/phoenix/ontologies/2022/0/SmartGrid#r0
+:r0 rdf:type owl:DatatypeProperty .
+
+
+###  http://www.semanticweb.org/phoenix/ontologies/2022/0/SmartGrid#r1
+:r1 rdf:type owl:DatatypeProperty .
+
+
 ###  http://www.semanticweb.org/phoenix/ontologies/2022/0/SmartGrid#rate
 :rate rdf:type owl:DatatypeProperty ;
       <http://www.w3.org/2004/02/skos/core#definition> "The bandwith for the link" .
+
+
+###  http://www.semanticweb.org/phoenix/ontologies/2022/0/SmartGrid#rmat
+:rmat rdf:type owl:DatatypeProperty .
 
 
 ###  http://www.semanticweb.org/phoenix/ontologies/2022/0/SmartGrid#switch_type
@@ -418,6 +447,18 @@
 ###  http://www.semanticweb.org/phoenix/ontologies/2022/0/SmartGrid#vreg
 :vreg rdf:type owl:DatatypeProperty ;
       <http://www.w3.org/2004/02/skos/core#definition> "Voltage regulator settings, in volts, for the winding being controlled. Multiplying this value times the ptratio yield the voltage across the winding of the controlled transformer" .
+
+
+###  http://www.semanticweb.org/phoenix/ontologies/2022/0/SmartGrid#x0
+:x0 rdf:type owl:DatatypeProperty .
+
+
+###  http://www.semanticweb.org/phoenix/ontologies/2022/0/SmartGrid#x1
+:x1 rdf:type owl:DatatypeProperty .
+
+
+###  http://www.semanticweb.org/phoenix/ontologies/2022/0/SmartGrid#xmat
+:xmat rdf:type owl:DatatypeProperty .
 
 
 #################################################################
@@ -477,9 +518,9 @@
       rdfs:subClassOf :Electrical_Equipment .
 
 
-###  http://www.semanticweb.org/phoenix/ontologies/2022/0/SmartGrid#Line_Code
-:Line_Code rdf:type owl:Class ;
-           rdfs:subClassOf :Line .
+###  http://www.semanticweb.org/phoenix/ontologies/2022/0/SmartGrid#LineCode
+:LineCode rdf:type owl:Class ;
+          rdfs:subClassOf :Line .
 
 
 ###  http://www.semanticweb.org/phoenix/ontologies/2022/0/SmartGrid#Load
@@ -650,6 +691,7 @@
 :Capacitor_Cap1 rdf:type owl:NamedIndividual ,
                          :Capacitor ;
                 :attachsTo :Bus_675 ;
+                :kV_primary 4.16 ;
                 :kvar 600 ;
                 :num_phases 3 .
 
@@ -658,6 +700,7 @@
 :Capacitor_Cap2 rdf:type owl:NamedIndividual ,
                          :Capacitor ;
                 :attachsTo :Bus_611 ;
+                :kV_primary 2.4 ;
                 :kvar 100 ;
                 :nodes_primary 1 ;
                 :num_phases 1 .
@@ -793,11 +836,84 @@
            :num_phases 3 .
 
 
+###  http://www.semanticweb.org/phoenix/ontologies/2022/0/SmartGrid#LineCode_mtx601
+:LineCode_mtx601 rdf:type owl:NamedIndividual ,
+                          :LineCode ;
+                 :freq 60 ;
+                 :num_phases 3 ;
+                 :rmat "(0.3465 | 0.1560 0.3375 | 0.1580 0.1535 0.3414 )" ;
+                 :unit "mi" ;
+                 :xmat "(1.0179 | 0.5017 1.0478 | 0.4236 0.3849 1.0348 )" .
+
+
+###  http://www.semanticweb.org/phoenix/ontologies/2022/0/SmartGrid#LineCode_mtx602
+:LineCode_mtx602 rdf:type owl:NamedIndividual ,
+                          :LineCode ;
+                 :freq 60 ;
+                 :num_phases 3 ;
+                 :rmat "(0.7526 | 0.1580 0.7475 | 0.1560 0.1535 0.7436 )" ;
+                 :unit "mi" ;
+                 :xmat "(1.1814 | 0.4236 1.1983 | 0.5017 0.3849 1.2112 )" .
+
+
+###  http://www.semanticweb.org/phoenix/ontologies/2022/0/SmartGrid#LineCode_mtx603
+:LineCode_mtx603 rdf:type owl:NamedIndividual ,
+                          :LineCode ;
+                 :freq 60 ;
+                 :num_phases 2 ;
+                 :rmat "(1.3238 | 0.2066 1.3294 )" ;
+                 :unit "mi" ;
+                 :xmat "(1.3569 | 0.4591 1.3471 )" .
+
+
+###  http://www.semanticweb.org/phoenix/ontologies/2022/0/SmartGrid#LineCode_mtx604
+:LineCode_mtx604 rdf:type owl:NamedIndividual ,
+                          :LineCode ;
+                 :freq 60 ;
+                 :num_phases 2 ;
+                 :rmat "(1.3238 | 0.2066 1.3294 )" ;
+                 :unit "mi" ;
+                 :xmat "(1.3569 | 0.4591 1.3471 )" .
+
+
+###  http://www.semanticweb.org/phoenix/ontologies/2022/0/SmartGrid#LineCode_mtx605
+:LineCode_mtx605 rdf:type owl:NamedIndividual ,
+                          :LineCode ;
+                 :freq 60 ;
+                 :num_phases 1 ;
+                 :rmat "(1.3292 )" ;
+                 :unit "mi" ;
+                 :xmat "(1.3475 )" .
+
+
+###  http://www.semanticweb.org/phoenix/ontologies/2022/0/SmartGrid#LineCode_mtx606
+:LineCode_mtx606 rdf:type owl:NamedIndividual ,
+                          :LineCode ;
+                 :cmat "[257 | 0 257 | 0 0 257]" ;
+                 :freq 60 ;
+                 :num_phases 3 ;
+                 :rmat "(0.7982 | 0.3192 0.7891 | 0.2849 0.3192 0.7982 )" ;
+                 :unit "mi" ;
+                 :xmat "(0.4463 | 0.0328 0.4041 | -0.0143 0.0328 0.4463 )" .
+
+
+###  http://www.semanticweb.org/phoenix/ontologies/2022/0/SmartGrid#LineCode_mtx607
+:LineCode_mtx607 rdf:type owl:NamedIndividual ,
+                          :LineCode ;
+                 :cmat "[236]" ;
+                 :freq 60 ;
+                 :num_phases 1 ;
+                 :rmat "(1.3425 )" ;
+                 :unit "mi" ;
+                 :xmat "(0.5124 )" .
+
+
 ###  http://www.semanticweb.org/phoenix/ontologies/2022/0/SmartGrid#Line_632633
 :Line_632633 rdf:type owl:NamedIndividual ,
                       :Line ;
-             :attachsTo :Bus_632 ,
-                        :Bus_633 ;
+             :attachsTo :Bus_633 ;
+             :hasComponent :LineCode_mtx602 ;
+             :primaryAttachsTo :Bus_632 ;
              :length 500 ;
              :nodes_primary "1 2 3" ;
              :nodes_secondary "1 2 3" ;
@@ -808,8 +924,9 @@
 ###  http://www.semanticweb.org/phoenix/ontologies/2022/0/SmartGrid#Line_632645
 :Line_632645 rdf:type owl:NamedIndividual ,
                       :Line ;
-             :attachsTo :Bus_632 ,
-                        :Bus_645 ;
+             :attachsTo :Bus_645 ;
+             :hasComponent :LineCode_mtx603 ;
+             :primaryAttachsTo :Bus_632 ;
              :length 500 ;
              :nodes_primary "3 2" ;
              :nodes_secondary "3 2" ;
@@ -820,8 +937,9 @@
 ###  http://www.semanticweb.org/phoenix/ontologies/2022/0/SmartGrid#Line_632670
 :Line_632670 rdf:type owl:NamedIndividual ,
                       :Line ;
-             :attachsTo :Bus_632 ,
-                        :Bus_670 ;
+             :attachsTo :Bus_670 ;
+             :hasComponent :LineCode_mtx601 ;
+             :primaryAttachsTo :Bus_632 ;
              :length 667 ;
              :nodes_primary "1 2 3" ;
              :nodes_secondary "1 2 3" ;
@@ -832,8 +950,9 @@
 ###  http://www.semanticweb.org/phoenix/ontologies/2022/0/SmartGrid#Line_645646
 :Line_645646 rdf:type owl:NamedIndividual ,
                       :Line ;
-             :attachsTo :Bus_645 ,
-                        :Bus_646 ;
+             :attachsTo :Bus_646 ;
+             :hasComponent :LineCode_mtx603 ;
+             :primaryAttachsTo :Bus_645 ;
              :length 300 ;
              :nodes_primary "3 2" ;
              :nodes_secondary "3 2" ;
@@ -844,8 +963,9 @@
 ###  http://www.semanticweb.org/phoenix/ontologies/2022/0/SmartGrid#Line_650632
 :Line_650632 rdf:type owl:NamedIndividual ,
                       :Line ;
-             :attachsTo :Bus_632 ,
-                        :Bus_650 ;
+             :attachsTo :Bus_632 ;
+             :hasComponent :LineCode_mtx601 ;
+             :primaryAttachsTo :Bus_RG60 ;
              :length 2000 ;
              :nodes_primary "1 2 3" ;
              :nodes_secondary "1 2 3" ;
@@ -856,8 +976,9 @@
 ###  http://www.semanticweb.org/phoenix/ontologies/2022/0/SmartGrid#Line_670671
 :Line_670671 rdf:type owl:NamedIndividual ,
                       :Line ;
-             :attachsTo :Bus_670 ,
-                        :Bus_671 ;
+             :attachsTo :Bus_671 ;
+             :hasComponent :LineCode_mtx601 ;
+             :primaryAttachsTo :Bus_670 ;
              :length 1333 ;
              :nodes_primary "1 2 3" ;
              :nodes_secondary "1 2 3" ;
@@ -868,8 +989,9 @@
 ###  http://www.semanticweb.org/phoenix/ontologies/2022/0/SmartGrid#Line_671680
 :Line_671680 rdf:type owl:NamedIndividual ,
                       :Line ;
-             :attachsTo :Bus_671 ,
-                        :Bus_680 ;
+             :attachsTo :Bus_680 ;
+             :hasComponent :LineCode_mtx601 ;
+             :primaryAttachsTo :Bus_671 ;
              :length 1000 ;
              :nodes_primary "1 2 3" ;
              :nodes_secondary "1 2 3" ;
@@ -880,8 +1002,9 @@
 ###  http://www.semanticweb.org/phoenix/ontologies/2022/0/SmartGrid#Line_671684
 :Line_671684 rdf:type owl:NamedIndividual ,
                       :Line ;
-             :attachsTo :Bus_671 ,
-                        :Bus_684 ;
+             :attachsTo :Bus_684 ;
+             :hasComponent :LineCode_mtx604 ;
+             :primaryAttachsTo :Bus_671 ;
              :length 300 ;
              :nodes_primary "1 3" ;
              :nodes_secondary "1 3" ;
@@ -892,8 +1015,9 @@
 ###  http://www.semanticweb.org/phoenix/ontologies/2022/0/SmartGrid#Line_684611
 :Line_684611 rdf:type owl:NamedIndividual ,
                       :Line ;
-             :attachsTo :Bus_611 ,
-                        :Bus_684 ;
+             :attachsTo :Bus_611 ;
+             :hasComponent :LineCode_mtx605 ;
+             :primaryAttachsTo :Bus_684 ;
              :length 300 ;
              :nodes_primary 3 ;
              :nodes_secondary 3 ;
@@ -904,8 +1028,9 @@
 ###  http://www.semanticweb.org/phoenix/ontologies/2022/0/SmartGrid#Line_684652
 :Line_684652 rdf:type owl:NamedIndividual ,
                       :Line ;
-             :attachsTo :Bus_652 ,
-                        :Bus_684 ;
+             :attachsTo :Bus_652 ;
+             :hasComponent :LineCode_mtx607 ;
+             :primaryAttachsTo :Bus_684 ;
              :length 800 ;
              :nodes_primary 1 ;
              :nodes_secondary 1 ;
@@ -916,8 +1041,9 @@
 ###  http://www.semanticweb.org/phoenix/ontologies/2022/0/SmartGrid#Line_692675
 :Line_692675 rdf:type owl:NamedIndividual ,
                       :Line ;
-             :attachsTo :Bus_675 ,
-                        :Bus_692 ;
+             :attachsTo :Bus_675 ;
+             :hasComponent :LineCode_mtx606 ;
+             :primaryAttachsTo :Bus_692 ;
              :length 500 ;
              :nodes_primary "1 2 3" ;
              :nodes_secondary "1 2 3" ;
@@ -925,46 +1051,12 @@
              :unit "ft" .
 
 
-###  http://www.semanticweb.org/phoenix/ontologies/2022/0/SmartGrid#Line_Code_mtx601
-:Line_Code_mtx601 rdf:type owl:NamedIndividual ,
-                           :Line_Code .
-
-
-###  http://www.semanticweb.org/phoenix/ontologies/2022/0/SmartGrid#Line_Code_mtx602
-:Line_Code_mtx602 rdf:type owl:NamedIndividual ,
-                           :Line_Code .
-
-
-###  http://www.semanticweb.org/phoenix/ontologies/2022/0/SmartGrid#Line_Code_mtx603
-:Line_Code_mtx603 rdf:type owl:NamedIndividual ,
-                           :Line_Code .
-
-
-###  http://www.semanticweb.org/phoenix/ontologies/2022/0/SmartGrid#Line_Code_mtx604
-:Line_Code_mtx604 rdf:type owl:NamedIndividual ,
-                           :Line_Code .
-
-
-###  http://www.semanticweb.org/phoenix/ontologies/2022/0/SmartGrid#Line_Code_mtx605
-:Line_Code_mtx605 rdf:type owl:NamedIndividual ,
-                           :Line_Code .
-
-
-###  http://www.semanticweb.org/phoenix/ontologies/2022/0/SmartGrid#Line_Code_mtx606
-:Line_Code_mtx606 rdf:type owl:NamedIndividual ,
-                           :Line_Code .
-
-
-###  http://www.semanticweb.org/phoenix/ontologies/2022/0/SmartGrid#Line_Code_mtx607
-:Line_Code_mtx607 rdf:type owl:NamedIndividual ,
-                           :Line_Code .
-
-
 ###  http://www.semanticweb.org/phoenix/ontologies/2022/0/SmartGrid#Load_611_3
 :Load_611_3 rdf:type owl:NamedIndividual ,
                      :Load ;
             :attachsTo :Bus_611 ;
             :connection_primary "Wye" ;
+            :kV_primary 2.4 ;
             :kW 170 ;
             :kvar 80 ;
             :model 1 ;
@@ -977,6 +1069,7 @@
                      :Load ;
             :attachsTo :Bus_634 ;
             :connection_primary "Wye" ;
+            :kV_primary 0.277 ;
             :kW 160 ;
             :kvar 110 ;
             :model 1 ;
@@ -989,6 +1082,7 @@
                      :Load ;
             :attachsTo :Bus_634 ;
             :connection_primary "Wye" ;
+            :kV_primary 0.277 ;
             :kW 120 ;
             :kvar 90 ;
             :model 1 ;
@@ -1001,6 +1095,7 @@
                      :Load ;
             :attachsTo :Bus_634 ;
             :connection_primary "Wye" ;
+            :kV_primary 0.277 ;
             :kW 120 ;
             :kvar 90 ;
             :model 1 ;
@@ -1013,6 +1108,7 @@
                      :Load ;
             :attachsTo :Bus_645 ;
             :connection_primary "Wye" ;
+            :kV_primary 2.4 ;
             :kW 170 ;
             :kvar 125 ;
             :model 1 ;
@@ -1025,6 +1121,7 @@
                      :Load ;
             :attachsTo :Bus_646 ;
             :connection_primary "Delta" ;
+            :kV_primary 4.16 ;
             :kW 230 ;
             :kvar 132 ;
             :model 2 ;
@@ -1037,6 +1134,7 @@
                      :Load ;
             :attachsTo :Bus_652 ;
             :connection_primary "Wye" ;
+            :kV_primary 2.4 ;
             :kW 128 ;
             :kvar 86 ;
             :model 2 ;
@@ -1049,6 +1147,7 @@
                      :Load ;
             :attachsTo :Bus_670 ;
             :connection_primary "Wye" ;
+            :kV_primary 2.4 ;
             :kW 17 ;
             :kvar 10 ;
             :model 1 ;
@@ -1061,6 +1160,7 @@
                      :Load ;
             :attachsTo :Bus_670 ;
             :connection_primary "Wye" ;
+            :kV_primary 2.4 ;
             :kW 66 ;
             :kvar 38 ;
             :model 1 ;
@@ -1073,6 +1173,7 @@
                      :Load ;
             :attachsTo :Bus_670 ;
             :connection_primary "Wye" ;
+            :kV_primary 2.4 ;
             :kW 117 ;
             :kvar 68 ;
             :model 1 ;
@@ -1085,6 +1186,7 @@
                    :Load ;
           :attachsTo :Bus_671 ;
           :connection_primary "Delta" ;
+          :kV_primary 4.16 ;
           :kW 1155 ;
           :kvar 660 ;
           :model 1 ;
@@ -1097,6 +1199,7 @@
                      :Load ;
             :attachsTo :Bus_675 ;
             :connection_primary "Wye" ;
+            :kV_primary 2.4 ;
             :kW 485 ;
             :kvar 190 ;
             :model 1 ;
@@ -1109,6 +1212,7 @@
                      :Load ;
             :attachsTo :Bus_675 ;
             :connection_primary "Wye" ;
+            :kV_primary 2.4 ;
             :kW 68 ;
             :kvar 60 ;
             :model 1 ;
@@ -1121,6 +1225,7 @@
                      :Load ;
             :attachsTo :Bus_675 ;
             :connection_primary "Wye" ;
+            :kV_primary 2.4 ;
             :kW 290 ;
             :kvar 212 ;
             :model 1 ;
@@ -1133,6 +1238,7 @@
                      :Load ;
             :attachsTo :Bus_692 ;
             :connection_primary "Delta" ;
+            :kV_primary 4.16 ;
             :kW 170 ;
             :kvar 151 ;
             :model 5 ;
@@ -1143,28 +1249,15 @@
 ###  http://www.semanticweb.org/phoenix/ontologies/2022/0/SmartGrid#Switch_671692
 :Switch_671692 rdf:type owl:NamedIndividual ,
                         :Switch ;
-               :attachsTo :Bus_671 ,
-                          :Bus_692 ;
+               :attachsTo :Bus_692 ;
+               :primaryAttachsTo :Bus_671 ;
+               :c0 0.0 ;
+               :c1 0.0 ;
                :normal_state "open" ;
-               :num_phases 3 .
-
-
-###  http://www.semanticweb.org/phoenix/ontologies/2022/0/SmartGrid#Transformer_1
-:Transformer_1 rdf:type owl:NamedIndividual ,
-                        :Transformer ;
-               :attachsTo :Bus_634 ;
-               :primaryAttachsTo :Bus_633 ;
-               :Kva 500 ;
-               :XHL 2 ;
-               :XHT 1 ;
-               :XLT 1 ;
-               :connection_primary "Wye" ;
-               :connection_secondary "Wye" ;
-               :kV_primary 4.16 ;
-               :kV_secondary 0.480 ;
-               :num_phases 3 ;
-               :percent_R 0.55 ;
-               rdfs:comment "This is the transformer labelled XFM-1" .
+               :r0 0.0001 ;
+               :r1 0.0001 ;
+               :x0 0.0 ;
+               :x1 0.0 .
 
 
 ###  http://www.semanticweb.org/phoenix/ontologies/2022/0/SmartGrid#Transformer_Sub
@@ -1180,6 +1273,24 @@
                  :num_phases 3 ;
                  :percent_R "(.5 1000 /)" ;
                  rdfs:comment "This is the transformer at the generating station" .
+
+
+###  http://www.semanticweb.org/phoenix/ontologies/2022/0/SmartGrid#Transformer_XFM1
+:Transformer_XFM1 rdf:type owl:NamedIndividual ,
+                           :Transformer ;
+                  :attachsTo :Bus_634 ;
+                  :primaryAttachsTo :Bus_633 ;
+                  :Kva 500 ;
+                  :XHL 2 ;
+                  :XHT 1 ;
+                  :XLT 1 ;
+                  :connection_primary "Wye" ;
+                  :connection_secondary "Wye" ;
+                  :kV_primary 4.16 ;
+                  :kV_secondary 0.480 ;
+                  :num_phases 3 ;
+                  :percent_R 0.55 ;
+                  rdfs:comment "This is the transformer labelled XFM-1" .
 
 
 ###  http://www.semanticweb.org/phoenix/ontologies/2022/0/SmartGrid#Transporter_Controller_Actuator

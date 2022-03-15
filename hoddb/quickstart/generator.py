@@ -26,17 +26,17 @@ def get_bus(entity, key):
     return bus
 
 def parse_load_name(load):
-    """
-    This will parse the individual name to the object's name for the load
-    """
-    if bool(re.match('load_', load, re.I)):
-        return load[5:].replace('_','.')
-    return load.replace('_','.')
+        """
+        This will parse the individual name to the object's name for the load
+        """
+        if bool(re.match('load_', load, re.I)):
+            return load[5:].replace('_','.')
+        return load.replace('_','.')
 
 def parse_load(load):
     dss_load = "New Load."
-    dss_load += parse_load_name(load['load'].split("#")[1]) + ' '
-    dss_load += f"Bus1={get_bus(load,'bus')}"
+    dss_load += load['load'].split("#")[1].split('_')[1]
+    dss_load += f"Bus={load['bus'].split('#')[1].split('_')[1]}"
     primary_nodes = get_nodes(load, 'n_prim')
     if primary_nodes != None:
         dss_load += primary_nodes + ' '
@@ -75,6 +75,7 @@ WHERE {
     ?trans a :Transformer .
     ?trans :primaryAttachsTo ?prim_bus .
     ?trans :attachsTo ?sec_bus .
+    ?trans :num_phases ?num_phases .
     ?trans :Kva ?Kva .
     ?trans :connection_primary ?conn_prim .
     ?trans :connection_secondary ?conn_sec .
@@ -93,7 +94,9 @@ WHERE {
     for row in res:
         trans = SmartGrid.Transformer(
             trans = row['trans'],
+            num_phases = row['num_phases'],
             bus_primary = row['prim_bus'],
+            bus_secondary = row['sec_bus'],
             kva = row['Kva'],
             connection_primary = row['conn_prim'],
             connection_secondary = row['conn_sec'],
@@ -101,18 +104,34 @@ WHERE {
             kv_secondary = row['kv_sec'],
             percent_r = row['percent_R']
         )
-        print(trans)
+        print(trans.get_opendss())
+
 def query_capacitors():
     query_str = """
 SELECT *
 WHERE {
     ?cap a :Capacitor .
     ?cap :attachsTo ?bus .
+    ?cap :kV_primary ?kv .
     ?cap :kvar ?kvar .
-    ?cap :nodes_primary ?prim_bus .
     ?cap :num_phases ?num_phases .
+    ?cap :kvar ?kvar .
+    OPTIONAL {
+        ?cap :nodes_primary ?prim_bus .
+    }
 }    
 """
+    res = g.query(query_str)
+    for row in res:
+        cap = SmartGrid.Capacitor(
+            cap = row['cap'],
+            bus = row['bus'],
+            kv = row['kv'],
+            nodes_primary = row['prim_bus'],
+            num_phases = row['num_phases'],
+            kvar = row['kvar']
+        )
+        print(cap.get_opendss())
 
 def query_buses():
     query_str = """
@@ -137,15 +156,16 @@ WHERE {
             x = int(row['x']), 
             y = int(row['y']) 
         )
-        print(bus)
 
 def query_lines():
+    # Because the orientation of the bus connection does not matter 
     query_str = """
 SELECT *
 WHERE {
     ?line a :Line .
-    ?line :attachsTo ?bus1 .
+    ?line :primaryAttachsTo ?bus1 .
     ?line :attachsTo ?bus2 .
+    ?line :hasComponent ?linecode .
     ?line :length ?length .
     ?line :nodes_primary ?n_prim .
     ?line :nodes_secondary ?n_sec .
@@ -154,18 +174,19 @@ WHERE {
 }
 """
     res = g.query(query_str)
-    print(len(res))
     for row in res:
         line = SmartGrid.Line(
             line = row['line'],
+            bus1 = row['bus1'],
+            bus2 = row['bus2'],
+            linecode = row['linecode'],
             length = row['length'],
             length_unit = row['unit'],
             nodes_primary = row['n_prim'],
             nodes_secondary = row['n_sec'],
             num_phases = row['num_phases']
         )
-        print(line)
-        print(row['bus1'], row['bus2'])
+        print(line.get_opendss())
 
 def query_loads():
     # Write the query
@@ -185,11 +206,44 @@ WHERE {
     # Get the query
     res = g.query(query_str)
 
+
+
     for row in res:
         print(parse_load(row))
 
-# query_transformers()
-# query_loads()
-# query_buses()
+def query_linecode():
+    query_str = """
+SELECT *
+WHERE {
+    ?linecode a :LineCode .
+    ?linecode :freq ?freq .
+    ?linecode :num_phases ?num_phases .
+    ?linecode :rmat ?rmat .
+    ?linecode :xmat ?xmat .
+    ?linecode :unit ?unit .
+    OPTIONAL {
+        ?linecode :cmat ?cmat .
+    }
+}    
+"""
+    res = g.query(query_str)
+
+    for row in res:
+        linecode = SmartGrid.LineCode(
+            linecode = row['linecode'],
+            freq = row['freq'],
+            num_phases = row['num_phases'],
+            rmat = row['rmat'],
+            xmat = row['xmat'],
+            unit = row['unit'],
+            cmat = row['cmat'] if 'cmat' in row else None
+        )
+        print(linecode.get_opendss())
+
+query_transformers()
+query_loads()
+query_buses()
+query_linecode()
 query_lines()
+query_capacitors()
 # print(node_buses)
