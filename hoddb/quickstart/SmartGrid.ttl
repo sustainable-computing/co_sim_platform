@@ -829,10 +829,10 @@
                      :locatedAt :Bus_632 .
 
 
-###  http://www.semanticweb.org/phoenix/ontologies/2022/0/SmartGrid#Generator
-:Generator rdf:type owl:NamedIndividual ,
+###  http://www.semanticweb.org/phoenix/ontologies/2022/0/SmartGrid#Generator_IEEE13Nodeckt
+:Generator_IEEE13Nodeckt rdf:type owl:NamedIndividual ,
                     :Generator ;
-           :attachsTo :Bus_Source ;
+           :primaryAttachsTo :Bus_Source ;
            :MVAsc1 21000 ;
            :MVAsc3 20000 ;
            :angle 30 ;

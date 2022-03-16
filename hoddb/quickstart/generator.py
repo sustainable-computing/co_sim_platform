@@ -68,6 +68,35 @@ def parse_capacitors(cap):
     # Add voltage
     return dss_cap
 
+def query_generator():
+    query_str = """
+SELECT *
+WHERE {
+    ?gen a :Generator .
+    ?gen :primaryAttachsTo ?bus1 .
+    ?gen :MVAsc1 ?MVAsc1 .
+    ?gen :MVAsc3 ?MVAsc3 .
+    ?gen :angle ?angle .
+    ?gen :kV_secondary ?kv_sec .
+    ?gen :num_phases ?num_phases
+}    
+"""
+    res = g.query(query_str)
+    for row in res:
+        gen = SmartGrid.Generator(
+            gen = row['gen'],
+            bus1 = row['bus1'],
+            kv_sec = row['kv_sec'],
+            num_phases = row['num_phases'],
+            MVAsc1 = row['MVAsc1'],
+            MVAsc3 = row['MVAsc3'],
+            angle = row['angle']
+        )   
+        print(gen.get_opendss())
+        # There should only be one generator
+        break
+
+
 def query_transformers():
     query_str = """
 SELECT *
@@ -326,6 +355,8 @@ WHERE {
         )
         print(reg_control.get_opendss())
 
+
+
 def post_object_opendss():
     """
     This will write code post object definition
@@ -352,10 +383,12 @@ WHERE {
     opendss_str = f"Set VoltageBases={voltages}\n"
     opendss_str += "calcv\nSolve"
     return opendss_str
-# query_regcontrol()
-# query_buses()
-# print(node_buses)
+
+
+query_buses()
+query_generator()
 query_transformers()
+query_regcontrol()
 query_linecode()
 query_loads()
 query_capacitors()

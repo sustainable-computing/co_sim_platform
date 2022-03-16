@@ -258,4 +258,26 @@ class VoltageRegulator():
         opendss_str += f"X={self.X} "
         return opendss_str
 
-    
+class Generator():
+    def __init__(self, **kwargs):
+        self.name = kwargs['gen'].split('#')[1].split('_')[1]
+        self.basekv = kwargs['kv_sec']
+        self.bus1 = kwargs['bus1'].split('#')[1].split('_')[1]
+        self.pu = None 
+        self.num_phases = kwargs['num_phases']
+        self.MVAsc1 = kwargs['MVAsc1']
+        self.MVAsc3 = kwargs['MVAsc3']
+        self.angle = kwargs['angle']
+        
+
+    def __str__(self):
+        return self.name
+
+    def get_opendss(self):
+        opendss = f"new circuit.{self.name}\n"
+        opendss += f"~ basekv={self.basekv} "
+        opendss += f"phases={self.num_phases} "
+        opendss += f"bus1={self.bus1}\n"
+        opendss += f"~ Angle={self.angle}\n"
+        opendss += f"~ MVAsc3={self.MVAsc3} MVAsc1={self.MVAsc1}"
+        return opendss
