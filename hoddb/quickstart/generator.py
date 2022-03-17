@@ -76,6 +76,7 @@ WHERE {
     ?gen :primaryAttachsTo ?bus1 .
     ?gen :MVAsc1 ?MVAsc1 .
     ?gen :MVAsc3 ?MVAsc3 .
+    ?gen :pu ?pu .
     ?gen :angle ?angle .
     ?gen :kV_secondary ?kv_sec .
     ?gen :num_phases ?num_phases
@@ -87,6 +88,7 @@ WHERE {
             gen = row['gen'],
             bus1 = row['bus1'],
             kv_sec = row['kv_sec'],
+            pu = row['pu'],
             num_phases = row['num_phases'],
             MVAsc1 = row['MVAsc1'],
             MVAsc3 = row['MVAsc3'],

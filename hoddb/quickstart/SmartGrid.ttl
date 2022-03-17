@@ -420,6 +420,10 @@
 :ptratio rdf:type owl:DatatypeProperty .
 
 
+###  http://www.semanticweb.org/phoenix/ontologies/2022/0/SmartGrid#pu
+:pu rdf:type owl:DatatypeProperty .
+
+
 ###  http://www.semanticweb.org/phoenix/ontologies/2022/0/SmartGrid#r0
 :r0 rdf:type owl:DatatypeProperty .
 
@@ -831,13 +835,14 @@
 
 ###  http://www.semanticweb.org/phoenix/ontologies/2022/0/SmartGrid#Generator_IEEE13Nodeckt
 :Generator_IEEE13Nodeckt rdf:type owl:NamedIndividual ,
-                    :Generator ;
-           :primaryAttachsTo :Bus_Source ;
-           :MVAsc1 21000 ;
-           :MVAsc3 20000 ;
-           :angle 30 ;
-           :kV_secondary 115 ;
-           :num_phases 3 .
+                                  :Generator ;
+                         :primaryAttachsTo :Bus_Source ;
+                         :MVAsc1 21000 ;
+                         :MVAsc3 20000 ;
+                         :angle 30 ;
+                         :kV_secondary 115 ;
+                         :num_phases 3 ;
+                         :pu 1.0001 .
 
 
 ###  http://www.semanticweb.org/phoenix/ontologies/2022/0/SmartGrid#LineCode_mtx601
