@@ -446,6 +446,14 @@
              rdfs:domain :Line .
 
 
+###  http://www.semanticweb.org/phoenix/ontologies/2022/0/SmartGrid#tap_primary
+:tap_primary rdf:type owl:DatatypeProperty .
+
+
+###  http://www.semanticweb.org/phoenix/ontologies/2022/0/SmartGrid#tap_secondary
+:tap_secondary rdf:type owl:DatatypeProperty .
+
+
 ###  http://www.semanticweb.org/phoenix/ontologies/2022/0/SmartGrid#unit
 :unit rdf:type owl:DatatypeProperty ;
       rdfs:domain :Equipment ;
@@ -691,8 +699,8 @@
 
 ###  http://www.semanticweb.org/phoenix/ontologies/2022/0/SmartGrid#Bus_SourceBus
 :Bus_SourceBus rdf:type owl:NamedIndividual ,
-                     :Bus ;
-            :locatedAt :Coord_200_400 .
+                        :Bus ;
+               :locatedAt :Coord_200_400 .
 
 
 ###  http://www.semanticweb.org/phoenix/ontologies/2022/0/SmartGrid#Capacitor_Cap1
@@ -1291,6 +1299,8 @@
                  :num_taps 32 ;
                  :percent_Load_Loss 0.01 ;
                  :ptratio 20 ;
+                 :tap_primary 1 ;
+                 :tap_secondary 1 ;
                  :vreg 122 .
 
 
@@ -1316,6 +1326,8 @@
                  :num_taps 32 ;
                  :percent_Load_Loss 0.01 ;
                  :ptratio 20 ;
+                 :tap_primary 1 ;
+                 :tap_secondary 1 ;
                  :vreg 122 .
 
 
@@ -1341,6 +1353,8 @@
                  :num_taps 32 ;
                  :percent_Load_Loss 0.01 ;
                  :ptratio 20 ;
+                 :tap_primary 1 ;
+                 :tap_secondary 1 ;
                  :vreg 122 .
 
 
