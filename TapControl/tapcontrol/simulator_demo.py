@@ -26,7 +26,7 @@ BASE_DIR = str((Path(BASE_DIR)).parent) + "/"
 DSS_EXE_PATH = BASE_DIR + 'TapControl/tapcontrol/'
 
 #--- Path relative to OpenDSS scripts directory 
-TOPO_RPATH_FILE = 'data/IEEE13Nodeckt.dss'
+TOPO_RPATH_FILE = 'data/outfile.dss'
 NWL_RPATH_FILE  = 'data/IEEE13Nodeckt_NodeWithLoad.csv'
 ILPQ_RPATH_FILE = 'data/IEEE13Nodeckt_InelasticLoadPQ.csv'
 ACTS_RPATH_FILE = 'data/IEEE13Nodeckt_Actives_Tap.csv'
