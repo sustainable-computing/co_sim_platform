@@ -1,72 +1,16 @@
 from rdflib import Graph
 import re 
 import SmartGrid
-
-node_buses = {}
+import argparse
 
 g = Graph()
-g.parse('SmartGrid.ttl')
 
-def get_nodes(entity, key):
-    try:
-        nodes = '.' + entity[key].strip().replace(' ', '.').replace('_','.').replace('-','.')
-    except:
-        return None
-    return nodes
+parser = argparse.ArgumentParser(description = "Convert turtle files to OpenDSS")
+parser.add_argument('--freq', default=60, type=int, help="The frequency of the grid")
+parser.add_argument('--outfile', default="outfile.dss", help="The filename of the OpenDSS file")
+parser.add_argument('--infile', default="SmartGrid.ttl", help="The filename of the ontology to convert")
 
-def get_bus(entity, key):
-    """
-    This will return the bus number (bus_num) from the format Bus_<bus_num>_#_#_#_#...
-    """
-    bus = None
-    try:
-        bus = entity[key].split('#')[1].split('_')[1] 
-    except:
-        return None
-    return bus
-
-def parse_load_name(load):
-        """
-        This will parse the individual name to the object's name for the load
-        """
-        if bool(re.match('load_', load, re.I)):
-            return load[5:].replace('_','.')
-        return load.replace('_','.')
-
-def parse_load(load):
-    dss_load = "New Load."
-    dss_load += load['load'].split("#")[1].split('_')[1]
-    dss_load += f"Bus={load['bus'].split('#')[1].split('_')[1]}"
-    primary_nodes = get_nodes(load, 'n_prim')
-    if primary_nodes != None:
-        dss_load += primary_nodes + ' '
-    else:
-        dss_load += ' '
-    dss_load += f"Phases={load['num_phases']} "
-    dss_load += f"Conn={load['conn'] } "
-    dss_load += f"Model={load['model']} "
-    dss_load += f"kW={load['kW']} "
-    dss_load += f"kvar={load['kvar']}"
-
-    return dss_load
-
-def parse_cap_name(load):
-    """
-    This will parse the individual name to the object's name for the cap
-    """
-    if bool(re.match('capacitor_', load, re.I)):
-        return load[5:].replace('_','.')
-    return load.replace('_','.')
-
-def parse_capacitors(cap):
-    dss_cap = "New Capacitor."
-    dss_cap += parse_cap_name(cap['cap'].split('#')[1]) + ' '
-    dss_cap += f"Bus1={get_bus(cap, 'prim_bus')} "
-    primary_nodes = get_nodes(cap, 'prim_bus')
-    dss_cap += f"phases={cap['num_phases']} "
-    dss_cap += f"kVAR={cap['kvar']} "
-    # Add voltage
-    return dss_cap
+node_buses = {}
 
 def query_generator():
     query_str = """
@@ -83,6 +27,8 @@ WHERE {
 }    
 """
     res = g.query(query_str)
+
+    opendss = "!--- Genereted circuit\n"
     for row in res:
         gen = SmartGrid.Generator(
             gen = row['gen'],
@@ -94,10 +40,11 @@ WHERE {
             MVAsc3 = row['MVAsc3'],
             angle = row['angle']
         )   
-        print(gen.get_opendss())
+        opendss += gen.get_opendss()
         # There should only be one generator
         break
-
+    opendss += '\n\n'
+    return opendss
 
 def query_transformers():
     query_str = """
@@ -108,19 +55,21 @@ WHERE {
     ?trans :attachsTo ?sec_bus .
     ?trans :num_phases ?num_phases .
     ?trans :Kva ?Kva .
+    ?trans :XHL ?xhl .
     ?trans :connection_primary ?conn_prim .
     ?trans :connection_secondary ?conn_sec .
     ?trans :kV_primary ?kv_prim .
     ?trans :kV_secondary ?kv_sec .
     ?trans :percent_R ?percent_R .
     OPTIONAL {
-        ?trans :XHL ?xhl .
         ?trans :XHT ?xht .
         ?trans :XLT ?xlt .
     }
 }
     """
     res = g.query(query_str)
+
+    opendss = "!--- Generated Transformers\n"
 
     for row in res:
         trans = SmartGrid.Transformer(
@@ -129,13 +78,18 @@ WHERE {
             bus_primary = row['prim_bus'],
             bus_secondary = row['sec_bus'],
             kva = row['Kva'],
+            XHL= row['xhl'],
+            XHT = row['xht'],
+            XLT = row['xlt'],
             connection_primary = row['conn_prim'],
             connection_secondary = row['conn_sec'],
             kv_primary = row['kv_prim'],
             kv_secondary = row['kv_sec'],
             percent_r = row['percent_R']
         )
-        print(trans.get_opendss())
+        opendss += trans.get_opendss() + '\n'
+    opendss += '\n\n'
+    return opendss 
 
 def query_capacitors():
     query_str = """
@@ -153,6 +107,7 @@ WHERE {
 }    
 """
     res = g.query(query_str)
+    opendss = "!--- Generated Capacitors\n"
     for row in res:
         cap = SmartGrid.Capacitor(
             cap = row['cap'],
@@ -162,7 +117,9 @@ WHERE {
             num_phases = row['num_phases'],
             kvar = row['kvar']
         )
-        print(cap.get_opendss())
+        opendss += cap.get_opendss() + '\n'
+    opendss += '\n\n'
+    return opendss 
 
 def query_buses():
     query_str = """
@@ -205,6 +162,7 @@ WHERE {
 }
 """
     res = g.query(query_str)
+    opendss = "!--- Generated Lines\n"
     for row in res:
         line = SmartGrid.Line(
             line = row['line'],
@@ -217,7 +175,9 @@ WHERE {
             nodes_secondary = row['n_sec'],
             num_phases = row['num_phases']
         )
-        print(line.get_opendss())
+        opendss += line.get_opendss() + '\n'
+    opendss += '\n\n'
+    return opendss
 
 def query_loads():
     # Write the query
@@ -225,22 +185,39 @@ def query_loads():
 SELECT *
 WHERE {
     ?load a :Load .
-    ?load :attachsTo ?bus .
+    ?load :attachsTo ?bus1 .
     ?load :connection_primary ?conn .
+    ?load :kV_primary ?kv_prim .
     ?load :kW ?kW .
     ?load :kvar ?kvar .
     ?load :model ?model .
     ?load :nodes_primary ?n_prim .
-    ?load :num_phases ?num_phases
+    ?load :num_phases ?num_phases . 
+    OPTIONAL {
+        ?load :nodes_secondary ?n_sec .
+    }
 }
 """
     # Get the query
     res = g.query(query_str)
-
-
-
+    opendss = "!--- Generated Loads\n"
     for row in res:
-        print(parse_load(row))
+        load = SmartGrid.Load(
+            load = row['load'],
+            bus1 = row['bus1'],
+            conn = row['conn'],
+            kv_primary = row['kv_prim'],
+            kw = row['kW'],
+            kvar = row['kvar'],
+            model = row['model'],
+            nodes_primary = row['n_prim'],
+            nodes_secondary = row['n_sec'],
+            num_phases = row['num_phases']
+        )
+        opendss += load.get_opendss() + '\n'
+    opendss += '\n\n'
+
+    return opendss
 
 def query_linecode():
     query_str = """
@@ -258,7 +235,7 @@ WHERE {
 }    
 """
     res = g.query(query_str)
-
+    opendss = "!--- Generated Linecodes\n"
     for row in res:
         linecode = SmartGrid.LineCode(
             linecode = row['linecode'],
@@ -267,9 +244,11 @@ WHERE {
             rmat = row['rmat'],
             xmat = row['xmat'],
             unit = row['unit'],
-            cmat = row['cmat'] if 'cmat' in row else None
+            cmat = row['cmat']
         )
-        print(linecode.get_opendss())
+        opendss += linecode.get_opendss() + '\n'
+    opendss += '\n\n'
+    return opendss
 
 def query_switches():
     query_str = """
@@ -288,6 +267,7 @@ WHERE {
 }    
 """
     res = g.query(query_str)
+    opendss = "!--- Generated Switches\n"
     for row in res:
         switch = SmartGrid.Switch(
             switch = row['switch'],
@@ -301,7 +281,9 @@ WHERE {
             x0 = row['x0'],
             x1 = row['x1']
         )
-        print(switch.get_opendss())
+        opendss += switch.get_opendss() +'\n'
+    opendss += '\n\n'
+    return opendss
 
 def query_regcontrol():
     query_str = """
@@ -331,6 +313,7 @@ WHERE {
 }    
 """
     res = g.query(query_str)
+    opendss = "!--- Generated Reg Control\n"
     for row in res:
         reg_control = SmartGrid.VoltageRegulator(
             regcontrol = row['reg'],
@@ -355,9 +338,9 @@ WHERE {
             R = row['R'],
             X = row['X']
         )
-        print(reg_control.get_opendss())
-
-
+        opendss += reg_control.get_opendss() + '\n'
+    opendss += '\n\n'
+    return opendss
 
 def post_object_opendss():
     """
@@ -383,17 +366,51 @@ WHERE {
         voltages.append(float(row['kv']))
 
     opendss_str = f"Set VoltageBases={voltages}\n"
-    opendss_str += "calcv\nSolve"
+    opendss_str += "calcv\nSolve\n"
+    return opendss_str
+
+def pre_object_opendss(freq = 60):
+    """
+    This will write code pre-object definition 
+    """
+    opendss_str = f"Clear\nSet DefaultBaseFrequency={freq}\n\n"
     return opendss_str
 
 
-query_buses()
-query_generator()
-query_transformers()
-query_regcontrol()
-query_linecode()
-query_loads()
-query_capacitors()
-query_lines()
-query_switches()
-print(post_object_opendss())
+# print("!--- Generated pre-dss code")
+# print(pre_object_opendss())
+# query_buses()
+# query_generator()
+# query_transformers()
+# query_regcontrol()
+# query_linecode()
+# query_loads()
+# query_capacitors()
+# query_lines()
+# query_switches()
+# print("!--- Generated post-dss code")
+# print(post_object_opendss())
+
+
+def main():
+    args = parser.parse_args()
+
+    outfilename = args.outfile 
+    onto_filename = args.infile
+    g.parse(onto_filename)
+    query_buses()
+    with open(outfilename, 'wt') as outfile:
+        outfile.write(pre_object_opendss())
+        outfile.write(query_generator())
+        outfile.write(query_transformers())
+        outfile.write(query_regcontrol())
+        outfile.write(query_linecode())
+        outfile.write(query_loads())
+        outfile.write(query_capacitors())
+        outfile.write(query_lines())
+        outfile.write(query_switches())
+        outfile.write(post_object_opendss())
+
+
+if __name__ == "__main__":
+    main()

@@ -4,6 +4,9 @@ class Transformer():
         self.name = kwargs['trans'].split('#')[1] if kwargs['trans'].startswith("http://") else kwargs['trans'] 
         self.name = self.name.split('_')[1]
         self.num_phases = kwargs['num_phases']
+        self.XHL = kwargs['XHL']
+        self.XHT = kwargs['XHT']
+        self.XLT = kwargs['XLT']
         self.bus_primary = kwargs['bus_primary'].split('#')[1].split('_')[1]
         self.bus_secondary = kwargs['bus_secondary'].split('#')[1].split('_')[1]
         self.kva = kwargs['kva']
@@ -17,17 +20,23 @@ class Transformer():
         opendss = f"New Transformer.{self.name} "
         opendss += f"Phases={self.num_phases} "
         opendss += "Windings=2 "
-        opendss += f"XHL= \n"
+        opendss += f"XHL={self.XHL}\n"
         opendss += f"~ wdg=1 bus={self.bus_primary} "
         opendss += f"conn={self.connection_primary} "
         opendss += f"kv={self.kv_primary} "
         opendss += f"kva={self.kva} "
-        opendss += f"%r={self.percent_r}\n"
+        opendss += f"%r={self.percent_r} "
+        if self.XHT is not None:
+            opendss += f"XHT={self.XHT}\n"
+        else:
+            opendss += '\n'
         opendss += f"~ wdg=2 bus={self.bus_secondary} "
         opendss += f"conn={self.connection_secondary} "
         opendss += f"kv={self.kv_secondary} "
         opendss += f"kva={self.kva} "
-        opendss += f"%r={self.percent_r}\n"
+        opendss += f"%r={self.percent_r} "
+        if self.XLT is not None:
+            opendss += f"XLT={self.XLT}"
 
         return opendss
 
@@ -93,14 +102,14 @@ class Line():
         return self.name
 
 class LineCode():
-    def __init__(self, cmat = None, **kwargs):
+    def __init__(self, **kwargs):
         self.name = kwargs['linecode'].split('#')[1].split('_')[1]
         self.freq = kwargs['freq']
         self.num_phases = kwargs['num_phases']
         self.rmat = kwargs['rmat']
         self.xmat = kwargs['xmat']
         self.unit = kwargs['unit']
-        self.cmat = cmat
+        self.cmat = kwargs['cmat']
 
     def get_opendss(self):
         opendss = f"New linecode.{self.name} "
@@ -110,7 +119,7 @@ class LineCode():
         opendss += f"~ xmatrix = {self.xmat}\n"
         if self.cmat is not None:
             opendss += f"~ Cmatrix = {self.cmat}\n"
-        opendss += f"~ unit={self.unit}\n"
+        opendss += f"~ units={self.unit}"
     
         return opendss
 
@@ -119,31 +128,33 @@ class LineCode():
 
 class Load():
     def __init__(self, **kwargs):
-        self.name = kwargs['load']
-    
-    def parse_load_name(self, load):
-        """
-        This will parse the individual name to the object's name for the load
-        """
-        if bool(re.match('load_', load, re.I)):
-            return load[5:].replace('_','.')
-        return load.replace('_','.')
-
+        self.name = kwargs['load'].split('#')[1].split('_')[1]
+        self.bus1 = kwargs['bus1'].split('#')[1].split('_')[1]
+        self.conn = kwargs['conn']
+        self.kv_primary = kwargs['kv_primary']
+        self.kw = kwargs['kw']
+        self.kvar = kwargs['kvar']
+        self.model = kwargs['model']
+        self.nodes_primary = kwargs['nodes_primary'].replace(' ','.')
+        if kwargs['nodes_secondary'] is not None:
+            self.nodes_secondary = kwargs['nodes_secondary'].replace(' ','.')
+        else:
+            self.nodes_secondary = None
+        self.num_phases = kwargs['num_phases']
 
     def get_opendss(self):
-        opendss = "New Load."
-        opendss += self.parse_load_name(load['load'].split("#")[1]) + ' '
-        opendss += f"Bus1={get_bus(load,'bus')}"
-        primary_nodes = get_nodes(load, 'n_prim')
-        if primary_nodes != None:
-            opendss += primary_nodes + ' '
+        opendss = f"New Load.{self.name}"
+        if self.nodes_secondary is not None:
+            opendss += f".{self.nodes_secondary} "
         else:
             opendss += ' '
-        opendss += f"Phases={load['num_phases']} "
-        opendss += f"Conn={load['conn'] } "
-        opendss += f"Model={load['model']} "
-        opendss += f"kW={load['kW']} "
-        opendss += f"kvar={load['kvar']}"
+        opendss += f"Bus1={self.bus1}.{self.nodes_primary} "
+        opendss += f"Phases={self.num_phases} "
+        opendss += f"Conn={self.conn} "
+        opendss += f"Model={self.model} "
+        opendss += f"kV={self.kv_primary} "
+        opendss += f"kW={self.kw} "
+        opendss += f"kvar={self.kvar}"
 
         return opendss
 
@@ -241,7 +252,7 @@ class VoltageRegulator():
         opendss_str += f"phases={self.num_phases} "
         opendss_str += f"bank={self.bank} "
         opendss_str += f"XHL={self.XHL} "
-        opendss_str += f"kVAs=[{self.primary_kv} {self.secondary_kv}] "
+        opendss_str += f"kVAs=[{self.kva} {self.kva}] "
         opendss_str += f"NumTaps={self.num_taps} "
         opendss_str += f"maxtap={self.max_tap} "
         opendss_str += f"mintap={self.min_tap}\n"
@@ -249,7 +260,7 @@ class VoltageRegulator():
         opendss_str += f"kVs=[{self.primary_kv} {self.secondary_kv}] "
         opendss_str += f"%LoadLoss={self.load_loss}\n"
         # The winding is always 2
-        opendss_str += f"new regcontrol.{self.name} transformer={self.name} windings=2 "
+        opendss_str += f"new regcontrol.{self.name} transformer={self.name} winding=2 "
         opendss_str += f"vreg={self.vreg} "
         opendss_str += f"band={self.band} "
         opendss_str += f"ptratio={self.ptratio} "
