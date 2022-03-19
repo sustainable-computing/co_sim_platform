@@ -105,11 +105,4 @@ New Line.671692 Phases=3 Bus1=671 Bus2=692 Switch=y c0=0.0 c1=0.0 r0=0.0001 r1=0
 Set VoltageBases=[115.0, 4.16, 0.48]
 calcv
 Solve
-
-Transformer.Reg1.Taps=[1.0 1.0000] !1.0625
-Transformer.Reg2.Taps=[1.0 1.0000] !1.0500
-Transformer.Reg3.Taps=[1.0 1.0000] !1.06875
-
-
-! Control modes: OFF | STATIC | EVENT | TIME, default: STATIC
-Set ControlMode=OFF
+Set ControlMode=Off

@@ -10,7 +10,15 @@ parser.add_argument('--freq', default=60, type=int, help="The frequency of the g
 parser.add_argument('--outfile', default="outfile.dss", help="The filename of the OpenDSS file")
 parser.add_argument('--infile', default="SmartGrid.ttl", help="The filename of the ontology to convert")
 
-node_buses = {}
+
+buses = {}
+lines = {}
+loads = {}
+capacitors = {}
+linecode = {}
+transformers = {}
+regcontrols = {}
+
 
 def query_generator():
     query_str = """
@@ -138,7 +146,7 @@ WHERE {
             'x': int(row['x']),
             'y': int(row['y']),
         }
-        node_buses[row['bus'].split('#')[1]] = node
+        buses[row['bus'].split('#')[1]] = node
         bus = SmartGrid.Bus(
             bus = row['bus'],
             x = int(row['x']), 
@@ -301,6 +309,8 @@ WHERE {
     ?reg :ctprim ?ctprim .
     ?reg :kV_primary ?kv_prim .
     ?reg :kV_secondary ?kv_sec .
+    ?reg :tap_primary ?tap_prim .
+    ?reg :tap_secondary ?tap_sec .
     ?reg :max_tap ?max_tap .
     ?reg :min_tap ?min_tap .
     ?reg :nodes_primary ?nodes_primary .
@@ -325,8 +335,10 @@ WHERE {
             kva = row['kva'],
             primary_kv = row['kv_prim'],
             nodes_primary = row['nodes_primary'],
+            tap_primary = row['tap_prim'],
             secondary_kv = row['kv_sec'],
             nodes_secondary = row['nodes_secondary'],
+            tap_secondary = row['tap_sec'],
             num_taps = row['num_taps'],
             max_tap = row['max_tap'], 
             min_tap = row['min_tap'],
@@ -339,8 +351,18 @@ WHERE {
             X = row['X']
         )
         opendss += reg_control.get_opendss() + '\n'
+        regcontrols[str(reg_control)] = reg_control
     opendss += '\n\n'
     return opendss
+
+def pre_object_opendss(freq = 60):
+    """
+    This will write code pre-object definition 
+    """
+    opendss_str = f"Clear\nSet DefaultBaseFrequency={freq}\n\n"
+    return opendss_str
+
+
 
 def post_object_opendss():
     """
@@ -367,29 +389,11 @@ WHERE {
 
     opendss_str = f"Set VoltageBases={voltages}\n"
     opendss_str += "calcv\nSolve\n"
+    opendss_str += "Set ControlMode=Off"
     return opendss_str
 
-def pre_object_opendss(freq = 60):
-    """
-    This will write code pre-object definition 
-    """
-    opendss_str = f"Clear\nSet DefaultBaseFrequency={freq}\n\n"
-    return opendss_str
-
-
-# print("!--- Generated pre-dss code")
-# print(pre_object_opendss())
-# query_buses()
-# query_generator()
-# query_transformers()
-# query_regcontrol()
-# query_linecode()
-# query_loads()
-# query_capacitors()
-# query_lines()
-# query_switches()
-# print("!--- Generated post-dss code")
-# print(post_object_opendss())
+def set_taps():
+    pass
 
 
 def main():
@@ -411,6 +415,7 @@ def main():
         outfile.write(query_switches())
         outfile.write(post_object_opendss())
 
+    print(regcontrols)
 
 if __name__ == "__main__":
     main()

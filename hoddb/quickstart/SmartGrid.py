@@ -231,8 +231,10 @@ class VoltageRegulator():
         self.kva = kwargs['kva']
         self.primary_kv = kwargs['primary_kv']
         self.nodes_primary = kwargs['nodes_primary'].strip().replace(' ','.')
+        self.tap_primary = kwargs['tap_primary']
         self.secondary_kv = kwargs['secondary_kv']
         self.nodes_secondary = kwargs['nodes_secondary'].strip().replace(' ','.')
+        self.tap_secondary = kwargs['tap_secondary']
         self.num_taps = kwargs['num_taps']
         self.max_tap = kwargs['max_tap']
         self.min_tap = kwargs['min_tap']
