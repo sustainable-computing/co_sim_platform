@@ -389,12 +389,14 @@ WHERE {
 
     opendss_str = f"Set VoltageBases={voltages}\n"
     opendss_str += "calcv\nSolve\n"
-    opendss_str += "Set ControlMode=Off"
     return opendss_str
 
 def set_taps():
-    pass
+    openstr = ""
+    for reg, obj in regcontrols.items():
+        openstr += f"Transformer.{reg}.Taps=[1 1]\n"
 
+    return openstr
 
 def main():
     args = parser.parse_args()
@@ -402,7 +404,9 @@ def main():
     outfilename = args.outfile 
     onto_filename = args.infile
     g.parse(onto_filename)
+
     query_buses()
+    
     with open(outfilename, 'wt') as outfile:
         outfile.write(pre_object_opendss())
         outfile.write(query_generator())
@@ -414,8 +418,8 @@ def main():
         outfile.write(query_lines())
         outfile.write(query_switches())
         outfile.write(post_object_opendss())
-
-    print(regcontrols)
+        outfile.write(set_taps())
+        outfile.write("Set ControlMode=OFF")
 
 if __name__ == "__main__":
     main()

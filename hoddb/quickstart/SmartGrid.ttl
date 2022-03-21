@@ -718,7 +718,7 @@
                 :attachsTo :Bus_611 ;
                 :kV_primary 2.4 ;
                 :kvar 100 ;
-                :nodes_primary 1 ;
+                :nodes_primary 3 ;
                 :num_phases 1 .
 
 
@@ -1076,7 +1076,7 @@
             :kV_primary 2.4 ;
             :kW 170 ;
             :kvar 80 ;
-            :model 1 ;
+            :model 5 ;
             :nodes_primary "3" ;
             :nodes_secondary "3" ;
             :num_phases 1 .
