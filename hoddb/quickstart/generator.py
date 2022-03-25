@@ -145,8 +145,9 @@ WHERE {
         node = {
             'x': int(row['x']),
             'y': int(row['y']),
+            'connections': []
         }
-        buses[row['bus'].split('#')[1]] = node
+        buses[row['bus'].split('#')[1].split('_')[1]] = node
         bus = SmartGrid.Bus(
             bus = row['bus'],
             x = int(row['x']), 
@@ -398,6 +399,23 @@ def set_taps():
 
     return openstr
 
+def query_double_buses():
+    query_str = """
+SELECT *
+WHERE {
+    ?entity rdf:type ?type .
+    ?type rdfs:subClassOf* :Electrical_Equipment .
+    ?entity :primaryAttachsTo ?bus1 .
+    ?entity :attachsTo ?bus2 .
+} 
+"""
+    res = g.query(query_str)
+    for row in res:
+        bus_in = row['bus1'].split('#')[1].split('_')[1]
+        bus_out = row['bus2'].split('#')[1].split('_')[1]
+        buses[bus_in]['connections'].append(bus_out)
+        buses[bus_out]['connections'].append(bus_in)
+
 def main():
     args = parser.parse_args()
 
@@ -407,6 +425,10 @@ def main():
 
     query_buses()
     
+    query_double_buses()
+    print(buses)
+
+    exit()
     with open(outfilename, 'wt') as outfile:
         outfile.write(pre_object_opendss())
         outfile.write(query_generator())
