@@ -44,6 +44,7 @@ with open('res_values.txt','w') as outfile:
         axs[i].set_xlim(-5, max_t+5)
         axs[i].grid(visible=True, which='both', axis='both')
         outfile.write(df_names[i])
+        outfile.write('\n')
         outfile.write('\n'.join(map(str, df_sets[i]['v'])))
         outfile.write('\n')
 
