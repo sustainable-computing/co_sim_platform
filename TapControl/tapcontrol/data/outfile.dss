@@ -62,7 +62,7 @@ New linecode.mtx607 nphases=1 BaseFreq=60
 
 
 !--- Generated Loads
-New Load.611.3 Bus1=611.3 Phases=1 Conn=Wye Model=1 kV=2.4 kW=170 kvar=80
+New Load.611.3 Bus1=611.3 Phases=1 Conn=Wye Model=5 kV=2.4 kW=170 kvar=80
 New Load.634.1 Bus1=634.1 Phases=1 Conn=Wye Model=1 kV=0.277 kW=160 kvar=110
 New Load.634.2 Bus1=634.2 Phases=1 Conn=Wye Model=1 kV=0.277 kW=120 kvar=90
 New Load.634.3 Bus1=634.3 Phases=1 Conn=Wye Model=1 kV=0.277 kW=120 kvar=90
@@ -81,7 +81,7 @@ New Load.692.3 Bus1=692.3.1 Phases=1 Conn=Delta Model=5 kV=4.16 kW=170 kvar=151
 
 !--- Generated Capacitors
 New Capacitor.Cap1 Bus1=675 phases=3 KVAR=600 kV=4.16
-New Capacitor.Cap2 Bus1=611.1 phases=1 KVAR=100 kV=2.4
+New Capacitor.Cap2 Bus1=611.3 phases=1 KVAR=100 kV=2.4
 
 
 !--- Generated Lines
@@ -105,12 +105,7 @@ New Line.671692 Phases=3 Bus1=671 Bus2=692 Switch=y c0=0.0 c1=0.0 r0=0.0001 r1=0
 Set VoltageBases=[115.0, 4.16, 0.48]
 calcv
 Solve
-!BusCoords IEEE13Node_BusXY.csv
-
-
-Transformer.Reg1.Taps=[1.0 1.0000] !1.0625
-Transformer.Reg2.Taps=[1.0 1.0000] !1.0500
-Transformer.Reg3.Taps=[1.0 1.0000] !1.06875
-
-
+Transformer.Reg1.Taps=[1 1]
+Transformer.Reg2.Taps=[1 1]
+Transformer.Reg3.Taps=[1 1]
 Set ControlMode=OFF

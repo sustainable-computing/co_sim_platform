@@ -78,8 +78,8 @@ class LoadGenerator(object):
         self._PhaseShift = PhaseShift
 
         
-        #np.random.seed(0)
-        np.random.seed(None)
+        np.random.seed(1)
+        # np.random.seed(None)
         
         logging.disable(logging.NOTSET)
         logging.basicConfig(format='%(asctime)s %(message)s', stream=sys.stderr, level=logging.DEBUG)  

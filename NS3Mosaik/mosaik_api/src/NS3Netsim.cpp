@@ -275,7 +275,8 @@ void NS3Netsim::init(string f_adjmat,
   NS_LOG_FUNCTION(this);
 
   // --- generate different seed each time
-  srand((unsigned)time(NULL));
+  long int seed = 1;
+  srand((unsigned)time(&seed));
 
   //--- set link properties
   LinkRate = s_linkRate;
