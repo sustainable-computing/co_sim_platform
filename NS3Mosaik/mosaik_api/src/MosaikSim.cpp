@@ -90,6 +90,7 @@ void MosaikSim::initNetsimProps(void)
   netsimProp["appcon_file"] = "null";
   netsimProp["adjmat_file"] = "null";
   netsimProp["coords_file"] = "null";
+  netsimProp["json_file"] = "null";
   netsimProp["linkRate"] = "null";
   netsimProp["linkDelay"] = "null";
   netsimProp["linkErrorRate"] = "null";
@@ -440,7 +441,6 @@ MosaikSim::init(Json::Value args, Json::Value kwargs)
   {
     param = (item.key()).asString();
     value = (*item).asString();
-
     if (verbose > 2)
       std::cout << "MosaikSim::init param: " << item.key() << " : " << *item << std::endl;
 
@@ -452,14 +452,15 @@ MosaikSim::init(Json::Value args, Json::Value kwargs)
     }
   }
 
-  // vecNetSimConn = readAppConnectionsFile(netsimProp["appcon_file"]); // Change this to read from a json file
-  vecNetSimConn = readAppConnectionsJSONFile(netsimProp["appcon_file"]);
+  vecNetSimConn = readAppConnectionsFile(netsimProp["appcon_file"]); // Change this to read from a json file
+  vecNetSimConn = readAppConnectionsJSONFile(netsimProp["json_file"]);
   verbose = stoi(netsimProp["verbose"]);
   
   //--- Initialize NS3 class
   objNetsim->init(netsimProp["adjmat_file"],
                   netsimProp["coords_file"],
                   netsimProp["appcon_file"],
+                  netsimProp["json_file"],
                   netsimProp["linkRate"],
                   netsimProp["linkDelay"],
                   netsimProp["linkErrorRate"],

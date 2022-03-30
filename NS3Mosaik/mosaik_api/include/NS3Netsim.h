@@ -105,7 +105,7 @@ class NS3Netsim {
    * \returns None
    *
    */
-  void init (string f_adjmat, string f_coords, string f_appcon, string s_linkRate,
+  void init (string f_adjmat, string f_coords, string f_appcon, string f_json, string s_linkRate,
              string s_linkDelay, string s_linkErrorRate, string start_time,
              string stop_time, string verb, string s_tcpOrUdp, string s_net);
 

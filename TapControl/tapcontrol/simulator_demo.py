@@ -26,7 +26,7 @@ BASE_DIR = str((Path(BASE_DIR)).parent) + "/"
 DSS_EXE_PATH = BASE_DIR + 'TapControl/tapcontrol/'
 
 #--- Path relative to OpenDSS scripts directory 
-TOPO_RPATH_FILE = 'data/outfile.dss'
+TOPO_RPATH_FILE = 'data/IEEE13Nodeckt.dss'
 NWL_RPATH_FILE  = 'data/IEEE13Nodeckt_NodeWithLoad.csv'
 ILPQ_RPATH_FILE = 'data/IEEE13Nodeckt_InelasticLoadPQ.csv'
 ACTS_RPATH_FILE = 'data/IEEE13Nodeckt_Actives_Tap.csv'
@@ -101,6 +101,8 @@ def readAppConnections(appcon_file):
         with open(pathToFile, 'r') as csvFile:
             csvobj = csv.reader(csvFile)
             appconLinks = {(rows[0], rows[1], rows[2]) for rows in csvobj}
+            print("appconLinks gold")
+            print(appconLinks)
         csvFile.close()
 
 def readAppConnectionsJSON(json_file):
@@ -117,8 +119,9 @@ def readAppConnectionsJSON(json_file):
     else:
         with open(pathToFile, 'r') as jsonFile:
             jsonobj = json.load(jsonFile)
-            appconLinks = {(conns["src"], conns["dst"], conns["func"]) for conns in jsonobj['app_connections']}
-
+            appconLinks = {(str(conns["src"]), str(conns["dst"]), conns["func"]) for conns in jsonobj['app_connections']}
+            print("appconLinks JSON")
+            print(appconLinks)
 
 def main():
     #--- Process input arguments
@@ -129,7 +132,8 @@ def main():
     args = parser.parse_args()
     print( 'Starting simulation with args: {0}'.format( vars( args ) ) )
     
-    readAppConnectionsJSON(args.json_file)
+    readAppConnections(args.appcon_file)
+    # readAppConnectionsJSON(args.json_file)
     #readActives(ACTS_FILE) -- not necessary in the moment
     world = mosaik.World( sim_config=SIM_CONFIG, mosaik_config=MOSAIK_CONFIG, debug=False )
     create_scenario( world, args )
@@ -154,9 +158,10 @@ def  create_scenario( world, args ):
     pktnetsim = world.start( 'PktNetSim',
         model_name      = 'TransporterModel',
         eid_prefix      = 'Transp_',
-        adjmat_file     = JSON_RPATH_FILE,
-        coords_file     = JSON_RPATH_FILE,
-        appcon_file     = JSON_RPATH_FILE,
+        adjmat_file     = ADJMAT_RPATH_FILE,
+        coords_file     = COORDS_RPATH_FILE,
+        appcon_file     = APPCON_RPATH_FILE,
+        json_file       = JSON_RPATH_FILE,
         linkRate        = "512Kbps",
         linkDelay       = "15ms",
         linkErrorRate   = "0.0001",
