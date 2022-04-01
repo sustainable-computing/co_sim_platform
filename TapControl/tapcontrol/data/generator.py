@@ -480,11 +480,22 @@ def main():
         outfile.write("Set ControlMode=OFF ")
 
     with open(nodes_filename, 'wt') as nodes_file:
+        regcontrol_buses = []
+        for regulator in regcontrols.values():
+            regcontrol_buses.append(regulator.bus1)
+            regcontrol_buses.append(regulator.bus2)
+        # remove duplicate buses
+        regcontrol_buses = set(regcontrol_buses)
+        nodes_dict = {
+            "nodes": {}
+        } 
+        for node in regcontrol_buses:
+            buses[node]['connections'] = list(set(buses[node]['connections']))
+            nodes_dict['nodes'][node] = buses[node]
+        
         for node in buses.keys():
             buses[node]['connections'] = list(set(buses[node]['connections']))
-        nodes_dict = {
-            "nodes": buses
-        } 
+            nodes_dict['nodes'][node] = buses[node]
         nodes_file.write(json.dumps(nodes_dict, indent=2))
 
 if __name__ == "__main__":
