@@ -26,7 +26,7 @@ BASE_DIR = str((Path(BASE_DIR)).parent) + "/"
 DSS_EXE_PATH = BASE_DIR + 'TapControl/tapcontrol/'
 
 #--- Path relative to OpenDSS scripts directory 
-TOPO_RPATH_FILE = 'data/IEEE13Nodeckt.dss'
+TOPO_RPATH_FILE = 'data/outfile.dss'
 NWL_RPATH_FILE  = 'data/IEEE13Nodeckt_NodeWithLoad.csv'
 ILPQ_RPATH_FILE = 'data/IEEE13Nodeckt_InelasticLoadPQ.csv'
 ACTS_RPATH_FILE = 'data/IEEE13Nodeckt_Actives_Tap.csv'
@@ -39,7 +39,7 @@ NS3_LIB_PATH = BASE_DIR + 'ns-allinone-3.33/ns-3.33/build/lib'
 ADJMAT_RPATH_FILE = DSS_EXE_PATH + 'data/IEEE13Node-adjacency_matrix.txt'
 COORDS_RPATH_FILE = DSS_EXE_PATH + 'data/IEEE13Node_BusXY.csv'
 APPCON_RPATH_FILE = DSS_EXE_PATH + 'data/IEEE13Node_AppConnections_Tap.csv'
-JSON_RPATH_FILE = DSS_EXE_PATH + 'data/Node.json'
+JSON_RPATH_FILE = DSS_EXE_PATH + 'data/gen_nodes.json'
 
 #--- Application config path
 APPCON_FILE = DSS_EXE_PATH + 'data/IEEE13Node_AppConnections_Tap.csv'
@@ -57,7 +57,7 @@ SIM_CONFIG = {
     'PFlowSim': {
         'python': 'simulator_pflow:PFlowSim',
     },
-     'PktNetSim': {
+    'PktNetSim': {
           'cmd': NS3_EXE_PATH + '/NS3MosaikSim %(addr)s',
           'cwd': Path( os.path.abspath( os.path.dirname( NS3_EXE_PATH ) ) ),
           'env': {
@@ -101,8 +101,6 @@ def readAppConnections(appcon_file):
         with open(pathToFile, 'r') as csvFile:
             csvobj = csv.reader(csvFile)
             appconLinks = {(rows[0], rows[1], rows[2]) for rows in csvobj}
-            print("appconLinks gold")
-            print(appconLinks)
         csvFile.close()
 
 def readAppConnectionsJSON(json_file):
@@ -120,8 +118,6 @@ def readAppConnectionsJSON(json_file):
         with open(pathToFile, 'r') as jsonFile:
             jsonobj = json.load(jsonFile)
             appconLinks = {(str(conns["src"]), str(conns["dst"]), conns["func"]) for conns in jsonobj['app_connections']}
-            print("appconLinks JSON")
-            print(appconLinks)
 
 def main():
     #--- Process input arguments

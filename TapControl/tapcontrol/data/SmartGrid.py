@@ -20,23 +20,23 @@ class Transformer():
         opendss = f"New Transformer.{self.name} "
         opendss += f"Phases={self.num_phases} "
         opendss += "Windings=2 "
-        opendss += f"XHL={self.XHL}\n"
+        opendss += f"XHL={self.XHL} \n"
         opendss += f"~ wdg=1 bus={self.bus_primary} "
         opendss += f"conn={self.connection_primary} "
         opendss += f"kv={self.kv_primary} "
         opendss += f"kva={self.kva} "
         opendss += f"%r={self.percent_r} "
         if self.XHT is not None:
-            opendss += f"XHT={self.XHT}\n"
+            opendss += f"XHT={self.XHT} \n"
         else:
-            opendss += '\n'
+            opendss += ' \n'
         opendss += f"~ wdg=2 bus={self.bus_secondary} "
         opendss += f"conn={self.connection_secondary} "
         opendss += f"kv={self.kv_secondary} "
         opendss += f"kva={self.kva} "
         opendss += f"%r={self.percent_r} "
         if self.XLT is not None:
-            opendss += f"XLT={self.XLT}"
+            opendss += f"XLT={self.XLT} "
 
         return opendss
 
@@ -69,7 +69,7 @@ class Capacitor():
         opendss += f"Bus1={self.bus1}{self.nodes_primary} "
         opendss += f"phases={self.num_phases} "
         opendss += f"kVAR={self.kvar} "
-        opendss += f"kV={self.kv}"
+        opendss += f"kV={self.kv} "
 
         return opendss
         
@@ -98,7 +98,7 @@ class Line():
         opendss += f"Bus2={self.bus2}.{self.nodes_secondary} "
         opendss += f"LineCode={self.linecode} "
         opendss += f"Length={self.length} "
-        opendss += f"units={self.length_unit}"
+        opendss += f"units={self.length_unit} "
 
         return opendss
 
@@ -118,12 +118,12 @@ class LineCode():
     def get_opendss(self):
         opendss = f"New linecode.{self.name} "
         opendss += f"nphases={self.num_phases} "
-        opendss += f"BaseFreq={self.freq}\n"
-        opendss += f"~ rmatrix = {self.rmat}\n"
-        opendss += f"~ xmatrix = {self.xmat}\n"
+        opendss += f"BaseFreq={self.freq} \n"
+        opendss += f"~ rmatrix = {self.rmat} \n"
+        opendss += f"~ xmatrix = {self.xmat} \n"
         if self.cmat is not None:
-            opendss += f"~ Cmatrix = {self.cmat}\n"
-        opendss += f"~ units={self.unit}"
+            opendss += f"~ Cmatrix = {self.cmat} \n"
+        opendss += f"~ units={self.unit} "
     
         return opendss
 
@@ -158,7 +158,7 @@ class Load():
         opendss += f"Model={self.model} "
         opendss += f"kV={self.kv_primary} "
         opendss += f"kW={self.kw} "
-        opendss += f"kvar={self.kvar}"
+        opendss += f"kvar={self.kvar} "
 
         return opendss
 
@@ -186,7 +186,7 @@ class Capacitor():
             opendss += " "
         opendss += f"phases={self.num_phases} "
         opendss += f"KVAR={self.kvar} "
-        opendss += f"kV={self.kv}"
+        opendss += f"kV={self.kv} "
         return opendss 
 
     def __str__(self):
@@ -261,10 +261,10 @@ class VoltageRegulator():
         opendss_str += f"kVAs=[{self.kva} {self.kva}] "
         opendss_str += f"NumTaps={self.num_taps} "
         opendss_str += f"maxtap={self.max_tap} "
-        opendss_str += f"mintap={self.min_tap}\n"
+        opendss_str += f"mintap={self.min_tap} \n"
         opendss_str += f"~ Buses=[{self.bus1}.{self.nodes_primary} {self.bus2}.{self.nodes_secondary}] "
         opendss_str += f"kVs=[{self.primary_kv} {self.secondary_kv}] "
-        opendss_str += f"%LoadLoss={self.load_loss}\n"
+        opendss_str += f"%LoadLoss={self.load_loss} \n"
         # The winding is always 2
         opendss_str += f"new regcontrol.{self.name} transformer={self.name} winding=2 "
         opendss_str += f"vreg={self.vreg} "
@@ -291,11 +291,30 @@ class Generator():
         return self.name
 
     def get_opendss(self):
-        opendss = f"new circuit.{self.name}\n"
+        opendss = f"new circuit.{self.name} \n"
         opendss += f"~ basekv={self.basekv} "
         opendss += f"pu={self.pu} "
         opendss += f"phases={self.num_phases} "
-        opendss += f"bus1={self.bus1}\n"
-        opendss += f"~ Angle={self.angle}\n"
-        opendss += f"~ MVAsc3={self.MVAsc3} MVAsc1={self.MVAsc1}"
+        opendss += f"bus1={self.bus1} \n"
+        opendss += f"~ Angle={self.angle} \n"
+        opendss += f"~ MVAsc3={self.MVAsc3} MVAsc1={self.MVAsc1} "
         return opendss
+
+class Sensor():
+    def __init__(self,**kwargs):
+        self.name = kwargs['sensor']
+        self.connects_to = kwargs['connects_to']
+        self.feeds = kwargs['feeds']
+        self.measures = kwargs['measures']
+        self.monitor = kwargs['monitor']
+        self.rate = kwargs['rate']
+
+    def __str__(self):
+        return self.name
+
+class Actuator():
+    def __init__(self, **kwargs):
+        self.name = kwargs['actuator']
+    
+    def __str__(self):
+        return self.name

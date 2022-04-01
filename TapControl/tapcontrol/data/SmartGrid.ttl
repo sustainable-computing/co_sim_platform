@@ -1443,6 +1443,7 @@
 ###  http://www.semanticweb.org/phoenix/ontologies/2022/0/SmartGrid#Voltage_Controller
 :Voltage_Controller rdf:type owl:NamedIndividual ,
                              :Controller ;
+                    :connectsTo :Endpoint_Controller ;
                     :feeds :Voltage_Actuator ;
                     :delay 1 .
 

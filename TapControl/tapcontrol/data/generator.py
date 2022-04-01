@@ -2,6 +2,7 @@ from rdflib import Graph
 import re 
 import SmartGrid
 import argparse
+import json
 
 g = Graph()
 
@@ -9,6 +10,7 @@ parser = argparse.ArgumentParser(description = "Convert turtle files to OpenDSS"
 parser.add_argument('--freq', default=60, type=int, help="The frequency of the grid")
 parser.add_argument('--outfile', default="outfile.dss", help="The filename of the OpenDSS file")
 parser.add_argument('--infile', default="SmartGrid.ttl", help="The filename of the ontology to convert")
+parser.add_argument('--nodes_file', default="gen_nodes.json", help="The filename of the nodes json file to be used by the network sim")
 
 
 buses = {}
@@ -356,11 +358,46 @@ WHERE {
     opendss += '\n\n'
     return opendss
 
+def query_actuators():
+    query_str = """
+SELECT *
+WHERE {
+    ?act a :Actuator .
+    ?act :connectsTo ?conn_to .
+    ?act :controls ?controls .
+    ?act :isFedBy ?fedby .
+}    
+"""
+
+def query_sensor():
+    query_str = """
+SELECT *
+WHERE {
+    ?sen a :Voltage_Sensor .
+    ?sen :connectsTo ?conn_to .
+    ?sen :feeds ?feeds .
+    ?sen :measures ?measures . 
+    ?sen :monitor ?monitor .
+    ?sen :rate ?rate .
+}    
+"""
+    res = g.query(query_str)
+
+    for row in res:
+        sensor = SmartGrid.Sensor(
+            sensor = row['sen'],
+            connects_to = row['conn_to'],
+            feeds = row['feeds'],
+            measures = row['measures'],
+            monitor = row['monitor'],
+            rate = row['rate']
+        )
+
 def pre_object_opendss(freq = 60):
     """
     This will write code pre-object definition 
     """
-    opendss_str = f"Clear\nSet DefaultBaseFrequency={freq}\n\n"
+    opendss_str = f"Clear \nSet DefaultBaseFrequency={freq} \n\n"
     return opendss_str
 
 
@@ -388,14 +425,14 @@ WHERE {
     for row in res:
         voltages.append(float(row['kv']))
 
-    opendss_str = f"Set VoltageBases={voltages}\n"
-    opendss_str += "calcv\nSolve\n"
+    opendss_str = f"Set VoltageBases={voltages} \n"
+    opendss_str += "calcv \nSolve \n"
     return opendss_str
 
 def set_taps():
     openstr = ""
     for reg, obj in regcontrols.items():
-        openstr += f"Transformer.{reg}.Taps=[1 1]\n"
+        openstr += f"Transformer.{reg}.Taps=[1 1] \n"
 
     return openstr
 
@@ -421,14 +458,13 @@ def main():
 
     outfilename = args.outfile 
     onto_filename = args.infile
+    nodes_filename = args.nodes_file
     g.parse(onto_filename)
 
     query_buses()
     
     query_double_buses()
-    # print(buses)
 
-    # exit()
     with open(outfilename, 'wt') as outfile:
         outfile.write(pre_object_opendss())
         outfile.write(query_generator())
@@ -441,7 +477,15 @@ def main():
         outfile.write(query_switches())
         outfile.write(post_object_opendss())
         outfile.write(set_taps())
-        outfile.write("Set ControlMode=OFF")
+        outfile.write("Set ControlMode=OFF ")
+
+    with open(nodes_filename, 'wt') as nodes_file:
+        for node in buses.keys():
+            buses[node]['connections'] = list(set(buses[node]['connections']))
+        nodes_dict = {
+            "nodes": buses
+        } 
+        nodes_file.write(json.dumps(nodes_dict, indent=2))
 
 if __name__ == "__main__":
     main()

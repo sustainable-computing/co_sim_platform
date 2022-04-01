@@ -121,7 +121,7 @@ ReadNodeAdjListJson(string jsonFileName)
     node_to_idx.emplace(node.key(), idx);
     ++idx;
   }
-
+  // This will create the adjacency matrix
   for (auto &node : config["nodes"].items())
   {
     unsigned int curr_idx = node_to_idx[node.key()];
