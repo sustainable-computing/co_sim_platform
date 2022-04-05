@@ -306,15 +306,34 @@ class Sensor():
         self.connects_to = kwargs['connects_to']
         self.feeds = kwargs['feeds']
         self.measures = kwargs['measures']
-        self.monitor = kwargs['monitor']
+        self.src = kwargs['src'].split('#')[1].split('_')[1]
         self.rate = kwargs['rate']
+        self.dst = kwargs['dst'].split('#')[1].split('_')[1]
 
     def __str__(self):
         return self.name
+    
+    def get_conn_dict(self):
+        conn = {
+            'src': self.src,
+            'dst': self.dst,
+            'func': 'sensing'
+        }
+        return conn
 
 class Actuator():
     def __init__(self, **kwargs):
         self.name = kwargs['actuator']
+        self.src = kwargs['src'].split('#')[1].split('_')[1]
+        self.dst = kwargs['dst'].split('#')[1].split('_')[1]
     
     def __str__(self):
         return self.name
+
+    def get_conn_dict(self):
+        conn = {
+            'src': self.src,
+            'dst': self.dst,
+            'func': 'acting'
+        }
+        return conn

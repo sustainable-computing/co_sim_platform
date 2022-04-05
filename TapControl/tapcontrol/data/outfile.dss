@@ -62,6 +62,7 @@ New linecode.mtx607 nphases=1 BaseFreq=60
 
 
 !--- Generated Loads
+!--- Note: the order and placements of the Loads matter
 New Load.611.3 Bus1=611.3 Phases=1 Conn=Wye Model=5 kV=2.4 kW=170 kvar=80 
 New Load.634.1 Bus1=634.1 Phases=1 Conn=Wye Model=1 kV=0.277 kW=160 kvar=110 
 New Load.634.2 Bus1=634.2 Phases=1 Conn=Wye Model=1 kV=0.277 kW=120 kvar=90 

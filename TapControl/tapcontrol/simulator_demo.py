@@ -128,8 +128,8 @@ def main():
     args = parser.parse_args()
     print( 'Starting simulation with args: {0}'.format( vars( args ) ) )
     
-    readAppConnections(args.appcon_file)
-    # readAppConnectionsJSON(args.json_file)
+    # readAppConnections(args.appcon_file)
+    readAppConnectionsJSON(args.json_file)
     #readActives(ACTS_FILE) -- not necessary in the moment
     world = mosaik.World( sim_config=SIM_CONFIG, mosaik_config=MOSAIK_CONFIG, debug=False )
     create_scenario( world, args )

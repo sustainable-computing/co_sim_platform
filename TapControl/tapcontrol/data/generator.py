@@ -211,7 +211,7 @@ WHERE {
 """
     # Get the query
     res = g.query(query_str)
-    opendss = "!--- Generated Loads\n"
+    opendss = "!--- Generated Loads\n!--- Note: the order and placements of the Loads matter\n"
     for row in res:
         load = SmartGrid.Load(
             load = row['load'],
@@ -366,10 +366,26 @@ WHERE {
     ?act :connectsTo ?conn_to .
     ?act :controls ?controls .
     ?act :isFedBy ?fedby .
+    ?controls :primaryAttachsTo ?dst .
+    ?fedby :connectsTo ?endpoint .
+    ?endpoint :locatedAt ?src .
 }    
 """
+    res = g.query(query_str)
+    actuators = []
+    for row in res:
+        act = SmartGrid.Actuator(
+            actuator = row['act'],
+            dst = row['dst'],
+            src = row['src']
+        )
 
-def query_sensor():
+        actuators.append(act.get_conn_dict())
+    
+    return actuators
+
+
+def query_sensors():
     query_str = """
 SELECT *
 WHERE {
@@ -379,19 +395,26 @@ WHERE {
     ?sen :measures ?measures . 
     ?sen :monitor ?monitor .
     ?sen :rate ?rate .
+    ?feeds :connectsTo ?endpoint .
+    ?endpoint :locatedAt ?dst .
 }    
 """
     res = g.query(query_str)
-
+    sensors = []
     for row in res:
+        # monitor is the src
         sensor = SmartGrid.Sensor(
             sensor = row['sen'],
             connects_to = row['conn_to'],
             feeds = row['feeds'],
             measures = row['measures'],
-            monitor = row['monitor'],
-            rate = row['rate']
+            src = row['monitor'],
+            rate = row['rate'],
+            dst = row['dst']
         )
+        sensors.append(sensor.get_conn_dict())
+    
+    return sensors
 
 def pre_object_opendss(freq = 60):
     """
@@ -399,8 +422,6 @@ def pre_object_opendss(freq = 60):
     """
     opendss_str = f"Clear \nSet DefaultBaseFrequency={freq} \n\n"
     return opendss_str
-
-
 
 def post_object_opendss():
     """
@@ -465,6 +486,7 @@ def main():
     
     query_double_buses()
 
+    
     with open(outfilename, 'wt') as outfile:
         outfile.write(pre_object_opendss())
         outfile.write(query_generator())
@@ -496,7 +518,19 @@ def main():
         for node in buses.keys():
             buses[node]['connections'] = list(set(buses[node]['connections']))
             nodes_dict['nodes'][node] = buses[node]
+
+        app_conn = []
+        actuators = query_actuators()
+        sensors = query_sensors()
+        app_conn.extend(sensors)
+        app_conn.extend(actuators)  
+
+        nodes_dict['app_connections'] = app_conn
+
         nodes_file.write(json.dumps(nodes_dict, indent=2))
+
+
+       
 
 if __name__ == "__main__":
     main()
