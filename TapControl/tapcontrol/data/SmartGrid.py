@@ -1,6 +1,10 @@
 import re
 class Transformer():
+    """
+    This class represents an OpenDSS Transformer object
+    """
     def __init__(self, **kwargs):
+        # TODO: change the naming to be more flexible so it can handle both URL and non-URL 
         self.name = kwargs['trans'].split('#')[1] if kwargs['trans'].startswith("http://") else kwargs['trans'] 
         self.name = self.name.split('_')[1]
         self.num_phases = kwargs['num_phases']
@@ -17,6 +21,9 @@ class Transformer():
         self.percent_r = kwargs['percent_r']
 
     def get_opendss(self):
+        """
+        Generate the OpenDSS code for the transformer
+        """
         opendss = f"New Transformer.{self.name} "
         opendss += f"Phases={self.num_phases} "
         opendss += "Windings=2 "
@@ -45,7 +52,11 @@ class Transformer():
         return self.name
 
 class Bus():
+    """
+    This class will represent an OpenDSS Bus object
+    """
     def __init__(self, **kwargs):
+        # TODO: change the naming to be more flexible so it can handle both URL and non-URL 
         self.name = kwargs['bus'].split('#')[1] if kwargs['bus'].startswith("http://") else kwargs['bus']
         self.x = kwargs['x']
         self.y = kwargs['y']
@@ -53,7 +64,11 @@ class Bus():
         return self.name
 
 class Capacitor():
+    """
+    This class represents an OpenDSS Capacitor object
+    """
     def __init__(self, **kwargs):
+        # TODO: change the naming to be more flexible so it can handle both URL and non-URL 
         self.name = kwargs['capacitor'].split('#')[1].split('_')[1]
         self.bus1 = kwargs['bus1'].split('#')[1].split('_')[1]
         if kwargs['nodes_primary'] is not None:
@@ -65,6 +80,9 @@ class Capacitor():
         self.kv = kwargs['kv']
     
     def get_opendss(self):
+        """
+        Generate the openDSS code for the capacitor
+        """
         opendss = f"New Capacitor.{self.name} "
         opendss += f"Bus1={self.bus1}{self.nodes_primary} "
         opendss += f"phases={self.num_phases} "
@@ -77,7 +95,11 @@ class Capacitor():
         return self.name
 
 class Line():
+    """
+    This class represent an OpenDSS Line object
+    """
     def __init__(self,  **kwargs):
+        # TODO: change the naming to be more flexible so it can handle both URL and non-URL 
         self.name = kwargs['line'].split('#')[1] if kwargs['line'].startswith("http://") else kwargs['line']
         self.name = self.name.split('_')[1]
         self.bus1 = kwargs['bus1'].split('#')[1]
@@ -92,6 +114,9 @@ class Line():
         self.num_phases = kwargs['num_phases']
     
     def get_opendss(self):
+        """
+        Generate the OpenDSS code for the line
+        """
         opendss = f"New Line.{self.name} "
         opendss += f"Phases={self.num_phases} "
         opendss += f"Bus1={self.bus1}.{self.nodes_primary} "
@@ -106,7 +131,11 @@ class Line():
         return self.name
 
 class LineCode():
+    """
+    This class represents an OpenDSS LineCode object
+    """
     def __init__(self, **kwargs):
+        # TODO: change the naming to be more flexible so it can handle both URL and non-URL 
         self.name = kwargs['linecode'].split('#')[1].split('_')[1]
         self.freq = kwargs['freq']
         self.num_phases = kwargs['num_phases']
@@ -116,6 +145,9 @@ class LineCode():
         self.cmat = kwargs['cmat']
 
     def get_opendss(self):
+        """
+        Generate the OpenDSS code for the linecode
+        """
         opendss = f"New linecode.{self.name} "
         opendss += f"nphases={self.num_phases} "
         opendss += f"BaseFreq={self.freq} \n"
@@ -131,7 +163,11 @@ class LineCode():
         return self.name
 
 class Load():
+    """
+    This class represents an OpenDSS Load
+    """
     def __init__(self, **kwargs):
+        # TODO: change the naming to be more flexible so it can handle both URL and non-URL 
         self.name = kwargs['load'].split('#')[1].split('_')[1]
         self.bus1 = kwargs['bus1'].split('#')[1].split('_')[1]
         self.conn = kwargs['conn']
@@ -147,6 +183,9 @@ class Load():
         self.num_phases = kwargs['num_phases']
 
     def get_opendss(self):
+        """
+        Generate the OpenDSS code for the Load
+        """
         opendss = f"New Load.{self.name}"
         if self.nodes_secondary is not None:
             opendss += f".{self.nodes_secondary} "
@@ -166,7 +205,11 @@ class Load():
         return self.name
 
 class Capacitor():
+    """
+    This class represents an OpenDSS Capacitor object
+    """
     def __init__(self, **kwargs):
+        # TODO: change the naming to be more flexible so it can handle both URL and non-URL 
         self.name = kwargs['cap'].split('#')[1].split('_')[1]
         self.bus1 = kwargs['bus'].split('#')[1].split('_')[1]
         if kwargs['nodes_primary'] is not None:
@@ -178,6 +221,9 @@ class Capacitor():
         self.kv = kwargs['kv']
 
     def get_opendss(self):
+        """
+        Generate the OpenDSS code for the Capacitor
+        """
         opendss = f"New Capacitor.{self.name} "
         opendss += f"Bus1={self.bus1}"
         if self.nodes_primary is not None:
@@ -194,6 +240,7 @@ class Capacitor():
 
 class Switch():
     def __init__(self, **kwargs):
+        # TODO: change the naming to be more flexible so it can handle both URL and non-URL 
         self.name = kwargs['switch'].split('#')[1].split('_')[1]
         self.bus1 = kwargs['bus1'].split('#')[1].split('_')[1]
         self.bus2 = kwargs['bus2'].split('#')[1].split('_')[1]
@@ -276,6 +323,9 @@ class VoltageRegulator():
         return opendss_str
 
 class Generator():
+    """
+    This class represents an OpenDSS Generator object
+    """
     def __init__(self, **kwargs):
         self.name = kwargs['gen'].split('#')[1].split('_')[1]
         self.basekv = kwargs['kv_sec']
@@ -291,6 +341,9 @@ class Generator():
         return self.name
 
     def get_opendss(self):
+        """
+        Generate the OpenDSS code for the generator
+        """
         opendss = f"new circuit.{self.name} \n"
         opendss += f"~ basekv={self.basekv} "
         opendss += f"pu={self.pu} "
@@ -301,6 +354,9 @@ class Generator():
         return opendss
 
 class Sensor():
+    """
+    This class represents the sensor for the control system
+    """
     def __init__(self,**kwargs):
         self.name = kwargs['sensor']
         self.connects_to = kwargs['connects_to']
@@ -314,6 +370,9 @@ class Sensor():
         return self.name
     
     def get_conn_dict(self):
+        """
+        Generate the app connection for NS3
+        """
         conn = {
             'src': self.src,
             'dst': self.dst,
@@ -322,6 +381,9 @@ class Sensor():
         return conn
 
 class Actuator():
+    """
+    This class represents the actuator for the control system
+    """
     def __init__(self, **kwargs):
         self.name = kwargs['actuator']
         self.src = kwargs['src'].split('#')[1].split('_')[1]
@@ -331,6 +393,9 @@ class Actuator():
         return self.name
 
     def get_conn_dict(self):
+        """
+        Generate the app connection for NS3
+        """
         conn = {
             'src': self.src,
             'dst': self.dst,

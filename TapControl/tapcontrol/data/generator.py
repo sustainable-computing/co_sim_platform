@@ -211,7 +211,7 @@ WHERE {
 """
     # Get the query
     res = g.query(query_str)
-    opendss = "!--- Generated Loads\n!--- Note: the order and placements of the Loads matter\n"
+    opendss = "!--- Generated Loads\n"
     for row in res:
         load = SmartGrid.Load(
             load = row['load'],
@@ -458,6 +458,9 @@ def set_taps():
     return openstr
 
 def query_double_buses():
+    """
+    This will get all electrical equipment that is connected to two buses
+    """
     query_str = """
 SELECT *
 WHERE {
@@ -474,6 +477,46 @@ WHERE {
         buses[bus_in]['connections'].append(bus_out)
         buses[bus_out]['connections'].append(bus_in)
 
+def query_neighbours(bus, dist = 1):
+    """
+    This will get all electrical equipment that is attached to a bus
+    """
+    
+    results = []
+    for i in range(dist):
+        query_str = """
+        SELECT DISTINCT *
+        WHERE {
+            ?entity rdf:type ?type .
+            ?type rdfs:subClassOf* :Electrical_Equipment .
+            {
+                ?entity :primaryAttachsTo ?prim .
+                FILTER regex(str(?prim),  '""" + bus + """') .
+            }
+            UNION
+            {
+                ?entity :attachsTo ?sec .
+                FILTER regex(str(?sec), '""" + bus + """') . 
+            }
+        } 
+"""
+        res = g.query(query_str)
+        neighbours = []
+        for row in res:
+            results.append(row)
+            print(row)
+            if 'Line' in str(row['type']):
+                print("datatype: ", row['type'])
+                line_query = """
+                SELECT DISTINCT *
+                WHERE {
+                    ?line 
+                }
+                """
+
+
+
+
 def main():
     args = parser.parse_args()
 
@@ -486,7 +529,10 @@ def main():
     
     query_double_buses()
 
+    # query_neighbours('Bus_611')
+    # exit(1)
     
+    # Generate the opendss file
     with open(outfilename, 'wt') as outfile:
         outfile.write(pre_object_opendss())
         outfile.write(query_generator())
@@ -501,6 +547,7 @@ def main():
         outfile.write(set_taps())
         outfile.write("Set ControlMode=OFF ")
 
+    # Generate the node connections file
     with open(nodes_filename, 'wt') as nodes_file:
         regcontrol_buses = []
         for regulator in regcontrols.values():
