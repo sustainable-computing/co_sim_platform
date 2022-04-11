@@ -477,13 +477,20 @@ WHERE {
         buses[bus_in]['connections'].append(bus_out)
         buses[bus_out]['connections'].append(bus_in)
 
-def query_neighbours(bus, dist = 1):
+def query_neighbours(origin, dist = 1):
     """
     This will get all electrical equipment that is attached to a bus
     """
-    
     results = []
-    for i in range(dist):
+    # include the start bus
+    bus_to_search = [origin]
+    bus_dist = {
+        origin: 0
+    }
+    while True:
+        if len(bus_to_search) == 0:
+            break
+        bus = bus_to_search.pop(0)
         query_str = """
         SELECT DISTINCT *
         WHERE {
@@ -498,21 +505,50 @@ def query_neighbours(bus, dist = 1):
                 ?entity :attachsTo ?sec .
                 FILTER regex(str(?sec), '""" + bus + """') . 
             }
+            UNION
+            {
+                ?entity :primaryAttachsTo ?prim .
+                FILTER regex(str(?prim),  '""" + bus + """') .
+                OPTIONAL {
+                    ?entity a :Line .
+                    ?entity :primaryAttachsTo ?n1 .
+                    ?entity :attachsTo ?n2 .
+                }
+            }
+            UNION
+            {
+                ?entity :attachsTo ?sec .
+                FILTER regex(str(?sec), '""" + bus + """') . 
+                OPTIONAL {
+                    ?entity a :Line .
+                    ?entity :primaryAttachsTo ?n1 .
+                    ?entity :attachsTo ?n2 .
+                }
+            }
         } 
 """
         res = g.query(query_str)
-        neighbours = []
+        print(len(res))
         for row in res:
-            results.append(row)
             print(row)
-            if 'Line' in str(row['type']):
-                print("datatype: ", row['type'])
-                line_query = """
-                SELECT DISTINCT *
-                WHERE {
-                    ?line 
-                }
-                """
+            # If the distance to this bus from the origin is greater than dist then go next
+            if bus_dist[bus] >= dist:
+                break
+            # Skip if the result is already in the result list
+            # if row in results:
+            #     continue
+            results.append(row)
+            if 'Line' in str(row['type']) and row['n1'] is not None and row['n2'] is not None:
+                bus1 = row['n1'].split('#')[1].split('_')[1]
+                bus2 = row['n2'].split('#')[1].split('_')[1]
+                if row['n1'] not in results:
+                    bus_to_search.append(bus1)
+                    bus_dist[bus1] = bus_dist[bus] + 1
+                if row['n2'] not in results:
+                    bus_to_search.append(bus2)
+                    bus_dist[bus2] = bus_dist[bus] + 1
+
+    return results
 
 
 
@@ -529,8 +565,10 @@ def main():
     
     query_double_buses()
 
-    # query_neighbours('Bus_611')
-    # exit(1)
+    res = query_neighbours('645')
+    for row in res:
+        print(row['entity'])
+    exit(1)
     
     # Generate the opendss file
     with open(outfilename, 'wt') as outfile:
