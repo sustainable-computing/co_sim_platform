@@ -484,7 +484,7 @@ def query_neighbours(origin, dist = 1):
     results = []
     # include the start bus
     bus_to_search = [origin]
-    bus_dist = {
+    entity_dist = {
         origin: 0
     }
     while True:
@@ -496,16 +496,6 @@ def query_neighbours(origin, dist = 1):
         WHERE {
             ?entity rdf:type ?type .
             ?type rdfs:subClassOf* :Electrical_Equipment .
-            {
-                ?entity :primaryAttachsTo ?prim .
-                FILTER regex(str(?prim),  '""" + bus + """') .
-            }
-            UNION
-            {
-                ?entity :attachsTo ?sec .
-                FILTER regex(str(?sec), '""" + bus + """') . 
-            }
-            UNION
             {
                 ?entity :primaryAttachsTo ?prim .
                 FILTER regex(str(?prim),  '""" + bus + """') .
@@ -528,25 +518,29 @@ def query_neighbours(origin, dist = 1):
         } 
 """
         res = g.query(query_str)
-        print(len(res))
         for row in res:
-            print(row)
             # If the distance to this bus from the origin is greater than dist then go next
-            if bus_dist[bus] >= dist:
+            if entity_dist[bus] >= dist:
                 break
-            # Skip if the result is already in the result list
-            # if row in results:
-            #     continue
-            results.append(row)
+
+            # Add the entity if not in result list
+            if row['entity'] in results:
+                continue
+            results.append(row['entity'])
+
+
             if 'Line' in str(row['type']) and row['n1'] is not None and row['n2'] is not None:
                 bus1 = row['n1'].split('#')[1].split('_')[1]
                 bus2 = row['n2'].split('#')[1].split('_')[1]
-                if row['n1'] not in results:
+                if bus1 not in bus_to_search:
                     bus_to_search.append(bus1)
-                    bus_dist[bus1] = bus_dist[bus] + 1
-                if row['n2'] not in results:
+                if bus2 not in bus_to_search:
                     bus_to_search.append(bus2)
-                    bus_dist[bus2] = bus_dist[bus] + 1
+                if bus1 != bus:
+                    entity_dist[bus1] = entity_dist[bus] + 1
+                if bus2 != bus:
+                    entity_dist[bus2] = entity_dist[bus] + 1
+                
 
     return results
 
@@ -565,9 +559,9 @@ def main():
     
     query_double_buses()
 
-    res = query_neighbours('645')
+    res = query_neighbours('645', 2)
     for row in res:
-        print(row['entity'])
+        print(row)
     exit(1)
     
     # Generate the opendss file
