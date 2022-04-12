@@ -179,7 +179,7 @@ def  create_scenario( world, args ):
         # network architecture: P2P/CSMA/P2Pv6/CSMAv6 (supported backbone architectures)
         # When P2Pv6 or CSMAv6 is selected, secondary network is automatically fitted with
         # LR-WPAN and 6LoWPAN (make the distance between two nodes is set accordingly)
-        network         = "P2Pv6"
+        network         = "P2P"
     )
   
     controlsim  = world.start('ControlSim',  

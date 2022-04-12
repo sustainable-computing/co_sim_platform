@@ -37,8 +37,8 @@ cp wscripts/wscript_core ns-allinone-3.33/ns-3.33/src/core/wscript
 echo "Building NS-3"
 cd ns-allinone-3.33/ns-3.33
 
-./waf configure --build-profile=optimized
-# ./waf configure --build-profile=debug
+# ./waf configure --build-profile=optimized
+./waf configure --build-profile=debug
 ./waf
 
 echo "Building NS3Mosaik"

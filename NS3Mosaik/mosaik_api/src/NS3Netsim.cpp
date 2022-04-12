@@ -72,6 +72,9 @@ void ExtractInformationFromPacketAndSendToUpperLayer(Ptr<Socket> socket)
 {
   Address from;
   Ptr<Packet> packet = socket->RecvFrom(from);
+  // std::cout << "Received Packet size: ";
+  // packet->Print(std::cout);
+  // std::cout << std::endl;
   uint32_t srcNodeId;
   if (v4)
   {
@@ -251,6 +254,7 @@ NS3Netsim::NS3Netsim() : linkCount(0), sinkPort(0), startTime(0), verbose(0)
   // LogComponentEnable ("LrWpanSpectrumSignalParameters", LOG_LEVEL_ALL);
   // LogComponentEnable ("LrWpanSpectrumValueHelper", LOG_LEVEL_ALL);
   // LogComponentEnable ("SingleModelSpectrumChannel", LOG_LEVEL_ALL);
+  // LogComponentEnable ("TraceHelper", LOG_LEVEL_ALL);
 
   // Print node IDs for every log message
   // LogComponentEnableAll(LOG_PREFIX_NODE); 
@@ -263,6 +267,10 @@ NS3Netsim::NS3Netsim() : linkCount(0), sinkPort(0), startTime(0), verbose(0)
   
   //--- To set the nodes as routers for IPv6, where they are hosts by default
   Config::SetDefault("ns3::Ipv6::IpForward", BooleanValue(true));
+
+  // Might cause problems for 6LoWPAN
+  // Packet::EnablePrinting ();
+  // Packet::EnableChecking ();
 }
 
 NS3Netsim::~NS3Netsim()
@@ -381,7 +389,7 @@ void NS3Netsim::init(string f_adjmat,
         NetDeviceContainer n_devs;
         /// If IPv6 is the selected protocol and the nodes at the ends of this link
         /// are part of the secondary network, install 6LoWPAN instead of P2P/CSMA
-        if (!v4 && isSecondary(arrayNamesCoords[i][0]) || isSecondary(arrayNamesCoords[j][0]))
+        if (!v4 && (isSecondary(arrayNamesCoords[i][0]) || isSecondary(arrayNamesCoords[j][0])))
         {
           /// Manual installation is used here
           /// Helper installation raises some issues for some reason

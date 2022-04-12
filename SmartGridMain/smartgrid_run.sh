@@ -1,7 +1,7 @@
 #!/bin/bash
 
 #---
-# Script to run tapcontrol application
+# Script to run Smart-Grid application
 #---
 
 BASE_DIR="../.."

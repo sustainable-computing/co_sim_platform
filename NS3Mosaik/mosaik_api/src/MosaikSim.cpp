@@ -732,18 +732,35 @@ MosaikSim::step(Json::Value args, Json::Value kwargs)
 
   for (itMapRcvData = mapRcvData.begin(); itMapRcvData != mapRcvData.end(); itMapRcvData++)
   {
-    ///--- There might be multiple data for the same destination
-    while((*itMapRcvData).second.val_V.find(']') != -1
-          && (*itMapRcvData).second.val_V.find(']') != 0)
+    ///--- There might be multiple data from the same source
+    ///--- for the same destination (TCP socket delay - batch)
+    while((*itMapRcvData).second.val_T.find(']') != -1
+          && (*itMapRcvData).second.val_T.find(']') != 0)
     {
       if (verbose > 3)  std::cout << "All contents: val_v = " << (*itMapRcvData).second.val_V
                                   << "   val_t = " << (*itMapRcvData).second.val_T << std::endl;
       (*itMapRcvData).second.val_V = (*itMapRcvData).second.val_V.substr(1);
       (*itMapRcvData).second.val_T = (*itMapRcvData).second.val_T.substr(1);
 
-      ///--- For V
-      size_t end_val = (*itMapRcvData).second.val_V.find(',');
-      if (end_val == -1)  end_val = (*itMapRcvData).second.val_V.find(']');
+      ///--- For V do a stack operation to ensure that we balance the brackets
+      ///--- and do not separate at the segments at the wrong place
+      stack <char> brackets;
+      size_t end_val = -1, data_size = (*itMapRcvData).second.val_V.size();
+      for(size_t brackets_i=0; brackets_i<data_size; brackets_i++)
+      {
+        if((*itMapRcvData).second.val_V[brackets_i] == ',' && brackets.empty())
+        {
+          // Data segment found
+          end_val = brackets_i;
+        }
+        else if((*itMapRcvData).second.val_V[brackets_i] == '{')
+          brackets.push('{');
+        else if((*itMapRcvData).second.val_V[brackets_i] == '[')
+          brackets.push('[');
+        else if((*itMapRcvData).second.val_V[brackets_i] == '}' || (*itMapRcvData).second.val_V[brackets_i] == ']')
+          brackets.pop();
+      }
+      if (end_val == -1)  end_val = data_size-2;
       string val_v = (*itMapRcvData).second.val_V.substr(0, end_val);
       (*itMapRcvData).second.val_V = (*itMapRcvData).second.val_V.substr(end_val);
 

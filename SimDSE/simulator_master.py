@@ -34,7 +34,9 @@ TOPO_FILE    = PRJ_PATH + 'config/master33.dss'
 NWL_FILE     = PRJ_PATH + 'config/IEEE33_NodeWithLoad.csv'
 ADJMAT_FILE  = PRJ_PATH + 'config/IEEE33_AdjMatrix.txt'
 COORDS_FILE  = PRJ_PATH + 'config/IEEE33_BusXY.csv'
-DEVS_FILE    = PRJ_PATH + 'config/IEEE33_Devices.csv'
+# This devs File may not be feasible
+# DEVS_FILE    = PRJ_PATH + 'config/IEEE33_Devices.csv'
+DEVS_FILE    = PRJ_PATH + 'config/IEEE33_Devices_Test.csv'
 
 
 #--- Simulators configuration
@@ -53,8 +55,8 @@ SIM_CONFIG = {
 #        'cmd': NS3_EXE_PATH + '/cosimul-cplusplus %(addr)s',
         'cwd': Path( os.path.abspath( os.path.dirname( NS3_EXE_PATH ) ) ),
         'env': {
-                'LD_LIBRARY_PATH': NS3_LIB_PATH,
-                'NS_LOG': "SmartgridDefaultSimulatorImpl=all",
+                'LD_LIBRARY_PATH': NS3_LIB_PATH
+                # 'NS_LOG': "SmartgridDefaultSimulatorImpl=all",
         }
     },
 }
@@ -113,7 +115,7 @@ def main():
     print( 'Starting simulation with args: {0}'.format( vars( args ) ) )
     
     readDevices(args.devs_file)
-    world = mosaik.World( sim_config=SIM_CONFIG, mosaik_config=MOSAIK_CONFIG, debug=False )
+    world = mosaik.World( sim_config=SIM_CONFIG, mosaik_config=MOSAIK_CONFIG, debug=True )
     create_scenario( world, args )
     world.run( until=END_TIME )
 
@@ -126,13 +128,13 @@ def  create_scenario( world, args ):
     pflowsim    = world.start('PFlowSim',    
                               topofile = TOPO_FILE,
                               nwlfile  = NWL_FILE,
-                              loadgen_interval = 1,                              
+                              loadgen_interval = 1,
+                              test = True,
                               verbose = 0)        
 
 
     collector   = world.start('Collector',   
-                              eid_prefix='Collector_', 
-                              step_size = 1, 
+                              eid_prefix='Collector_',
                               verbose = 0,
                               out_list = False,
                               h5_save = True,
@@ -141,8 +143,7 @@ def  create_scenario( world, args ):
 
     
     dsesim      = world.start('DSESim', 
-                              eid_prefix = 'Estimator_', 
-                              step_size  = 1, 
+                              eid_prefix = 'Estimator_',
                               verbose    = 0)
 
     pktnetsim = world.start( 'PktNetSim',
@@ -154,11 +155,12 @@ def  create_scenario( world, args ):
         linkRate      = "1024Kbps",
         linkDelay     = "5ms",
         linkErrorRate = "0.0001",
-        step_size     = 1,
-        start_time    = 0, 
+        start_time    = 0,
+        stop_time     = END_TIME,
         random_seed   = args.random_seed,        
         verbose       = 0,
-        tcpOrUdp        = "tcp"                      
+        tcpOrUdp      = "tcp", # transport layer protocols: tcp/udp (udp only for single client)
+        network       = "P2P" # network architecture: P2P/CSMA/P2Pv6/CSMAv6 (supported architectures)
     )
 
 
@@ -211,6 +213,9 @@ def  create_scenario( world, args ):
     for key in devParams.keys():
         client = devParams[key]['src']
         server = devParams[key]['dst']
+        # Why same source or destination? I do not know.
+        # Ans: To test, not exactly feasible or realistic
+        if (client == server):  continue
         created_transporter = False       
         for transporter in transporters:
             transporter_instance = 'Transp_' + str(client) + '-' + str(server)

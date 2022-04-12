@@ -15,7 +15,7 @@ import numpy as np
 import logging
 import math
 import scipy.io as spio
-
+import pandas as pd
 
 class LoadGenerator(object):
     '''
@@ -163,12 +163,26 @@ class LoadGenerator(object):
         
         return loadsPQ
 
-    def readLoads(self):
-        mat = spio.loadmat('config/loadHour9.mat', squeeze_me=True)
+    def readLoads(self, test):
         #For testing version configuration
-        #mat = spio.loadmat('config/loadHour933.mat', squeeze_me=True)
+        if(test):
+            mat = spio.loadmat('config/loadHour933.mat', squeeze_me=True)
+        else:
+            mat = spio.loadmat('config/loadHour9.mat', squeeze_me=True)
+        
+        # Checking the contents of mat file
+        # test = {k:v for k, v in mat.items()}
+        # data = pd.DataFrame({k: pd.Series(v[0]) for k, v in test.items() if len(v) != 0})
+        # data.to_csv("load_mat.csv")
+
         p = np.array(mat['P'])
         q = np.array(mat['Q'])
+        # There are 96 load nodes for test version
+        # print("Load Generator: P load size:", len(p))
+        # print("Load Generator: Q load size:", len(q))
+        # There are 1320 load values per node
+        # print("Load Generator: P node 1 load size:", len(p[0]))
+        # print("Load Generator: Q node 1 load size:", len(q[0]))
         loadNode = mat['loadNode']
         loadsPQ = []
         for row in range(0, len(p[:, 0])):

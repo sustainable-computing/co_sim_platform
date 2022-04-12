@@ -137,7 +137,9 @@ class Smartmeter(Sensor):
         if (self.verbose > 2): print('Smartmeter::updateValues', 
                                     self.cktElement, self.cktTerminal, self.cktPhase)
         
-        if (0 == time % (self.step_size + self.randomTime)):
+        # if (0 == time % (self.step_size + self.randomTime)):
+        # for now assume that there is no randomTime
+        if (0 == time % (self.step_size)):
             val = {}
             val['IDT'] = self.idt
             val['TYPE'] = 'Smartmeter'
@@ -209,7 +211,9 @@ class Prober(Sensor):
         if (self.verbose > 0): print('Prober::updateValues', 
                                     self.cktElement, self.cktTerminal, self.cktPhase, self.cktProperty)
         
-        if (0 == time % (self.step_size + self.randomTime)):
+        # if (0 == time % (self.step_size + self.randomTime)):
+        # for now assume that there is no randomTime
+        if (0 == time % (self.step_size)):
             val = {}
             (VComp, IComp, PComp) = self.objDSS.getCktElementState(self.cktElement, 
                                                      CKTTerm[self.cktTerminal].value, 
