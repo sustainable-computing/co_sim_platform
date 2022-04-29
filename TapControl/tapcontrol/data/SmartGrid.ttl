@@ -268,6 +268,13 @@
 :bank rdf:type owl:DatatypeProperty .
 
 
+###  http://www.semanticweb.org/phoenix/ontologies/2022/0/SmartGrid#bus_terminal
+:bus_terminal rdf:type owl:DatatypeProperty ;
+              rdfs:domain :Actuator ,
+                          :Sensor ;
+              <http://www.w3.org/2004/02/skos/core#definition> "What terminal is the sensor or actuator is monitoring or acting upon on an equipment." .
+
+
 ###  http://www.semanticweb.org/phoenix/ontologies/2022/0/SmartGrid#c0
 :c0 rdf:type owl:DatatypeProperty .
 
@@ -414,6 +421,12 @@
 ###  http://www.semanticweb.org/phoenix/ontologies/2022/0/SmartGrid#percent_R
 :percent_R rdf:type owl:DatatypeProperty ;
            <http://www.w3.org/2004/02/skos/core#definition> "Percent resistance of this equipment on the rated kVA base." .
+
+
+###  http://www.semanticweb.org/phoenix/ontologies/2022/0/SmartGrid#phase
+:phase rdf:type owl:DatatypeProperty ;
+       rdfs:domain :Actuator ,
+                   :Sensor .
 
 
 ###  http://www.semanticweb.org/phoenix/ontologies/2022/0/SmartGrid#ptratio
@@ -1436,8 +1449,10 @@
 :Voltage_Actuator rdf:type owl:NamedIndividual ,
                            :Actuator ;
                   :connectsTo :Transporter_Controller_Actuator ;
-                  :controls :RegControl_Reg1 ;
-                  :isFedBy :Voltage_Controller .
+                  :controls :RegControl_Reg3 ;
+                  :isFedBy :Voltage_Controller ;
+                  :bus_terminal 1 ;
+                  :phase 3 .
 
 
 ###  http://www.semanticweb.org/phoenix/ontologies/2022/0/SmartGrid#Voltage_Controller
@@ -1454,7 +1469,9 @@
                 :connectsTo :Transporter_Sensor_Controller ;
                 :feeds :Voltage_Controller ;
                 :measures :Voltage ;
-                :monitor :Bus_611 ;
+                :monitor :Line_684611 ;
+                :bus_terminal 2 ;
+                :phase 3 ;
                 :rate 120 .
 
 

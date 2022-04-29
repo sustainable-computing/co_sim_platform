@@ -1,8 +1,10 @@
+from collections import deque
 from rdflib import Graph
 import re 
 import SmartGrid
 import argparse
 import json
+import csv
 
 g = Graph()
 
@@ -11,18 +13,26 @@ parser.add_argument('--freq', default=60, type=int, help="The frequency of the g
 parser.add_argument('--outfile', default="outfile.dss", help="The filename of the OpenDSS file")
 parser.add_argument('--infile', default="SmartGrid.ttl", help="The filename of the ontology to convert")
 parser.add_argument('--nodes_file', default="gen_nodes.json", help="The filename of the nodes json file to be used by the network sim")
+parser.add_argument('--device_file', default="gen_devices.csv", help="The filename of the device file to be used by the network sim")
+parser.add_argument('--error', default=0.00001667, help="The error margin")
+parser.add_argument('--period', default=20, help="The period time for the sensor")
 
 
 buses = {}
+# Get the child of the bus
+buses_child = {}
+# Get the parent of the bus
+buses_parent = {}
 lines = {}
 loads = {}
 capacitors = {}
 linecode = {}
 transformers = {}
 regcontrols = {}
-
+generator = None
 
 def query_generator():
+    global generator
     query_str = """
 SELECT *
 WHERE {
@@ -51,6 +61,7 @@ WHERE {
             angle = row['angle']
         )   
         opendss += gen.get_opendss()
+        generator = gen
         # There should only be one generator
         break
     opendss += '\n\n'
@@ -132,6 +143,9 @@ WHERE {
     return opendss 
 
 def query_buses():
+    """
+    Get all the buses from the power grid
+    """
     query_str = """
 SELECT *
 WHERE {
@@ -147,14 +161,34 @@ WHERE {
         node = {
             'x': int(row['x']),
             'y': int(row['y']),
-            'connections': []
+            'connections': set()
         }
         buses[row['bus'].split('#')[1].split('_')[1]] = node
-        bus = SmartGrid.Bus(
-            bus = row['bus'],
-            x = int(row['x']), 
-            y = int(row['y']) 
-        )
+        buses_child[row['bus'].split('#')[1].split('_')[1]] = set()
+        buses_parent[row['bus'].split('#')[1].split('_')[1]] = set()
+
+def query_double_buses():
+    """
+    This will get all electrical equipment that is connected to two buses
+    """
+    query_str = """
+SELECT *
+WHERE {
+    ?entity rdf:type ?type .
+    ?type rdfs:subClassOf* :Electrical_Equipment .
+    ?entity :primaryAttachsTo ?bus1 .
+    ?entity :attachsTo ?bus2 .
+} 
+"""
+    res = g.query(query_str)
+    for row in res:
+        bus_in = row['bus1'].split('#')[1].split('_')[1]
+        bus_out = row['bus2'].split('#')[1].split('_')[1]
+        buses[bus_in]['connections'].add(bus_out)
+        buses[bus_out]['connections'].add(bus_in)
+        buses_child[bus_in].add(bus_out)
+        buses_parent[bus_out].add(bus_in)
+
 
 def query_lines():
     # Because the orientation of the bus connection does not matter 
@@ -362,25 +396,40 @@ def query_actuators():
     query_str = """
 SELECT *
 WHERE {
-    ?act a :Actuator .
+    ?act rdf:type ?type .
+    ?type rdfs:subClassOf* :Actuator .
     ?act :connectsTo ?conn_to .
     ?act :controls ?controls .
     ?act :isFedBy ?fedby .
-    ?controls :primaryAttachsTo ?dst .
+    ?act :phase ?phase .
+    ?act :bus_terminal ?bus .
+    ?controls :primaryAttachsTo ?bus1 .
     ?fedby :connectsTo ?endpoint .
     ?endpoint :locatedAt ?src .
+    OPTIONAL {
+        ?controls :attachsTo ?bus2 .
+    }
 }    
 """
     res = g.query(query_str)
     actuators = []
     for row in res:
+        if '1' in row['bus'] and row['bus1'] is not None:
+            dst = row['bus1']
+        elif '2' in row['bus'] and row['bus2'] is not None:
+            dst = row['bus2']
+        else:
+            dst = row['bus1']
         act = SmartGrid.Actuator(
             actuator = row['act'],
-            dst = row['dst'],
-            src = row['src']
+            dst = dst,
+            src = row['src'],
+            controls = row['controls'],
+            controller = row['fedby'],
+            phase = row['phase'],
+            bus = row['bus']
         )
-
-        actuators.append(act.get_conn_dict())
+        actuators.append(act)
     
     return actuators
 
@@ -389,32 +438,69 @@ def query_sensors():
     query_str = """
 SELECT *
 WHERE {
-    ?sen a :Voltage_Sensor .
+    ?sen rdf:type ?type .
+    ?type rdfs:subClassOf* :Sensor .
     ?sen :connectsTo ?conn_to .
     ?sen :feeds ?feeds .
     ?sen :measures ?measures . 
     ?sen :monitor ?monitor .
+    ?monitor :primaryAttachsTo ?bus1 .
     ?sen :rate ?rate .
+    ?sen :phase ?phase .
+    ?sen :bus_terminal ?bus .
     ?feeds :connectsTo ?endpoint .
     ?endpoint :locatedAt ?dst .
+    OPTIONAL {
+        ?monitor :attachsTo ?bus2 .
+    }
 }    
 """
     res = g.query(query_str)
     sensors = []
     for row in res:
-        # monitor is the src
+        if '1' in row['bus'] and row['bus1'] is not None:
+            src = row['bus1']
+        elif '2' in row['bus'] and row['bus2'] is not None:
+            src = row['bus2']
+        else:
+            src = row['bus1']
+
         sensor = SmartGrid.Sensor(
             sensor = row['sen'],
             connects_to = row['conn_to'],
-            feeds = row['feeds'],
+            controller = row['feeds'],
             measures = row['measures'],
-            src = row['monitor'],
+            monitor = row['monitor'],
+            src = src,
             rate = row['rate'],
-            dst = row['dst']
+            dst = row['dst'],
+            phase = row['phase'],
+            bus = row['bus']
         )
-        sensors.append(sensor.get_conn_dict())
+        sensors.append(sensor)
     
     return sensors
+
+def query_controllers():
+    """
+    This will return the list of controllers in the graph    
+    """
+    query_str = """
+SELECT *
+WHERE {
+    ?entity rdf:type ?type .
+    ?type rdfs:subClassOf* :Controller .
+}    
+"""
+    res = g.query(query_str)
+    controllers = []
+    for row in res:
+        control = SmartGrid.Controller(
+            control = row['entity']
+        )
+        controllers.append(control)
+    
+    return controllers
 
 def pre_object_opendss(freq = 60):
     """
@@ -457,31 +543,12 @@ def set_taps():
 
     return openstr
 
-def query_double_buses():
-    """
-    This will get all electrical equipment that is connected to two buses
-    """
-    query_str = """
-SELECT *
-WHERE {
-    ?entity rdf:type ?type .
-    ?type rdfs:subClassOf* :Electrical_Equipment .
-    ?entity :primaryAttachsTo ?bus1 .
-    ?entity :attachsTo ?bus2 .
-} 
-"""
-    res = g.query(query_str)
-    for row in res:
-        bus_in = row['bus1'].split('#')[1].split('_')[1]
-        bus_out = row['bus2'].split('#')[1].split('_')[1]
-        buses[bus_in]['connections'].append(bus_out)
-        buses[bus_out]['connections'].append(bus_in)
-
-def query_neighbours(origin, dist = 1):
+def query_neighbours(origin, dist = 0):
     """
     This will get all electrical equipment that is attached to a bus
     """
     results = []
+    results_dist = []
     # include the start bus
     bus_to_search = [origin]
     entity_dist = {
@@ -520,14 +587,14 @@ def query_neighbours(origin, dist = 1):
         res = g.query(query_str)
         for row in res:
             # If the distance to this bus from the origin is greater than dist then go next
-            if entity_dist[bus] >= dist:
+            if entity_dist[bus] > dist:
                 break
 
             # Add the entity if not in result list
             if row['entity'] in results:
                 continue
             results.append(row['entity'])
-
+            results_dist.append(entity_dist[bus])
 
             if 'Line' in str(row['type']) and row['n1'] is not None and row['n2'] is not None:
                 bus1 = row['n1'].split('#')[1].split('_')[1]
@@ -542,10 +609,38 @@ def query_neighbours(origin, dist = 1):
                     entity_dist[bus2] = entity_dist[bus] + 1
                 
 
-    return results
+    return zip(results, results_dist)
 
+def traverse_grid(root_bus = None):
+    """
+    BFS tree traversal of the grid starting from the root node
 
+    Returns a dict of buses and their properties w.r.t to the graph
+    """
+    if root_bus is None:
+        root_bus = generator.bus1
+    visited = {bus: False for bus in buses.keys()}
+    q = deque([root_bus])
+    traversed_buses = {
+        root_bus : {
+            'depth' : 0
+        }
+    }
 
+    while len(q) > 0:
+        bus = q.popleft()
+        visited[bus] = True
+        # Set child attribute value
+        if len(buses_child[bus]) == 0:
+            traversed_buses[bus]['child'] = True
+            continue
+        traversed_buses[bus]['child'] = False
+        for neighbor in buses_child[bus]:
+            if not visited[neighbor]:
+                q.append(neighbor)
+                traversed_buses[neighbor] = {'depth': traversed_buses[bus]['depth'] + 1}
+
+    return traversed_buses
 
 def main():
     args = parser.parse_args()
@@ -553,15 +648,58 @@ def main():
     outfilename = args.outfile 
     onto_filename = args.infile
     nodes_filename = args.nodes_file
+    device_filename= args.device_file
+    period = args.period
+    error = args.error
+
     g.parse(onto_filename)
 
+    # You must query buses first
     query_buses()
-    
+    # You must query double buses/connections after querying the buses
     query_double_buses()
+    # Before querying any further you need to query the generator after
+    query_generator()
 
-    res = query_neighbours('645', 2)
-    for row in res:
-        print(row)
+    # This will get all equipments downstream from a bus
+    traversed_buses = traverse_grid('671')
+    query_equipments = set()
+    for bus in traversed_buses.keys():
+        print(traversed_buses[bus])
+        equipments = query_neighbours(bus)
+        query_equipments.update([i[0] for i in equipments])
+    print(query_equipments)
+    print(len(query_equipments))
+
+
+    sensors = query_sensors()
+    actuators = query_actuators()
+    controllers = query_controllers()
+
+
+    # res = query_neighbours('645', 2)
+    # for row in res:
+    #     print(row)
+
+    with open(device_filename, 'w') as csv_file:
+        fieldnames = ['idn','type','src','dst','period','error','cktElement','cktTerminal','cktPhase','cktProperty']
+        writer = csv.DictWriter(csv_file, fieldnames=fieldnames)
+        writer.writeheader()
+        idx = 0
+        for sensor in sensors:
+            writer.writerow({
+                    'idn': idx, 'type': 'sensing', 'src': sensor.src, 'dst': sensor.dst, 
+                    'period': period, 'error': error, 
+                    'cktElement': f'{sensor.equipment}', 'cktTerminal': f'BUS{sensor.bus}', 'cktPhase': f'PHASE_{sensor.phase}', 'cktProperty': 'None'
+                })
+            # idx += 1
+        for actuator in actuators:
+            writer.writerow({
+                    'idn': idx, 'type': 'acting', 'src': actuator.src, 'dst': actuator.dst, 
+                    'period': period, 'error': error, 
+                    'cktElement': f'{actuator.equipment}', 'cktTerminal': f'BUS{actuator.bus}', 'cktPhase': f'PHASE_{actuator.phase}', 'cktProperty': 'None'
+                })
+            # idx += 1
     exit(1)
     
     # Generate the opendss file
@@ -590,19 +728,20 @@ def main():
         nodes_dict = {
             "nodes": {}
         } 
+        # The regulators must come first before the buses
         for node in regcontrol_buses:
-            buses[node]['connections'] = list(set(buses[node]['connections']))
+            buses[node]['connections'] = list(buses[node]['connections'])
             nodes_dict['nodes'][node] = buses[node]
         
         for node in buses.keys():
-            buses[node]['connections'] = list(set(buses[node]['connections']))
+            buses[node]['connections'] = list(buses[node]['connections'])
             nodes_dict['nodes'][node] = buses[node]
 
         app_conn = []
         actuators = query_actuators()
         sensors = query_sensors()
-        app_conn.extend(sensors)
-        app_conn.extend(actuators)  
+        app_conn.extend([sen.get_conn_dict() for sen in sensors])
+        app_conn.extend([act.get_conn_dict() for act in actuators])  
 
         nodes_dict['app_connections'] = app_conn
 

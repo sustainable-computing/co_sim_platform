@@ -1,4 +1,3 @@
-import re
 class Transformer():
     """
     This class represents an OpenDSS Transformer object
@@ -360,11 +359,14 @@ class Sensor():
     def __init__(self,**kwargs):
         self.name = kwargs['sensor']
         self.connects_to = kwargs['connects_to']
-        self.feeds = kwargs['feeds']
+        self.controller = kwargs['controller']
         self.measures = kwargs['measures']
+        self.equipment = kwargs['monitor'].split('#')[1]
         self.src = kwargs['src'].split('#')[1].split('_')[1]
         self.rate = kwargs['rate']
         self.dst = kwargs['dst'].split('#')[1].split('_')[1]
+        self.phase = kwargs['phase']
+        self.bus = kwargs['bus']
 
     def __str__(self):
         return self.name
@@ -388,6 +390,10 @@ class Actuator():
         self.name = kwargs['actuator']
         self.src = kwargs['src'].split('#')[1].split('_')[1]
         self.dst = kwargs['dst'].split('#')[1].split('_')[1]
+        self.equipment = kwargs['controls'].split('#')[1]
+        self.controller = kwargs['controller']
+        self.phase = kwargs['phase']
+        self.bus = kwargs['bus']
     
     def __str__(self):
         return self.name
@@ -402,3 +408,13 @@ class Actuator():
             'func': 'acting'
         }
         return conn
+
+class Controller():
+    """
+    This class represents the controller for the control system
+    """
+    def __init__(self, **kwargs):
+        self.name = kwargs['control']
+
+    def __str__(self):
+        return self.name
