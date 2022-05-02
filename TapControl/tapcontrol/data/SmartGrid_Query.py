@@ -4,7 +4,10 @@ The resulting queries will be of course python data structure friendly
 """
 
 from rdflib import Graph 
+from collections import deque
+
 from SmartGrid import *
+
 
 class SmartGridGraph:
     def __init__(self, file):
@@ -39,7 +42,6 @@ class SmartGridGraph:
 
         res = self.g.query(query_str)
 
-        opendss = "!--- Genereted circuit\n"
         for row in res:
             gen = Generator(
                 gen = row['gen'],
@@ -51,12 +53,10 @@ class SmartGridGraph:
                 MVAsc3 = row['MVAsc3'],
                 angle = row['angle']
             )   
-            opendss += gen.get_opendss()
             self.generator = gen
             # There should only be one generator
             break
-        opendss += '\n\n'
-        return opendss
+        return gen
 
     def query_transformers(self):
         query_str = """
@@ -81,8 +81,7 @@ class SmartGridGraph:
         """
         res = self.g.query(query_str)
 
-        opendss = "!--- Generated Transformers\n"
-
+        transformers = []
         for row in res:
             trans = Transformer(
                 trans = row['trans'],
@@ -99,9 +98,8 @@ class SmartGridGraph:
                 kv_secondary = row['kv_sec'],
                 percent_r = row['percent_R']
             )
-            opendss += trans.get_opendss() + '\n'
-        opendss += '\n\n'
-        return opendss 
+            transformers.append(trans)
+        return transformers 
 
     def query_capacitors(self):
         query_str = """
@@ -119,7 +117,7 @@ class SmartGridGraph:
         }    
         """
         res = self.g.query(query_str)
-        opendss = "!--- Generated Capacitors\n"
+        capacitors = []
         for row in res:
             cap = Capacitor(
                 cap = row['cap'],
@@ -129,9 +127,8 @@ class SmartGridGraph:
                 num_phases = row['num_phases'],
                 kvar = row['kvar']
             )
-            opendss += cap.get_opendss() + '\n'
-        opendss += '\n\n'
-        return opendss 
+            capacitors.append(cap)
+        return capacitors 
 
     def query_buses(self):
         """
@@ -157,6 +154,8 @@ class SmartGridGraph:
             self.buses[row['bus'].split('#')[1].split('_')[1]] = node
             self.buses_child[row['bus'].split('#')[1].split('_')[1]] = set()
             self.buses_parent[row['bus'].split('#')[1].split('_')[1]] = set()
+        
+        return self.buses
 
     def query_double_buses(self):
         """
@@ -179,6 +178,8 @@ class SmartGridGraph:
             self.buses[bus_out]['connections'].add(bus_in)
             self.buses_child[bus_in].add(bus_out)
             self.buses_parent[bus_out].add(bus_in)
+        
+        return self.buses
 
     def query_lines(self):
         # Because the orientation of the bus connection does not matter 
@@ -197,7 +198,7 @@ class SmartGridGraph:
         }
         """
         res = self.g.query(query_str)
-        opendss = "!--- Generated Lines\n"
+        lines = []
         for row in res:
             line = Line(
                 line = row['line'],
@@ -210,9 +211,8 @@ class SmartGridGraph:
                 nodes_secondary = row['n_sec'],
                 num_phases = row['num_phases']
             )
-            opendss += line.get_opendss() + '\n'
-        opendss += '\n\n'
-        return opendss
+            lines.append(line)
+        return lines
 
     def query_loads(self):
         # Write the query
@@ -235,7 +235,7 @@ class SmartGridGraph:
         """
         # Get the query
         res = self.g.query(query_str)
-        opendss = "!--- Generated Loads\n"
+        loads = []
         for row in res:
             load = Load(
                 load = row['load'],
@@ -249,12 +249,11 @@ class SmartGridGraph:
                 nodes_secondary = row['n_sec'],
                 num_phases = row['num_phases']
             )
-            opendss += load.get_opendss() + '\n'
-        opendss += '\n\n'
+            loads.append(load)
 
-        return opendss
+        return loads
 
-    def query_linecode(self):
+    def query_linecodes(self):
         query_str = """
         SELECT *
         WHERE {
@@ -270,7 +269,9 @@ class SmartGridGraph:
         }    
         """
         res = self.g.query(query_str)
-        opendss = "!--- Generated Linecodes\n"
+
+        linecodes = []
+
         for row in res:
             linecode = LineCode(
                 linecode = row['linecode'],
@@ -281,9 +282,8 @@ class SmartGridGraph:
                 unit = row['unit'],
                 cmat = row['cmat']
             )
-            opendss += linecode.get_opendss() + '\n'
-        opendss += '\n\n'
-        return opendss
+            linecodes.append(linecode)
+        return linecodes
 
     def query_switches(self):
         query_str = """
@@ -302,7 +302,7 @@ class SmartGridGraph:
         }    
         """
         res = self.g.query(query_str)
-        opendss = "!--- Generated Switches\n"
+        switches = []
         for row in res:
             switch = Switch(
                 switch = row['switch'],
@@ -316,9 +316,8 @@ class SmartGridGraph:
                 x0 = row['x0'],
                 x1 = row['x1']
             )
-            opendss += switch.get_opendss() +'\n'
-        opendss += '\n\n'
-        return opendss
+            switches.append(switch)
+        return switches
 
     def query_regcontrol(self):
         query_str = """
@@ -350,7 +349,7 @@ class SmartGridGraph:
         }    
         """
         res = self.g.query(query_str)
-        opendss = "!--- Generated Reg Control\n"
+        reg_controls = []
         for row in res:
             reg_control = VoltageRegulator(
                 regcontrol = row['reg'],
@@ -377,10 +376,9 @@ class SmartGridGraph:
                 R = row['R'],
                 X = row['X']
             )
-            opendss += reg_control.get_opendss() + '\n'
             self.regcontrols[str(reg_control)] = reg_control
-        opendss += '\n\n'
-        return opendss
+            reg_controls.append(reg_control)
+        return reg_controls
 
     def query_actuators(self):
         query_str = """
@@ -490,3 +488,126 @@ class SmartGridGraph:
             controllers.append(control)
         
         return controllers
+    
+    def query_transformers_voltages(self):
+        query_str = """ 
+        SELECT DISTINCT ?kv
+        WHERE {
+            ?trans a :Transformer . 
+            {
+                ?trans :kV_primary ?kv.
+
+            }
+            UNION 
+            {
+                ?trans :kV_secondary ?kv    
+            }
+        }
+            """
+        res = self.g.query(query_str)
+        voltages = []
+        for row in res:
+            voltages.append(float(row['kv']))
+
+        opendss_str = f"Set VoltageBases={voltages} \n"
+        opendss_str += "calcv \nSolve \n"
+        return opendss_str
+
+    def query_neighbours(self, origin, dist = 0):
+        """
+        This will get all electrical equipment that is attached to a bus
+        """
+        results = []
+        results_dist = []
+        # include the start bus
+        bus_to_search = [origin]
+        entity_dist = {
+            origin: 0
+        }
+        while True:
+            if len(bus_to_search) == 0:
+                break
+            bus = bus_to_search.pop(0)
+            query_str = """
+            SELECT DISTINCT *
+            WHERE {
+                ?entity rdf:type ?type .
+                ?type rdfs:subClassOf* :Electrical_Equipment .
+                {
+                    ?entity :primaryAttachsTo ?prim .
+                    FILTER regex(str(?prim),  '""" + bus + """') .
+                    OPTIONAL {
+                        ?entity a :Line .
+                        ?entity :primaryAttachsTo ?n1 .
+                        ?entity :attachsTo ?n2 .
+                    }
+                }
+                UNION
+                {
+                    ?entity :attachsTo ?sec .
+                    FILTER regex(str(?sec), '""" + bus + """') . 
+                    OPTIONAL {
+                        ?entity a :Line .
+                        ?entity :primaryAttachsTo ?n1 .
+                        ?entity :attachsTo ?n2 .
+                    }
+                }
+            } 
+            """
+            res = self.g.query(query_str)
+            for row in res:
+                # If the distance to this bus from the origin is greater than dist then go next
+                if entity_dist[bus] > dist:
+                    break
+
+                # Add the entity if not in result list
+                if row['entity'] in results:
+                    continue
+                results.append(row['entity'])
+                results_dist.append(entity_dist[bus])
+
+                if 'Line' in str(row['type']) and row['n1'] is not None and row['n2'] is not None:
+                    bus1 = row['n1'].split('#')[1].split('_')[1]
+                    bus2 = row['n2'].split('#')[1].split('_')[1]
+                    if bus1 not in bus_to_search:
+                        bus_to_search.append(bus1)
+                    if bus2 not in bus_to_search:
+                        bus_to_search.append(bus2)
+                    if bus1 != bus:
+                        entity_dist[bus1] = entity_dist[bus] + 1
+                    if bus2 != bus:
+                        entity_dist[bus2] = entity_dist[bus] + 1
+                    
+
+        return zip(results, results_dist)
+    
+    def traverse_grid(self, root_bus = None):
+        """
+        BFS tree traversal of the grid starting from the root node
+
+        Returns a dict of buses and their properties w.r.t to the graph
+        """
+        if root_bus is None:
+            root_bus = self.generator.bus1
+        visited = {bus: False for bus in self.buses.keys()}
+        q = deque([root_bus])
+        traversed_buses = {
+            root_bus : {
+                'depth' : 0
+            }
+        }
+
+        while len(q) > 0:
+            bus = q.popleft()
+            visited[bus] = True
+            # Set child attribute value
+            if len(self.buses_child[bus]) == 0:
+                traversed_buses[bus]['child'] = True
+                continue
+            traversed_buses[bus]['child'] = False
+            for neighbor in self.buses_child[bus]:
+                if not visited[neighbor]:
+                    q.append(neighbor)
+                    traversed_buses[neighbor] = {'depth': traversed_buses[bus]['depth'] + 1}
+
+        return traversed_buses
