@@ -25,6 +25,9 @@ class SmartGridGraph:
         self.transformers = {}
         self.regcontrols = {}
 
+    def _get_individual_name(self, uri):
+        return uri.split('#')[1]
+
     def query_generator(self):
         query_str = """
         SELECT *
@@ -106,7 +109,7 @@ class SmartGridGraph:
         SELECT *
         WHERE {
             ?cap a :Capacitor .
-            ?cap :attachsTo ?bus .
+            ?cap :primaryAttachsTo ?bus .
             ?cap :kV_primary ?kv .
             ?cap :kvar ?kvar .
             ?cap :num_phases ?num_phases .
@@ -181,6 +184,204 @@ class SmartGridGraph:
         
         return self.buses
 
+    def query_neighbor_buses(self, bus, filter = None):
+        """
+        This will get all the neighboring buses connected via an electrical equipment
+
+        The filter argument is used to filter out any neighboring buses that doesn't 
+        meet a user-defined criteria 
+        """ 
+        query_str = """
+        SELECT DISTINCT ?neighbor_bus
+        WHERE {
+            ?entity rdf:type ?type .
+            ?type rdfs:subClassOf* :Electrical_Equipment .
+            {
+                ?entity :primaryAttachsTo ?prim .
+                FILTER regex(str(?prim),  '""" + bus + """') .
+                ?entity :attachsTo ?neighbor_bus .
+            }
+            UNION
+            {
+                ?entity :attachsTo ?sec .
+                FILTER regex(str(?sec), '""" + bus + """') . 
+                ?entity :primaryAttachsTo ?neighbor_bus .
+            }
+        } 
+        """
+
+        res = self.g.query(query_str)
+        buses = []
+        for row in res:
+            bus = self._get_individual_name(row['neighbor_bus'])
+            buses.append(bus)
+        
+        return buses
+
+    def query_network_neighbor_endpoints(self, node, filter = None):
+        """
+        This will get all the neighboring endpoints connected the node
+
+        The filter argument is used to filter out any neighbouring endpoints that
+        doesn't meet a user-defined criteria
+        """
+        query_str = """
+        SELECT DISTINCT ?neighbor_endpoint
+        WHERE {
+            ?curr_endpoint a :Network_Endpoint .
+            ?transport a :Transporter .
+            FILTER regex(str(?curr_endpoint),  '""" + node + """') .
+            {
+                ?curr_endpoint :connectsTo ?transport .
+                ?transport :connectsTo ?neighbor_endpoint .
+            }
+            UNION
+            {
+                ?neighbor_endpoint :connectsTo ?transport .
+                ?transport :connectsTo ?curr_endpoint .
+            }
+        }
+        """ 
+
+        res = self.g.query(query_str)
+
+        endpoints = []
+        for row in res:
+            neighbor = self._get_individual_name(row['neighbor_endpoint'])
+            endpoints.append(neighbor)
+
+        return endpoints
+
+    def query_bus_from_equipment(self, equipment):
+        """
+        This will return a list of buses that the equipment is attached to
+        """
+        query_str = """
+        SELECT DISTINCT ?bus1 ?bus2
+        WHERE {
+            ?equipment rdf:type ?type .
+            ?type rdfs:subClassOf* :Electrical_Equipment . 
+            FILTER regex(str(?equipment), '""" + equipment + """')
+            OPTIONAL {
+                ?equipment :primaryAttachsTo ?bus1
+            }
+            OPTIONAL {
+                ?equipment :attachsTo ?bus2
+            }
+        }
+        """
+
+        res = self.g.query(query_str)
+        buses = []
+        for row in res:
+            if row['bus1'] is not None:
+                buses.append(self._get_individual_name(row['bus1']))
+            if row['bus2'] is not None:
+                buses.append(self._get_individual_name(row['bus2']))
+
+        return buses
+
+    def query_endpoint_from_control_system(self, equipment):
+        """
+        This will return a list of endpoints that the equipment is connected to
+        """
+        query_str = """
+        SELECT DISTINCT ?endpoint
+        WHERE {
+            ?equipment rdf:type ?type .
+            ?type rdfs:subClassOf* :Control_System .
+            FILTER regex(str(?equipment), '"""+ equipment +"""') .
+            ?equipment :connectsTo ?endpoint .
+        }
+        """
+
+        res = self.g.query(query_str)
+        endpoints = []
+        for row in res:
+            endpoints.append(self._get_individual_name(row['endpoint']))
+
+        return endpoints
+
+    def query_electrical_path(self, src, dst):
+        """
+        This will return the path (if it exist) between the src and dst power equipment
+        """
+        src_buses = self.query_bus_from_equipment(src)
+        dst_buses = self.query_bus_from_equipment(dst)
+
+        # Check if any of the src buses is in the dst buses 
+        for src_bus in src_buses:
+            if src_bus in dst_buses:
+                return src_bus
+
+        q = deque(src_buses)
+        visited = set()
+        bus_parent = {}
+        t = None
+        # Have both bus's parent be None
+        for src_bus in src_buses:
+            bus_parent[src_bus] = None
+        while len(q) > 0:
+            bus = q.popleft()
+            visited.add(bus)
+            for neighbor in self.query_neighbor_buses(bus):
+                if neighbor not in bus_parent.keys():
+                    bus_parent[neighbor] = bus
+                if neighbor not in visited and neighbor not in q:
+                    if neighbor in dst_buses:
+                        t = neighbor
+                        break
+                    q.append(neighbor)
+            if neighbor in dst_buses:
+                break
+    
+        path = []
+        u = t
+        while u is not None:
+            path.append(u)
+            u = bus_parent[u]
+        return path[::-1]
+
+    def query_network_path(self, src, dst):
+        """
+        This will return the path (if it exist) between the src and dst networking equipment 
+        """
+        src_endpoints = self.query_endpoint_from_control_system(src)
+        dst_endpoints = self.query_endpoint_from_control_system(dst)
+
+        # Check if any of the src buses is in the dst buses 
+        for src_endpoint in src_endpoints:
+            if src_endpoint in dst_endpoints:
+                return src_endpoint
+
+        q = deque(src_endpoints)
+        visited = set()
+        bus_parent = {}
+        t = None
+        # Have both bus's parent be None
+        for src_endpoint in src_endpoints:
+            bus_parent[src_endpoint] = None
+        while len(q) > 0:
+            endpoint = q.popleft()
+            visited.add(endpoint)
+            for neighbor in self.query_network_neighbor_endpoints(endpoint):
+                if neighbor not in bus_parent.keys():
+                    bus_parent[neighbor] = endpoint
+                if neighbor not in visited and neighbor not in q:
+                    if neighbor in dst_endpoints:
+                        t = neighbor
+                        break
+                    q.append(neighbor)
+            if neighbor in dst_endpoints:
+                break
+    
+        path = []
+        u = t
+        while u is not None:
+            path.append(u)
+            u = bus_parent[u]
+        return path[::-1]
+
     def query_lines(self):
         # Because the orientation of the bus connection does not matter 
         query_str = """
@@ -220,7 +421,7 @@ class SmartGridGraph:
         SELECT *
         WHERE {
             ?load a :Load .
-            ?load :attachsTo ?bus1 .
+            ?load :primaryAttachsTo ?bus1 .
             ?load :connection_primary ?conn .
             ?load :kV_primary ?kv_prim .
             ?load :kW ?kW .
