@@ -719,7 +719,7 @@
 ###  http://www.semanticweb.org/phoenix/ontologies/2022/0/SmartGrid#Capacitor_Cap1
 :Capacitor_Cap1 rdf:type owl:NamedIndividual ,
                          :Capacitor ;
-                :attachsTo :Bus_675 ;
+                :primaryAttachsTo :Bus_675 ;
                 :kV_primary 4.16 ;
                 :kvar 600 ;
                 :num_phases 3 .
@@ -728,7 +728,7 @@
 ###  http://www.semanticweb.org/phoenix/ontologies/2022/0/SmartGrid#Capacitor_Cap2
 :Capacitor_Cap2 rdf:type owl:NamedIndividual ,
                          :Capacitor ;
-                :attachsTo :Bus_611 ;
+                :primaryAttachsTo :Bus_611 ;
                 :kV_primary 2.4 ;
                 :kvar 100 ;
                 :nodes_primary 3 ;
@@ -1084,7 +1084,7 @@
 ###  http://www.semanticweb.org/phoenix/ontologies/2022/0/SmartGrid#Load_611_3
 :Load_611_3 rdf:type owl:NamedIndividual ,
                      :Load ;
-            :attachsTo :Bus_611 ;
+            :primaryAttachsTo :Bus_611 ;
             :connection_primary "Wye" ;
             :kV_primary 2.4 ;
             :kW 170 ;
@@ -1098,7 +1098,7 @@
 ###  http://www.semanticweb.org/phoenix/ontologies/2022/0/SmartGrid#Load_634_1
 :Load_634_1 rdf:type owl:NamedIndividual ,
                      :Load ;
-            :attachsTo :Bus_634 ;
+            :primaryAttachsTo :Bus_634 ;
             :connection_primary "Wye" ;
             :kV_primary 0.277 ;
             :kW 160 ;
@@ -1112,7 +1112,7 @@
 ###  http://www.semanticweb.org/phoenix/ontologies/2022/0/SmartGrid#Load_634_2
 :Load_634_2 rdf:type owl:NamedIndividual ,
                      :Load ;
-            :attachsTo :Bus_634 ;
+            :primaryAttachsTo :Bus_634 ;
             :connection_primary "Wye" ;
             :kV_primary 0.277 ;
             :kW 120 ;
@@ -1126,7 +1126,7 @@
 ###  http://www.semanticweb.org/phoenix/ontologies/2022/0/SmartGrid#Load_634_3
 :Load_634_3 rdf:type owl:NamedIndividual ,
                      :Load ;
-            :attachsTo :Bus_634 ;
+            :primaryAttachsTo :Bus_634 ;
             :connection_primary "Wye" ;
             :kV_primary 0.277 ;
             :kW 120 ;
@@ -1140,7 +1140,7 @@
 ###  http://www.semanticweb.org/phoenix/ontologies/2022/0/SmartGrid#Load_645_2
 :Load_645_2 rdf:type owl:NamedIndividual ,
                      :Load ;
-            :attachsTo :Bus_645 ;
+            :primaryAttachsTo :Bus_645 ;
             :connection_primary "Wye" ;
             :kV_primary 2.4 ;
             :kW 170 ;
@@ -1154,7 +1154,7 @@
 ###  http://www.semanticweb.org/phoenix/ontologies/2022/0/SmartGrid#Load_646_2
 :Load_646_2 rdf:type owl:NamedIndividual ,
                      :Load ;
-            :attachsTo :Bus_646 ;
+            :primaryAttachsTo :Bus_646 ;
             :connection_primary "Delta" ;
             :kV_primary 4.16 ;
             :kW 230 ;
@@ -1168,7 +1168,7 @@
 ###  http://www.semanticweb.org/phoenix/ontologies/2022/0/SmartGrid#Load_652_1
 :Load_652_1 rdf:type owl:NamedIndividual ,
                      :Load ;
-            :attachsTo :Bus_652 ;
+            :primaryAttachsTo :Bus_652 ;
             :connection_primary "Wye" ;
             :kV_primary 2.4 ;
             :kW 128 ;
@@ -1182,7 +1182,7 @@
 ###  http://www.semanticweb.org/phoenix/ontologies/2022/0/SmartGrid#Load_670_1
 :Load_670_1 rdf:type owl:NamedIndividual ,
                      :Load ;
-            :attachsTo :Bus_670 ;
+            :primaryAttachsTo :Bus_670 ;
             :connection_primary "Wye" ;
             :kV_primary 2.4 ;
             :kW 17 ;
@@ -1196,7 +1196,7 @@
 ###  http://www.semanticweb.org/phoenix/ontologies/2022/0/SmartGrid#Load_670_2
 :Load_670_2 rdf:type owl:NamedIndividual ,
                      :Load ;
-            :attachsTo :Bus_670 ;
+            :primaryAttachsTo :Bus_670 ;
             :connection_primary "Wye" ;
             :kV_primary 2.4 ;
             :kW 66 ;
@@ -1210,7 +1210,7 @@
 ###  http://www.semanticweb.org/phoenix/ontologies/2022/0/SmartGrid#Load_670_3
 :Load_670_3 rdf:type owl:NamedIndividual ,
                      :Load ;
-            :attachsTo :Bus_670 ;
+            :primaryAttachsTo :Bus_670 ;
             :connection_primary "Wye" ;
             :kV_primary 2.4 ;
             :kW 117 ;
@@ -1224,7 +1224,7 @@
 ###  http://www.semanticweb.org/phoenix/ontologies/2022/0/SmartGrid#Load_671
 :Load_671 rdf:type owl:NamedIndividual ,
                    :Load ;
-          :attachsTo :Bus_671 ;
+          :primaryAttachsTo :Bus_671 ;
           :connection_primary "Delta" ;
           :kV_primary 4.16 ;
           :kW 1155 ;
@@ -1237,7 +1237,7 @@
 ###  http://www.semanticweb.org/phoenix/ontologies/2022/0/SmartGrid#Load_675_1
 :Load_675_1 rdf:type owl:NamedIndividual ,
                      :Load ;
-            :attachsTo :Bus_675 ;
+            :primaryAttachsTo :Bus_675 ;
             :connection_primary "Wye" ;
             :kV_primary 2.4 ;
             :kW 485 ;
@@ -1251,7 +1251,7 @@
 ###  http://www.semanticweb.org/phoenix/ontologies/2022/0/SmartGrid#Load_675_2
 :Load_675_2 rdf:type owl:NamedIndividual ,
                      :Load ;
-            :attachsTo :Bus_675 ;
+            :primaryAttachsTo :Bus_675 ;
             :connection_primary "Wye" ;
             :kV_primary 2.4 ;
             :kW 68 ;
@@ -1265,7 +1265,7 @@
 ###  http://www.semanticweb.org/phoenix/ontologies/2022/0/SmartGrid#Load_675_3
 :Load_675_3 rdf:type owl:NamedIndividual ,
                      :Load ;
-            :attachsTo :Bus_675 ;
+            :primaryAttachsTo :Bus_675 ;
             :connection_primary "Wye" ;
             :kV_primary 2.4 ;
             :kW 290 ;
@@ -1279,7 +1279,7 @@
 ###  http://www.semanticweb.org/phoenix/ontologies/2022/0/SmartGrid#Load_692_3
 :Load_692_3 rdf:type owl:NamedIndividual ,
                      :Load ;
-            :attachsTo :Bus_692 ;
+            :primaryAttachsTo :Bus_692 ;
             :connection_primary "Delta" ;
             :kV_primary 4.16 ;
             :kW 170 ;

@@ -41,10 +41,6 @@ def traverse_grid(root_bus):
 
 # traverse_grid('Bus_SourceBus')
 
-bus = graph.query_bus_from_equipment('Load_611_3')
-print(bus)
-endpoint = graph.query_endpoint_from_control_system('Power_Meter_611_3')
-print(endpoint)
 power_path = graph.query_electrical_path('Load_611_3', 'Load_645_2')
 print(power_path)
 network_path = graph.query_network_path('Power_Meter_611_3', 'Power_Meter_645_2')
