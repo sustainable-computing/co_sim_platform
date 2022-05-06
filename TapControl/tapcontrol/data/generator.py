@@ -86,30 +86,28 @@ def main():
     controllers = graph.query_controllers()
 
 
-    # res = query_neighbours('645', 2)
-    # for row in res:
-    #     print(row)
-
     with open(device_filename, 'w') as csv_file:
         fieldnames = ['idn','type','src','dst','period','error','cktElement','cktTerminal','cktPhase','cktProperty']
         writer = csv.DictWriter(csv_file, fieldnames=fieldnames)
         writer.writeheader()
-        idx = 0
-        for sensor in sensors:
-            writer.writerow({
-                    'idn': idx, 'type': 'sensor', 'src': sensor.src, 'dst': sensor.dst, 
-                    'period': period, 'error': error, 
-                    'cktElement': f'{sensor.equipment}', 'cktTerminal': f'BUS{sensor.bus}', 'cktPhase': f'PHASE_{sensor.phase}', 'cktProperty': 'None'
-                })
-            # idx += 1
-        for actuator in actuators:
-            writer.writerow({
-                    'idn': idx, 'type': 'actuator', 'src': actuator.src, 'dst': actuator.dst, 
-                    'period': period, 'error': error, 
-                    'cktElement': f'{actuator.equipment}', 'cktTerminal': f'BUS{actuator.bus}', 'cktPhase': f'PHASE_{actuator.phase}', 'cktProperty': 'None'
-                })
-            # idx += 1
-    # exit(1)
+        for idx, controller in enumerate(controllers):
+        
+            for sensor in sensors:
+                # If the dst points to the controller
+                if sensor.dst in controller.bus:
+                    writer.writerow({
+                            'idn': idx, 'type': 'sensor', 'src': sensor.src, 'dst': sensor.dst, 
+                            'period': period, 'error': error, 
+                            'cktElement': f'{sensor.equipment}', 'cktTerminal': f'BUS{sensor.bus}', 'cktPhase': f'PHASE_{sensor.phase}', 'cktProperty': 'None'
+                        })
+            for actuator in actuators:
+                # If the src points to the controller
+                if actuator.src in controller.bus:
+                    writer.writerow({
+                            'idn': idx, 'type': 'actuator', 'src': actuator.src, 'dst': actuator.dst, 
+                            'period': period, 'error': error, 
+                            'cktElement': f'{actuator.equipment}', 'cktTerminal': f'BUS{actuator.bus}', 'cktPhase': f'PHASE_{actuator.phase}', 'cktProperty': 'None'
+                        })
     
     # Generate the opendss file
     with open(outfilename, 'wt') as outfile:

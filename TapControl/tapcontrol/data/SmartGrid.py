@@ -415,6 +415,7 @@ class Controller():
     """
     def __init__(self, **kwargs):
         self.name = kwargs['control']
+        self.bus = kwargs['bus'].split('#')[1]
 
     def __str__(self):
         return self.name
