@@ -86,6 +86,10 @@ def main():
     controllers = graph.query_controllers()
 
 
+    # res = query_neighbours('645', 2)
+    # for row in res:
+    #     print(row)
+
     with open(device_filename, 'w') as csv_file:
         fieldnames = ['idn','type','src','dst','period','error','cktElement','cktTerminal','cktPhase','cktProperty']
         writer = csv.DictWriter(csv_file, fieldnames=fieldnames)
@@ -93,18 +97,19 @@ def main():
         idx = 0
         for sensor in sensors:
             writer.writerow({
-                    'idn': idx, 'type': 'sensing', 'src': sensor.src, 'dst': sensor.dst, 
+                    'idn': idx, 'type': 'sensor', 'src': sensor.src, 'dst': sensor.dst, 
                     'period': period, 'error': error, 
                     'cktElement': f'{sensor.equipment}', 'cktTerminal': f'BUS{sensor.bus}', 'cktPhase': f'PHASE_{sensor.phase}', 'cktProperty': 'None'
                 })
-            idx += 1
+            # idx += 1
         for actuator in actuators:
             writer.writerow({
-                    'idn': idx, 'type': 'acting', 'src': actuator.src, 'dst': actuator.dst, 
+                    'idn': idx, 'type': 'actuator', 'src': actuator.src, 'dst': actuator.dst, 
                     'period': period, 'error': error, 
                     'cktElement': f'{actuator.equipment}', 'cktTerminal': f'BUS{actuator.bus}', 'cktPhase': f'PHASE_{actuator.phase}', 'cktProperty': 'None'
                 })
-            idx += 1
+            # idx += 1
+    # exit(1)
     
     # Generate the opendss file
     with open(outfilename, 'wt') as outfile:
@@ -112,7 +117,7 @@ def main():
         outfile.write(pre_object_opendss())
         outfile.write('!---- Generated Circuit/generator\n')
         outfile.write(graph.query_generator().get_opendss())
-        outfile.write('\n!---- Generated Transformers\n')
+        outfile.write('\n!---- Generated Transformer\n')
         outfile.write('\n'.join([trans.get_opendss() for trans in graph.query_transformers()]))
         outfile.write('\n!---- Generated RegControls\n')
         outfile.write('\n'.join([reg_control.get_opendss() for reg_control in graph.query_regcontrol()]))
@@ -128,6 +133,7 @@ def main():
         outfile.write('\n'.join([switch.get_opendss() for switch in graph.query_switches()]))
         outfile.write('\n!---- Generated Transformer Voltages\n')
         outfile.write(graph.query_transformers_voltages())
+        # outfile.write(post_object_opendss())
         outfile.write(set_taps(graph))
         outfile.write("Set ControlMode=OFF ")
 
