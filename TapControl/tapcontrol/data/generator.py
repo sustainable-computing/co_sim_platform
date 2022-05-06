@@ -97,14 +97,14 @@ def main():
         idx = 0
         for sensor in sensors:
             writer.writerow({
-                    'idn': idx, 'type': 'sensing', 'src': sensor.src, 'dst': sensor.dst, 
+                    'idn': idx, 'type': 'sensor', 'src': sensor.src, 'dst': sensor.dst, 
                     'period': period, 'error': error, 
                     'cktElement': f'{sensor.equipment}', 'cktTerminal': f'BUS{sensor.bus}', 'cktPhase': f'PHASE_{sensor.phase}', 'cktProperty': 'None'
                 })
             # idx += 1
         for actuator in actuators:
             writer.writerow({
-                    'idn': idx, 'type': 'acting', 'src': actuator.src, 'dst': actuator.dst, 
+                    'idn': idx, 'type': 'actuator', 'src': actuator.src, 'dst': actuator.dst, 
                     'period': period, 'error': error, 
                     'cktElement': f'{actuator.equipment}', 'cktTerminal': f'BUS{actuator.bus}', 'cktPhase': f'PHASE_{actuator.phase}', 'cktProperty': 'None'
                 })
