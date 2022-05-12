@@ -610,6 +610,11 @@
         rdfs:subClassOf :Control_System .
 
 
+###  http://www.semanticweb.org/phoenix/ontologies/2022/0/SmartGrid#Subcontroller
+:Subcontroller rdf:type owl:Class ;
+               rdfs:subClassOf :Controller .
+
+
 ###  http://www.semanticweb.org/phoenix/ontologies/2022/0/SmartGrid#Switch
 :Switch rdf:type owl:Class ;
         rdfs:subClassOf :Line .
@@ -764,7 +769,8 @@
 
 ###  http://www.semanticweb.org/phoenix/ontologies/2022/0/SmartGrid#Controller_Load_Balancer
 :Controller_Load_Balancer rdf:type owl:NamedIndividual ,
-                                   :Controller .
+                                   :Controller ;
+                          :connectsTo :Endpoint_Controller .
 
 
 ###  http://www.semanticweb.org/phoenix/ontologies/2022/0/SmartGrid#Coord_0_100
@@ -1419,7 +1425,7 @@
 :Power_Meter_611_3 rdf:type owl:NamedIndividual ,
                             :Power_Meter ;
                    :connectsTo :Endpoint_611 ;
-                   :feeds :Controller_Load_Balancer ;
+                   :feeds :Subcontroller_South ;
                    :measures :Power ;
                    :monitor :Load_611_3 .
 
@@ -1428,7 +1434,7 @@
 :Power_Meter_634_1 rdf:type owl:NamedIndividual ,
                             :Power_Meter ;
                    :connectsTo :Endpoint_634 ;
-                   :feeds :Controller_Load_Balancer ;
+                   :feeds :Subcontroller_North ;
                    :measures :Power ;
                    :monitor :Load_634_1 .
 
@@ -1437,7 +1443,7 @@
 :Power_Meter_634_2 rdf:type owl:NamedIndividual ,
                             :Power_Meter ;
                    :connectsTo :Endpoint_634 ;
-                   :feeds :Controller_Load_Balancer ;
+                   :feeds :Subcontroller_North ;
                    :measures :Power ;
                    :monitor :Load_634_2 .
 
@@ -1446,7 +1452,7 @@
 :Power_Meter_634_3 rdf:type owl:NamedIndividual ,
                             :Power_Meter ;
                    :connectsTo :Endpoint_634 ;
-                   :feeds :Controller_Load_Balancer ;
+                   :feeds :Subcontroller_North ;
                    :measures :Power ;
                    :monitor :Load_634_3 .
 
@@ -1455,7 +1461,7 @@
 :Power_Meter_645_2 rdf:type owl:NamedIndividual ,
                             :Power_Meter ;
                    :connectsTo :Endpoint_645 ;
-                   :feeds :Controller_Load_Balancer ;
+                   :feeds :Subcontroller_North ;
                    :measures :Power ;
                    :monitor :Load_645_2 .
 
@@ -1464,7 +1470,7 @@
 :Power_Meter_646_2 rdf:type owl:NamedIndividual ,
                             :Power_Meter ;
                    :connectsTo :Endpoint_646 ;
-                   :feeds :Controller_Load_Balancer ;
+                   :feeds :Subcontroller_North ;
                    :measures :Power ;
                    :monitor :Load_646_2 .
 
@@ -1473,7 +1479,7 @@
 :Power_Meter_652_1 rdf:type owl:NamedIndividual ,
                             :Power_Meter ;
                    :connectsTo :Endpoint_652 ;
-                   :feeds :Controller_Load_Balancer ;
+                   :feeds :Subcontroller_South ;
                    :measures :Power ;
                    :monitor :Load_652_1 .
 
@@ -1509,7 +1515,7 @@
 :Power_Meter_671 rdf:type owl:NamedIndividual ,
                           :Power_Meter ;
                  :connectsTo :Endpoint_671 ;
-                 :feeds :Controller_Load_Balancer ;
+                 :feeds :Subcontroller_South ;
                  :measures :Power ;
                  :monitor :Load_671 .
 
@@ -1518,7 +1524,7 @@
 :Power_Meter_675_1 rdf:type owl:NamedIndividual ,
                             :Power_Meter ;
                    :connectsTo :Endpoint_675 ;
-                   :feeds :Controller_Load_Balancer ;
+                   :feeds :Subcontroller_South ;
                    :measures :Power ;
                    :monitor :Load_675_1 .
 
@@ -1527,7 +1533,7 @@
 :Power_Meter_675_2 rdf:type owl:NamedIndividual ,
                             :Power_Meter ;
                    :connectsTo :Endpoint_675 ;
-                   :feeds :Controller_Load_Balancer ;
+                   :feeds :Subcontroller_South ;
                    :measures :Power ;
                    :monitor :Load_675_2 .
 
@@ -1536,7 +1542,7 @@
 :Power_Meter_675_3 rdf:type owl:NamedIndividual ,
                             :Power_Meter ;
                    :connectsTo :Endpoint_675 ;
-                   :feeds :Controller_Load_Balancer ;
+                   :feeds :Subcontroller_South ;
                    :measures :Power ;
                    :monitor :Load_675_3 .
 
@@ -1545,7 +1551,7 @@
 :Power_Meter_692_3 rdf:type owl:NamedIndividual ,
                             :Power_Meter ;
                    :connectsTo :Endpoint_692 ;
-                   :feeds :Controller_Load_Balancer ;
+                   :feeds :Subcontroller_South ;
                    :measures :Power ;
                    :monitor :Load_692_3 .
 
@@ -1629,6 +1635,20 @@
                  :tap_primary 1 ;
                  :tap_secondary 1 ;
                  :vreg 122 .
+
+
+###  http://www.semanticweb.org/phoenix/ontologies/2022/0/SmartGrid#Subcontroller_North
+:Subcontroller_North rdf:type owl:NamedIndividual ,
+                              :Subcontroller ;
+                     :connectsTo :Endpoint_North ;
+                     :feeds :Controller_Load_Balancer .
+
+
+###  http://www.semanticweb.org/phoenix/ontologies/2022/0/SmartGrid#Subcontroller_South
+:Subcontroller_South rdf:type owl:NamedIndividual ,
+                              :Subcontroller ;
+                     :connectsTo :Endpoint_South ;
+                     :feeds :Controller_Load_Balancer .
 
 
 ###  http://www.semanticweb.org/phoenix/ontologies/2022/0/SmartGrid#Switch_671692

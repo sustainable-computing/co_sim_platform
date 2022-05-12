@@ -201,7 +201,10 @@ class Load():
         return opendss
 
     def __str__(self):
-        return self.name
+        string = self.name 
+        if self.nodes_secondary is not None:
+            string += f'.{self.nodes_secondary}'
+        return string
 
 class Capacitor():
     """
@@ -415,6 +418,16 @@ class Controller():
     """
     def __init__(self, **kwargs):
         self.name = kwargs['control']
+
+    def __str__(self):
+        return self.name
+
+class Subcontroller():
+    """
+    This class represents the subcontroller for the control system
+    """
+    def __init__(self, **kwargs):
+        self.name = kwargs['subcontrol'].split('#')[1]
 
     def __str__(self):
         return self.name

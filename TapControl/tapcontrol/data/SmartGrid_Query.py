@@ -28,7 +28,11 @@ class SmartGridGraph:
     def _get_individual_name(self, uri):
         return uri.split('#')[1]
 
+    # Start of OpenDSS object queries
     def query_generator(self):
+        """
+        This will get the single generator from the graph
+        """
         query_str = """
         SELECT *
         WHERE {
@@ -61,7 +65,12 @@ class SmartGridGraph:
             break
         return gen
 
-    def query_transformers(self):
+    def query_transformers(self, pattern = None):
+        """
+        Get all transformers from the graph
+
+        If pattern is provided then it will only return transformers that matches that regex pattern
+        """
         query_str = """
         SELECT *
         WHERE {
@@ -80,6 +89,12 @@ class SmartGridGraph:
                 ?trans :XHT ?xht .
                 ?trans :XLT ?xlt .
             }
+        """
+        if pattern is not None:
+            query_str += """
+            FILTER regex(str(?trans), '""" + pattern + """')
+            """
+        query_str += """
         }
         """
         res = self.g.query(query_str)
@@ -104,7 +119,12 @@ class SmartGridGraph:
             transformers.append(trans)
         return transformers 
 
-    def query_capacitors(self):
+    def query_capacitors(self, pattern = None):
+        """
+        Get all capacitors from the graph
+
+        If pattern is provided then it will only return capacitors that matches that regex pattern
+        """
         query_str = """
         SELECT *
         WHERE {
@@ -117,7 +137,13 @@ class SmartGridGraph:
             OPTIONAL {
                 ?cap :nodes_primary ?prim_bus .
             }
-        }    
+        """
+        if pattern is not None:
+            query_str += """
+            FILTER regex(str(?cap), '""" + pattern + """')
+            """
+        query_str += """
+        }
         """
         res = self.g.query(query_str)
         capacitors = []
@@ -133,9 +159,11 @@ class SmartGridGraph:
             capacitors.append(cap)
         return capacitors 
 
-    def query_buses(self):
+    def query_buses(self, pattern = None):
         """
         Get all the buses from the power grid
+
+        If pattern is provided then it will return all buses that matches that regex pattern
         """
         query_str = """
         SELECT *
@@ -144,7 +172,14 @@ class SmartGridGraph:
             ?bus :locatedAt ?loc .
             ?loc :coord_x ?x .
             ?loc :coord_y ?y .
-        }    
+        """
+        if pattern is not None:
+            query_str += """
+            FILTER regex(str(?bus), '""" + pattern + """')
+            """
+
+        query_str += """
+        }
         """
         res = self.g.query(query_str)
         
@@ -160,9 +195,250 @@ class SmartGridGraph:
         
         return self.buses
 
-    def query_double_buses(self):
+    def query_lines(self, pattern = None):
+        # Because the orientation of the bus connection does not matter 
+        query_str = """
+        SELECT *
+        WHERE {
+            ?line a :Line .
+            ?line :primaryAttachsTo ?bus1 .
+            ?line :attachsTo ?bus2 .
+            ?line :hasComponent ?linecode .
+            ?line :length ?length .
+            ?line :nodes_primary ?n_prim .
+            ?line :nodes_secondary ?n_sec .
+            ?line :num_phases ?num_phases .
+            ?line :unit ?unit .
+        """
+
+        if pattern is not None:
+            query_str += """
+            FILTER regex(str(?line), '""" + pattern + """')
+            """
+        
+        query_str += """
+        }
+        """
+
+        res = self.g.query(query_str)
+        lines = []
+        for row in res:
+            line = Line(
+                line = row['line'],
+                bus1 = row['bus1'],
+                bus2 = row['bus2'],
+                linecode = row['linecode'],
+                length = row['length'],
+                length_unit = row['unit'],
+                nodes_primary = row['n_prim'],
+                nodes_secondary = row['n_sec'],
+                num_phases = row['num_phases']
+            )
+            lines.append(line)
+        return lines
+
+    def query_loads(self, pattern = None):
+        # Write the query
+        query_str = """
+        SELECT *
+        WHERE {
+            ?load a :Load .
+            ?load :primaryAttachsTo ?bus1 .
+            ?load :connection_primary ?conn .
+            ?load :kV_primary ?kv_prim .
+            ?load :kW ?kW .
+            ?load :kvar ?kvar .
+            ?load :model ?model .
+            ?load :nodes_primary ?n_prim .
+            ?load :num_phases ?num_phases . 
+            OPTIONAL {
+                ?load :nodes_secondary ?n_sec .
+            }
+        """
+
+        if pattern is not None:
+            query_str += """
+            FILTER regex(str(?load), '""" + pattern + """')
+            """
+        query_str += """
+        }
+        """
+        # Get the query
+        res = self.g.query(query_str)
+        loads = []
+        for row in res:
+            load = Load(
+                load = row['load'],
+                bus1 = row['bus1'],
+                conn = row['conn'],
+                kv_primary = row['kv_prim'],
+                kw = row['kW'],
+                kvar = row['kvar'],
+                model = row['model'],
+                nodes_primary = row['n_prim'],
+                nodes_secondary = row['n_sec'],
+                num_phases = row['num_phases']
+            )
+            loads.append(load)
+
+        return loads
+
+    def query_linecodes(self, pattern = None):
+        query_str = """
+        SELECT *
+        WHERE {
+            ?linecode a :LineCode .
+            ?linecode :freq ?freq .
+            ?linecode :num_phases ?num_phases .
+            ?linecode :rmat ?rmat .
+            ?linecode :xmat ?xmat .
+            ?linecode :unit ?unit .
+            OPTIONAL {
+                ?linecode :cmat ?cmat .
+            }
+        """
+
+        if pattern is not None:
+            query_str += """
+            FILTER regex(str(?linecode), '""" + pattern + """')
+            """
+        query_str += """
+        }
+        """
+        res = self.g.query(query_str)
+
+        linecodes = []
+
+        for row in res:
+            linecode = LineCode(
+                linecode = row['linecode'],
+                freq = row['freq'],
+                num_phases = row['num_phases'],
+                rmat = row['rmat'],
+                xmat = row['xmat'],
+                unit = row['unit'],
+                cmat = row['cmat']
+            )
+            linecodes.append(linecode)
+        return linecodes
+
+    def query_switches(self, pattern = None):
+        query_str = """
+        SELECT *
+        WHERE {
+            ?switch a :Switch .
+            ?switch :primaryAttachsTo ?bus1 .
+            ?switch :attachsTo ?bus2 .
+            ?switch :num_phases ?num_phases .
+            ?switch :c0 ?c0 .
+            ?switch :c1 ?c1 .
+            ?switch :r0 ?r0 .
+            ?switch :r1 ?r1 .
+            ?switch :x0 ?x0 .
+            ?switch :x1 ?x1 .
+        """
+
+        if pattern is not None:
+            query_str += """
+            FILTER regex(str(?switch), '""" + pattern + """')
+            """
+        query_str += """
+        }
+        """
+        res = self.g.query(query_str)
+        switches = []
+        for row in res:
+            switch = Switch(
+                switch = row['switch'],
+                bus1 = row['bus1'],
+                bus2 = row['bus2'],
+                num_phases = row['num_phases'],
+                c0 = row['c0'],
+                c1 = row['c1'],
+                r0 = row['r0'],
+                r1 = row['r1'],
+                x0 = row['x0'],
+                x1 = row['x1']
+            )
+            switches.append(switch)
+        return switches
+
+    def query_regcontrol(self, pattern = None):
+        query_str = """
+        SELECT *
+        WHERE {
+            ?reg a :RegControl .
+            ?reg :primaryAttachsTo ?bus1 .
+            ?reg :attachsTo ?bus2 .
+            ?reg :Kva ?kva .
+            ?reg :R ?R .
+            ?reg :X ?X.
+            ?reg :XHL ?XHL .
+            ?reg :band ?band .
+            ?reg :bank ?bank . 
+            ?reg :ctprim ?ctprim .
+            ?reg :kV_primary ?kv_prim .
+            ?reg :kV_secondary ?kv_sec .
+            ?reg :tap_primary ?tap_prim .
+            ?reg :tap_secondary ?tap_sec .
+            ?reg :max_tap ?max_tap .
+            ?reg :min_tap ?min_tap .
+            ?reg :nodes_primary ?nodes_primary .
+            ?reg :nodes_secondary ?nodes_secondary .
+            ?reg :num_phases ?num_phases .
+            ?reg :num_taps ?num_taps .
+            ?reg :percent_Load_Loss ?percent_load_loss .
+            ?reg :ptratio ?ptratio .
+            ?reg :vreg ?vreg .
+        """
+
+        if pattern is not None:
+            query_str += """
+            FILTER regex(str(?reg), '""" + pattern + """')
+            """
+        query_str += """
+        }
+        """
+        res = self.g.query(query_str)
+        reg_controls = []
+        for row in res:
+            reg_control = VoltageRegulator(
+                regcontrol = row['reg'],
+                bus1 = row['bus1'],
+                bus2 = row['bus2'],
+                num_phases = row['num_phases'],
+                bank = row['bank'],
+                XHL = row['XHL'],
+                kva = row['kva'],
+                primary_kv = row['kv_prim'],
+                nodes_primary = row['nodes_primary'],
+                tap_primary = row['tap_prim'],
+                secondary_kv = row['kv_sec'],
+                nodes_secondary = row['nodes_secondary'],
+                tap_secondary = row['tap_sec'],
+                num_taps = row['num_taps'],
+                max_tap = row['max_tap'], 
+                min_tap = row['min_tap'],
+                load_loss = row['percent_load_loss'],
+                vreg = row['vreg'],
+                band = row['band'],
+                ptratio = row['ptratio'],
+                ctprim = row['ctprim'],
+                R = row['R'],
+                X = row['X']
+            )
+            self.regcontrols[str(reg_control)] = reg_control
+            reg_controls.append(reg_control)
+        return reg_controls
+
+    # End of OpenDSS object queries
+
+    def query_double_buses(self, bus1 = None, bus2 = None):
         """
         This will get all electrical equipment that is connected to two buses
+
+        If bus1 is provided then it will get all electrical equipment whose primary or bus1 matches the pattern.
+        If bus2 is provided then it will get all electrical equipment whose secondary or bus2 matches the pattern.
         """
         query_str = """
         SELECT *
@@ -171,9 +447,24 @@ class SmartGridGraph:
             ?type rdfs:subClassOf* :Electrical_Equipment .
             ?entity :primaryAttachsTo ?bus1 .
             ?entity :attachsTo ?bus2 .
-        } 
+        """
+        if bus1 is not None:
+            query_str += """
+            FILTER regex(str(?bus1), '""" + bus1 + """') 
+            """
+        
+        if bus2 is not None:
+            query_str += """
+            FILTER regex(str(?bus2), '""" + bus2 + """') 
+            """
+        
+        query_str += """
+        }
         """
         res = self.g.query(query_str)
+
+        equipments = []
+
         for row in res:
             bus_in = row['bus1'].split('#')[1].split('_')[1]
             bus_out = row['bus2'].split('#')[1].split('_')[1]
@@ -181,8 +472,9 @@ class SmartGridGraph:
             self.buses[bus_out]['connections'].add(bus_in)
             self.buses_child[bus_in].add(bus_out)
             self.buses_parent[bus_out].add(bus_in)
+            equipments.append(row['entity'])
         
-        return self.buses
+        return equipments
 
     def query_neighbor_buses(self, bus, filter = None):
         """
@@ -382,204 +674,6 @@ class SmartGridGraph:
             u = bus_parent[u]
         return path[::-1]
 
-    def query_lines(self):
-        # Because the orientation of the bus connection does not matter 
-        query_str = """
-        SELECT *
-        WHERE {
-            ?line a :Line .
-            ?line :primaryAttachsTo ?bus1 .
-            ?line :attachsTo ?bus2 .
-            ?line :hasComponent ?linecode .
-            ?line :length ?length .
-            ?line :nodes_primary ?n_prim .
-            ?line :nodes_secondary ?n_sec .
-            ?line :num_phases ?num_phases .
-            ?line :unit ?unit .
-        }
-        """
-        res = self.g.query(query_str)
-        lines = []
-        for row in res:
-            line = Line(
-                line = row['line'],
-                bus1 = row['bus1'],
-                bus2 = row['bus2'],
-                linecode = row['linecode'],
-                length = row['length'],
-                length_unit = row['unit'],
-                nodes_primary = row['n_prim'],
-                nodes_secondary = row['n_sec'],
-                num_phases = row['num_phases']
-            )
-            lines.append(line)
-        return lines
-
-    def query_loads(self):
-        # Write the query
-        query_str = """
-        SELECT *
-        WHERE {
-            ?load a :Load .
-            ?load :primaryAttachsTo ?bus1 .
-            ?load :connection_primary ?conn .
-            ?load :kV_primary ?kv_prim .
-            ?load :kW ?kW .
-            ?load :kvar ?kvar .
-            ?load :model ?model .
-            ?load :nodes_primary ?n_prim .
-            ?load :num_phases ?num_phases . 
-            OPTIONAL {
-                ?load :nodes_secondary ?n_sec .
-            }
-        }
-        """
-        # Get the query
-        res = self.g.query(query_str)
-        loads = []
-        for row in res:
-            load = Load(
-                load = row['load'],
-                bus1 = row['bus1'],
-                conn = row['conn'],
-                kv_primary = row['kv_prim'],
-                kw = row['kW'],
-                kvar = row['kvar'],
-                model = row['model'],
-                nodes_primary = row['n_prim'],
-                nodes_secondary = row['n_sec'],
-                num_phases = row['num_phases']
-            )
-            loads.append(load)
-
-        return loads
-
-    def query_linecodes(self):
-        query_str = """
-        SELECT *
-        WHERE {
-            ?linecode a :LineCode .
-            ?linecode :freq ?freq .
-            ?linecode :num_phases ?num_phases .
-            ?linecode :rmat ?rmat .
-            ?linecode :xmat ?xmat .
-            ?linecode :unit ?unit .
-            OPTIONAL {
-                ?linecode :cmat ?cmat .
-            }
-        }    
-        """
-        res = self.g.query(query_str)
-
-        linecodes = []
-
-        for row in res:
-            linecode = LineCode(
-                linecode = row['linecode'],
-                freq = row['freq'],
-                num_phases = row['num_phases'],
-                rmat = row['rmat'],
-                xmat = row['xmat'],
-                unit = row['unit'],
-                cmat = row['cmat']
-            )
-            linecodes.append(linecode)
-        return linecodes
-
-    def query_switches(self):
-        query_str = """
-        SELECT *
-        WHERE {
-            ?switch a :Switch .
-            ?switch :primaryAttachsTo ?bus1 .
-            ?switch :attachsTo ?bus2 .
-            ?switch :num_phases ?num_phases .
-            ?switch :c0 ?c0 .
-            ?switch :c1 ?c1 .
-            ?switch :r0 ?r0 .
-            ?switch :r1 ?r1 .
-            ?switch :x0 ?x0 .
-            ?switch :x1 ?x1 .
-        }    
-        """
-        res = self.g.query(query_str)
-        switches = []
-        for row in res:
-            switch = Switch(
-                switch = row['switch'],
-                bus1 = row['bus1'],
-                bus2 = row['bus2'],
-                num_phases = row['num_phases'],
-                c0 = row['c0'],
-                c1 = row['c1'],
-                r0 = row['r0'],
-                r1 = row['r1'],
-                x0 = row['x0'],
-                x1 = row['x1']
-            )
-            switches.append(switch)
-        return switches
-
-    def query_regcontrol(self):
-        query_str = """
-        SELECT *
-        WHERE {
-            ?reg a :RegControl .
-            ?reg :primaryAttachsTo ?bus1 .
-            ?reg :attachsTo ?bus2 .
-            ?reg :Kva ?kva .
-            ?reg :R ?R .
-            ?reg :X ?X.
-            ?reg :XHL ?XHL .
-            ?reg :band ?band .
-            ?reg :bank ?bank . 
-            ?reg :ctprim ?ctprim .
-            ?reg :kV_primary ?kv_prim .
-            ?reg :kV_secondary ?kv_sec .
-            ?reg :tap_primary ?tap_prim .
-            ?reg :tap_secondary ?tap_sec .
-            ?reg :max_tap ?max_tap .
-            ?reg :min_tap ?min_tap .
-            ?reg :nodes_primary ?nodes_primary .
-            ?reg :nodes_secondary ?nodes_secondary .
-            ?reg :num_phases ?num_phases .
-            ?reg :num_taps ?num_taps .
-            ?reg :percent_Load_Loss ?percent_load_loss .
-            ?reg :ptratio ?ptratio .
-            ?reg :vreg ?vreg .
-        }    
-        """
-        res = self.g.query(query_str)
-        reg_controls = []
-        for row in res:
-            reg_control = VoltageRegulator(
-                regcontrol = row['reg'],
-                bus1 = row['bus1'],
-                bus2 = row['bus2'],
-                num_phases = row['num_phases'],
-                bank = row['bank'],
-                XHL = row['XHL'],
-                kva = row['kva'],
-                primary_kv = row['kv_prim'],
-                nodes_primary = row['nodes_primary'],
-                tap_primary = row['tap_prim'],
-                secondary_kv = row['kv_sec'],
-                nodes_secondary = row['nodes_secondary'],
-                tap_secondary = row['tap_sec'],
-                num_taps = row['num_taps'],
-                max_tap = row['max_tap'], 
-                min_tap = row['min_tap'],
-                load_loss = row['percent_load_loss'],
-                vreg = row['vreg'],
-                band = row['band'],
-                ptratio = row['ptratio'],
-                ctprim = row['ctprim'],
-                R = row['R'],
-                X = row['X']
-            )
-            self.regcontrols[str(reg_control)] = reg_control
-            reg_controls.append(reg_control)
-        return reg_controls
 
     def query_actuators(self):
         query_str = """
@@ -689,6 +783,49 @@ class SmartGridGraph:
             controllers.append(control)
         
         return controllers
+
+    def query_subcontrollers(self, controller = None):
+        """
+        This will return the list of subcontroller that are controlled by the controller
+
+        If the controller parameter is specified then it will only get subcontrollers that are controlled by that controller
+        """
+        
+        if controller is not None:
+            query_str = """
+            SELECT *
+            WHERE {
+                ?entity rdf:type ?subcontroller_type .
+                ?subcontroller_type rdfs:subClassOf* :Subcontroller .
+                ?entity :feeds ?controller .
+                {  
+                    SELECT * 
+                    WHERE {
+                        ?controller rdf:type ?controller_type .
+                        ?controller_type rdfs:subClassOf* :Controller .
+                        FILTER regex(str(?controller), '""" + controller + """')
+                    }
+                }
+            }
+            """
+        else:
+            query_str = """
+            SELECT *
+            WHERE {
+                ?entity rdf:type ?type .
+                ?type rdfs:subClassOf* :Subcontroller .
+            }
+            """
+        res = self.g.query(query_str)
+        subcontrollers = []
+        for row in res:
+            subcontroller = Subcontroller(
+                subcontrol = row['entity']
+            )
+            subcontrollers.append(subcontroller)
+
+        return subcontrollers
+
     
     def query_transformers_voltages(self):
         query_str = """ 
