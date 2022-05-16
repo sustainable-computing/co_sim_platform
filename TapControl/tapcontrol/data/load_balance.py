@@ -41,11 +41,17 @@ def traverse_grid(root_bus):
 
 # traverse_grid('Bus_SourceBus')
 
-power_path = graph.query_electrical_path('Load_611_3', 'Load_645_2')
-print(power_path)
-network_path = graph.query_network_path('Power_Meter_611_3', 'Power_Meter_645_2')
-print(network_path)
-# endpoints = graph.query_network_neighbor_endpoints('611')
-
+# power_path = graph.query_electrical_path('Load_611_3', 'Load_645_2')
+# print(power_path)
+# network_path = graph.query_network_path('Power_Meter_611_3', 'Power_Meter_645_2')
+# print(network_path)
+# # endpoints = graph.query_network_neighbor_endpoints('611')
+# subcontrollers = graph.query_subcontrollers('Controller_Load_Balancer')
+# for subcontroller in subcontrollers:
+#     print(subcontroller)
+graph.query_buses()
+equipments = graph.query_double_buses('632','645')
+for equipment in equipments:
+    print(equipment)
 # for endpoint in endpoints:
 #     print(endpoint)
