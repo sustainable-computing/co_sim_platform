@@ -826,7 +826,48 @@ class SmartGridGraph:
 
         return subcontrollers
 
+    def query_controllers_from_sensor(self, sensor):
+        """
+        This will get all controllers that are being fed by the provided sensor
+        """
+        query_str = """
+        SELECT *
+        WHERE {
+                ?sensor rdf:type ?type . 
+                ?type rdfs:subClassOf* :Sensor .
+                ?sensor :feeds ?controller .
+                FILTER regex(str(?sensor), '""" + sensor + """') 
+        }
+        """
+        res = self.g.query(query_str)
+        controllers = []
+        for row in res:
+            controllers.append(row['controller'])
+
+        return controllers
+            
+    def query_controllers_from_actuators(self, actuator):
+        """
+        This will get all controllers that feeds the provided actuator
+        """
+        query_str = """
+        SELECT *
+        WHERE {
+            ?controller rdf:type ?type_con . 
+            ?type_con rdfs:subClassOf* :Controller . 
+            ?controller :feeds ?actuator .
+            FILTER regex(str(?actuator), '""" + actuator + """') 
+        }
+        """
+
+        res = self.g.query(query_str)
+
+        controllers = []
+        for row in res:
+            controllers.append(row['controller'])
     
+        return controllers
+        
     def query_transformers_voltages(self):
         query_str = """ 
         SELECT DISTINCT ?kv

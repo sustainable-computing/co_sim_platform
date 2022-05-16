@@ -49,9 +49,9 @@ def traverse_grid(root_bus):
 # subcontrollers = graph.query_subcontrollers('Controller_Load_Balancer')
 # for subcontroller in subcontrollers:
 #     print(subcontroller)
-graph.query_buses()
-equipments = graph.query_double_buses('632','645')
-for equipment in equipments:
-    print(equipment)
+
 # for endpoint in endpoints:
 #     print(endpoint)
+
+# graph.query_controllers_from_sensor('Power_Meter_611_3')
+graph.query_controllers_from_actuators('Flow_Switch_645')

@@ -504,6 +504,11 @@
          rdfs:subClassOf :Electrical_Equipment .
 
 
+###  http://www.semanticweb.org/phoenix/ontologies/2022/0/SmartGrid#Bluetooth
+:Bluetooth rdf:type owl:Class ;
+           rdfs:subClassOf :Transporter .
+
+
 ###  http://www.semanticweb.org/phoenix/ontologies/2022/0/SmartGrid#Bus
 :Bus rdf:type owl:Class ;
      rdfs:subClassOf :Electrical_Equipment .
@@ -540,6 +545,11 @@
 
 ###  http://www.semanticweb.org/phoenix/ontologies/2022/0/SmartGrid#Equipment
 :Equipment rdf:type owl:Class .
+
+
+###  http://www.semanticweb.org/phoenix/ontologies/2022/0/SmartGrid#Ethernet
+:Ethernet rdf:type owl:Class ;
+          rdfs:subClassOf :Transporter .
 
 
 ###  http://www.semanticweb.org/phoenix/ontologies/2022/0/SmartGrid#Flow_Switch
@@ -633,6 +643,11 @@
                 rdfs:subClassOf :Sensor .
 
 
+###  http://www.semanticweb.org/phoenix/ontologies/2022/0/SmartGrid#WiFi
+:WiFi rdf:type owl:Class ;
+      rdfs:subClassOf :Transporter .
+
+
 #################################################################
 #    Individuals
 #################################################################
@@ -647,6 +662,81 @@
 :Battery_671 rdf:type owl:NamedIndividual ,
                       :Battery ;
              :primaryAttachsTo :Bus_671 .
+
+
+###  http://www.semanticweb.org/phoenix/ontologies/2022/0/SmartGrid#Bluetooth_611_3
+:Bluetooth_611_3 rdf:type owl:NamedIndividual ,
+                          :Bluetooth .
+
+
+###  http://www.semanticweb.org/phoenix/ontologies/2022/0/SmartGrid#Bluetooth_634_1
+:Bluetooth_634_1 rdf:type owl:NamedIndividual ,
+                          :Bluetooth .
+
+
+###  http://www.semanticweb.org/phoenix/ontologies/2022/0/SmartGrid#Bluetooth_634_2
+:Bluetooth_634_2 rdf:type owl:NamedIndividual ,
+                          :Bluetooth .
+
+
+###  http://www.semanticweb.org/phoenix/ontologies/2022/0/SmartGrid#Bluetooth_634_3
+:Bluetooth_634_3 rdf:type owl:NamedIndividual ,
+                          :Bluetooth .
+
+
+###  http://www.semanticweb.org/phoenix/ontologies/2022/0/SmartGrid#Bluetooth_645_2
+:Bluetooth_645_2 rdf:type owl:NamedIndividual ,
+                          :Bluetooth .
+
+
+###  http://www.semanticweb.org/phoenix/ontologies/2022/0/SmartGrid#Bluetooth_646_2
+:Bluetooth_646_2 rdf:type owl:NamedIndividual ,
+                          :Bluetooth .
+
+
+###  http://www.semanticweb.org/phoenix/ontologies/2022/0/SmartGrid#Bluetooth_652_1
+:Bluetooth_652_1 rdf:type owl:NamedIndividual ,
+                          :Bluetooth .
+
+
+###  http://www.semanticweb.org/phoenix/ontologies/2022/0/SmartGrid#Bluetooth_670_1
+:Bluetooth_670_1 rdf:type owl:NamedIndividual ,
+                          :Bluetooth .
+
+
+###  http://www.semanticweb.org/phoenix/ontologies/2022/0/SmartGrid#Bluetooth_670_2
+:Bluetooth_670_2 rdf:type owl:NamedIndividual ,
+                          :Bluetooth .
+
+
+###  http://www.semanticweb.org/phoenix/ontologies/2022/0/SmartGrid#Bluetooth_670_3
+:Bluetooth_670_3 rdf:type owl:NamedIndividual ,
+                          :Bluetooth .
+
+
+###  http://www.semanticweb.org/phoenix/ontologies/2022/0/SmartGrid#Bluetooth_671
+:Bluetooth_671 rdf:type owl:NamedIndividual ,
+                        :Bluetooth .
+
+
+###  http://www.semanticweb.org/phoenix/ontologies/2022/0/SmartGrid#Bluetooth_675_1
+:Bluetooth_675_1 rdf:type owl:NamedIndividual ,
+                          :Bluetooth .
+
+
+###  http://www.semanticweb.org/phoenix/ontologies/2022/0/SmartGrid#Bluetooth_675_2
+:Bluetooth_675_2 rdf:type owl:NamedIndividual ,
+                          :Bluetooth .
+
+
+###  http://www.semanticweb.org/phoenix/ontologies/2022/0/SmartGrid#Bluetooth_675_3
+:Bluetooth_675_3 rdf:type owl:NamedIndividual ,
+                          :Bluetooth .
+
+
+###  http://www.semanticweb.org/phoenix/ontologies/2022/0/SmartGrid#Bluetooth_692_3
+:Bluetooth_692_3 rdf:type owl:NamedIndividual ,
+                          :Bluetooth .
 
 
 ###  http://www.semanticweb.org/phoenix/ontologies/2022/0/SmartGrid#Bus_611
@@ -767,7 +857,8 @@
 ###  http://www.semanticweb.org/phoenix/ontologies/2022/0/SmartGrid#Controller_611_3
 :Controller_611_3 rdf:type owl:NamedIndividual ,
                            :Controller ;
-                  :connectsTo :Endpoint_611 ;
+                  :connectsTo :Bluetooth_611_3 ,
+                              :WiFi_611_3 ;
                   :feeds :Flow_Switch_645 ,
                          :Flow_Switch_671 .
 
@@ -775,7 +866,8 @@
 ###  http://www.semanticweb.org/phoenix/ontologies/2022/0/SmartGrid#Controller_634_1
 :Controller_634_1 rdf:type owl:NamedIndividual ,
                            :Controller ;
-                  :connectsTo :Endpoint_634 ;
+                  :connectsTo :Bluetooth_634_1 ,
+                              :WiFi_634_1 ;
                   :feeds :Flow_Switch_645 ,
                          :Flow_Switch_671 .
 
@@ -783,7 +875,8 @@
 ###  http://www.semanticweb.org/phoenix/ontologies/2022/0/SmartGrid#Controller_634_2
 :Controller_634_2 rdf:type owl:NamedIndividual ,
                            :Controller ;
-                  :connectsTo :Endpoint_634 ;
+                  :connectsTo :Bluetooth_634_2 ,
+                              :WiFi_634_2 ;
                   :feeds :Flow_Switch_645 ,
                          :Flow_Switch_671 .
 
@@ -791,7 +884,8 @@
 ###  http://www.semanticweb.org/phoenix/ontologies/2022/0/SmartGrid#Controller_634_3
 :Controller_634_3 rdf:type owl:NamedIndividual ,
                            :Controller ;
-                  :connectsTo :Endpoint_634 ;
+                  :connectsTo :Bluetooth_634_3 ,
+                              :WiFi_634_3 ;
                   :feeds :Flow_Switch_645 ,
                          :Flow_Switch_671 .
 
@@ -799,7 +893,8 @@
 ###  http://www.semanticweb.org/phoenix/ontologies/2022/0/SmartGrid#Controller_645_2
 :Controller_645_2 rdf:type owl:NamedIndividual ,
                            :Controller ;
-                  :connectsTo :Endpoint_645 ;
+                  :connectsTo :Bluetooth_645_2 ,
+                              :WiFi_645_2 ;
                   :feeds :Flow_Switch_645 ,
                          :Flow_Switch_671 .
 
@@ -807,7 +902,8 @@
 ###  http://www.semanticweb.org/phoenix/ontologies/2022/0/SmartGrid#Controller_646_2
 :Controller_646_2 rdf:type owl:NamedIndividual ,
                            :Controller ;
-                  :connectsTo :Endpoint_646 ;
+                  :connectsTo :Bluetooth_646_2 ,
+                              :WiFi_646_2 ;
                   :feeds :Flow_Switch_645 ,
                          :Flow_Switch_671 .
 
@@ -815,7 +911,8 @@
 ###  http://www.semanticweb.org/phoenix/ontologies/2022/0/SmartGrid#Controller_652_1
 :Controller_652_1 rdf:type owl:NamedIndividual ,
                            :Controller ;
-                  :connectsTo :Endpoint_652 ;
+                  :connectsTo :Bluetooth_652_1 ,
+                              :WiFi_652_1 ;
                   :feeds :Flow_Switch_645 ,
                          :Flow_Switch_671 .
 
@@ -823,7 +920,8 @@
 ###  http://www.semanticweb.org/phoenix/ontologies/2022/0/SmartGrid#Controller_670_1
 :Controller_670_1 rdf:type owl:NamedIndividual ,
                            :Controller ;
-                  :connectsTo :Endpoint_670 ;
+                  :connectsTo :Bluetooth_670_1 ,
+                              :WiFi_670_1 ;
                   :feeds :Flow_Switch_645 ,
                          :Flow_Switch_671 .
 
@@ -831,7 +929,8 @@
 ###  http://www.semanticweb.org/phoenix/ontologies/2022/0/SmartGrid#Controller_670_2
 :Controller_670_2 rdf:type owl:NamedIndividual ,
                            :Controller ;
-                  :connectsTo :Endpoint_670 ;
+                  :connectsTo :Bluetooth_670_2 ,
+                              :WiFi_670_2 ;
                   :feeds :Flow_Switch_645 ,
                          :Flow_Switch_671 .
 
@@ -839,7 +938,8 @@
 ###  http://www.semanticweb.org/phoenix/ontologies/2022/0/SmartGrid#Controller_670_3
 :Controller_670_3 rdf:type owl:NamedIndividual ,
                            :Controller ;
-                  :connectsTo :Endpoint_670 ;
+                  :connectsTo :Bluetooth_670_3 ,
+                              :WiFi_670_3 ;
                   :feeds :Flow_Switch_645 ,
                          :Flow_Switch_671 .
 
@@ -847,7 +947,8 @@
 ###  http://www.semanticweb.org/phoenix/ontologies/2022/0/SmartGrid#Controller_671
 :Controller_671 rdf:type owl:NamedIndividual ,
                          :Controller ;
-                :connectsTo :Endpoint_671 ;
+                :connectsTo :Bluetooth_671 ,
+                            :WiFi_671 ;
                 :feeds :Flow_Switch_645 ,
                        :Flow_Switch_671 .
 
@@ -855,7 +956,8 @@
 ###  http://www.semanticweb.org/phoenix/ontologies/2022/0/SmartGrid#Controller_675_1
 :Controller_675_1 rdf:type owl:NamedIndividual ,
                            :Controller ;
-                  :connectsTo :Endpoint_675 ;
+                  :connectsTo :Bluetooth_675_1 ,
+                              :WiFi_675_1 ;
                   :feeds :Flow_Switch_645 ,
                          :Flow_Switch_671 .
 
@@ -863,7 +965,8 @@
 ###  http://www.semanticweb.org/phoenix/ontologies/2022/0/SmartGrid#Controller_675_2
 :Controller_675_2 rdf:type owl:NamedIndividual ,
                            :Controller ;
-                  :connectsTo :Endpoint_675 ;
+                  :connectsTo :Bluetooth_675_2 ,
+                              :WiFi_675_2 ;
                   :feeds :Flow_Switch_645 ,
                          :Flow_Switch_671 .
 
@@ -871,7 +974,8 @@
 ###  http://www.semanticweb.org/phoenix/ontologies/2022/0/SmartGrid#Controller_675_3
 :Controller_675_3 rdf:type owl:NamedIndividual ,
                            :Controller ;
-                  :connectsTo :Endpoint_675 ;
+                  :connectsTo :Bluetooth_675_3 ,
+                              :WiFi_675_3 ;
                   :feeds :Flow_Switch_645 ,
                          :Flow_Switch_671 .
 
@@ -879,7 +983,8 @@
 ###  http://www.semanticweb.org/phoenix/ontologies/2022/0/SmartGrid#Controller_692_3
 :Controller_692_3 rdf:type owl:NamedIndividual ,
                            :Controller ;
-                  :connectsTo :Endpoint_692 ;
+                  :connectsTo :Bluetooth_692_3 ,
+                              :WiFi_692_3 ;
                   :feeds :Flow_Switch_645 ,
                          :Flow_Switch_671 .
 
@@ -999,63 +1104,54 @@
 ###  http://www.semanticweb.org/phoenix/ontologies/2022/0/SmartGrid#Endpoint_611
 :Endpoint_611 rdf:type owl:NamedIndividual ,
                        :Network_Endpoint ;
-              :connectsTo :Transporter_611_South ;
               :locatedAt :Bus_611 .
 
 
 ###  http://www.semanticweb.org/phoenix/ontologies/2022/0/SmartGrid#Endpoint_634
 :Endpoint_634 rdf:type owl:NamedIndividual ,
                        :Network_Endpoint ;
-              :connectsTo :Transporter_634_North ;
               :locatedAt :Bus_634 .
 
 
 ###  http://www.semanticweb.org/phoenix/ontologies/2022/0/SmartGrid#Endpoint_645
 :Endpoint_645 rdf:type owl:NamedIndividual ,
                        :Network_Endpoint ;
-              :connectsTo :Transporter_645_North ;
               :locatedAt :Bus_645 .
 
 
 ###  http://www.semanticweb.org/phoenix/ontologies/2022/0/SmartGrid#Endpoint_646
 :Endpoint_646 rdf:type owl:NamedIndividual ,
                        :Network_Endpoint ;
-              :connectsTo :Transporter_646_North ;
               :locatedAt :Bus_646 .
 
 
 ###  http://www.semanticweb.org/phoenix/ontologies/2022/0/SmartGrid#Endpoint_652
 :Endpoint_652 rdf:type owl:NamedIndividual ,
                        :Network_Endpoint ;
-              :connectsTo :Transporter_652_South ;
               :locatedAt :Bus_652 .
 
 
 ###  http://www.semanticweb.org/phoenix/ontologies/2022/0/SmartGrid#Endpoint_670
 :Endpoint_670 rdf:type owl:NamedIndividual ,
                        :Network_Endpoint ;
-              :connectsTo :Transporter_670_Controller ;
               :locatedAt :Bus_670 .
 
 
 ###  http://www.semanticweb.org/phoenix/ontologies/2022/0/SmartGrid#Endpoint_671
 :Endpoint_671 rdf:type owl:NamedIndividual ,
                        :Network_Endpoint ;
-              :connectsTo :Transporter_671_South ;
               :locatedAt :Bus_671 .
 
 
 ###  http://www.semanticweb.org/phoenix/ontologies/2022/0/SmartGrid#Endpoint_675
 :Endpoint_675 rdf:type owl:NamedIndividual ,
                        :Network_Endpoint ;
-              :connectsTo :Transporter_675_South ;
               :locatedAt :Bus_675 .
 
 
 ###  http://www.semanticweb.org/phoenix/ontologies/2022/0/SmartGrid#Endpoint_692
 :Endpoint_692 rdf:type owl:NamedIndividual ,
                        :Network_Endpoint ;
-              :connectsTo :Transporter_692_South ;
               :locatedAt :Bus_692 .
 
 
@@ -1067,14 +1163,12 @@
 
 ###  http://www.semanticweb.org/phoenix/ontologies/2022/0/SmartGrid#Endpoint_North
 :Endpoint_North rdf:type owl:NamedIndividual ,
-                         :Network_Endpoint ;
-                :connectsTo :Transporter_North_Controller .
+                         :Network_Endpoint .
 
 
 ###  http://www.semanticweb.org/phoenix/ontologies/2022/0/SmartGrid#Endpoint_South
 :Endpoint_South rdf:type owl:NamedIndividual ,
-                         :Network_Endpoint ;
-                :connectsTo :Transporter_South_Controller .
+                         :Network_Endpoint .
 
 
 ###  http://www.semanticweb.org/phoenix/ontologies/2022/0/SmartGrid#Flow_Switch_645
@@ -1535,7 +1629,7 @@
 ###  http://www.semanticweb.org/phoenix/ontologies/2022/0/SmartGrid#Power_Meter_611_3
 :Power_Meter_611_3 rdf:type owl:NamedIndividual ,
                             :Power_Meter ;
-                   :connectsTo :Endpoint_611 ;
+                   :connectsTo :Bluetooth_611_3 ;
                    :feeds :Controller_611_3 ;
                    :measures :Power ;
                    :monitor :Load_611_3 .
@@ -1544,7 +1638,7 @@
 ###  http://www.semanticweb.org/phoenix/ontologies/2022/0/SmartGrid#Power_Meter_634_1
 :Power_Meter_634_1 rdf:type owl:NamedIndividual ,
                             :Power_Meter ;
-                   :connectsTo :Endpoint_634 ;
+                   :connectsTo :Bluetooth_634_1 ;
                    :feeds :Controller_634_1 ;
                    :measures :Power ;
                    :monitor :Load_634_1 .
@@ -1553,7 +1647,7 @@
 ###  http://www.semanticweb.org/phoenix/ontologies/2022/0/SmartGrid#Power_Meter_634_2
 :Power_Meter_634_2 rdf:type owl:NamedIndividual ,
                             :Power_Meter ;
-                   :connectsTo :Endpoint_634 ;
+                   :connectsTo :Bluetooth_634_2 ;
                    :feeds :Controller_634_2 ;
                    :measures :Power ;
                    :monitor :Load_634_2 .
@@ -1562,7 +1656,7 @@
 ###  http://www.semanticweb.org/phoenix/ontologies/2022/0/SmartGrid#Power_Meter_634_3
 :Power_Meter_634_3 rdf:type owl:NamedIndividual ,
                             :Power_Meter ;
-                   :connectsTo :Endpoint_634 ;
+                   :connectsTo :Bluetooth_634_3 ;
                    :feeds :Controller_634_3 ;
                    :measures :Power ;
                    :monitor :Load_634_3 .
@@ -1571,7 +1665,7 @@
 ###  http://www.semanticweb.org/phoenix/ontologies/2022/0/SmartGrid#Power_Meter_645_2
 :Power_Meter_645_2 rdf:type owl:NamedIndividual ,
                             :Power_Meter ;
-                   :connectsTo :Endpoint_645 ;
+                   :connectsTo :Bluetooth_645_2 ;
                    :feeds :Controller_645_2 ;
                    :measures :Power ;
                    :monitor :Load_645_2 .
@@ -1580,7 +1674,7 @@
 ###  http://www.semanticweb.org/phoenix/ontologies/2022/0/SmartGrid#Power_Meter_646_2
 :Power_Meter_646_2 rdf:type owl:NamedIndividual ,
                             :Power_Meter ;
-                   :connectsTo :Endpoint_646 ;
+                   :connectsTo :Bluetooth_646_2 ;
                    :feeds :Controller_646_2 ;
                    :measures :Power ;
                    :monitor :Load_646_2 .
@@ -1589,7 +1683,7 @@
 ###  http://www.semanticweb.org/phoenix/ontologies/2022/0/SmartGrid#Power_Meter_652_1
 :Power_Meter_652_1 rdf:type owl:NamedIndividual ,
                             :Power_Meter ;
-                   :connectsTo :Endpoint_652 ;
+                   :connectsTo :Bluetooth_652_1 ;
                    :feeds :Controller_652_1 ;
                    :measures :Power ;
                    :monitor :Load_652_1 .
@@ -1598,7 +1692,7 @@
 ###  http://www.semanticweb.org/phoenix/ontologies/2022/0/SmartGrid#Power_Meter_670_1
 :Power_Meter_670_1 rdf:type owl:NamedIndividual ,
                             :Power_Meter ;
-                   :connectsTo :Endpoint_670 ;
+                   :connectsTo :Bluetooth_670_1 ;
                    :feeds :Controller_670_1 ;
                    :measures :Power ;
                    :monitor :Load_670_1 .
@@ -1616,7 +1710,7 @@
 ###  http://www.semanticweb.org/phoenix/ontologies/2022/0/SmartGrid#Power_Meter_670_3
 :Power_Meter_670_3 rdf:type owl:NamedIndividual ,
                             :Power_Meter ;
-                   :connectsTo :Endpoint_670 ;
+                   :connectsTo :Bluetooth_670_3 ;
                    :feeds :Controller_670_3 ;
                    :measures :Power ;
                    :monitor :Load_670_3 .
@@ -1625,7 +1719,7 @@
 ###  http://www.semanticweb.org/phoenix/ontologies/2022/0/SmartGrid#Power_Meter_671
 :Power_Meter_671 rdf:type owl:NamedIndividual ,
                           :Power_Meter ;
-                 :connectsTo :Endpoint_671 ;
+                 :connectsTo :Bluetooth_671 ;
                  :feeds :Controller_671 ;
                  :measures :Power ;
                  :monitor :Load_671 .
@@ -1634,7 +1728,7 @@
 ###  http://www.semanticweb.org/phoenix/ontologies/2022/0/SmartGrid#Power_Meter_675_1
 :Power_Meter_675_1 rdf:type owl:NamedIndividual ,
                             :Power_Meter ;
-                   :connectsTo :Endpoint_675 ;
+                   :connectsTo :Bluetooth_675_1 ;
                    :feeds :Controller_675_1 ;
                    :measures :Power ;
                    :monitor :Load_675_1 .
@@ -1643,7 +1737,7 @@
 ###  http://www.semanticweb.org/phoenix/ontologies/2022/0/SmartGrid#Power_Meter_675_2
 :Power_Meter_675_2 rdf:type owl:NamedIndividual ,
                             :Power_Meter ;
-                   :connectsTo :Endpoint_675 ;
+                   :connectsTo :Bluetooth_675_2 ;
                    :feeds :Controller_675_2 ;
                    :measures :Power ;
                    :monitor :Load_675_2 .
@@ -1652,7 +1746,7 @@
 ###  http://www.semanticweb.org/phoenix/ontologies/2022/0/SmartGrid#Power_Meter_675_3
 :Power_Meter_675_3 rdf:type owl:NamedIndividual ,
                             :Power_Meter ;
-                   :connectsTo :Endpoint_675 ;
+                   :connectsTo :Bluetooth_675_3 ;
                    :feeds :Controller_675_3 ;
                    :measures :Power ;
                    :monitor :Load_675_3 .
@@ -1661,7 +1755,7 @@
 ###  http://www.semanticweb.org/phoenix/ontologies/2022/0/SmartGrid#Power_Meter_692_3
 :Power_Meter_692_3 rdf:type owl:NamedIndividual ,
                             :Power_Meter ;
-                   :connectsTo :Endpoint_692 ;
+                   :connectsTo :Bluetooth_692_3 ;
                    :feeds :Controller_692_3 ;
                    :measures :Power ;
                    :monitor :Load_692_3 .
@@ -1797,75 +1891,84 @@
                   rdfs:comment "This is the transformer labelled XFM-1" .
 
 
-###  http://www.semanticweb.org/phoenix/ontologies/2022/0/SmartGrid#Transporter_611_South
-:Transporter_611_South rdf:type owl:NamedIndividual ,
-                                :Transporter ;
-                       :connectsTo :Endpoint_South .
-
-
-###  http://www.semanticweb.org/phoenix/ontologies/2022/0/SmartGrid#Transporter_634_North
-:Transporter_634_North rdf:type owl:NamedIndividual ,
-                                :Transporter ;
-                       :connectsTo :Endpoint_North .
-
-
-###  http://www.semanticweb.org/phoenix/ontologies/2022/0/SmartGrid#Transporter_645_North
-:Transporter_645_North rdf:type owl:NamedIndividual ,
-                                :Transporter ;
-                       :connectsTo :Endpoint_North .
-
-
-###  http://www.semanticweb.org/phoenix/ontologies/2022/0/SmartGrid#Transporter_646_North
-:Transporter_646_North rdf:type owl:NamedIndividual ,
-                                :Transporter ;
-                       :connectsTo :Endpoint_North .
-
-
-###  http://www.semanticweb.org/phoenix/ontologies/2022/0/SmartGrid#Transporter_652_South
-:Transporter_652_South rdf:type owl:NamedIndividual ,
-                                :Transporter ;
-                       :connectsTo :Endpoint_South .
-
-
-###  http://www.semanticweb.org/phoenix/ontologies/2022/0/SmartGrid#Transporter_670_Controller
-:Transporter_670_Controller rdf:type owl:NamedIndividual ,
-                                     :Transporter ;
-                            :connectsTo :Endpoint_Controller .
-
-
-###  http://www.semanticweb.org/phoenix/ontologies/2022/0/SmartGrid#Transporter_671_South
-:Transporter_671_South rdf:type owl:NamedIndividual ,
-                                :Transporter ;
-                       :connectsTo :Endpoint_South .
-
-
-###  http://www.semanticweb.org/phoenix/ontologies/2022/0/SmartGrid#Transporter_675_South
-:Transporter_675_South rdf:type owl:NamedIndividual ,
-                                :Transporter ;
-                       :connectsTo :Endpoint_South .
-
-
-###  http://www.semanticweb.org/phoenix/ontologies/2022/0/SmartGrid#Transporter_692_South
-:Transporter_692_South rdf:type owl:NamedIndividual ,
-                                :Transporter ;
-                       :connectsTo :Endpoint_South .
-
-
-###  http://www.semanticweb.org/phoenix/ontologies/2022/0/SmartGrid#Transporter_North_Controller
-:Transporter_North_Controller rdf:type owl:NamedIndividual ,
-                                       :Transporter ;
-                              :connectsTo :Endpoint_Controller .
-
-
-###  http://www.semanticweb.org/phoenix/ontologies/2022/0/SmartGrid#Transporter_South_Controller
-:Transporter_South_Controller rdf:type owl:NamedIndividual ,
-                                       :Transporter ;
-                              :connectsTo :Endpoint_Controller .
-
-
 ###  http://www.semanticweb.org/phoenix/ontologies/2022/0/SmartGrid#Voltage
 :Voltage rdf:type owl:NamedIndividual ,
                   :Quantity .
+
+
+###  http://www.semanticweb.org/phoenix/ontologies/2022/0/SmartGrid#WiFi_611_3
+:WiFi_611_3 rdf:type owl:NamedIndividual ,
+                     :WiFi .
+
+
+###  http://www.semanticweb.org/phoenix/ontologies/2022/0/SmartGrid#WiFi_634_1
+:WiFi_634_1 rdf:type owl:NamedIndividual ,
+                     :WiFi .
+
+
+###  http://www.semanticweb.org/phoenix/ontologies/2022/0/SmartGrid#WiFi_634_2
+:WiFi_634_2 rdf:type owl:NamedIndividual ,
+                     :WiFi .
+
+
+###  http://www.semanticweb.org/phoenix/ontologies/2022/0/SmartGrid#WiFi_634_3
+:WiFi_634_3 rdf:type owl:NamedIndividual ,
+                     :WiFi .
+
+
+###  http://www.semanticweb.org/phoenix/ontologies/2022/0/SmartGrid#WiFi_645_2
+:WiFi_645_2 rdf:type owl:NamedIndividual ,
+                     :WiFi .
+
+
+###  http://www.semanticweb.org/phoenix/ontologies/2022/0/SmartGrid#WiFi_646_2
+:WiFi_646_2 rdf:type owl:NamedIndividual ,
+                     :WiFi .
+
+
+###  http://www.semanticweb.org/phoenix/ontologies/2022/0/SmartGrid#WiFi_652_1
+:WiFi_652_1 rdf:type owl:NamedIndividual ,
+                     :WiFi .
+
+
+###  http://www.semanticweb.org/phoenix/ontologies/2022/0/SmartGrid#WiFi_670_1
+:WiFi_670_1 rdf:type owl:NamedIndividual ,
+                     :WiFi .
+
+
+###  http://www.semanticweb.org/phoenix/ontologies/2022/0/SmartGrid#WiFi_670_2
+:WiFi_670_2 rdf:type owl:NamedIndividual ,
+                     :WiFi .
+
+
+###  http://www.semanticweb.org/phoenix/ontologies/2022/0/SmartGrid#WiFi_670_3
+:WiFi_670_3 rdf:type owl:NamedIndividual ,
+                     :WiFi .
+
+
+###  http://www.semanticweb.org/phoenix/ontologies/2022/0/SmartGrid#WiFi_671
+:WiFi_671 rdf:type owl:NamedIndividual ,
+                   :WiFi .
+
+
+###  http://www.semanticweb.org/phoenix/ontologies/2022/0/SmartGrid#WiFi_675_1
+:WiFi_675_1 rdf:type owl:NamedIndividual ,
+                     :WiFi .
+
+
+###  http://www.semanticweb.org/phoenix/ontologies/2022/0/SmartGrid#WiFi_675_2
+:WiFi_675_2 rdf:type owl:NamedIndividual ,
+                     :WiFi .
+
+
+###  http://www.semanticweb.org/phoenix/ontologies/2022/0/SmartGrid#WiFi_675_3
+:WiFi_675_3 rdf:type owl:NamedIndividual ,
+                     :WiFi .
+
+
+###  http://www.semanticweb.org/phoenix/ontologies/2022/0/SmartGrid#WiFi_692_3
+:WiFi_692_3 rdf:type owl:NamedIndividual ,
+                     :WiFi .
 
 
 ###  Generated by the OWL API (version 4.5.9.2019-02-01T07:24:44Z) https://github.com/owlcs/owlapi
