@@ -582,7 +582,8 @@
 
 ###  http://www.semanticweb.org/phoenix/ontologies/2022/0/SmartGrid#Network_Endpoint
 :Network_Endpoint rdf:type owl:Class ;
-                  rdfs:subClassOf :Network_Devices .
+                  rdfs:subClassOf :Network_Devices ;
+                  <http://www.w3.org/2004/02/skos/core#definition> "Analogous to an electrical bus but for networking" .
 
 
 ###  http://www.semanticweb.org/phoenix/ontologies/2022/0/SmartGrid#Power_Meter
@@ -623,7 +624,8 @@
 
 ###  http://www.semanticweb.org/phoenix/ontologies/2022/0/SmartGrid#Transporter
 :Transporter rdf:type owl:Class ;
-             rdfs:subClassOf :Network_Devices .
+             rdfs:subClassOf :Network_Devices ;
+             <http://www.w3.org/2004/02/skos/core#definition> "Analogous to a electrical line but for networking" .
 
 
 ###  http://www.semanticweb.org/phoenix/ontologies/2022/0/SmartGrid#Voltage_Sensor
