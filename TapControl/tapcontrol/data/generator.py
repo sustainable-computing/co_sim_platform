@@ -90,25 +90,33 @@ def main():
         fieldnames = ['idn','type','src','dst','period','error','cktElement','cktTerminal','cktPhase','cktProperty']
         writer = csv.DictWriter(csv_file, fieldnames=fieldnames)
         writer.writeheader()
-        for idx, controller in enumerate(controllers):
+        # This will keep track of all the devices located at the same src.dst pair
+        device_counter = {}
         
-            for sensor in sensors:
-                # If the dst points to the controller
-                if sensor.dst in controller.bus:
-                    writer.writerow({
-                            'idn': idx, 'type': 'sensor', 'src': sensor.src, 'dst': sensor.dst, 
-                            'period': period, 'error': error, 
-                            'cktElement': f'{sensor.equipment}', 'cktTerminal': f'BUS{sensor.bus}', 'cktPhase': f'PHASE_{sensor.phase}', 'cktProperty': 'None'
-                        })
-            for actuator in actuators:
-                # If the src points to the controller
-                if actuator.src in controller.bus:
-                    writer.writerow({
-                            'idn': idx, 'type': 'actuator', 'src': actuator.src, 'dst': actuator.dst, 
-                            'period': period, 'error': error, 
-                            'cktElement': f'{actuator.equipment}', 'cktTerminal': f'BUS{actuator.bus}', 'cktPhase': f'PHASE_{actuator.phase}', 'cktProperty': 'None'
-                        })
-    
+        for sensor in sensors:
+            loc_pair = f'{sensor.src}.{sensor.dst}'
+            if loc_pair not in device_counter.keys():
+                device_counter[loc_pair] = 0
+
+            writer.writerow({
+                    'idn': f'{loc_pair}.{device_counter[loc_pair]}', 'type': 'sensor', 'src': sensor.src, 'dst': sensor.dst, 
+                    'period': period, 'error': error, 
+                    'cktElement': f'{sensor.equipment}', 'cktTerminal': f'BUS{sensor.bus}', 'cktPhase': f'PHASE_{sensor.phase}', 'cktProperty': 'None'
+            })
+
+            device_counter[loc_pair] += 1
+        for actuator in actuators:
+            loc_pair = f'{actuator.src}.{actuator.dst}'
+            if loc_pair not in device_counter.keys():
+                device_counter[loc_pair] = 0
+
+            writer.writerow({
+                    'idn': f'{loc_pair}.{device_counter[loc_pair]}', 'type': 'actuator', 'src': actuator.src, 'dst': actuator.dst, 
+                    'period': period, 'error': error, 
+                    'cktElement': f'{actuator.equipment}', 'cktTerminal': f'BUS{actuator.bus}', 'cktPhase': f'PHASE_{actuator.phase}', 'cktProperty': 'None'
+            })
+            device_counter[loc_pair] += 1
+
     # Generate the opendss file
     with open(outfilename, 'wt') as outfile:
         outfile.write('!---- pre object declareation\n')
