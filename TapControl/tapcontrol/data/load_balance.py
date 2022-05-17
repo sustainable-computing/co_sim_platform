@@ -53,5 +53,11 @@ def traverse_grid(root_bus):
 # for endpoint in endpoints:
 #     print(endpoint)
 
-# graph.query_controllers_from_sensor('Power_Meter_611_3')
-graph.query_controllers_from_actuators('Flow_Switch_645')
+controllers = graph.query_controllers_from_sensor('Power_Meter_611_3')
+for controller in controllers:
+    print(controller)
+
+print('\n\n')
+controllers =  graph.query_controllers_from_actuators('Flow_Switch_645')
+for controller in controllers:
+    print(controller)

@@ -562,6 +562,12 @@
            rdfs:subClassOf :Electrical_Equipment .
 
 
+###  http://www.semanticweb.org/phoenix/ontologies/2022/0/SmartGrid#Interposer
+:Interposer rdf:type owl:Class ;
+            rdfs:subClassOf :Network_Devices ;
+            <http://www.w3.org/2004/02/skos/core#definition> "Allows a change in communication technologies between two devices" .
+
+
 ###  http://www.semanticweb.org/phoenix/ontologies/2022/0/SmartGrid#Line
 :Line rdf:type owl:Class ;
       rdfs:subClassOf :Electrical_Equipment .
@@ -858,6 +864,7 @@
 :Controller_611_3 rdf:type owl:NamedIndividual ,
                            :Controller ;
                   :connectsTo :Bluetooth_611_3 ,
+                              :Internet_611_3 ,
                               :WiFi_611_3 ;
                   :feeds :Flow_Switch_645 ,
                          :Flow_Switch_671 .
@@ -893,6 +900,8 @@
 ###  http://www.semanticweb.org/phoenix/ontologies/2022/0/SmartGrid#Controller_645_2
 :Controller_645_2 rdf:type owl:NamedIndividual ,
                            :Controller ;
+                  :connectsTo :Bluetooth_645_2 ,
+                              :WiFi_645_2 ;
                   :feeds :Flow_Switch_645 ,
                          :Flow_Switch_671 .
 
@@ -901,6 +910,7 @@
 :Controller_646_2 rdf:type owl:NamedIndividual ,
                            :Controller ;
                   :connectsTo :Bluetooth_646_2 ,
+                              :Internet_646_2 ,
                               :WiFi_646_2 ;
                   :feeds :Flow_Switch_645 ,
                          :Flow_Switch_671 .
@@ -1172,7 +1182,9 @@
 ###  http://www.semanticweb.org/phoenix/ontologies/2022/0/SmartGrid#Flow_Switch_645
 :Flow_Switch_645 rdf:type owl:NamedIndividual ,
                           :Flow_Switch ;
-                 :connectsTo :WiFi_611_3 ,
+                 :connectsTo :Internet_611_3 ,
+                             :Internet_646_2 ,
+                             :WiFi_611_3 ,
                              :WiFi_634_1 ,
                              :WiFi_634_2 ,
                              :WiFi_634_3 ,
@@ -1193,7 +1205,9 @@
 ###  http://www.semanticweb.org/phoenix/ontologies/2022/0/SmartGrid#Flow_Switch_671
 :Flow_Switch_671 rdf:type owl:NamedIndividual ,
                           :Flow_Switch ;
-                 :connectsTo :WiFi_611_3 ,
+                 :connectsTo :Internet_611_3 ,
+                             :Internet_646_2 ,
+                             :WiFi_611_3 ,
                              :WiFi_634_1 ,
                              :WiFi_634_2 ,
                              :WiFi_634_3 ,
@@ -1221,6 +1235,16 @@
                          :kV_secondary 115 ;
                          :num_phases 3 ;
                          :pu 1.0001 .
+
+
+###  http://www.semanticweb.org/phoenix/ontologies/2022/0/SmartGrid#Internet_611_3
+:Internet_611_3 rdf:type owl:NamedIndividual ,
+                         :Ethernet .
+
+
+###  http://www.semanticweb.org/phoenix/ontologies/2022/0/SmartGrid#Internet_646_2
+:Internet_646_2 rdf:type owl:NamedIndividual ,
+                         :Ethernet .
 
 
 ###  http://www.semanticweb.org/phoenix/ontologies/2022/0/SmartGrid#LineCode_mtx601
@@ -1745,7 +1769,7 @@
 ###  http://www.semanticweb.org/phoenix/ontologies/2022/0/SmartGrid#Power_Meter_671
 :Power_Meter_671 rdf:type owl:NamedIndividual ,
                           :Power_Meter ;
-                 :connectsTo :Bluetooth_671 ;
+                 :connectsTo :Bluetooth_670_2 ;
                  :feeds :Controller_671 ;
                  :measures :Power ;
                  :monitor :Load_671 .
