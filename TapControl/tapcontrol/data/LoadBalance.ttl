@@ -893,8 +893,6 @@
 ###  http://www.semanticweb.org/phoenix/ontologies/2022/0/SmartGrid#Controller_645_2
 :Controller_645_2 rdf:type owl:NamedIndividual ,
                            :Controller ;
-                  :connectsTo :Bluetooth_645_2 ,
-                              :WiFi_645_2 ;
                   :feeds :Flow_Switch_645 ,
                          :Flow_Switch_671 .
 
@@ -1174,14 +1172,42 @@
 ###  http://www.semanticweb.org/phoenix/ontologies/2022/0/SmartGrid#Flow_Switch_645
 :Flow_Switch_645 rdf:type owl:NamedIndividual ,
                           :Flow_Switch ;
-                 :connectsTo :Endpoint_645 ;
+                 :connectsTo :WiFi_611_3 ,
+                             :WiFi_634_1 ,
+                             :WiFi_634_2 ,
+                             :WiFi_634_3 ,
+                             :WiFi_645_2 ,
+                             :WiFi_646_2 ,
+                             :WiFi_652_1 ,
+                             :WiFi_670_1 ,
+                             :WiFi_670_2 ,
+                             :WiFi_670_3 ,
+                             :WiFi_671 ,
+                             :WiFi_675_1 ,
+                             :WiFi_675_2 ,
+                             :WiFi_675_3 ,
+                             :WiFi_692_3 ;
                  :controls :Battery_645 .
 
 
 ###  http://www.semanticweb.org/phoenix/ontologies/2022/0/SmartGrid#Flow_Switch_671
 :Flow_Switch_671 rdf:type owl:NamedIndividual ,
                           :Flow_Switch ;
-                 :connectsTo :Endpoint_671 ;
+                 :connectsTo :WiFi_611_3 ,
+                             :WiFi_634_1 ,
+                             :WiFi_634_2 ,
+                             :WiFi_634_3 ,
+                             :WiFi_645_2 ,
+                             :WiFi_646_2 ,
+                             :WiFi_652_1 ,
+                             :WiFi_670_1 ,
+                             :WiFi_670_2 ,
+                             :WiFi_670_3 ,
+                             :WiFi_671 ,
+                             :WiFi_675_1 ,
+                             :WiFi_675_2 ,
+                             :WiFi_675_3 ,
+                             :WiFi_692_3 ;
                  :controls :Battery_671 .
 
 
