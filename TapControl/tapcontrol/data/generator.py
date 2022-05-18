@@ -25,19 +25,22 @@ parser.add_argument('--period', default=20, help="The period time for the sensor
 
 def pre_object_opendss(freq = 60):
     """
-    This will write code pre-object definition 
+    This will produce the pre-object definition 
     """
     opendss_str = f"Clear \nSet DefaultBaseFrequency={freq} \n\n"
     return opendss_str
 
 def set_taps(graph):
+    """
+    This will produce the initial tap settings for the regulator
+    """
     regcontrols = graph.regcontrols
     openstr = ""
     for reg, obj in regcontrols.items():
         openstr += f"Transformer.{reg}.Taps=[1 1] \n"
 
     return openstr
-    
+
 def main():
     args = parser.parse_args()
     
@@ -61,7 +64,6 @@ def main():
 
     sensors = graph.query_sensors()
     actuators = graph.query_actuators()
-    controllers = graph.query_controllers()
 
 
     with open(device_filename, 'w') as csv_file:
@@ -72,24 +74,24 @@ def main():
         device_counter = {}
         
         for sensor in sensors:
-            loc_pair = f'{sensor.src}.{sensor.dst}'
+            loc_pair = f'{sensor.src}-{sensor.dst}'
             if loc_pair not in device_counter.keys():
                 device_counter[loc_pair] = 0
 
             writer.writerow({
-                    'idn': f'{loc_pair}.{device_counter[loc_pair]}', 'type': 'sensor', 'src': sensor.src, 'dst': sensor.dst, 
+                    'idn': f'Sensor_{loc_pair}.{device_counter[loc_pair]}', 'type': 'sensor', 'src': sensor.src, 'dst': sensor.dst, 
                     'period': period, 'error': error, 
                     'cktElement': f'{sensor.equipment}', 'cktTerminal': f'BUS{sensor.bus}', 'cktPhase': f'PHASE_{sensor.phase}', 'cktProperty': 'None'
             })
 
             device_counter[loc_pair] += 1
         for actuator in actuators:
-            loc_pair = f'{actuator.src}.{actuator.dst}'
+            loc_pair = f'{actuator.src}-{actuator.dst}'
             if loc_pair not in device_counter.keys():
                 device_counter[loc_pair] = 0
 
             writer.writerow({
-                    'idn': f'{loc_pair}.{device_counter[loc_pair]}', 'type': 'actuator', 'src': actuator.src, 'dst': actuator.dst, 
+                    'idn': f'Actuator_{loc_pair}.{device_counter[loc_pair]}', 'type': 'actuator', 'src': actuator.src, 'dst': actuator.dst, 
                     'period': period, 'error': error, 
                     'cktElement': f'{actuator.equipment}', 'cktTerminal': f'BUS{actuator.bus}', 'cktPhase': f'PHASE_{actuator.phase}', 'cktProperty': 'None'
             })
