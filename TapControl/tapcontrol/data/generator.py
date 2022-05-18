@@ -1,13 +1,21 @@
 import argparse
 import json
 import csv
+import sys 
+import os.path
+import git 
 
-import SmartGrid_Query as query
+# Setup path to search for custom modules at the git root level
+repo = git.Repo('.', search_parent_directories=True)
+repo_root_path = repo.working_tree_dir
+sys.path.insert(1, repo_root_path)
+
+from SmartGridOntology import SmartGrid_Query as query
 
 parser = argparse.ArgumentParser(description = "Convert turtle files to OpenDSS")
 parser.add_argument('--freq', default=60, type=int, help="The frequency of the grid")
 parser.add_argument('--outfile', default="outfile.dss", help="The filename of the OpenDSS file")
-parser.add_argument('--infile', default="SmartGrid.ttl", help="The filename of the ontology to convert")
+parser.add_argument('--infile', help="The filename of the ontology to convert", required=True)
 parser.add_argument('--nodes_file', default="gen_nodes.json", help="The filename of the nodes json file to be used by the network sim")
 parser.add_argument('--device_file', default="gen_devices.csv", help="The filename of the device file to be used by the network sim")
 parser.add_argument('--error', default=0.00001667, help="The error margin")
@@ -17,40 +25,15 @@ parser.add_argument('--period', default=20, help="The period time for the sensor
 
 def pre_object_opendss(freq = 60):
     """
-    This will write code pre-object definition 
+    This will produce the pre-object definition 
     """
     opendss_str = f"Clear \nSet DefaultBaseFrequency={freq} \n\n"
     return opendss_str
 
-def post_object_opendss():
-    """
-    This will write code post object definition
-    """
-    # TODO replace this with the Query helper
-    query_str = """ 
-SELECT DISTINCT ?kv
-WHERE {
-    ?trans a :Transformer . 
-    {
-        ?trans :kV_primary ?kv.
-
-    }
-    UNION 
-    {
-        ?trans :kV_secondary ?kv    
-    }
-}
-"""
-    res = g.query(query_str)
-    voltages = []
-    for row in res:
-        voltages.append(float(row['kv']))
-
-    opendss_str = f"Set VoltageBases={voltages} \n"
-    opendss_str += "calcv \nSolve \n"
-    return opendss_str
-
 def set_taps(graph):
+    """
+    This will produce the initial tap settings for the regulator
+    """
     regcontrols = graph.regcontrols
     openstr = ""
     for reg, obj in regcontrols.items():
@@ -58,11 +41,9 @@ def set_taps(graph):
 
     return openstr
 
-
-
 def main():
     args = parser.parse_args()
-
+    
     outfilename = args.outfile 
     onto_filename = args.infile
     nodes_filename = args.nodes_file
@@ -83,34 +64,39 @@ def main():
 
     sensors = graph.query_sensors()
     actuators = graph.query_actuators()
-    controllers = graph.query_controllers()
 
-
-    # res = query_neighbours('645', 2)
-    # for row in res:
-    #     print(row)
 
     with open(device_filename, 'w') as csv_file:
         fieldnames = ['idn','type','src','dst','period','error','cktElement','cktTerminal','cktPhase','cktProperty']
         writer = csv.DictWriter(csv_file, fieldnames=fieldnames)
         writer.writeheader()
-        idx = 0
+        # This will keep track of all the devices located at the same src.dst pair
+        device_counter = {}
+        
         for sensor in sensors:
+            loc_pair = f'{sensor.src}-{sensor.dst}'
+            if loc_pair not in device_counter.keys():
+                device_counter[loc_pair] = 0
+
             writer.writerow({
-                    'idn': idx, 'type': 'sensor', 'src': sensor.src, 'dst': sensor.dst, 
+                    'idn': f'Sensor_{loc_pair}.{device_counter[loc_pair]}', 'type': 'sensor', 'src': sensor.src, 'dst': sensor.dst, 
                     'period': period, 'error': error, 
                     'cktElement': f'{sensor.equipment}', 'cktTerminal': f'BUS{sensor.bus}', 'cktPhase': f'PHASE_{sensor.phase}', 'cktProperty': 'None'
-                })
-            # idx += 1
+            })
+
+            device_counter[loc_pair] += 1
         for actuator in actuators:
+            loc_pair = f'{actuator.src}-{actuator.dst}'
+            if loc_pair not in device_counter.keys():
+                device_counter[loc_pair] = 0
+
             writer.writerow({
-                    'idn': idx, 'type': 'actuator', 'src': actuator.src, 'dst': actuator.dst, 
+                    'idn': f'Actuator_{loc_pair}.{device_counter[loc_pair]}', 'type': 'actuator', 'src': actuator.src, 'dst': actuator.dst, 
                     'period': period, 'error': error, 
                     'cktElement': f'{actuator.equipment}', 'cktTerminal': f'BUS{actuator.bus}', 'cktPhase': f'PHASE_{actuator.phase}', 'cktProperty': 'None'
-                })
-            # idx += 1
-    # exit(1)
-    
+            })
+            device_counter[loc_pair] += 1
+
     # Generate the opendss file
     with open(outfilename, 'wt') as outfile:
         outfile.write('!---- pre object declareation\n')
@@ -133,7 +119,6 @@ def main():
         outfile.write('\n'.join([switch.get_opendss() for switch in graph.query_switches()]))
         outfile.write('\n!---- Generated Transformer Voltages\n')
         outfile.write(graph.query_transformers_voltages())
-        # outfile.write(post_object_opendss())
         outfile.write(set_taps(graph))
         outfile.write("Set ControlMode=OFF ")
 

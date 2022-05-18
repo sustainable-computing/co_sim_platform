@@ -1,22 +1,20 @@
+!---- pre object declareation
 Clear 
 Set DefaultBaseFrequency=60 
 
-!--- Genereted circuit
+!---- Generated Circuit/generator
 new circuit.IEEE13Nodeckt 
 ~ basekv=115 pu=1.0001 phases=3 bus1=SourceBus 
 ~ Angle=30 
 ~ MVAsc3=20000 MVAsc1=21000 
-
-!--- Generated Transformers
+!---- Generated Transformer
 New Transformer.Sub Phases=3 Windings=2 XHL=(8 1000 /) 
 ~ wdg=1 bus=SourceBus conn=Delta kv=115 kva=5000 %r=(.5 1000 /)  
 ~ wdg=2 bus=650 conn=Wye kv=4.16 kva=5000 %r=(.5 1000 /) 
 New Transformer.XFM1 Phases=3 Windings=2 XHL=2 
 ~ wdg=1 bus=633 conn=Wye kv=4.16 kva=500 %r=0.55 XHT=1 
 ~ wdg=2 bus=634 conn=Wye kv=0.480 kva=500 %r=0.55 XLT=1 
-
-
-!--- Generated Reg Control
+!---- Generated RegControls
 New Transformer.Reg1 phases=1 bank=reg1 XHL=0.01 kVAs=[1666 1666] NumTaps=32 maxtap=1.05 mintap=0.95 
 ~ Buses=[650.1 RG60.1] kVs=[2.4 2.4] %LoadLoss=0.01 
 new regcontrol.Reg1 transformer=Reg1 winding=2 vreg=122 band=2 ptratio=20 ctprim=700 R=3 X=9 
@@ -26,9 +24,7 @@ new regcontrol.Reg2 transformer=Reg2 winding=2 vreg=122 band=2 ptratio=20 ctprim
 New Transformer.Reg3 phases=1 bank=reg1 XHL=0.01 kVAs=[1666 1666] NumTaps=32 maxtap=1.05 mintap=0.95 
 ~ Buses=[650.3 RG60.3] kVs=[2.4 2.4] %LoadLoss=0.01 
 new regcontrol.Reg3 transformer=Reg3 winding=2 vreg=122 band=2 ptratio=20 ctprim=700 R=3 X=9 
-
-
-!--- Generated Linecodes
+!---- Generated Line Codes
 New linecode.mtx601 nphases=3 BaseFreq=60 
 ~ rmatrix = (0.3465 | 0.1560 0.3375 | 0.1580 0.1535 0.3414 ) 
 ~ xmatrix = (1.0179 | 0.5017 1.0478 | 0.4236 0.3849 1.0348 ) 
@@ -59,10 +55,7 @@ New linecode.mtx607 nphases=1 BaseFreq=60
 ~ xmatrix = (0.5124 ) 
 ~ Cmatrix = [236] 
 ~ units=mi 
-
-
-!--- Generated Loads
-!--- Note: the order and placements of the Loads matter
+!---- Generated Loads
 New Load.611.3 Bus1=611.3 Phases=1 Conn=Wye Model=5 kV=2.4 kW=170 kvar=80 
 New Load.634.1 Bus1=634.1 Phases=1 Conn=Wye Model=1 kV=0.277 kW=160 kvar=110 
 New Load.634.2 Bus1=634.2 Phases=1 Conn=Wye Model=1 kV=0.277 kW=120 kvar=90 
@@ -78,14 +71,10 @@ New Load.675.1 Bus1=675.1 Phases=1 Conn=Wye Model=1 kV=2.4 kW=485 kvar=190
 New Load.675.2 Bus1=675.2 Phases=1 Conn=Wye Model=1 kV=2.4 kW=68 kvar=60 
 New Load.675.3 Bus1=675.3 Phases=1 Conn=Wye Model=1 kV=2.4 kW=290 kvar=212 
 New Load.692.3 Bus1=692.3.1 Phases=1 Conn=Delta Model=5 kV=4.16 kW=170 kvar=151 
-
-
-!--- Generated Capacitors
+!---- Generated Capacitors
 New Capacitor.Cap1 Bus1=675 phases=3 KVAR=600 kV=4.16 
 New Capacitor.Cap2 Bus1=611.3 phases=1 KVAR=100 kV=2.4 
-
-
-!--- Generated Lines
+!---- Generated Lines
 New Line.632633 Phases=3 Bus1=632.1.2.3 Bus2=633.1.2.3 LineCode=mtx602 Length=500 units=ft 
 New Line.632645 Phases=2 Bus1=632.3.2 Bus2=645.3.2 LineCode=mtx603 Length=500 units=ft 
 New Line.632670 Phases=3 Bus1=632.1.2.3 Bus2=670.1.2.3 LineCode=mtx601 Length=667 units=ft 
@@ -97,12 +86,9 @@ New Line.671684 Phases=2 Bus1=671.1.3 Bus2=684.1.3 LineCode=mtx604 Length=300 un
 New Line.684611 Phases=1 Bus1=684.3 Bus2=611.3 LineCode=mtx605 Length=300 units=ft 
 New Line.684652 Phases=1 Bus1=684.1 Bus2=652.1 LineCode=mtx607 Length=800 units=ft 
 New Line.692675 Phases=3 Bus1=692.1.2.3 Bus2=675.1.2.3 LineCode=mtx606 Length=500 units=ft 
-
-
-!--- Generated Switches
+!---- Generated Switches
 New Line.671692 Phases=3 Bus1=671 Bus2=692 Switch=y c0=0.0 c1=0.0 r0=0.0001 r1=0.0001 x0=0.0 x1=0.0 
-
-
+!---- Generated Transformer Voltages
 Set VoltageBases=[115.0, 4.16, 0.48] 
 calcv 
 Solve 

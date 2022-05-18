@@ -418,16 +418,7 @@ class Controller():
     """
     def __init__(self, **kwargs):
         self.name = kwargs['control']
-
-    def __str__(self):
-        return self.name
-
-class Subcontroller():
-    """
-    This class represents the subcontroller for the control system
-    """
-    def __init__(self, **kwargs):
-        self.name = kwargs['subcontrol'].split('#')[1]
+        self.bus = kwargs['bus'].split('#')[1]
 
     def __str__(self):
         return self.name

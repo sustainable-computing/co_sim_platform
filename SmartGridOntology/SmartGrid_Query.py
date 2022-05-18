@@ -6,7 +6,7 @@ The resulting queries will be of course python data structure friendly
 from rdflib import Graph 
 from collections import deque
 
-from SmartGrid import *
+from .SmartGrid import *
 
 
 class SmartGridGraph:
@@ -768,17 +768,20 @@ class SmartGridGraph:
         This will return the list of controllers in the graph    
         """
         query_str = """
-        SELECT *
+        SELECT DISTINCT *
         WHERE {
             ?entity rdf:type ?type .
             ?type rdfs:subClassOf* :Controller .
+            ?entity :connectsTo ?connnects_to .
+            ?connnects_to :locatedAt ?bus .
         }    
         """
         res = self.g.query(query_str)
         controllers = []
         for row in res:
             control = Controller(
-                control = row['entity']
+                control = row['entity'],
+                bus = row['bus']
             )
             controllers.append(control)
         
