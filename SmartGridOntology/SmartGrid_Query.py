@@ -6,7 +6,7 @@ The resulting queries will be of course python data structure friendly
 from rdflib import Graph 
 from collections import deque
 
-from SmartGrid import *
+from .SmartGrid import *
 
 
 class SmartGridGraph:

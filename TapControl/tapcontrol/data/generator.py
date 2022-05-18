@@ -1,13 +1,21 @@
 import argparse
 import json
 import csv
+import sys 
+import os.path
+import git 
 
-import SmartGrid_Query as query
+# Setup path to search for custom modules at the git root level
+repo = git.Repo('.', search_parent_directories=True)
+repo_root_path = repo.working_tree_dir
+sys.path.insert(1, repo_root_path)
+
+from SmartGridOntology import SmartGrid_Query as query
 
 parser = argparse.ArgumentParser(description = "Convert turtle files to OpenDSS")
 parser.add_argument('--freq', default=60, type=int, help="The frequency of the grid")
 parser.add_argument('--outfile', default="outfile.dss", help="The filename of the OpenDSS file")
-parser.add_argument('--infile', default="SmartGrid.ttl", help="The filename of the ontology to convert")
+parser.add_argument('--infile', help="The filename of the ontology to convert", required=True)
 parser.add_argument('--nodes_file', default="gen_nodes.json", help="The filename of the nodes json file to be used by the network sim")
 parser.add_argument('--device_file', default="gen_devices.csv", help="The filename of the device file to be used by the network sim")
 parser.add_argument('--error', default=0.00001667, help="The error margin")
@@ -22,34 +30,6 @@ def pre_object_opendss(freq = 60):
     opendss_str = f"Clear \nSet DefaultBaseFrequency={freq} \n\n"
     return opendss_str
 
-def post_object_opendss():
-    """
-    This will write code post object definition
-    """
-    # TODO replace this with the Query helper
-    query_str = """ 
-SELECT DISTINCT ?kv
-WHERE {
-    ?trans a :Transformer . 
-    {
-        ?trans :kV_primary ?kv.
-
-    }
-    UNION 
-    {
-        ?trans :kV_secondary ?kv    
-    }
-}
-"""
-    res = g.query(query_str)
-    voltages = []
-    for row in res:
-        voltages.append(float(row['kv']))
-
-    opendss_str = f"Set VoltageBases={voltages} \n"
-    opendss_str += "calcv \nSolve \n"
-    return opendss_str
-
 def set_taps(graph):
     regcontrols = graph.regcontrols
     openstr = ""
@@ -57,12 +37,10 @@ def set_taps(graph):
         openstr += f"Transformer.{reg}.Taps=[1 1] \n"
 
     return openstr
-
-
-
+    
 def main():
     args = parser.parse_args()
-
+    
     outfilename = args.outfile 
     onto_filename = args.infile
     nodes_filename = args.nodes_file
@@ -139,7 +117,6 @@ def main():
         outfile.write('\n'.join([switch.get_opendss() for switch in graph.query_switches()]))
         outfile.write('\n!---- Generated Transformer Voltages\n')
         outfile.write(graph.query_transformers_voltages())
-        # outfile.write(post_object_opendss())
         outfile.write(set_taps(graph))
         outfile.write("Set ControlMode=OFF ")
 
