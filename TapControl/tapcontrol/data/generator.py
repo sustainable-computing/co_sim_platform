@@ -2,7 +2,6 @@ import argparse
 import json
 import csv
 import sys 
-import os.path
 import git 
 
 # Setup path to search for custom modules at the git root level

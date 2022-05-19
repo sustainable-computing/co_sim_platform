@@ -993,3 +993,23 @@ class SmartGridGraph:
                     traversed_buses[neighbor] = {'depth': traversed_buses[bus]['depth'] + 1}
 
         return traversed_buses
+
+    def query_interfaces(self, device):
+        """
+        This will return all the interfaces that the device is using to communicate
+        """
+        query_str = """
+        SELECT ?interface
+        WHERE {
+            ?device rdf:type ?type .
+            ?type rdfs:subClassOf* :Control_System . 
+            FILTER regex(str(?device), '""" + device + """') .
+            ?device :connectsTo ?conn .
+            ?conn rdf:type owl:NamedIndividual, ?interface .
+        }
+        """
+
+        res = self.g.query(query_str)
+
+        for row in res:
+            print(row['interface'])

@@ -12,6 +12,10 @@
 #    Annotation properties
 #################################################################
 
+###  http://www.semanticweb.org/phoenix/ontologies/2022/0/SmartGrid#LineCode
+:LineCode rdf:type owl:AnnotationProperty .
+
+
 ###  http://www.semanticweb.org/phoenix/ontologies/2022/0/SmartGrid#and
 :and rdf:type owl:AnnotationProperty .
 
@@ -124,10 +128,6 @@
        rdfs:domain :Equipment ;
        rdfs:range :Equipment ;
        <http://www.w3.org/2004/02/skos/core#definition> "The subject is upstream of the object in the context of some sequential process; some media is passed between them." .
-
-
-###  http://www.semanticweb.org/phoenix/ontologies/2022/0/SmartGrid#hasComponent
-:hasComponent rdf:type owl:ObjectProperty .
 
 
 ###  http://www.semanticweb.org/phoenix/ontologies/2022/0/SmartGrid#isControlledBy
@@ -942,143 +942,143 @@
 :Line_632633 rdf:type owl:NamedIndividual ,
                       :Line ;
              :attachsTo :Bus_633 ;
-             :hasComponent :LineCode_mtx602 ;
              :primaryAttachsTo :Bus_632 ;
              :length 500 ;
              :nodes_primary "1 2 3" ;
              :nodes_secondary "1 2 3" ;
              :num_phases 3 ;
-             :unit "ft" .
+             :unit "ft" ;
+             :LineCode :LineCode_mtx602 .
 
 
 ###  http://www.semanticweb.org/phoenix/ontologies/2022/0/SmartGrid#Line_632645
 :Line_632645 rdf:type owl:NamedIndividual ,
                       :Line ;
              :attachsTo :Bus_645 ;
-             :hasComponent :LineCode_mtx603 ;
              :primaryAttachsTo :Bus_632 ;
              :length 500 ;
              :nodes_primary "3 2" ;
              :nodes_secondary "3 2" ;
              :num_phases 2 ;
-             :unit "ft" .
+             :unit "ft" ;
+             :LineCode :LineCode_mtx603 .
 
 
 ###  http://www.semanticweb.org/phoenix/ontologies/2022/0/SmartGrid#Line_632670
 :Line_632670 rdf:type owl:NamedIndividual ,
                       :Line ;
              :attachsTo :Bus_670 ;
-             :hasComponent :LineCode_mtx601 ;
              :primaryAttachsTo :Bus_632 ;
              :length 667 ;
              :nodes_primary "1 2 3" ;
              :nodes_secondary "1 2 3" ;
              :num_phases 3 ;
-             :unit "ft" .
+             :unit "ft" ;
+             :LineCode :LineCode_mtx601 .
 
 
 ###  http://www.semanticweb.org/phoenix/ontologies/2022/0/SmartGrid#Line_645646
 :Line_645646 rdf:type owl:NamedIndividual ,
                       :Line ;
              :attachsTo :Bus_646 ;
-             :hasComponent :LineCode_mtx603 ;
              :primaryAttachsTo :Bus_645 ;
              :length 300 ;
              :nodes_primary "3 2" ;
              :nodes_secondary "3 2" ;
              :num_phases 2 ;
-             :unit "ft" .
+             :unit "ft" ;
+             :LineCode :LineCode_mtx603 .
 
 
 ###  http://www.semanticweb.org/phoenix/ontologies/2022/0/SmartGrid#Line_650632
 :Line_650632 rdf:type owl:NamedIndividual ,
                       :Line ;
              :attachsTo :Bus_632 ;
-             :hasComponent :LineCode_mtx601 ;
              :primaryAttachsTo :Bus_RG60 ;
              :length 2000 ;
              :nodes_primary "1 2 3" ;
              :nodes_secondary "1 2 3" ;
              :num_phases 3 ;
-             :unit "ft" .
+             :unit "ft" ;
+             :LineCode :LineCode_mtx601 .
 
 
 ###  http://www.semanticweb.org/phoenix/ontologies/2022/0/SmartGrid#Line_670671
 :Line_670671 rdf:type owl:NamedIndividual ,
                       :Line ;
              :attachsTo :Bus_671 ;
-             :hasComponent :LineCode_mtx601 ;
              :primaryAttachsTo :Bus_670 ;
              :length 1333 ;
              :nodes_primary "1 2 3" ;
              :nodes_secondary "1 2 3" ;
              :num_phases 3 ;
-             :unit "ft" .
+             :unit "ft" ;
+             :LineCode :LineCode_mtx601 .
 
 
 ###  http://www.semanticweb.org/phoenix/ontologies/2022/0/SmartGrid#Line_671680
 :Line_671680 rdf:type owl:NamedIndividual ,
                       :Line ;
              :attachsTo :Bus_680 ;
-             :hasComponent :LineCode_mtx601 ;
              :primaryAttachsTo :Bus_671 ;
              :length 1000 ;
              :nodes_primary "1 2 3" ;
              :nodes_secondary "1 2 3" ;
              :num_phases 3 ;
-             :unit "ft" .
+             :unit "ft" ;
+             :LineCode :LineCode_mtx601 .
 
 
 ###  http://www.semanticweb.org/phoenix/ontologies/2022/0/SmartGrid#Line_671684
 :Line_671684 rdf:type owl:NamedIndividual ,
                       :Line ;
              :attachsTo :Bus_684 ;
-             :hasComponent :LineCode_mtx604 ;
              :primaryAttachsTo :Bus_671 ;
              :length 300 ;
              :nodes_primary "1 3" ;
              :nodes_secondary "1 3" ;
              :num_phases 2 ;
-             :unit "ft" .
+             :unit "ft" ;
+             :LineCode :LineCode_mtx604 .
 
 
 ###  http://www.semanticweb.org/phoenix/ontologies/2022/0/SmartGrid#Line_684611
 :Line_684611 rdf:type owl:NamedIndividual ,
                       :Line ;
              :attachsTo :Bus_611 ;
-             :hasComponent :LineCode_mtx605 ;
              :primaryAttachsTo :Bus_684 ;
              :length 300 ;
              :nodes_primary 3 ;
              :nodes_secondary 3 ;
              :num_phases 1 ;
-             :unit "ft" .
+             :unit "ft" ;
+             :LineCode :LineCode_mtx605 .
 
 
 ###  http://www.semanticweb.org/phoenix/ontologies/2022/0/SmartGrid#Line_684652
 :Line_684652 rdf:type owl:NamedIndividual ,
                       :Line ;
              :attachsTo :Bus_652 ;
-             :hasComponent :LineCode_mtx607 ;
              :primaryAttachsTo :Bus_684 ;
              :length 800 ;
              :nodes_primary 1 ;
              :nodes_secondary 1 ;
              :num_phases 1 ;
-             :unit "ft" .
+             :unit "ft" ;
+             :LineCode :LineCode_mtx607 .
 
 
 ###  http://www.semanticweb.org/phoenix/ontologies/2022/0/SmartGrid#Line_692675
 :Line_692675 rdf:type owl:NamedIndividual ,
                       :Line ;
              :attachsTo :Bus_675 ;
-             :hasComponent :LineCode_mtx606 ;
              :primaryAttachsTo :Bus_692 ;
              :length 500 ;
              :nodes_primary "1 2 3" ;
              :nodes_secondary "1 2 3" ;
              :num_phases 3 ;
-             :unit "ft" .
+             :unit "ft" ;
+             :LineCode :LineCode_mtx606 .
 
 
 ###  http://www.semanticweb.org/phoenix/ontologies/2022/0/SmartGrid#Load_611_3

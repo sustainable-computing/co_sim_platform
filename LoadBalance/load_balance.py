@@ -1,8 +1,16 @@
 from collections import deque
+import sys
+import git 
 
-import SmartGrid_Query as query
+# Setup path to search for custom modules at the git root level
+repo = git.Repo('.', search_parent_directories=True)
+repo_root_path = repo.working_tree_dir
+sys.path.insert(1, repo_root_path)
 
-graph = query.SmartGridGraph('LoadBalance.ttl')
+from SmartGridOntology import SmartGrid_Query as query
+
+
+graph = query.SmartGridGraph('../SmartGridOntology/models/LoadBalance.ttl')
 
 
 def traverse_network(root_node):
@@ -53,11 +61,13 @@ def traverse_grid(root_bus):
 # for endpoint in endpoints:
 #     print(endpoint)
 
-controllers = graph.query_controllers_from_sensor('Power_Meter_611_3')
-for controller in controllers:
-    print(controller)
+# controllers = graph.query_controllers_from_sensor('Power_Meter_611_3')
+# for controller in controllers:
+#     print(controller)
 
-print('\n\n')
-controllers =  graph.query_controllers_from_actuators('Flow_Switch_645')
-for controller in controllers:
-    print(controller)
+# print('\n\n')
+# controllers =  graph.query_controllers_from_actuators('Flow_Switch_645')
+# for controller in controllers:
+#     print(controller)
+
+graph.query_interfaces('Flow_Switch_645')
