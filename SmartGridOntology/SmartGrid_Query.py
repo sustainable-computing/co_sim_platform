@@ -106,7 +106,7 @@ class SmartGridGraph:
         SELECT *
         WHERE {
             ?cap a :Capacitor .
-            ?cap :attachsTo ?bus .
+            ?cap :primaryAttachsTo ?bus .
             ?cap :kV_primary ?kv .
             ?cap :kvar ?kvar .
             ?cap :num_phases ?num_phases .
@@ -189,7 +189,7 @@ class SmartGridGraph:
             ?line a :Line .
             ?line :primaryAttachsTo ?bus1 .
             ?line :attachsTo ?bus2 .
-            ?line :hasComponent ?linecode .
+            ?line :LineCode ?linecode .
             ?line :length ?length .
             ?line :nodes_primary ?n_prim .
             ?line :nodes_secondary ?n_sec .
@@ -220,7 +220,7 @@ class SmartGridGraph:
         SELECT *
         WHERE {
             ?load a :Load .
-            ?load :attachsTo ?bus1 .
+            ?load :primaryAttachsTo ?bus1 .
             ?load :connection_primary ?conn .
             ?load :kV_primary ?kv_prim .
             ?load :kW ?kW .
