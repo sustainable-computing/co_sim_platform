@@ -13,7 +13,9 @@
 #################################################################
 
 ###  http://www.semanticweb.org/phoenix/ontologies/2022/0/SmartGrid#LineCode
-:LineCode rdf:type owl:AnnotationProperty .
+:LineCode rdf:type owl:AnnotationProperty ;
+          rdfs:range :Line ;
+          rdfs:domain :LineCode .
 
 
 ###  http://www.semanticweb.org/phoenix/ontologies/2022/0/SmartGrid#and
@@ -56,6 +58,13 @@
 :targetSubjectOf rdf:type owl:AnnotationProperty .
 
 
+###  http://www.semanticweb.org/phoenix/ontologies/2022/0/SmartGrid#technology
+:technology rdf:type owl:AnnotationProperty ;
+            <http://www.w3.org/2004/02/skos/core#definition> "What kind of communication technology is used between two communication nodes/devices" ;
+            rdfs:range :Transporter ;
+            rdfs:domain :Network_Devices .
+
+
 ###  http://www.w3.org/2004/02/skos/core#definition
 <http://www.w3.org/2004/02/skos/core#definition> rdf:type owl:AnnotationProperty .
 
@@ -85,54 +94,55 @@
 #################################################################
 
 ###  http://www.semanticweb.org/phoenix/ontologies/2022/0/SmartGrid#attachsTo
-:attachsTo rdf:type owl:ObjectProperty ,
-                    owl:AsymmetricProperty ,
+:attachsTo rdf:type owl:ObjectProperty ;
+           rdfs:subPropertyOf owl:topObjectProperty ;
+           rdf:type owl:AsymmetricProperty ,
                     owl:IrreflexiveProperty ;
-           rdfs:domain :Capacitor ,
-                       :Generator ,
-                       :Line ,
-                       :Load ,
-                       :RegControl ,
-                       :Transformer ;
+           rdfs:domain :Electrical_Equipment ;
            rdfs:range :Bus ;
-           <http://www.w3.org/2004/02/skos/core#definition> "A electrical connection ot a bus" .
+           owl:propertyDisjointWith :primaryAttachsTo ;
+           <http://www.w3.org/2004/02/skos/core#definition> "A electrical connection to bus2" .
 
 
 ###  http://www.semanticweb.org/phoenix/ontologies/2022/0/SmartGrid#connectsTo
 :connectsTo rdf:type owl:ObjectProperty ;
+            rdfs:subPropertyOf owl:topObjectProperty ;
             owl:inverseOf :connectsTo ;
             rdf:type owl:SymmetricProperty ,
                      owl:IrreflexiveProperty ;
-            rdfs:domain :Control_System ,
+            rdfs:domain :Bus ,
                         :Network_Devices ;
-            rdfs:range :Control_System ,
+            rdfs:range :Bus ,
                        :Network_Devices ;
-            <http://www.w3.org/2004/02/skos/core#definition> "A logical connection between two entities" .
+            <http://www.w3.org/2004/02/skos/core#definition> "A network connection between two networking devices" .
 
 
 ###  http://www.semanticweb.org/phoenix/ontologies/2022/0/SmartGrid#controls
 :controls rdf:type owl:ObjectProperty ;
+          rdfs:subPropertyOf owl:topObjectProperty ;
           owl:inverseOf :isControlledBy ;
           rdf:type owl:AsymmetricProperty ,
                    owl:IrreflexiveProperty ;
           rdfs:domain :Actuator ;
           rdfs:range :Equipment ;
-          <http://www.w3.org/2004/02/skos/core#definition> "An equipment that controls another equipment." .
+          <http://www.w3.org/2004/02/skos/core#definition> "An actuator that controls another equipment." .
 
 
 ###  http://www.semanticweb.org/phoenix/ontologies/2022/0/SmartGrid#feeds
 :feeds rdf:type owl:ObjectProperty ;
+       rdfs:subPropertyOf owl:topObjectProperty ;
        owl:inverseOf :isFedBy ;
        rdf:type owl:AsymmetricProperty ,
                 owl:IrreflexiveProperty ;
-       rdfs:domain :Equipment ;
-       rdfs:range :Equipment ;
+       rdfs:domain :Network_Devices ;
+       rdfs:range :Network_Devices ;
        <http://www.w3.org/2004/02/skos/core#definition> "The subject is upstream of the object in the context of some sequential process; some media is passed between them." .
 
 
 ###  http://www.semanticweb.org/phoenix/ontologies/2022/0/SmartGrid#isControlledBy
-:isControlledBy rdf:type owl:ObjectProperty ,
-                         owl:AsymmetricProperty ,
+:isControlledBy rdf:type owl:ObjectProperty ;
+                rdfs:subPropertyOf owl:topObjectProperty ;
+                rdf:type owl:AsymmetricProperty ,
                          owl:IrreflexiveProperty ;
                 rdfs:domain :Equipment ;
                 rdfs:range :Actuator ;
@@ -140,16 +150,18 @@
 
 
 ###  http://www.semanticweb.org/phoenix/ontologies/2022/0/SmartGrid#isFedBy
-:isFedBy rdf:type owl:ObjectProperty ,
-                  owl:AsymmetricProperty ,
+:isFedBy rdf:type owl:ObjectProperty ;
+         rdfs:subPropertyOf owl:topObjectProperty ;
+         rdf:type owl:AsymmetricProperty ,
                   owl:IrreflexiveProperty ;
-         rdfs:domain :Equipment ;
-         rdfs:range :Equipment ;
+         rdfs:domain :Network_Devices ;
+         rdfs:range :Network_Devices ;
          <http://www.w3.org/2004/02/skos/core#definition> "The inverse of feeds" .
 
 
 ###  http://www.semanticweb.org/phoenix/ontologies/2022/0/SmartGrid#isLocationOf
 :isLocationOf rdf:type owl:ObjectProperty ;
+              rdfs:subPropertyOf owl:topObjectProperty ;
               owl:inverseOf :locatedAt ;
               rdf:type owl:AsymmetricProperty ,
                        owl:IrreflexiveProperty ;
@@ -160,6 +172,7 @@
 
 ###  http://www.semanticweb.org/phoenix/ontologies/2022/0/SmartGrid#isMeasuredBy
 :isMeasuredBy rdf:type owl:ObjectProperty ;
+              rdfs:subPropertyOf owl:topObjectProperty ;
               owl:inverseOf :measures ;
               rdf:type owl:AsymmetricProperty ,
                        owl:IrreflexiveProperty ;
@@ -170,6 +183,7 @@
 
 ###  http://www.semanticweb.org/phoenix/ontologies/2022/0/SmartGrid#isMonitorBy
 :isMonitorBy rdf:type owl:ObjectProperty ;
+             rdfs:subPropertyOf owl:topObjectProperty ;
              owl:inverseOf :monitor ;
              rdf:type owl:AsymmetricProperty ,
                       owl:IrreflexiveProperty ;
@@ -179,8 +193,9 @@
 
 
 ###  http://www.semanticweb.org/phoenix/ontologies/2022/0/SmartGrid#locatedAt
-:locatedAt rdf:type owl:ObjectProperty ,
-                    owl:AsymmetricProperty ,
+:locatedAt rdf:type owl:ObjectProperty ;
+           rdfs:subPropertyOf owl:topObjectProperty ;
+           rdf:type owl:AsymmetricProperty ,
                     owl:IrreflexiveProperty ;
            rdfs:domain :Equipment ;
            rdfs:range :Location ;
@@ -188,8 +203,9 @@
 
 
 ###  http://www.semanticweb.org/phoenix/ontologies/2022/0/SmartGrid#measures
-:measures rdf:type owl:ObjectProperty ,
-                   owl:AsymmetricProperty ,
+:measures rdf:type owl:ObjectProperty ;
+          rdfs:subPropertyOf owl:topObjectProperty ;
+          rdf:type owl:AsymmetricProperty ,
                    owl:IrreflexiveProperty ;
           rdfs:domain :Sensor ;
           rdfs:range :Measurable ;
@@ -197,8 +213,9 @@
 
 
 ###  http://www.semanticweb.org/phoenix/ontologies/2022/0/SmartGrid#monitor
-:monitor rdf:type owl:ObjectProperty ,
-                  owl:AsymmetricProperty ,
+:monitor rdf:type owl:ObjectProperty ;
+         rdfs:subPropertyOf owl:topObjectProperty ;
+         rdf:type owl:AsymmetricProperty ,
                   owl:IrreflexiveProperty ;
          rdfs:domain :Sensor ;
          rdfs:range :Equipment ;
@@ -207,10 +224,11 @@
 
 ###  http://www.semanticweb.org/phoenix/ontologies/2022/0/SmartGrid#primaryAttachsTo
 :primaryAttachsTo rdf:type owl:ObjectProperty ;
-                  rdfs:subPropertyOf :attachsTo ;
+                  rdfs:subPropertyOf owl:topObjectProperty ;
                   rdf:type owl:AsymmetricProperty ,
                            owl:IrreflexiveProperty ;
-                  rdfs:range :Bus .
+                  rdfs:range :Bus ;
+                  <http://www.w3.org/2004/02/skos/core#definition> "A electrical connection to bus1" .
 
 
 #################################################################
@@ -270,8 +288,6 @@
 
 ###  http://www.semanticweb.org/phoenix/ontologies/2022/0/SmartGrid#bus_terminal
 :bus_terminal rdf:type owl:DatatypeProperty ;
-              rdfs:domain :Actuator ,
-                          :Sensor ;
               <http://www.w3.org/2004/02/skos/core#definition> "What terminal is the sensor or actuator is monitoring or acting upon on an equipment." .
 
 
@@ -402,7 +418,6 @@
 
 ###  http://www.semanticweb.org/phoenix/ontologies/2022/0/SmartGrid#num_phases
 :num_phases rdf:type owl:DatatypeProperty ;
-            rdfs:domain :Equipment ;
             <http://www.w3.org/2004/02/skos/core#definition> "The number of phases" .
 
 
@@ -424,9 +439,7 @@
 
 
 ###  http://www.semanticweb.org/phoenix/ontologies/2022/0/SmartGrid#phase
-:phase rdf:type owl:DatatypeProperty ;
-       rdfs:domain :Actuator ,
-                   :Sensor .
+:phase rdf:type owl:DatatypeProperty .
 
 
 ###  http://www.semanticweb.org/phoenix/ontologies/2022/0/SmartGrid#ptratio
@@ -469,7 +482,6 @@
 
 ###  http://www.semanticweb.org/phoenix/ontologies/2022/0/SmartGrid#unit
 :unit rdf:type owl:DatatypeProperty ;
-      rdfs:domain :Equipment ;
       <http://www.w3.org/2004/02/skos/core#definition> "The unit of measurement the equipment processes on." .
 
 
@@ -496,93 +508,111 @@
 
 ###  http://www.semanticweb.org/phoenix/ontologies/2022/0/SmartGrid#Actuator
 :Actuator rdf:type owl:Class ;
-          rdfs:subClassOf :Control_System .
+          rdfs:subClassOf :Network_Devices ;
+          <http://www.w3.org/2004/02/skos/core#definition> "A class to represent an actuator object" .
+
+
+###  http://www.semanticweb.org/phoenix/ontologies/2022/0/SmartGrid#Bluetooth
+:Bluetooth rdf:type owl:Class ;
+           rdfs:subClassOf :Transporter ;
+           <http://www.w3.org/2004/02/skos/core#definition> "A class to specify bluetooth settings" .
 
 
 ###  http://www.semanticweb.org/phoenix/ontologies/2022/0/SmartGrid#Bus
 :Bus rdf:type owl:Class ;
-     rdfs:subClassOf :Electrical_Equipment .
+     rdfs:subClassOf :Electrical_Equipment ;
+     <http://www.w3.org/2004/02/skos/core#definition> "Define a bus object for the power simulator" .
 
 
 ###  http://www.semanticweb.org/phoenix/ontologies/2022/0/SmartGrid#Capacitor
 :Capacitor rdf:type owl:Class ;
-           rdfs:subClassOf :Electrical_Equipment .
+           rdfs:subClassOf :Electrical_Equipment ;
+           <http://www.w3.org/2004/02/skos/core#definition> "A class to represent a capacitor object" .
 
 
-###  http://www.semanticweb.org/phoenix/ontologies/2022/0/SmartGrid#Control_System
-:Control_System rdf:type owl:Class .
+###  http://www.semanticweb.org/phoenix/ontologies/2022/0/SmartGrid#Characteristics
+:Characteristics rdf:type owl:Class ;
+                 <http://www.w3.org/2004/02/skos/core#definition> "A class of characteristics for different equipment of the ontology" .
 
 
-###  http://www.semanticweb.org/phoenix/ontologies/2022/0/SmartGrid#Controller
-:Controller rdf:type owl:Class ;
-            rdfs:subClassOf :Processor .
+###  http://www.semanticweb.org/phoenix/ontologies/2022/0/SmartGrid#Communication_Node
+:Communication_Node rdf:type owl:Class ;
+                    rdfs:subClassOf :Network_Devices ;
+                    <http://www.w3.org/2004/02/skos/core#definition> "A class to represent a network node" .
 
 
 ###  http://www.semanticweb.org/phoenix/ontologies/2022/0/SmartGrid#Coordinates
 :Coordinates rdf:type owl:Class ;
-             rdfs:subClassOf :Location .
+             rdfs:subClassOf :Location ;
+             <http://www.w3.org/2004/02/skos/core#definition> "A class of coordinates to determine a location" .
 
 
 ###  http://www.semanticweb.org/phoenix/ontologies/2022/0/SmartGrid#Electrical_Equipment
 :Electrical_Equipment rdf:type owl:Class ;
-                      rdfs:subClassOf :Equipment ,
-                                      [ rdf:type owl:Restriction ;
-                                        owl:onProperty :freq ;
-                                        owl:qualifiedCardinality "60"^^xsd:nonNegativeInteger ;
-                                        owl:onDataRange xsd:integer
-                                      ] .
+                      rdfs:subClassOf :Equipment ;
+                      <http://www.w3.org/2004/02/skos/core#definition> "A class of electrical equipment for the OpenDSS simulator" .
 
 
 ###  http://www.semanticweb.org/phoenix/ontologies/2022/0/SmartGrid#Equipment
-:Equipment rdf:type owl:Class .
+:Equipment rdf:type owl:Class ;
+           <http://www.w3.org/2004/02/skos/core#definition> "A class of physical equipment for the simulators" .
+
+
+###  http://www.semanticweb.org/phoenix/ontologies/2022/0/SmartGrid#Ethernet
+:Ethernet rdf:type owl:Class ;
+          rdfs:subClassOf :Transporter ;
+          <http://www.w3.org/2004/02/skos/core#definition> "A class of ethernet settings" .
 
 
 ###  http://www.semanticweb.org/phoenix/ontologies/2022/0/SmartGrid#Generator
 :Generator rdf:type owl:Class ;
-           rdfs:subClassOf :Electrical_Equipment .
+           rdfs:subClassOf :Electrical_Equipment ;
+           <http://www.w3.org/2004/02/skos/core#definition> "A class to represent a generator or a circuit." .
 
 
 ###  http://www.semanticweb.org/phoenix/ontologies/2022/0/SmartGrid#Line
 :Line rdf:type owl:Class ;
-      rdfs:subClassOf :Electrical_Equipment .
+      rdfs:subClassOf :Electrical_Equipment ;
+      <http://www.w3.org/2004/02/skos/core#definition> "A class to represent a Line object" .
 
 
 ###  http://www.semanticweb.org/phoenix/ontologies/2022/0/SmartGrid#LineCode
 :LineCode rdf:type owl:Class ;
-          rdfs:subClassOf :Line .
+          rdfs:subClassOf :Characteristics .
 
 
 ###  http://www.semanticweb.org/phoenix/ontologies/2022/0/SmartGrid#Load
 :Load rdf:type owl:Class ;
-      rdfs:subClassOf :Electrical_Equipment .
+      rdfs:subClassOf :Electrical_Equipment ;
+      <http://www.w3.org/2004/02/skos/core#definition> "A class to represent a load object" .
 
 
 ###  http://www.semanticweb.org/phoenix/ontologies/2022/0/SmartGrid#Location
-:Location rdf:type owl:Class .
+:Location rdf:type owl:Class ;
+          <http://www.w3.org/2004/02/skos/core#definition> "A class to represent location" .
 
 
 ###  http://www.semanticweb.org/phoenix/ontologies/2022/0/SmartGrid#Measurable
-:Measurable rdf:type owl:Class .
+:Measurable rdf:type owl:Class ;
+            <http://www.w3.org/2004/02/skos/core#definition> "A class of measurable qualities" .
 
 
 ###  http://www.semanticweb.org/phoenix/ontologies/2022/0/SmartGrid#Network_Devices
 :Network_Devices rdf:type owl:Class ;
-                 rdfs:subClassOf :Equipment .
-
-
-###  http://www.semanticweb.org/phoenix/ontologies/2022/0/SmartGrid#Network_Endpoint
-:Network_Endpoint rdf:type owl:Class ;
-                  rdfs:subClassOf :Network_Devices .
+                 rdfs:subClassOf :Equipment ;
+                 <http://www.w3.org/2004/02/skos/core#definition> "A collection of networking devices including sensors, actuators, and controllers for the networking simulator." .
 
 
 ###  http://www.semanticweb.org/phoenix/ontologies/2022/0/SmartGrid#Processor
 :Processor rdf:type owl:Class ;
-           rdfs:subClassOf :Control_System .
+           rdfs:subClassOf :Network_Devices ;
+           <http://www.w3.org/2004/02/skos/core#definition> "A class to represent the control process of the control system" .
 
 
 ###  http://www.semanticweb.org/phoenix/ontologies/2022/0/SmartGrid#Quantity
 :Quantity rdf:type owl:Class ;
-          rdfs:subClassOf :Measurable .
+          rdfs:subClassOf :Measurable ;
+          <http://www.w3.org/2004/02/skos/core#definition> "A class to measure quantative property" .
 
 
 ###  http://www.semanticweb.org/phoenix/ontologies/2022/0/SmartGrid#RegControl
@@ -592,7 +622,8 @@
 
 ###  http://www.semanticweb.org/phoenix/ontologies/2022/0/SmartGrid#Sensor
 :Sensor rdf:type owl:Class ;
-        rdfs:subClassOf :Control_System .
+        rdfs:subClassOf :Network_Devices ;
+        <http://www.w3.org/2004/02/skos/core#definition> "A class to represent a sensor for the control loop" .
 
 
 ###  http://www.semanticweb.org/phoenix/ontologies/2022/0/SmartGrid#Switch
@@ -608,7 +639,13 @@
 
 ###  http://www.semanticweb.org/phoenix/ontologies/2022/0/SmartGrid#Transporter
 :Transporter rdf:type owl:Class ;
-             rdfs:subClassOf :Network_Devices .
+             rdfs:subClassOf :Characteristics ;
+             <http://www.w3.org/2004/02/skos/core#definition> "A class of technologies that is used to communicate between networking nodes" .
+
+
+###  http://www.semanticweb.org/phoenix/ontologies/2022/0/SmartGrid#Voltage_Controller
+:Voltage_Controller rdf:type owl:Class ;
+                    rdfs:subClassOf :Processor .
 
 
 ###  http://www.semanticweb.org/phoenix/ontologies/2022/0/SmartGrid#Voltage_Sensor
@@ -616,104 +653,355 @@
                 rdfs:subClassOf :Sensor .
 
 
+###  http://www.semanticweb.org/phoenix/ontologies/2022/0/SmartGrid#WiFi
+:WiFi rdf:type owl:Class ;
+      rdfs:subClassOf :Transporter ;
+      <http://www.w3.org/2004/02/skos/core#definition> "A class of WiFi settings" .
+
+
 #################################################################
 #    Individuals
 #################################################################
 
+###  http://www.semanticweb.org/phoenix/ontologies/2022/0/SmartGrid#Bluetooth_1
+:Bluetooth_1 rdf:type owl:NamedIndividual ,
+                      :Bluetooth .
+
+
 ###  http://www.semanticweb.org/phoenix/ontologies/2022/0/SmartGrid#Bus_611
 :Bus_611 rdf:type owl:NamedIndividual ,
                   :Bus ;
+         :connectsTo :Bus_684 ;
          :locatedAt :Coord_0_100 .
+
+[ rdf:type owl:Axiom ;
+   owl:annotatedSource :Bus_611 ;
+   owl:annotatedProperty :connectsTo ;
+   owl:annotatedTarget :Bus_684 ;
+   :technology :Ethernet_1
+ ] .
 
 
 ###  http://www.semanticweb.org/phoenix/ontologies/2022/0/SmartGrid#Bus_632
 :Bus_632 rdf:type owl:NamedIndividual ,
                   :Bus ;
+         :connectsTo :Bus_633 ,
+                     :Bus_645 ,
+                     :Bus_670 ,
+                     :Bus_RG60 ;
          :locatedAt :Coord_200_250 .
+
+[ rdf:type owl:Axiom ;
+   owl:annotatedSource :Bus_632 ;
+   owl:annotatedProperty :connectsTo ;
+   owl:annotatedTarget :Bus_633 ;
+   :technology :Ethernet_1
+ ] .
+
+[ rdf:type owl:Axiom ;
+   owl:annotatedSource :Bus_632 ;
+   owl:annotatedProperty :connectsTo ;
+   owl:annotatedTarget :Bus_645 ;
+   :technology :Ethernet_1
+ ] .
+
+[ rdf:type owl:Axiom ;
+   owl:annotatedSource :Bus_632 ;
+   owl:annotatedProperty :connectsTo ;
+   owl:annotatedTarget :Bus_670 ;
+   :technology :Ethernet_1
+ ] .
+
+[ rdf:type owl:Axiom ;
+   owl:annotatedSource :Bus_632 ;
+   owl:annotatedProperty :connectsTo ;
+   owl:annotatedTarget :Bus_RG60 ;
+   :technology :Ethernet_1
+ ] .
 
 
 ###  http://www.semanticweb.org/phoenix/ontologies/2022/0/SmartGrid#Bus_633
 :Bus_633 rdf:type owl:NamedIndividual ,
                   :Bus ;
+         :connectsTo :Bus_632 ,
+                     :Bus_634 ;
          :locatedAt :Coord_350_250 .
+
+[ rdf:type owl:Axiom ;
+   owl:annotatedSource :Bus_633 ;
+   owl:annotatedProperty :connectsTo ;
+   owl:annotatedTarget :Bus_632 ;
+   :technology :Ethernet_1
+ ] .
+
+[ rdf:type owl:Axiom ;
+   owl:annotatedSource :Bus_633 ;
+   owl:annotatedProperty :connectsTo ;
+   owl:annotatedTarget :Bus_634 ;
+   :technology :Ethernet_1
+ ] .
 
 
 ###  http://www.semanticweb.org/phoenix/ontologies/2022/0/SmartGrid#Bus_634
 :Bus_634 rdf:type owl:NamedIndividual ,
                   :Bus ;
+         :connectsTo :Bus_633 ;
          :locatedAt :Coord_400_250 .
+
+[ rdf:type owl:Axiom ;
+   owl:annotatedSource :Bus_634 ;
+   owl:annotatedProperty :connectsTo ;
+   owl:annotatedTarget :Bus_633 ;
+   :technology :Ethernet_1
+ ] .
 
 
 ###  http://www.semanticweb.org/phoenix/ontologies/2022/0/SmartGrid#Bus_645
 :Bus_645 rdf:type owl:NamedIndividual ,
                   :Bus ;
+         :connectsTo :Bus_632 ,
+                     :Bus_646 ;
          :locatedAt :Coord_100_250 .
+
+[ rdf:type owl:Axiom ;
+   owl:annotatedSource :Bus_645 ;
+   owl:annotatedProperty :connectsTo ;
+   owl:annotatedTarget :Bus_646 ;
+   :technology :Ethernet_1
+ ] .
+
+[ rdf:type owl:Axiom ;
+   owl:annotatedSource :Bus_645 ;
+   owl:annotatedProperty :connectsTo ;
+   owl:annotatedTarget :Bus_632 ;
+   :technology :Ethernet_1
+ ] .
 
 
 ###  http://www.semanticweb.org/phoenix/ontologies/2022/0/SmartGrid#Bus_646
 :Bus_646 rdf:type owl:NamedIndividual ,
                   :Bus ;
+         :connectsTo :Bus_645 ;
          :locatedAt :Coord_0_250 .
+
+[ rdf:type owl:Axiom ;
+   owl:annotatedSource :Bus_646 ;
+   owl:annotatedProperty :connectsTo ;
+   owl:annotatedTarget :Bus_645 ;
+   :technology :Ethernet_1
+ ] .
 
 
 ###  http://www.semanticweb.org/phoenix/ontologies/2022/0/SmartGrid#Bus_650
 :Bus_650 rdf:type owl:NamedIndividual ,
                   :Bus ;
+         :connectsTo :Bus_RG60 ,
+                     :Bus_SourceBus ;
          :locatedAt :Coord_200_350 .
+
+[ rdf:type owl:Axiom ;
+   owl:annotatedSource :Bus_650 ;
+   owl:annotatedProperty :connectsTo ;
+   owl:annotatedTarget :Bus_RG60 ;
+   :technology :Ethernet_1
+ ] .
+
+[ rdf:type owl:Axiom ;
+   owl:annotatedSource :Bus_650 ;
+   owl:annotatedProperty :connectsTo ;
+   owl:annotatedTarget :Bus_SourceBus ;
+   :technology :Ethernet_1
+ ] .
 
 
 ###  http://www.semanticweb.org/phoenix/ontologies/2022/0/SmartGrid#Bus_652
 :Bus_652 rdf:type owl:NamedIndividual ,
                   :Bus ;
+         :connectsTo :Bus_684 ;
          :locatedAt :Coord_100_0 .
+
+[ rdf:type owl:Axiom ;
+   owl:annotatedSource :Bus_652 ;
+   owl:annotatedProperty :connectsTo ;
+   owl:annotatedTarget :Bus_684 ;
+   :technology :Ethernet_1
+ ] .
 
 
 ###  http://www.semanticweb.org/phoenix/ontologies/2022/0/SmartGrid#Bus_670
 :Bus_670 rdf:type owl:NamedIndividual ,
                   :Bus ;
+         :connectsTo :Bus_632 ,
+                     :Bus_671 ;
          :locatedAt :Coord_200_200 .
+
+[ rdf:type owl:Axiom ;
+   owl:annotatedSource :Bus_670 ;
+   owl:annotatedProperty :connectsTo ;
+   owl:annotatedTarget :Bus_632 ;
+   :technology :Ethernet_1
+ ] .
+
+[ rdf:type owl:Axiom ;
+   owl:annotatedSource :Bus_670 ;
+   owl:annotatedProperty :connectsTo ;
+   owl:annotatedTarget :Bus_671 ;
+   :technology :Ethernet_1
+ ] .
 
 
 ###  http://www.semanticweb.org/phoenix/ontologies/2022/0/SmartGrid#Bus_671
 :Bus_671 rdf:type owl:NamedIndividual ,
                   :Bus ;
+         :connectsTo :Bus_670 ,
+                     :Bus_680 ,
+                     :Bus_684 ,
+                     :Bus_692 ;
          :locatedAt :Coord_200_100 .
+
+[ rdf:type owl:Axiom ;
+   owl:annotatedSource :Bus_671 ;
+   owl:annotatedProperty :connectsTo ;
+   owl:annotatedTarget :Bus_670 ;
+   :technology :Ethernet_1
+ ] .
+
+[ rdf:type owl:Axiom ;
+   owl:annotatedSource :Bus_671 ;
+   owl:annotatedProperty :connectsTo ;
+   owl:annotatedTarget :Bus_680 ;
+   :technology :Ethernet_1
+ ] .
+
+[ rdf:type owl:Axiom ;
+   owl:annotatedSource :Bus_671 ;
+   owl:annotatedProperty :connectsTo ;
+   owl:annotatedTarget :Bus_684 ;
+   :technology :Ethernet_1
+ ] .
+
+[ rdf:type owl:Axiom ;
+   owl:annotatedSource :Bus_671 ;
+   owl:annotatedProperty :connectsTo ;
+   owl:annotatedTarget :Bus_692 ;
+   :technology :Ethernet_1
+ ] .
 
 
 ###  http://www.semanticweb.org/phoenix/ontologies/2022/0/SmartGrid#Bus_675
 :Bus_675 rdf:type owl:NamedIndividual ,
                   :Bus ;
+         :connectsTo :Bus_692 ;
          :locatedAt :Coord_400_100 .
+
+[ rdf:type owl:Axiom ;
+   owl:annotatedSource :Bus_675 ;
+   owl:annotatedProperty :connectsTo ;
+   owl:annotatedTarget :Bus_692 ;
+   :technology :Ethernet_1
+ ] .
 
 
 ###  http://www.semanticweb.org/phoenix/ontologies/2022/0/SmartGrid#Bus_680
 :Bus_680 rdf:type owl:NamedIndividual ,
                   :Bus ;
+         :connectsTo :Bus_671 ;
          :locatedAt :Coord_200_0 .
+
+[ rdf:type owl:Axiom ;
+   owl:annotatedSource :Bus_680 ;
+   owl:annotatedProperty :connectsTo ;
+   owl:annotatedTarget :Bus_671 ;
+   :technology :Ethernet_1
+ ] .
 
 
 ###  http://www.semanticweb.org/phoenix/ontologies/2022/0/SmartGrid#Bus_684
 :Bus_684 rdf:type owl:NamedIndividual ,
                   :Bus ;
+         :connectsTo :Bus_611 ,
+                     :Bus_652 ,
+                     :Bus_671 ;
          :locatedAt :Coord_100_100 .
+
+[ rdf:type owl:Axiom ;
+   owl:annotatedSource :Bus_684 ;
+   owl:annotatedProperty :connectsTo ;
+   owl:annotatedTarget :Bus_611 ;
+   :technology :Ethernet_1
+ ] .
+
+[ rdf:type owl:Axiom ;
+   owl:annotatedSource :Bus_684 ;
+   owl:annotatedProperty :connectsTo ;
+   owl:annotatedTarget :Bus_652 ;
+   :technology :Ethernet_1
+ ] .
+
+[ rdf:type owl:Axiom ;
+   owl:annotatedSource :Bus_684 ;
+   owl:annotatedProperty :connectsTo ;
+   owl:annotatedTarget :Bus_671 ;
+   :technology :Ethernet_1
+ ] .
 
 
 ###  http://www.semanticweb.org/phoenix/ontologies/2022/0/SmartGrid#Bus_692
 :Bus_692 rdf:type owl:NamedIndividual ,
                   :Bus ;
+         :connectsTo :Bus_671 ,
+                     :Bus_675 ;
          :locatedAt :Coord_250_100 .
+
+[ rdf:type owl:Axiom ;
+   owl:annotatedSource :Bus_692 ;
+   owl:annotatedProperty :connectsTo ;
+   owl:annotatedTarget :Bus_671 ;
+   :technology :Ethernet_1
+ ] .
+
+[ rdf:type owl:Axiom ;
+   owl:annotatedSource :Bus_692 ;
+   owl:annotatedProperty :connectsTo ;
+   owl:annotatedTarget :Bus_675 ;
+   :technology :Ethernet_1
+ ] .
 
 
 ###  http://www.semanticweb.org/phoenix/ontologies/2022/0/SmartGrid#Bus_RG60
 :Bus_RG60 rdf:type owl:NamedIndividual ,
                    :Bus ;
+          :connectsTo :Bus_632 ,
+                      :Bus_650 ;
           :locatedAt :Coord_200_300 .
+
+[ rdf:type owl:Axiom ;
+   owl:annotatedSource :Bus_RG60 ;
+   owl:annotatedProperty :connectsTo ;
+   owl:annotatedTarget :Bus_632 ;
+   :technology :Ethernet_1
+ ] .
+
+[ rdf:type owl:Axiom ;
+   owl:annotatedSource :Bus_RG60 ;
+   owl:annotatedProperty :connectsTo ;
+   owl:annotatedTarget :Bus_650 ;
+   :technology :Ethernet_1
+ ] .
 
 
 ###  http://www.semanticweb.org/phoenix/ontologies/2022/0/SmartGrid#Bus_SourceBus
 :Bus_SourceBus rdf:type owl:NamedIndividual ,
                         :Bus ;
+               :connectsTo :Bus_650 ;
                :locatedAt :Coord_200_400 .
+
+[ rdf:type owl:Axiom ;
+   owl:annotatedSource :Bus_SourceBus ;
+   owl:annotatedProperty :connectsTo ;
+   owl:annotatedTarget :Bus_650 ;
+   :technology :Ethernet_1
+ ] .
 
 
 ###  http://www.semanticweb.org/phoenix/ontologies/2022/0/SmartGrid#Capacitor_Cap1
@@ -847,11 +1135,9 @@
                :coord_y 250 .
 
 
-###  http://www.semanticweb.org/phoenix/ontologies/2022/0/SmartGrid#Endpoint_Controller
-:Endpoint_Controller rdf:type owl:NamedIndividual ,
-                              :Network_Endpoint ;
-                     :connectsTo :Voltage_Controller ;
-                     :locatedAt :Bus_632 .
+###  http://www.semanticweb.org/phoenix/ontologies/2022/0/SmartGrid#Ethernet_1
+:Ethernet_1 rdf:type owl:NamedIndividual ,
+                     :Ethernet .
 
 
 ###  http://www.semanticweb.org/phoenix/ontologies/2022/0/SmartGrid#Generator_IEEE13Nodeckt
@@ -1420,26 +1706,6 @@
                   rdfs:comment "This is the transformer labelled XFM-1" .
 
 
-###  http://www.semanticweb.org/phoenix/ontologies/2022/0/SmartGrid#Transporter_Controller_Actuator
-:Transporter_Controller_Actuator rdf:type owl:NamedIndividual ,
-                                          :Transporter ;
-                                 :connectsTo :Endpoint_Controller ;
-                                 :delay "15 ms" ;
-                                 :error_rate 0.0001 ;
-                                 :layer_4 "TCP" ;
-                                 :rate "512 Kbps" .
-
-
-###  http://www.semanticweb.org/phoenix/ontologies/2022/0/SmartGrid#Transporter_Sensor_Controller
-:Transporter_Sensor_Controller rdf:type owl:NamedIndividual ,
-                                        :Transporter ;
-                               :connectsTo :Endpoint_Controller ;
-                               :delay "15 ms" ;
-                               :error_rate 0.0001 ;
-                               :layer_4 "TCP" ;
-                               :rate "512 Kbps" .
-
-
 ###  http://www.semanticweb.org/phoenix/ontologies/2022/0/SmartGrid#Voltage
 :Voltage rdf:type owl:NamedIndividual ,
                   :Quantity .
@@ -1448,31 +1714,52 @@
 ###  http://www.semanticweb.org/phoenix/ontologies/2022/0/SmartGrid#Voltage_Actuator
 :Voltage_Actuator rdf:type owl:NamedIndividual ,
                            :Actuator ;
-                  :connectsTo :Transporter_Controller_Actuator ;
+                  :connectsTo :Bus_650 ;
                   :controls :RegControl_Reg3 ;
                   :isFedBy :Voltage_Controller ;
+                  :locatedAt :Coord_200_350 ;
                   :bus_terminal 1 ;
                   :phase 3 .
 
 
 ###  http://www.semanticweb.org/phoenix/ontologies/2022/0/SmartGrid#Voltage_Controller
 :Voltage_Controller rdf:type owl:NamedIndividual ,
-                             :Controller ;
-                    :connectsTo :Endpoint_Controller ;
+                             :Voltage_Controller ;
+                    :connectsTo :Bus_632 ;
                     :feeds :Voltage_Actuator ;
+                    :locatedAt :Coord_200_250 ;
                     :delay 1 .
 
 
 ###  http://www.semanticweb.org/phoenix/ontologies/2022/0/SmartGrid#Voltage_Sensor
 :Voltage_Sensor rdf:type owl:NamedIndividual ,
                          :Voltage_Sensor ;
-                :connectsTo :Transporter_Sensor_Controller ;
+                :connectsTo :Bus_611 ;
                 :feeds :Voltage_Controller ;
+                :locatedAt :Coord_0_100 ;
                 :measures :Voltage ;
                 :monitor :Line_684611 ;
                 :bus_terminal 2 ;
                 :phase 3 ;
                 :rate 120 .
+
+
+###  http://www.semanticweb.org/phoenix/ontologies/2022/0/SmartGrid#WiFi_1
+:WiFi_1 rdf:type owl:NamedIndividual ,
+                 :WiFi .
+
+
+#################################################################
+#    Annotations
+#################################################################
+
+:LineCode <http://www.w3.org/2004/02/skos/core#definition> "Annotate line objects with a line code individual" .
+
+
+:Voltage_Controller <http://www.w3.org/2004/02/skos/core#definition> "A controller that controls a voltage regulator" .
+
+
+:Voltage_Sensor <http://www.w3.org/2004/02/skos/core#definition> "A sensor that measures voltage at a point" .
 
 
 ###  Generated by the OWL API (version 4.5.9.2019-02-01T07:24:44Z) https://github.com/owlcs/owlapi

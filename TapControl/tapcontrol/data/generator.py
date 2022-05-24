@@ -61,11 +61,11 @@ def main():
     # Before querying any further you need to query the generator after
     graph.query_generator()
 
+    graph.query_nodes()
+
 
     sensors = graph.query_sensors()
     actuators = graph.query_actuators()
-
-
     with open(device_filename, 'w') as csv_file:
         fieldnames = ['idn','type','src','dst','period','error','cktElement','cktTerminal','cktPhase','cktProperty']
         writer = csv.DictWriter(csv_file, fieldnames=fieldnames)
@@ -135,12 +135,12 @@ def main():
         } 
         # The regulators must come first before the buses
         for node in regcontrol_buses:
-            graph.buses[node]['connections'] = list(graph.buses[node]['connections'])
-            nodes_dict['nodes'][node] = graph.buses[node]
+            graph.nodes[node]['connections'] = list(graph.nodes[node]['connections'])
+            nodes_dict['nodes'][node] = graph.nodes[node]
         
-        for node in graph.buses.keys():
-            graph.buses[node]['connections'] = list(graph.buses[node]['connections'])
-            nodes_dict['nodes'][node] = graph.buses[node]
+        for node in graph.nodes.keys():
+            graph.nodes[node]['connections'] = list(graph.nodes[node]['connections'])
+            nodes_dict['nodes'][node] = graph.nodes[node]
 
         app_conn = []
         actuators = graph.query_actuators()

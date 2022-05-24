@@ -14,6 +14,7 @@ class SmartGridGraph:
         self.g = Graph().parse(file)
         self.generator = None
         self.buses = {}
+        self.nodes = {}
         # Get the child of the bus
         self.buses_child = {}
         # Get the parent of the bus
@@ -180,6 +181,48 @@ class SmartGridGraph:
             self.buses_parent[bus_out].add(bus_in)
         
         return self.buses
+    def query_nodes(self):
+        """
+        This will get all network nodes including buses that has a connectsTo relationship
+        """
+        query_str = """
+        SELECT DISTINCT ?node ?x ?y ?neighbor ?neighbor_x ?neighbor_y
+        WHERE {
+            {
+                ?node a :Bus .
+                ?node :connectsTo ?neighbor .
+            } UNION {
+                ?node a :Communication_Node .
+                ?node :connectsTo ?neighbor .
+            }   
+            ?node :locatedAt ?loc .
+            ?loc :coord_x ?x .
+            ?loc :coord_y ?y .
+            ?neighbor :locatedAt ?neighbor_loc .
+            ?neighbor_loc :coord_x ?neighbor_x .
+            ?neighbor_loc :coord_y ?neighbor_y .
+        }
+        """
+        res = self.g.query(query_str)
+        for row in res:
+            node_name = row['node'].split('#')[1].split('_')[1]
+            neighbor_node_name = row['neighbor'].split('#')[1].split('_')[1]
+            if node_name not in self.nodes.keys():
+                self.nodes[node_name] = {
+                    'x': int(row['x']),
+                    'y': int(row['y']),
+                    'connections': set()
+                }
+            if neighbor_node_name not in self.nodes.keys():
+                self.nodes[neighbor_node_name] = {
+                    'x': int(row['neighbor_x']),
+                    'y': int(row['neighbor_y']),
+                    'connections': set()
+                }
+            self.nodes[node_name]['connections'].add(neighbor_node_name)
+            self.nodes[neighbor_node_name]['connections'].add(node_name)
+            
+        return self.nodes      
 
     def query_lines(self):
         # Because the orientation of the bus connection does not matter 
@@ -386,14 +429,13 @@ class SmartGridGraph:
         WHERE {
             ?act rdf:type ?type .
             ?type rdfs:subClassOf* :Actuator .
-            ?act :connectsTo ?conn_to .
+            ?act :connectsTo ?dst_node .
             ?act :controls ?controls .
             ?act :isFedBy ?fedby .
             ?act :phase ?phase .
             ?act :bus_terminal ?bus .
             ?controls :primaryAttachsTo ?bus1 .
-            ?fedby :connectsTo ?endpoint .
-            ?endpoint :locatedAt ?src .
+            ?fedby :connectsTo ?src_node .
             OPTIONAL {
                 ?controls :attachsTo ?bus2 .
             }
@@ -411,7 +453,7 @@ class SmartGridGraph:
             act = Actuator(
                 actuator = row['act'],
                 dst = dst,
-                src = row['src'],
+                src = row['src_node'],
                 controls = row['controls'],
                 controller = row['fedby'],
                 phase = row['phase'],
@@ -427,16 +469,15 @@ class SmartGridGraph:
         WHERE {
             ?sen rdf:type ?type .
             ?type rdfs:subClassOf* :Sensor .
-            ?sen :connectsTo ?conn_to .
-            ?sen :feeds ?feeds .
+            ?sen :connectsTo ?src_node .
+            ?sen :feeds ?controller .
             ?sen :measures ?measures . 
             ?sen :monitor ?monitor .
             ?monitor :primaryAttachsTo ?bus1 .
             ?sen :rate ?rate .
             ?sen :phase ?phase .
             ?sen :bus_terminal ?bus .
-            ?feeds :connectsTo ?endpoint .
-            ?endpoint :locatedAt ?dst .
+            ?controller :connectsTo ?dst_node .
             OPTIONAL {
                 ?monitor :attachsTo ?bus2 .
             }
@@ -451,21 +492,20 @@ class SmartGridGraph:
                 src = row['bus2']
             else:
                 src = row['bus1']
-
             sensor = Sensor(
                 sensor = row['sen'],
-                connects_to = row['conn_to'],
-                controller = row['feeds'],
+                connects_to = row['src_node'],
+                controller = row['controller'],
                 measures = row['measures'],
                 monitor = row['monitor'],
                 src = src,
                 rate = row['rate'],
-                dst = row['dst'],
+                dst = row['dst_node'],
                 phase = row['phase'],
                 bus = row['bus']
             )
             sensors.append(sensor)
-        
+
         return sensors
 
     def query_controllers(self):
