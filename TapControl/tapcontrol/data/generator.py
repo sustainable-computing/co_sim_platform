@@ -78,10 +78,11 @@ def main():
             if didx_key not in device_counter.keys():
                 device_counter[didx_key] = 0
             cidx = controllers.index(sensor.controller)
+            equipment_name = sensor.equipment.replace('_','.',1)
             writer.writerow({
                     'type': 'Sensor', 'src': sensor.src, 'dst': sensor.dst, 'cidx': cidx, 'didx': device_counter[didx_key], 
                     'period': period, 'error': error, 
-                    'cktElement': f'{sensor.equipment}', 'cktTerminal': f'BUS{sensor.bus}', 'cktPhase': f'PHASE_{sensor.phase}', 'cktProperty': 'None'
+                    'cktElement': f'{equipment_name}', 'cktTerminal': f'BUS{sensor.bus}', 'cktPhase': f'PHASE_{sensor.phase}', 'cktProperty': 'None'
             })
 
             device_counter[didx_key] += 1
@@ -91,10 +92,11 @@ def main():
             if didx_key not in device_counter.keys():
                 device_counter[didx_key] = 0
             cidx = controllers.index(actuator.controller)
+            equipment_name = actuator.equipment.replace('_','.',1)
             writer.writerow({
                     'type': 'Actuator', 'src': actuator.src, 'dst': actuator.dst, 'cidx': cidx, 'didx': device_counter[didx_key], 
                     'period': period, 'error': error, 
-                    'cktElement': f'{actuator.equipment}', 'cktTerminal': f'BUS{actuator.bus}', 'cktPhase': f'PHASE_{actuator.phase}', 'cktProperty': 'None'
+                    'cktElement': f'{(equipment_name)}', 'cktTerminal': f'BUS{actuator.bus}', 'cktPhase': f'PHASE_{actuator.phase}', 'cktProperty': 'None'
             })
             device_counter[didx_key] += 1
 
