@@ -63,39 +63,40 @@ def main():
 
     graph.query_nodes()
 
-
+    controllers = [str(controller) for controller in graph.query_controllers()]
     sensors = graph.query_sensors()
     actuators = graph.query_actuators()
     with open(device_filename, 'w') as csv_file:
-        fieldnames = ['idn','type','src','dst','period','error','cktElement','cktTerminal','cktPhase','cktProperty']
+        fieldnames = ['type','src','dst','cidx','didx','period','error','cktElement','cktTerminal','cktPhase','cktProperty']
         writer = csv.DictWriter(csv_file, fieldnames=fieldnames)
         writer.writeheader()
         # This will keep track of all the devices located at the same src.dst pair
         device_counter = {}
         
         for sensor in sensors:
-            loc_pair = f'{sensor.src}-{sensor.dst}'
-            if loc_pair not in device_counter.keys():
-                device_counter[loc_pair] = 0
-
+            didx_key = f'Sensor-{sensor.src}'
+            if didx_key not in device_counter.keys():
+                device_counter[didx_key] = 0
+            cidx = controllers.index(sensor.controller)
             writer.writerow({
-                    'idn': f'Sensor_{loc_pair}.{device_counter[loc_pair]}', 'type': 'sensor', 'src': sensor.src, 'dst': sensor.dst, 
+                    'type': 'Sensor', 'src': sensor.src, 'dst': sensor.dst, 'cidx': cidx, 'didx': device_counter[didx_key], 
                     'period': period, 'error': error, 
                     'cktElement': f'{sensor.equipment}', 'cktTerminal': f'BUS{sensor.bus}', 'cktPhase': f'PHASE_{sensor.phase}', 'cktProperty': 'None'
             })
 
-            device_counter[loc_pair] += 1
-        for actuator in actuators:
-            loc_pair = f'{actuator.src}-{actuator.dst}'
-            if loc_pair not in device_counter.keys():
-                device_counter[loc_pair] = 0
+            device_counter[didx_key] += 1
 
+        for actuator in actuators:
+            didx_key = f'Actuator-{actuator.dst}'
+            if didx_key not in device_counter.keys():
+                device_counter[didx_key] = 0
+            cidx = controllers.index(actuator.controller)
             writer.writerow({
-                    'idn': f'Actuator_{loc_pair}.{device_counter[loc_pair]}', 'type': 'actuator', 'src': actuator.src, 'dst': actuator.dst, 
+                    'type': 'Actuator', 'src': actuator.src, 'dst': actuator.dst, 'cidx': cidx, 'didx': device_counter[didx_key], 
                     'period': period, 'error': error, 
                     'cktElement': f'{actuator.equipment}', 'cktTerminal': f'BUS{actuator.bus}', 'cktPhase': f'PHASE_{actuator.phase}', 'cktProperty': 'None'
             })
-            device_counter[loc_pair] += 1
+            device_counter[didx_key] += 1
 
     # Generate the opendss file
     with open(outfilename, 'wt') as outfile:
