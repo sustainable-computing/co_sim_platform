@@ -1721,6 +1721,13 @@
                   :bus_terminal 1 ;
                   :phase 3 .
 
+[ rdf:type owl:Axiom ;
+   owl:annotatedSource :Voltage_Actuator ;
+   owl:annotatedProperty :connectsTo ;
+   owl:annotatedTarget :Bus_650 ;
+   :technology :Bluetooth_1
+ ] .
+
 
 ###  http://www.semanticweb.org/phoenix/ontologies/2022/0/SmartGrid#Voltage_Controller
 :Voltage_Controller rdf:type owl:NamedIndividual ,
@@ -1729,6 +1736,13 @@
                     :feeds :Voltage_Actuator ;
                     :locatedAt :Coord_200_250 ;
                     :delay 1 .
+
+[ rdf:type owl:Axiom ;
+   owl:annotatedSource :Voltage_Controller ;
+   owl:annotatedProperty :connectsTo ;
+   owl:annotatedTarget :Bus_632 ;
+   :technology :Ethernet_1
+ ] .
 
 
 ###  http://www.semanticweb.org/phoenix/ontologies/2022/0/SmartGrid#Voltage_Sensor
@@ -1742,6 +1756,13 @@
                 :bus_terminal 2 ;
                 :phase 3 ;
                 :rate 120 .
+
+[ rdf:type owl:Axiom ;
+   owl:annotatedSource :Voltage_Sensor ;
+   owl:annotatedProperty :feeds ;
+   owl:annotatedTarget :Voltage_Controller ;
+   :technology :WiFi_1
+ ] .
 
 
 ###  http://www.semanticweb.org/phoenix/ontologies/2022/0/SmartGrid#WiFi_1
