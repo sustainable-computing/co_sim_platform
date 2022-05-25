@@ -92,7 +92,7 @@ def main():
             if didx_key not in device_counter.keys():
                 device_counter[didx_key] = 0
             cidx = controllers.index(actuator.controller)
-            equipment_name = actuator.equipment.replace('_','.',1)
+            equipment_name = actuator.equipment.replace('_','.',1).replace('regcontrol','Transformer',1)
             writer.writerow({
                     'type': 'Actuator', 'src': actuator.src, 'dst': actuator.dst, 'cidx': cidx, 'didx': device_counter[didx_key], 
                     'period': period, 'error': error, 

@@ -1,3 +1,3 @@
 type,src,dst,cidx,didx,period,error,cktElement,cktTerminal,cktPhase,cktProperty
 Sensor,611,632,0,0,20,1.667e-05,Line.684611,BUS2,PHASE_3,None
-Actuator,632,650,0,0,20,1.667e-05,RegControl.Reg3,BUS1,PHASE_3,None
+Actuator,632,650,0,0,20,1.667e-05,Transformer.Reg3,BUS1,PHASE_3,None

@@ -366,7 +366,7 @@ class SmartGridGraph:
         query_str = """
         SELECT *
         WHERE {
-            ?reg a :RegControl .
+            ?reg a :regcontrol .
             ?reg :primaryAttachsTo ?bus1 .
             ?reg :attachsTo ?bus2 .
             ?reg :Kva ?kva .
