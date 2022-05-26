@@ -70,7 +70,7 @@ def main():
         fieldnames = ['type','src','dst','cidx','didx','period','error','cktElement','cktTerminal','cktPhase','cktProperty']
         writer = csv.DictWriter(csv_file, fieldnames=fieldnames)
         writer.writeheader()
-        # This will keep track of all the devices located at the same src.dst pair
+        # This will keep track of all the devices located at the same src
         device_counter = {}
         
         for sensor in sensors:
