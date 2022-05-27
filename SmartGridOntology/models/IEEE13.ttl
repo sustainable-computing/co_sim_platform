@@ -6,7 +6,8 @@
 @prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
 @base <http://www.semanticweb.org/phoenix/ontologies/2022/0/SmartGrid> .
 
-<http://www.semanticweb.org/phoenix/ontologies/2022/0/SmartGrid> rdf:type owl:Ontology .
+<http://www.semanticweb.org/phoenix/ontologies/2022/0/SmartGrid> rdf:type owl:Ontology ;
+                                                                  owl:imports <http://www.semanticweb.org/phoenix/ontologies/2022/0/SmartGrid> .
 
 #################################################################
 #    Annotation properties
@@ -623,11 +624,6 @@
           <http://www.w3.org/2004/02/skos/core#definition> "A class to measure quantative property" .
 
 
-###  http://www.semanticweb.org/phoenix/ontologies/2022/0/SmartGrid#RegControl
-:RegControl rdf:type owl:Class ;
-            rdfs:subClassOf :Transformer .
-
-
 ###  http://www.semanticweb.org/phoenix/ontologies/2022/0/SmartGrid#Sensor
 :Sensor rdf:type owl:Class ;
         rdfs:subClassOf :Processor ;
@@ -665,6 +661,11 @@
 :WiFi rdf:type owl:Class ;
       rdfs:subClassOf :Transporter ;
       <http://www.w3.org/2004/02/skos/core#definition> "A class of WiFi settings" .
+
+
+###  http://www.semanticweb.org/phoenix/ontologies/2022/0/SmartGrid#regcontrol
+:regcontrol rdf:type owl:Class ;
+            rdfs:subClassOf :Transformer .
 
 
 #################################################################
@@ -1584,87 +1585,6 @@
             :num_phases 1 .
 
 
-###  http://www.semanticweb.org/phoenix/ontologies/2022/0/SmartGrid#RegControl_Reg1
-:RegControl_Reg1 rdf:type owl:NamedIndividual ,
-                          :RegControl ;
-                 :attachsTo :Bus_RG60 ;
-                 :primaryAttachsTo :Bus_650 ;
-                 :Kva 1666 ;
-                 :R 3 ;
-                 :X 9 ;
-                 :XHL 0.01 ;
-                 :band 2 ;
-                 :bank "reg1" ;
-                 :ctprim 700 ;
-                 :kV_primary 2.4 ;
-                 :kV_secondary 2.4 ;
-                 :max_tap 1.05 ;
-                 :min_tap 0.95 ;
-                 :nodes_primary 1 ;
-                 :nodes_secondary 1 ;
-                 :num_phases 1 ;
-                 :num_taps 32 ;
-                 :percent_Load_Loss 0.01 ;
-                 :ptratio 20 ;
-                 :tap_primary 1 ;
-                 :tap_secondary 1 ;
-                 :vreg 122 .
-
-
-###  http://www.semanticweb.org/phoenix/ontologies/2022/0/SmartGrid#RegControl_Reg2
-:RegControl_Reg2 rdf:type owl:NamedIndividual ,
-                          :RegControl ;
-                 :attachsTo :Bus_RG60 ;
-                 :primaryAttachsTo :Bus_650 ;
-                 :Kva 1666 ;
-                 :R 3 ;
-                 :X 9 ;
-                 :XHL 0.01 ;
-                 :band 2 ;
-                 :bank "reg1" ;
-                 :ctprim 700 ;
-                 :kV_primary 2.4 ;
-                 :kV_secondary 2.4 ;
-                 :max_tap 1.05 ;
-                 :min_tap 0.95 ;
-                 :nodes_primary 2 ;
-                 :nodes_secondary 2 ;
-                 :num_phases 1 ;
-                 :num_taps 32 ;
-                 :percent_Load_Loss 0.01 ;
-                 :ptratio 20 ;
-                 :tap_primary 1 ;
-                 :tap_secondary 1 ;
-                 :vreg 122 .
-
-
-###  http://www.semanticweb.org/phoenix/ontologies/2022/0/SmartGrid#RegControl_Reg3
-:RegControl_Reg3 rdf:type owl:NamedIndividual ,
-                          :RegControl ;
-                 :attachsTo :Bus_RG60 ;
-                 :primaryAttachsTo :Bus_650 ;
-                 :Kva 1666 ;
-                 :R 3 ;
-                 :X 9 ;
-                 :XHL 0.01 ;
-                 :band 2 ;
-                 :bank "reg1" ;
-                 :ctprim 700 ;
-                 :kV_primary 2.4 ;
-                 :kV_secondary 2.4 ;
-                 :max_tap 1.05 ;
-                 :min_tap 0.95 ;
-                 :nodes_primary 3 ;
-                 :nodes_secondary 3 ;
-                 :num_phases 1 ;
-                 :num_taps 32 ;
-                 :percent_Load_Loss 0.01 ;
-                 :ptratio 20 ;
-                 :tap_primary 1 ;
-                 :tap_secondary 1 ;
-                 :vreg 122 .
-
-
 ###  http://www.semanticweb.org/phoenix/ontologies/2022/0/SmartGrid#Switch_671692
 :Switch_671692 rdf:type owl:NamedIndividual ,
                         :Switch ;
@@ -1723,7 +1643,7 @@
 :Voltage_Actuator rdf:type owl:NamedIndividual ,
                            :Actuator ;
                   :connectsTo :Bus_650 ;
-                  :controls :RegControl_Reg3 ;
+                  :controls :regcontrol_Reg3 ;
                   :isFedBy :Voltage_Controller ;
                   :locatedAt :Coord_200_350 ;
                   :bus_terminal 1 ;
@@ -1776,6 +1696,87 @@
 ###  http://www.semanticweb.org/phoenix/ontologies/2022/0/SmartGrid#WiFi_1
 :WiFi_1 rdf:type owl:NamedIndividual ,
                  :WiFi .
+
+
+###  http://www.semanticweb.org/phoenix/ontologies/2022/0/SmartGrid#regcontrol_Reg1
+:regcontrol_Reg1 rdf:type owl:NamedIndividual ,
+                          :regcontrol ;
+                 :attachsTo :Bus_RG60 ;
+                 :primaryAttachsTo :Bus_650 ;
+                 :Kva 1666 ;
+                 :R 3 ;
+                 :X 9 ;
+                 :XHL 0.01 ;
+                 :band 2 ;
+                 :bank "reg1" ;
+                 :ctprim 700 ;
+                 :kV_primary 2.4 ;
+                 :kV_secondary 2.4 ;
+                 :max_tap 1.05 ;
+                 :min_tap 0.95 ;
+                 :nodes_primary 1 ;
+                 :nodes_secondary 1 ;
+                 :num_phases 1 ;
+                 :num_taps 32 ;
+                 :percent_Load_Loss 0.01 ;
+                 :ptratio 20 ;
+                 :tap_primary 1 ;
+                 :tap_secondary 1 ;
+                 :vreg 122 .
+
+
+###  http://www.semanticweb.org/phoenix/ontologies/2022/0/SmartGrid#regcontrol_Reg2
+:regcontrol_Reg2 rdf:type owl:NamedIndividual ,
+                          :regcontrol ;
+                 :attachsTo :Bus_RG60 ;
+                 :primaryAttachsTo :Bus_650 ;
+                 :Kva 1666 ;
+                 :R 3 ;
+                 :X 9 ;
+                 :XHL 0.01 ;
+                 :band 2 ;
+                 :bank "reg1" ;
+                 :ctprim 700 ;
+                 :kV_primary 2.4 ;
+                 :kV_secondary 2.4 ;
+                 :max_tap 1.05 ;
+                 :min_tap 0.95 ;
+                 :nodes_primary 2 ;
+                 :nodes_secondary 2 ;
+                 :num_phases 1 ;
+                 :num_taps 32 ;
+                 :percent_Load_Loss 0.01 ;
+                 :ptratio 20 ;
+                 :tap_primary 1 ;
+                 :tap_secondary 1 ;
+                 :vreg 122 .
+
+
+###  http://www.semanticweb.org/phoenix/ontologies/2022/0/SmartGrid#regcontrol_Reg3
+:regcontrol_Reg3 rdf:type owl:NamedIndividual ,
+                          :regcontrol ;
+                 :attachsTo :Bus_RG60 ;
+                 :primaryAttachsTo :Bus_650 ;
+                 :Kva 1666 ;
+                 :R 3 ;
+                 :X 9 ;
+                 :XHL 0.01 ;
+                 :band 2 ;
+                 :bank "reg1" ;
+                 :ctprim 700 ;
+                 :kV_primary 2.4 ;
+                 :kV_secondary 2.4 ;
+                 :max_tap 1.05 ;
+                 :min_tap 0.95 ;
+                 :nodes_primary 3 ;
+                 :nodes_secondary 3 ;
+                 :num_phases 1 ;
+                 :num_taps 32 ;
+                 :percent_Load_Loss 0.01 ;
+                 :ptratio 20 ;
+                 :tap_primary 1 ;
+                 :tap_secondary 1 ;
+                 :vreg 122 .
 
 
 #################################################################
