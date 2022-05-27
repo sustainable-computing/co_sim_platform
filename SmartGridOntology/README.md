@@ -4,7 +4,7 @@ This document details the specifics for the Smart Grid Ontology
 
 ## Example Smart Grid
 
-![](PowerGrid.drawio.svg)
+![](PowerGrid.png)
 
 This is a simple example of how the Smart Grid ontology can represent the power, network, and control graph for the example above.
 
