@@ -516,7 +516,7 @@ class SmartGridGraph:
         SELECT DISTINCT *
         WHERE {
             ?entity rdf:type ?type .
-            ?type rdfs:subClassOf* :Processor .
+            ?type rdfs:subClassOf* :Controller .
             ?entity :connectsTo ?connnects_to .
             ?connnects_to :locatedAt ?bus .
         }    

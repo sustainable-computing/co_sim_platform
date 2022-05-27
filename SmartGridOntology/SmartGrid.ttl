@@ -1,0 +1,680 @@
+@prefix : <http://www.semanticweb.org/phoenix/ontologies/2022/0/SmartGrid#> .
+@prefix owl: <http://www.w3.org/2002/07/owl#> .
+@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix xml: <http://www.w3.org/XML/1998/namespace> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@base <http://www.semanticweb.org/phoenix/ontologies/2022/0/SmartGrid> .
+
+<http://www.semanticweb.org/phoenix/ontologies/2022/0/SmartGrid> rdf:type owl:Ontology .
+
+#################################################################
+#    Annotation properties
+#################################################################
+
+###  http://www.semanticweb.org/phoenix/ontologies/2022/0/SmartGrid#LineCode
+:LineCode rdf:type owl:AnnotationProperty ;
+          rdfs:range :Line ;
+          rdfs:domain :LineCode .
+
+
+###  http://www.semanticweb.org/phoenix/ontologies/2022/0/SmartGrid#and
+:and rdf:type owl:AnnotationProperty .
+
+
+###  http://www.semanticweb.org/phoenix/ontologies/2022/0/SmartGrid#applicableUnit
+:applicableUnit rdf:type owl:AnnotationProperty .
+
+
+###  http://www.semanticweb.org/phoenix/ontologies/2022/0/SmartGrid#class
+:class rdf:type owl:AnnotationProperty .
+
+
+###  http://www.semanticweb.org/phoenix/ontologies/2022/0/SmartGrid#datatype
+:datatype rdf:type owl:AnnotationProperty .
+
+
+###  http://www.semanticweb.org/phoenix/ontologies/2022/0/SmartGrid#in
+:in rdf:type owl:AnnotationProperty .
+
+
+###  http://www.semanticweb.org/phoenix/ontologies/2022/0/SmartGrid#not
+:not rdf:type owl:AnnotationProperty .
+
+
+###  http://www.semanticweb.org/phoenix/ontologies/2022/0/SmartGrid#or
+:or rdf:type owl:AnnotationProperty .
+
+
+###  http://www.semanticweb.org/phoenix/ontologies/2022/0/SmartGrid#property
+:property rdf:type owl:AnnotationProperty .
+
+
+###  http://www.semanticweb.org/phoenix/ontologies/2022/0/SmartGrid#targetClass
+:targetClass rdf:type owl:AnnotationProperty .
+
+
+###  http://www.semanticweb.org/phoenix/ontologies/2022/0/SmartGrid#targetSubjectOf
+:targetSubjectOf rdf:type owl:AnnotationProperty .
+
+
+###  http://www.semanticweb.org/phoenix/ontologies/2022/0/SmartGrid#technology
+:technology rdf:type owl:AnnotationProperty ;
+            <http://www.w3.org/2004/02/skos/core#definition> "What kind of communication technology is used between two communication nodes/devices" ;
+            rdfs:range :Transporter ;
+            rdfs:domain :Network_Devices .
+
+
+###  http://www.w3.org/2004/02/skos/core#definition
+<http://www.w3.org/2004/02/skos/core#definition> rdf:type owl:AnnotationProperty .
+
+
+#################################################################
+#    Datatypes
+#################################################################
+
+###  http://www.semanticweb.org/phoenix/ontologies/2022/0/SmartGrid#float_array
+:float_array rdf:type rdfs:Datatype ;
+             <http://www.w3.org/2004/02/skos/core#definition> "An array of float that is internally represented as a string" ;
+             owl:equivalentClass rdf:PlainLiteral .
+
+
+###  http://www.semanticweb.org/phoenix/ontologies/2022/0/SmartGrid#int_array
+:int_array rdf:type rdfs:Datatype ;
+           <http://www.w3.org/2004/02/skos/core#definition> "An array of int that is internally represented as a string" ;
+           owl:equivalentClass rdf:PlainLiteral .
+
+
+###  http://www.semanticweb.org/phoenix/ontologies/2022/0/SmartGrid#trig_matrix
+:trig_matrix rdf:type rdfs:Datatype .
+
+
+#################################################################
+#    Object Properties
+#################################################################
+
+###  http://www.semanticweb.org/phoenix/ontologies/2022/0/SmartGrid#attachsTo
+:attachsTo rdf:type owl:ObjectProperty ;
+           rdfs:subPropertyOf owl:topObjectProperty ;
+           rdf:type owl:AsymmetricProperty ,
+                    owl:IrreflexiveProperty ;
+           rdfs:domain :Electrical_Equipment ;
+           rdfs:range :Bus ;
+           owl:propertyDisjointWith :primaryAttachsTo ;
+           <http://www.w3.org/2004/02/skos/core#definition> "A electrical connection to bus2" .
+
+
+###  http://www.semanticweb.org/phoenix/ontologies/2022/0/SmartGrid#connectsTo
+:connectsTo rdf:type owl:ObjectProperty ;
+            rdfs:subPropertyOf owl:topObjectProperty ;
+            owl:inverseOf :connectsTo ;
+            rdf:type owl:SymmetricProperty ,
+                     owl:IrreflexiveProperty ;
+            rdfs:domain :Bus ,
+                        :Network_Devices ;
+            rdfs:range :Bus ,
+                       :Network_Devices ;
+            <http://www.w3.org/2004/02/skos/core#definition> "A network connection between two networking devices" .
+
+
+###  http://www.semanticweb.org/phoenix/ontologies/2022/0/SmartGrid#controls
+:controls rdf:type owl:ObjectProperty ;
+          rdfs:subPropertyOf owl:topObjectProperty ;
+          owl:inverseOf :isControlledBy ;
+          rdf:type owl:AsymmetricProperty ,
+                   owl:IrreflexiveProperty ;
+          rdfs:domain :Actuator ;
+          rdfs:range :Equipment ;
+          <http://www.w3.org/2004/02/skos/core#definition> "An actuator that controls another equipment." .
+
+
+###  http://www.semanticweb.org/phoenix/ontologies/2022/0/SmartGrid#feeds
+:feeds rdf:type owl:ObjectProperty ;
+       rdfs:subPropertyOf owl:topObjectProperty ;
+       owl:inverseOf :isFedBy ;
+       rdf:type owl:AsymmetricProperty ,
+                owl:IrreflexiveProperty ;
+       rdfs:domain :Actuator ,
+                   :Controller ,
+                   :Sensor ;
+       rdfs:range :Actuator ,
+                  :Controller ,
+                  :Sensor ;
+       <http://www.w3.org/2004/02/skos/core#definition> "The subject is upstream of the object in the context of some sequential process; some media is passed between them." .
+
+
+###  http://www.semanticweb.org/phoenix/ontologies/2022/0/SmartGrid#isControlledBy
+:isControlledBy rdf:type owl:ObjectProperty ;
+                rdfs:subPropertyOf owl:topObjectProperty ;
+                rdf:type owl:AsymmetricProperty ,
+                         owl:IrreflexiveProperty ;
+                rdfs:domain :Equipment ;
+                rdfs:range :Actuator ;
+                <http://www.w3.org/2004/02/skos/core#definition> "The inverse of controls" .
+
+
+###  http://www.semanticweb.org/phoenix/ontologies/2022/0/SmartGrid#isFedBy
+:isFedBy rdf:type owl:ObjectProperty ;
+         rdfs:subPropertyOf owl:topObjectProperty ;
+         rdf:type owl:AsymmetricProperty ,
+                  owl:IrreflexiveProperty ;
+         <http://www.w3.org/2004/02/skos/core#definition> "The inverse of feeds" .
+
+
+###  http://www.semanticweb.org/phoenix/ontologies/2022/0/SmartGrid#isLocationOf
+:isLocationOf rdf:type owl:ObjectProperty ;
+              rdfs:subPropertyOf owl:topObjectProperty ;
+              owl:inverseOf :locatedAt ;
+              rdf:type owl:AsymmetricProperty ,
+                       owl:IrreflexiveProperty ;
+              rdfs:domain :Location ;
+              rdfs:range :Equipment ;
+              <http://www.w3.org/2004/02/skos/core#definition> "The inverse of hasLocation" .
+
+
+###  http://www.semanticweb.org/phoenix/ontologies/2022/0/SmartGrid#isMeasuredBy
+:isMeasuredBy rdf:type owl:ObjectProperty ;
+              rdfs:subPropertyOf owl:topObjectProperty ;
+              owl:inverseOf :measures ;
+              rdf:type owl:AsymmetricProperty ,
+                       owl:IrreflexiveProperty ;
+              rdfs:domain :Measurable ;
+              rdfs:range :Sensor ;
+              <http://www.w3.org/2004/02/skos/core#definition> "The inverse of measures" .
+
+
+###  http://www.semanticweb.org/phoenix/ontologies/2022/0/SmartGrid#isMonitorBy
+:isMonitorBy rdf:type owl:ObjectProperty ;
+             rdfs:subPropertyOf owl:topObjectProperty ;
+             owl:inverseOf :monitor ;
+             rdf:type owl:AsymmetricProperty ,
+                      owl:IrreflexiveProperty ;
+             rdfs:domain :Equipment ;
+             rdfs:range :Sensor ;
+             <http://www.w3.org/2004/02/skos/core#definition> "The inverse of monitor" .
+
+
+###  http://www.semanticweb.org/phoenix/ontologies/2022/0/SmartGrid#locatedAt
+:locatedAt rdf:type owl:ObjectProperty ;
+           rdfs:subPropertyOf owl:topObjectProperty ;
+           rdf:type owl:AsymmetricProperty ,
+                    owl:IrreflexiveProperty ;
+           rdfs:domain :Equipment ;
+           rdfs:range :Location ;
+           <http://www.w3.org/2004/02/skos/core#definition> "The subject is located at a particular place" .
+
+
+###  http://www.semanticweb.org/phoenix/ontologies/2022/0/SmartGrid#measures
+:measures rdf:type owl:ObjectProperty ;
+          rdfs:subPropertyOf owl:topObjectProperty ;
+          rdf:type owl:AsymmetricProperty ,
+                   owl:IrreflexiveProperty ;
+          rdfs:domain :Sensor ;
+          rdfs:range :Measurable ;
+          <http://www.w3.org/2004/02/skos/core#definition> "What measureable (unit) does the sensor measure." .
+
+
+###  http://www.semanticweb.org/phoenix/ontologies/2022/0/SmartGrid#monitor
+:monitor rdf:type owl:ObjectProperty ;
+         rdfs:subPropertyOf owl:topObjectProperty ;
+         rdf:type owl:AsymmetricProperty ,
+                  owl:IrreflexiveProperty ;
+         rdfs:domain :Sensor ;
+         rdfs:range :Equipment ;
+         <http://www.w3.org/2004/02/skos/core#definition> "A sensor that monitors/senses another equipment" .
+
+
+###  http://www.semanticweb.org/phoenix/ontologies/2022/0/SmartGrid#primaryAttachsTo
+:primaryAttachsTo rdf:type owl:ObjectProperty ;
+                  rdfs:subPropertyOf owl:topObjectProperty ;
+                  rdf:type owl:AsymmetricProperty ,
+                           owl:IrreflexiveProperty ;
+                  rdfs:range :Bus ;
+                  <http://www.w3.org/2004/02/skos/core#definition> "A electrical connection to bus1" .
+
+
+#################################################################
+#    Data properties
+#################################################################
+
+###  http://www.semanticweb.org/phoenix/ontologies/2022/0/SmartGrid#Kva
+:Kva rdf:type owl:DatatypeProperty ;
+     <http://www.w3.org/2004/02/skos/core#definition> "Base kVA rating (OA rating)" .
+
+
+###  http://www.semanticweb.org/phoenix/ontologies/2022/0/SmartGrid#MVAsc1
+:MVAsc1 rdf:type owl:DatatypeProperty ;
+        <http://www.w3.org/2004/02/skos/core#definition> "1-phase short circuit MVA." .
+
+
+###  http://www.semanticweb.org/phoenix/ontologies/2022/0/SmartGrid#MVAsc3
+:MVAsc3 rdf:type owl:DatatypeProperty ;
+        <http://www.w3.org/2004/02/skos/core#definition> "3-phase short circuit" .
+
+
+###  http://www.semanticweb.org/phoenix/ontologies/2022/0/SmartGrid#R
+:R rdf:type owl:DatatypeProperty ;
+   <http://www.w3.org/2004/02/skos/core#definition> "R setting" .
+
+
+###  http://www.semanticweb.org/phoenix/ontologies/2022/0/SmartGrid#X
+:X rdf:type owl:DatatypeProperty ;
+   <http://www.w3.org/2004/02/skos/core#definition> "X setting" .
+
+
+###  http://www.semanticweb.org/phoenix/ontologies/2022/0/SmartGrid#XHL
+:XHL rdf:type owl:DatatypeProperty ;
+     <http://www.w3.org/2004/02/skos/core#definition> "percent leakage from the H-winding to the L-winding or from winding 1 to winding 2" .
+
+
+###  http://www.semanticweb.org/phoenix/ontologies/2022/0/SmartGrid#XHT
+:XHT rdf:type owl:DatatypeProperty .
+
+
+###  http://www.semanticweb.org/phoenix/ontologies/2022/0/SmartGrid#XLT
+:XLT rdf:type owl:DatatypeProperty .
+
+
+###  http://www.semanticweb.org/phoenix/ontologies/2022/0/SmartGrid#angle
+:angle rdf:type owl:DatatypeProperty ;
+       <http://www.w3.org/2004/02/skos/core#definition> "Base angle, degrees, of the first phase" .
+
+
+###  http://www.semanticweb.org/phoenix/ontologies/2022/0/SmartGrid#band
+:band rdf:type owl:DatatypeProperty .
+
+
+###  http://www.semanticweb.org/phoenix/ontologies/2022/0/SmartGrid#bank
+:bank rdf:type owl:DatatypeProperty .
+
+
+###  http://www.semanticweb.org/phoenix/ontologies/2022/0/SmartGrid#bus_terminal
+:bus_terminal rdf:type owl:DatatypeProperty ;
+              <http://www.w3.org/2004/02/skos/core#definition> "What terminal is the sensor or actuator is monitoring or acting upon on an equipment." .
+
+
+###  http://www.semanticweb.org/phoenix/ontologies/2022/0/SmartGrid#c0
+:c0 rdf:type owl:DatatypeProperty .
+
+
+###  http://www.semanticweb.org/phoenix/ontologies/2022/0/SmartGrid#c1
+:c1 rdf:type owl:DatatypeProperty .
+
+
+###  http://www.semanticweb.org/phoenix/ontologies/2022/0/SmartGrid#cmat
+:cmat rdf:type owl:DatatypeProperty .
+
+
+###  http://www.semanticweb.org/phoenix/ontologies/2022/0/SmartGrid#connection_primary
+:connection_primary rdf:type owl:DatatypeProperty ;
+                    <http://www.w3.org/2004/02/skos/core#definition> "The connection for the first winding or bus, either detla or wye." .
+
+
+###  http://www.semanticweb.org/phoenix/ontologies/2022/0/SmartGrid#connection_secondary
+:connection_secondary rdf:type owl:DatatypeProperty ;
+                      <http://www.w3.org/2004/02/skos/core#definition> "The connection type for the second winding or bus." .
+
+
+###  http://www.semanticweb.org/phoenix/ontologies/2022/0/SmartGrid#coord_x
+:coord_x rdf:type owl:DatatypeProperty ;
+         rdfs:subPropertyOf owl:topDataProperty ;
+         rdfs:domain :Coordinates .
+
+
+###  http://www.semanticweb.org/phoenix/ontologies/2022/0/SmartGrid#coord_y
+:coord_y rdf:type owl:DatatypeProperty ;
+         rdfs:domain :Coordinates .
+
+
+###  http://www.semanticweb.org/phoenix/ontologies/2022/0/SmartGrid#ctprim
+:ctprim rdf:type owl:DatatypeProperty .
+
+
+###  http://www.semanticweb.org/phoenix/ontologies/2022/0/SmartGrid#delay
+:delay rdf:type owl:DatatypeProperty ;
+       <http://www.w3.org/2004/02/skos/core#definition> "The delay of processing the input" .
+
+
+###  http://www.semanticweb.org/phoenix/ontologies/2022/0/SmartGrid#error_rate
+:error_rate rdf:type owl:DatatypeProperty ;
+            <http://www.w3.org/2004/02/skos/core#definition> "The error rate of processing for transporting" .
+
+
+###  http://www.semanticweb.org/phoenix/ontologies/2022/0/SmartGrid#freq
+:freq rdf:type owl:DatatypeProperty ;
+      rdfs:subPropertyOf owl:topDataProperty ;
+      <http://www.w3.org/2004/02/skos/core#definition> "The frequency that the equipment is running on" .
+
+
+###  http://www.semanticweb.org/phoenix/ontologies/2022/0/SmartGrid#kV_primary
+:kV_primary rdf:type owl:DatatypeProperty ;
+            <http://www.w3.org/2004/02/skos/core#definition> "The rated voltage for the primary terminal or winding" .
+
+
+###  http://www.semanticweb.org/phoenix/ontologies/2022/0/SmartGrid#kV_secondary
+:kV_secondary rdf:type owl:DatatypeProperty ;
+              <http://www.w3.org/2004/02/skos/core#definition> "The rated voltage for the secondary terminal or winding" .
+
+
+###  http://www.semanticweb.org/phoenix/ontologies/2022/0/SmartGrid#kW
+:kW rdf:type owl:DatatypeProperty ;
+    <http://www.w3.org/2004/02/skos/core#definition> "nominal active power, kW, for the load. Total of all phases" .
+
+
+###  http://www.semanticweb.org/phoenix/ontologies/2022/0/SmartGrid#kvar
+:kvar rdf:type owl:DatatypeProperty ;
+      <http://www.w3.org/2004/02/skos/core#definition> "Base kvar" .
+
+
+###  http://www.semanticweb.org/phoenix/ontologies/2022/0/SmartGrid#layer_1
+:layer_1 rdf:type owl:DatatypeProperty .
+
+
+###  http://www.semanticweb.org/phoenix/ontologies/2022/0/SmartGrid#layer_2
+:layer_2 rdf:type owl:DatatypeProperty .
+
+
+###  http://www.semanticweb.org/phoenix/ontologies/2022/0/SmartGrid#layer_3
+:layer_3 rdf:type owl:DatatypeProperty .
+
+
+###  http://www.semanticweb.org/phoenix/ontologies/2022/0/SmartGrid#layer_4
+:layer_4 rdf:type owl:DatatypeProperty .
+
+
+###  http://www.semanticweb.org/phoenix/ontologies/2022/0/SmartGrid#length
+:length rdf:type owl:DatatypeProperty ;
+        rdfs:subPropertyOf owl:topDataProperty ;
+        rdfs:domain :Line .
+
+
+###  http://www.semanticweb.org/phoenix/ontologies/2022/0/SmartGrid#max_tap
+:max_tap rdf:type owl:DatatypeProperty .
+
+
+###  http://www.semanticweb.org/phoenix/ontologies/2022/0/SmartGrid#min_tap
+:min_tap rdf:type owl:DatatypeProperty .
+
+
+###  http://www.semanticweb.org/phoenix/ontologies/2022/0/SmartGrid#model
+:model rdf:type owl:DatatypeProperty ;
+       rdfs:domain :Load .
+
+
+###  http://www.semanticweb.org/phoenix/ontologies/2022/0/SmartGrid#nodes_primary
+:nodes_primary rdf:type owl:DatatypeProperty ;
+               rdfs:subPropertyOf owl:topDataProperty ;
+               <http://www.w3.org/2004/02/skos/core#definition> "List of node/terminal connections for the primary side of the equipment" .
+
+
+###  http://www.semanticweb.org/phoenix/ontologies/2022/0/SmartGrid#nodes_secondary
+:nodes_secondary rdf:type owl:DatatypeProperty ;
+                 <http://www.w3.org/2004/02/skos/core#definition> "List of node/terminal connections for the secondary side of the equipment" .
+
+
+###  http://www.semanticweb.org/phoenix/ontologies/2022/0/SmartGrid#normal_state
+:normal_state rdf:type owl:DatatypeProperty ;
+              rdfs:domain :Line ;
+              <http://www.w3.org/2004/02/skos/core#definition> "Is the switch normally open or closed" .
+
+
+###  http://www.semanticweb.org/phoenix/ontologies/2022/0/SmartGrid#num_phases
+:num_phases rdf:type owl:DatatypeProperty ;
+            <http://www.w3.org/2004/02/skos/core#definition> "The number of phases" .
+
+
+###  http://www.semanticweb.org/phoenix/ontologies/2022/0/SmartGrid#num_taps
+:num_taps rdf:type owl:DatatypeProperty ;
+          rdfs:domain :Transformer ;
+          <http://www.w3.org/2004/02/skos/core#definition> "The number of taps on the transformer" .
+
+
+###  http://www.semanticweb.org/phoenix/ontologies/2022/0/SmartGrid#percent_Load_Loss
+:percent_Load_Loss rdf:type owl:DatatypeProperty ;
+                   rdfs:subPropertyOf owl:topDataProperty ;
+                   <http://www.w3.org/2004/02/skos/core#definition> "Percent Losses at rated load. Causes the %r values to be set for winding 1 and 2" .
+
+
+###  http://www.semanticweb.org/phoenix/ontologies/2022/0/SmartGrid#percent_R
+:percent_R rdf:type owl:DatatypeProperty ;
+           <http://www.w3.org/2004/02/skos/core#definition> "Percent resistance of this equipment on the rated kVA base." .
+
+
+###  http://www.semanticweb.org/phoenix/ontologies/2022/0/SmartGrid#phase
+:phase rdf:type owl:DatatypeProperty .
+
+
+###  http://www.semanticweb.org/phoenix/ontologies/2022/0/SmartGrid#ptratio
+:ptratio rdf:type owl:DatatypeProperty .
+
+
+###  http://www.semanticweb.org/phoenix/ontologies/2022/0/SmartGrid#pu
+:pu rdf:type owl:DatatypeProperty .
+
+
+###  http://www.semanticweb.org/phoenix/ontologies/2022/0/SmartGrid#r0
+:r0 rdf:type owl:DatatypeProperty .
+
+
+###  http://www.semanticweb.org/phoenix/ontologies/2022/0/SmartGrid#r1
+:r1 rdf:type owl:DatatypeProperty .
+
+
+###  http://www.semanticweb.org/phoenix/ontologies/2022/0/SmartGrid#rate
+:rate rdf:type owl:DatatypeProperty ;
+      <http://www.w3.org/2004/02/skos/core#definition> "The bandwith for the link" .
+
+
+###  http://www.semanticweb.org/phoenix/ontologies/2022/0/SmartGrid#rmat
+:rmat rdf:type owl:DatatypeProperty .
+
+
+###  http://www.semanticweb.org/phoenix/ontologies/2022/0/SmartGrid#switch_type
+:switch_type rdf:type owl:DatatypeProperty ;
+             rdfs:domain :Line .
+
+
+###  http://www.semanticweb.org/phoenix/ontologies/2022/0/SmartGrid#tap_primary
+:tap_primary rdf:type owl:DatatypeProperty .
+
+
+###  http://www.semanticweb.org/phoenix/ontologies/2022/0/SmartGrid#tap_secondary
+:tap_secondary rdf:type owl:DatatypeProperty .
+
+
+###  http://www.semanticweb.org/phoenix/ontologies/2022/0/SmartGrid#unit
+:unit rdf:type owl:DatatypeProperty ;
+      <http://www.w3.org/2004/02/skos/core#definition> "The unit of measurement the equipment processes on." .
+
+
+###  http://www.semanticweb.org/phoenix/ontologies/2022/0/SmartGrid#vreg
+:vreg rdf:type owl:DatatypeProperty ;
+      <http://www.w3.org/2004/02/skos/core#definition> "Voltage regulator settings, in volts, for the winding being controlled. Multiplying this value times the ptratio yield the voltage across the winding of the controlled transformer" .
+
+
+###  http://www.semanticweb.org/phoenix/ontologies/2022/0/SmartGrid#x0
+:x0 rdf:type owl:DatatypeProperty .
+
+
+###  http://www.semanticweb.org/phoenix/ontologies/2022/0/SmartGrid#x1
+:x1 rdf:type owl:DatatypeProperty .
+
+
+###  http://www.semanticweb.org/phoenix/ontologies/2022/0/SmartGrid#xmat
+:xmat rdf:type owl:DatatypeProperty .
+
+
+#################################################################
+#    Classes
+#################################################################
+
+###  http://www.semanticweb.org/phoenix/ontologies/2022/0/SmartGrid#Actuator
+:Actuator rdf:type owl:Class ;
+          rdfs:subClassOf :Processor ;
+          <http://www.w3.org/2004/02/skos/core#definition> "A class to represent an actuator object" .
+
+
+###  http://www.semanticweb.org/phoenix/ontologies/2022/0/SmartGrid#Bluetooth
+:Bluetooth rdf:type owl:Class ;
+           rdfs:subClassOf :Transporter ;
+           <http://www.w3.org/2004/02/skos/core#definition> "A class to specify bluetooth settings" .
+
+
+###  http://www.semanticweb.org/phoenix/ontologies/2022/0/SmartGrid#Bus
+:Bus rdf:type owl:Class ;
+     rdfs:subClassOf :Electrical_Equipment ;
+     <http://www.w3.org/2004/02/skos/core#definition> "Define a bus object for the power simulator" .
+
+
+###  http://www.semanticweb.org/phoenix/ontologies/2022/0/SmartGrid#Capacitor
+:Capacitor rdf:type owl:Class ;
+           rdfs:subClassOf :Electrical_Equipment ;
+           <http://www.w3.org/2004/02/skos/core#definition> "A class to represent a capacitor object" .
+
+
+###  http://www.semanticweb.org/phoenix/ontologies/2022/0/SmartGrid#Characteristics
+:Characteristics rdf:type owl:Class ;
+                 <http://www.w3.org/2004/02/skos/core#definition> "A class of characteristics for different equipment of the ontology" .
+
+
+###  http://www.semanticweb.org/phoenix/ontologies/2022/0/SmartGrid#Communication_Node
+:Communication_Node rdf:type owl:Class ;
+                    rdfs:subClassOf :Network_Devices ;
+                    <http://www.w3.org/2004/02/skos/core#definition> "A class to represent a network node" .
+
+
+###  http://www.semanticweb.org/phoenix/ontologies/2022/0/SmartGrid#Controller
+:Controller rdf:type owl:Class ;
+            rdfs:subClassOf :Processor ;
+            <http://www.w3.org/2004/02/skos/core#definition> "A controller that controls a voltage regulator" .
+
+
+###  http://www.semanticweb.org/phoenix/ontologies/2022/0/SmartGrid#Coordinates
+:Coordinates rdf:type owl:Class ;
+             rdfs:subClassOf :Location ;
+             <http://www.w3.org/2004/02/skos/core#definition> "A class of coordinates to determine a location" .
+
+
+###  http://www.semanticweb.org/phoenix/ontologies/2022/0/SmartGrid#Electrical_Equipment
+:Electrical_Equipment rdf:type owl:Class ;
+                      rdfs:subClassOf :Equipment ;
+                      <http://www.w3.org/2004/02/skos/core#definition> "A class of electrical equipment for the OpenDSS simulator" .
+
+
+###  http://www.semanticweb.org/phoenix/ontologies/2022/0/SmartGrid#Equipment
+:Equipment rdf:type owl:Class ;
+           <http://www.w3.org/2004/02/skos/core#definition> "A class of physical equipment for the simulators" .
+
+
+###  http://www.semanticweb.org/phoenix/ontologies/2022/0/SmartGrid#Ethernet
+:Ethernet rdf:type owl:Class ;
+          rdfs:subClassOf :Transporter ;
+          <http://www.w3.org/2004/02/skos/core#definition> "A class of ethernet settings" .
+
+
+###  http://www.semanticweb.org/phoenix/ontologies/2022/0/SmartGrid#Generator
+:Generator rdf:type owl:Class ;
+           rdfs:subClassOf :Electrical_Equipment ;
+           <http://www.w3.org/2004/02/skos/core#definition> "A class to represent a generator or a circuit." .
+
+
+###  http://www.semanticweb.org/phoenix/ontologies/2022/0/SmartGrid#Line
+:Line rdf:type owl:Class ;
+      rdfs:subClassOf :Electrical_Equipment ;
+      <http://www.w3.org/2004/02/skos/core#definition> "A class to represent a Line object" .
+
+
+###  http://www.semanticweb.org/phoenix/ontologies/2022/0/SmartGrid#LineCode
+:LineCode rdf:type owl:Class ;
+          rdfs:subClassOf :Characteristics .
+
+
+###  http://www.semanticweb.org/phoenix/ontologies/2022/0/SmartGrid#Load
+:Load rdf:type owl:Class ;
+      rdfs:subClassOf :Electrical_Equipment ;
+      <http://www.w3.org/2004/02/skos/core#definition> "A class to represent a load object" .
+
+
+###  http://www.semanticweb.org/phoenix/ontologies/2022/0/SmartGrid#Location
+:Location rdf:type owl:Class ;
+          <http://www.w3.org/2004/02/skos/core#definition> "A class to represent location" .
+
+
+###  http://www.semanticweb.org/phoenix/ontologies/2022/0/SmartGrid#Measurable
+:Measurable rdf:type owl:Class ;
+            <http://www.w3.org/2004/02/skos/core#definition> "A class of measurable qualities" .
+
+
+###  http://www.semanticweb.org/phoenix/ontologies/2022/0/SmartGrid#Network_Devices
+:Network_Devices rdf:type owl:Class ;
+                 rdfs:subClassOf :Equipment ;
+                 <http://www.w3.org/2004/02/skos/core#definition> "A collection of networking devices including sensors, actuators, and controllers for the networking simulator." .
+
+
+###  http://www.semanticweb.org/phoenix/ontologies/2022/0/SmartGrid#Processor
+:Processor rdf:type owl:Class ;
+           rdfs:subClassOf :Network_Devices ;
+           <http://www.w3.org/2004/02/skos/core#definition> "A class to represent the control process of the control system" .
+
+
+###  http://www.semanticweb.org/phoenix/ontologies/2022/0/SmartGrid#Quantity
+:Quantity rdf:type owl:Class ;
+          rdfs:subClassOf :Measurable ;
+          <http://www.w3.org/2004/02/skos/core#definition> "A class to measure quantative property" .
+
+
+###  http://www.semanticweb.org/phoenix/ontologies/2022/0/SmartGrid#RegControl
+:RegControl rdf:type owl:Class ;
+            rdfs:subClassOf :Transformer .
+
+
+###  http://www.semanticweb.org/phoenix/ontologies/2022/0/SmartGrid#Sensor
+:Sensor rdf:type owl:Class ;
+        rdfs:subClassOf :Processor ;
+        <http://www.w3.org/2004/02/skos/core#definition> "A class to represent a sensor for the control loop" .
+
+
+###  http://www.semanticweb.org/phoenix/ontologies/2022/0/SmartGrid#Switch
+:Switch rdf:type owl:Class ;
+        rdfs:subClassOf :Line .
+
+
+###  http://www.semanticweb.org/phoenix/ontologies/2022/0/SmartGrid#Transformer
+:Transformer rdf:type owl:Class ;
+             rdfs:subClassOf :Electrical_Equipment ;
+             <http://www.w3.org/2004/02/skos/core#definition> "Transformer that changes the voltage from bus1 to bus2" .
+
+
+###  http://www.semanticweb.org/phoenix/ontologies/2022/0/SmartGrid#Transporter
+:Transporter rdf:type owl:Class ;
+             rdfs:subClassOf :Characteristics ;
+             <http://www.w3.org/2004/02/skos/core#definition> "A class of technologies that is used to communicate between networking nodes" .
+
+
+###  http://www.semanticweb.org/phoenix/ontologies/2022/0/SmartGrid#Voltage_Controller
+:Voltage_Controller rdf:type owl:Class ;
+                    rdfs:subClassOf :Controller .
+
+
+###  http://www.semanticweb.org/phoenix/ontologies/2022/0/SmartGrid#Voltage_Sensor
+:Voltage_Sensor rdf:type owl:Class ;
+                rdfs:subClassOf :Sensor .
+
+
+###  http://www.semanticweb.org/phoenix/ontologies/2022/0/SmartGrid#WiFi
+:WiFi rdf:type owl:Class ;
+      rdfs:subClassOf :Transporter ;
+      <http://www.w3.org/2004/02/skos/core#definition> "A class of WiFi settings" .
+
+
+#################################################################
+#    Annotations
+#################################################################
+
+:LineCode <http://www.w3.org/2004/02/skos/core#definition> "Annotate line objects with a line code individual" .
+
+
+:Voltage_Sensor <http://www.w3.org/2004/02/skos/core#definition> "A sensor that measures voltage at a point" .
+
+
+###  Generated by the OWL API (version 4.5.9.2019-02-01T07:24:44Z) https://github.com/owlcs/owlapi

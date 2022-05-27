@@ -39,7 +39,7 @@ Sensors, controllers, and actuators are themselves devices that can act as nodes
 Using the `connectsTo` relation between `nodes` creates a link between those `nodes`. In our ontology both electrical `buses` and `communication_nodes` can be `nodes`.
 
 In the example above `bus 20`, `bus 30`, and `bus 40` has a `connectsTo` relation.
-There is also a wireless connections between the buses
+There is also a wireless connections between the buses.
 
 ## Defining the Power Topology
 
