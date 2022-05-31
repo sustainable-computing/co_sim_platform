@@ -30,14 +30,14 @@ class SmartGridGraph:
         query_str = """
         SELECT *
         WHERE {
-            ?gen a :Generator .
-            ?gen :primaryAttachsTo ?bus1 .
-            ?gen :MVAsc1 ?MVAsc1 .
-            ?gen :MVAsc3 ?MVAsc3 .
-            ?gen :pu ?pu .
-            ?gen :angle ?angle .
-            ?gen :kV_secondary ?kv_sec .
-            ?gen :num_phases ?num_phases
+            ?gen a SmartGrid:Generator .
+            ?gen SmartGrid:primaryAttachsTo ?bus1 .
+            ?gen SmartGrid:MVAsc1 ?MVAsc1 .
+            ?gen SmartGrid:MVAsc3 ?MVAsc3 .
+            ?gen SmartGrid:pu ?pu .
+            ?gen SmartGrid:angle ?angle .
+            ?gen SmartGrid:kV_secondary ?kv_sec .
+            ?gen SmartGrid:num_phases ?num_phases
         }    
         """
 
@@ -63,20 +63,20 @@ class SmartGridGraph:
         query_str = """
         SELECT *
         WHERE {
-            ?trans a :Transformer .
-            ?trans :primaryAttachsTo ?prim_bus .
-            ?trans :attachsTo ?sec_bus .
-            ?trans :num_phases ?num_phases .
-            ?trans :Kva ?Kva .
-            ?trans :XHL ?xhl .
-            ?trans :connection_primary ?conn_prim .
-            ?trans :connection_secondary ?conn_sec .
-            ?trans :kV_primary ?kv_prim .
-            ?trans :kV_secondary ?kv_sec .
-            ?trans :percent_R ?percent_R .
+            ?trans a SmartGrid:Transformer .
+            ?trans SmartGrid:primaryAttachsTo ?prim_bus .
+            ?trans SmartGrid:attachsTo ?sec_bus .
+            ?trans SmartGrid:num_phases ?num_phases .
+            ?trans SmartGrid:Kva ?Kva .
+            ?trans SmartGrid:XHL ?xhl .
+            ?trans SmartGrid:connection_primary ?conn_prim .
+            ?trans SmartGrid:connection_secondary ?conn_sec .
+            ?trans SmartGrid:kV_primary ?kv_prim .
+            ?trans SmartGrid:kV_secondary ?kv_sec .
+            ?trans SmartGrid:percent_R ?percent_R .
             OPTIONAL {
-                ?trans :XHT ?xht .
-                ?trans :XLT ?xlt .
+                ?trans SmartGrid:XHT ?xht .
+                ?trans SmartGrid:XLT ?xlt .
             }
         }
         """
@@ -106,14 +106,14 @@ class SmartGridGraph:
         query_str = """
         SELECT *
         WHERE {
-            ?cap a :Capacitor .
-            ?cap :primaryAttachsTo ?bus .
-            ?cap :kV_primary ?kv .
-            ?cap :kvar ?kvar .
-            ?cap :num_phases ?num_phases .
-            ?cap :kvar ?kvar .
+            ?cap a SmartGrid:Capacitor .
+            ?cap SmartGrid:primaryAttachsTo ?bus .
+            ?cap SmartGrid:kV_primary ?kv .
+            ?cap SmartGrid:kvar ?kvar .
+            ?cap SmartGrid:num_phases ?num_phases .
+            ?cap SmartGrid:kvar ?kvar .
             OPTIONAL {
-                ?cap :nodes_primary ?prim_bus .
+                ?cap SmartGrid:nodes_primary ?prim_bus .
             }
         }    
         """
@@ -138,10 +138,10 @@ class SmartGridGraph:
         query_str = """
         SELECT *
         WHERE {
-            ?bus a :Bus .
-            ?bus :locatedAt ?loc .
-            ?loc :coord_x ?x .
-            ?loc :coord_y ?y .
+            ?bus a SmartGrid:Bus .
+            ?bus SmartGrid:locatedAt ?loc .
+            ?loc SmartGrid:coord_x ?x .
+            ?loc SmartGrid:coord_y ?y .
         }    
         """
         res = self.g.query(query_str)
@@ -166,9 +166,9 @@ class SmartGridGraph:
         SELECT *
         WHERE {
             ?entity rdf:type ?type .
-            ?type rdfs:subClassOf* :Electrical_Equipment .
-            ?entity :primaryAttachsTo ?bus1 .
-            ?entity :attachsTo ?bus2 .
+            ?type rdfs:subClassOf* SmartGrid:Electrical_Equipment .
+            ?entity SmartGrid:primaryAttachsTo ?bus1 .
+            ?entity SmartGrid:attachsTo ?bus2 .
         } 
         """
         res = self.g.query(query_str)
@@ -189,18 +189,18 @@ class SmartGridGraph:
         SELECT DISTINCT ?node ?x ?y ?neighbor ?neighbor_x ?neighbor_y
         WHERE {
             {
-                ?node a :Bus .
-                ?node :connectsTo ?neighbor .
+                ?node a SmartGrid:Bus .
+                ?node SmartGrid:connectsTo ?neighbor .
             } UNION {
-                ?node a :Communication_Node .
-                ?node :connectsTo ?neighbor .
+                ?node a SmartGrid:Communication_Node .
+                ?node SmartGrid:connectsTo ?neighbor .
             }   
-            ?node :locatedAt ?loc .
-            ?loc :coord_x ?x .
-            ?loc :coord_y ?y .
-            ?neighbor :locatedAt ?neighbor_loc .
-            ?neighbor_loc :coord_x ?neighbor_x .
-            ?neighbor_loc :coord_y ?neighbor_y .
+            ?node SmartGrid:locatedAt ?loc .
+            ?loc SmartGrid:coord_x ?x .
+            ?loc SmartGrid:coord_y ?y .
+            ?neighbor SmartGrid:locatedAt ?neighbor_loc .
+            ?neighbor_loc SmartGrid:coord_x ?neighbor_x .
+            ?neighbor_loc SmartGrid:coord_y ?neighbor_y .
         }
         """
         res = self.g.query(query_str)
@@ -229,15 +229,15 @@ class SmartGridGraph:
         query_str = """
         SELECT *
         WHERE {
-            ?line a :Line .
-            ?line :primaryAttachsTo ?bus1 .
-            ?line :attachsTo ?bus2 .
-            ?line :LineCode ?linecode .
-            ?line :length ?length .
-            ?line :nodes_primary ?n_prim .
-            ?line :nodes_secondary ?n_sec .
-            ?line :num_phases ?num_phases .
-            ?line :unit ?unit .
+            ?line a SmartGrid:Line .
+            ?line SmartGrid:primaryAttachsTo ?bus1 .
+            ?line SmartGrid:attachsTo ?bus2 .
+            ?line SmartGrid:LineCode ?linecode .
+            ?line SmartGrid:length ?length .
+            ?line SmartGrid:nodes_primary ?n_prim .
+            ?line SmartGrid:nodes_secondary ?n_sec .
+            ?line SmartGrid:num_phases ?num_phases .
+            ?line SmartGrid:unit ?unit .
         }
         """
         res = self.g.query(query_str)
@@ -262,17 +262,17 @@ class SmartGridGraph:
         query_str = """
         SELECT *
         WHERE {
-            ?load a :Load .
-            ?load :primaryAttachsTo ?bus1 .
-            ?load :connection_primary ?conn .
-            ?load :kV_primary ?kv_prim .
-            ?load :kW ?kW .
-            ?load :kvar ?kvar .
-            ?load :model ?model .
-            ?load :nodes_primary ?n_prim .
-            ?load :num_phases ?num_phases . 
+            ?load a SmartGrid:Load .
+            ?load SmartGrid:primaryAttachsTo ?bus1 .
+            ?load SmartGrid:connection_primary ?conn .
+            ?load SmartGrid:kV_primary ?kv_prim .
+            ?load SmartGrid:kW ?kW .
+            ?load SmartGrid:kvar ?kvar .
+            ?load SmartGrid:model ?model .
+            ?load SmartGrid:nodes_primary ?n_prim .
+            ?load SmartGrid:num_phases ?num_phases . 
             OPTIONAL {
-                ?load :nodes_secondary ?n_sec .
+                ?load SmartGrid:nodes_secondary ?n_sec .
             }
         }
         """
@@ -300,14 +300,14 @@ class SmartGridGraph:
         query_str = """
         SELECT *
         WHERE {
-            ?linecode a :LineCode .
-            ?linecode :freq ?freq .
-            ?linecode :num_phases ?num_phases .
-            ?linecode :rmat ?rmat .
-            ?linecode :xmat ?xmat .
-            ?linecode :unit ?unit .
+            ?linecode a SmartGrid:LineCode .
+            ?linecode SmartGrid:freq ?freq .
+            ?linecode SmartGrid:num_phases ?num_phases .
+            ?linecode SmartGrid:rmat ?rmat .
+            ?linecode SmartGrid:xmat ?xmat .
+            ?linecode SmartGrid:unit ?unit .
             OPTIONAL {
-                ?linecode :cmat ?cmat .
+                ?linecode SmartGrid:cmat ?cmat .
             }
         }    
         """
@@ -332,16 +332,16 @@ class SmartGridGraph:
         query_str = """
         SELECT *
         WHERE {
-            ?switch a :Switch .
-            ?switch :primaryAttachsTo ?bus1 .
-            ?switch :attachsTo ?bus2 .
-            ?switch :num_phases ?num_phases .
-            ?switch :c0 ?c0 .
-            ?switch :c1 ?c1 .
-            ?switch :r0 ?r0 .
-            ?switch :r1 ?r1 .
-            ?switch :x0 ?x0 .
-            ?switch :x1 ?x1 .
+            ?switch a SmartGrid:Switch .
+            ?switch SmartGrid:primaryAttachsTo ?bus1 .
+            ?switch SmartGrid:attachsTo ?bus2 .
+            ?switch SmartGrid:num_phases ?num_phases .
+            ?switch SmartGrid:c0 ?c0 .
+            ?switch SmartGrid:c1 ?c1 .
+            ?switch SmartGrid:r0 ?r0 .
+            ?switch SmartGrid:r1 ?r1 .
+            ?switch SmartGrid:x0 ?x0 .
+            ?switch SmartGrid:x1 ?x1 .
         }    
         """
         res = self.g.query(query_str)
@@ -366,29 +366,29 @@ class SmartGridGraph:
         query_str = """
         SELECT *
         WHERE {
-            ?reg a :regcontrol .
-            ?reg :primaryAttachsTo ?bus1 .
-            ?reg :attachsTo ?bus2 .
-            ?reg :Kva ?kva .
-            ?reg :R ?R .
-            ?reg :X ?X.
-            ?reg :XHL ?XHL .
-            ?reg :band ?band .
-            ?reg :bank ?bank . 
-            ?reg :ctprim ?ctprim .
-            ?reg :kV_primary ?kv_prim .
-            ?reg :kV_secondary ?kv_sec .
-            ?reg :tap_primary ?tap_prim .
-            ?reg :tap_secondary ?tap_sec .
-            ?reg :max_tap ?max_tap .
-            ?reg :min_tap ?min_tap .
-            ?reg :nodes_primary ?nodes_primary .
-            ?reg :nodes_secondary ?nodes_secondary .
-            ?reg :num_phases ?num_phases .
-            ?reg :num_taps ?num_taps .
-            ?reg :percent_Load_Loss ?percent_load_loss .
-            ?reg :ptratio ?ptratio .
-            ?reg :vreg ?vreg .
+            ?reg a SmartGrid:regcontrol .
+            ?reg SmartGrid:primaryAttachsTo ?bus1 .
+            ?reg SmartGrid:attachsTo ?bus2 .
+            ?reg SmartGrid:Kva ?kva .
+            ?reg SmartGrid:R ?R .
+            ?reg SmartGrid:X ?X.
+            ?reg SmartGrid:XHL ?XHL .
+            ?reg SmartGrid:band ?band .
+            ?reg SmartGrid:bank ?bank . 
+            ?reg SmartGrid:ctprim ?ctprim .
+            ?reg SmartGrid:kV_primary ?kv_prim .
+            ?reg SmartGrid:kV_secondary ?kv_sec .
+            ?reg SmartGrid:tap_primary ?tap_prim .
+            ?reg SmartGrid:tap_secondary ?tap_sec .
+            ?reg SmartGrid:max_tap ?max_tap .
+            ?reg SmartGrid:min_tap ?min_tap .
+            ?reg SmartGrid:nodes_primary ?nodes_primary .
+            ?reg SmartGrid:nodes_secondary ?nodes_secondary .
+            ?reg SmartGrid:num_phases ?num_phases .
+            ?reg SmartGrid:num_taps ?num_taps .
+            ?reg SmartGrid:percent_Load_Loss ?percent_load_loss .
+            ?reg SmartGrid:ptratio ?ptratio .
+            ?reg SmartGrid:vreg ?vreg .
         }    
         """
         res = self.g.query(query_str)
@@ -428,16 +428,16 @@ class SmartGridGraph:
         SELECT *
         WHERE {
             ?act rdf:type ?type .
-            ?type rdfs:subClassOf* :Actuator .
-            ?act :connectsTo ?dst_node .
-            ?act :controls ?controls .
-            ?act :isFedBy ?fedby .
-            ?act :phase ?phase .
-            ?act :bus_terminal ?bus .
-            ?controls :primaryAttachsTo ?bus1 .
-            ?fedby :connectsTo ?src_node .
+            ?type rdfs:subClassOf* SmartGrid:Actuator .
+            ?act SmartGrid:connectsTo ?dst_node .
+            ?act SmartGrid:controls ?controls .
+            ?act SmartGrid:isFedBy ?fedby .
+            ?act SmartGrid:phase ?phase .
+            ?act SmartGrid:bus_terminal ?bus .
+            ?controls SmartGrid:primaryAttachsTo ?bus1 .
+            ?fedby SmartGrid:connectsTo ?src_node .
             OPTIONAL {
-                ?controls :attachsTo ?bus2 .
+                ?controls SmartGrid:attachsTo ?bus2 .
             }
         }    
         """
@@ -468,18 +468,18 @@ class SmartGridGraph:
         SELECT *
         WHERE {
             ?sen rdf:type ?type .
-            ?type rdfs:subClassOf* :Sensor .
-            ?sen :connectsTo ?src_node .
-            ?sen :feeds ?controller .
-            ?sen :measures ?measures . 
-            ?sen :monitor ?monitor .
-            ?monitor :primaryAttachsTo ?bus1 .
-            ?sen :rate ?rate .
-            ?sen :phase ?phase .
-            ?sen :bus_terminal ?bus .
-            ?controller :connectsTo ?dst_node .
+            ?type rdfs:subClassOf* SmartGrid:Sensor .
+            ?sen SmartGrid:connectsTo ?src_node .
+            ?sen SmartGrid:feeds ?controller .
+            ?sen SmartGrid:measures ?measures . 
+            ?sen SmartGrid:monitor ?monitor .
+            ?monitor SmartGrid:primaryAttachsTo ?bus1 .
+            ?sen SmartGrid:rate ?rate .
+            ?sen SmartGrid:phase ?phase .
+            ?sen SmartGrid:bus_terminal ?bus .
+            ?controller SmartGrid:connectsTo ?dst_node .
             OPTIONAL {
-                ?monitor :attachsTo ?bus2 .
+                ?monitor SmartGrid:attachsTo ?bus2 .
             }
         }    
         """
@@ -516,9 +516,9 @@ class SmartGridGraph:
         SELECT DISTINCT *
         WHERE {
             ?entity rdf:type ?type .
-            ?type rdfs:subClassOf* :Controller .
-            ?entity :connectsTo ?connnects_to .
-            ?connnects_to :locatedAt ?bus .
+            ?type rdfs:subClassOf* SmartGrid:Controller .
+            ?entity SmartGrid:connectsTo ?connnects_to .
+            ?connnects_to SmartGrid:locatedAt ?bus .
         }    
         """
         res = self.g.query(query_str)
@@ -536,14 +536,14 @@ class SmartGridGraph:
         query_str = """ 
         SELECT DISTINCT ?kv
         WHERE {
-            ?trans a :Transformer . 
+            ?trans a SmartGrid:Transformer . 
             {
-                ?trans :kV_primary ?kv.
+                ?trans SmartGrid:kV_primary ?kv.
 
             }
             UNION 
             {
-                ?trans :kV_secondary ?kv    
+                ?trans SmartGrid:kV_secondary ?kv    
             }
         }
             """
@@ -575,24 +575,24 @@ class SmartGridGraph:
             SELECT DISTINCT *
             WHERE {
                 ?entity rdf:type ?type .
-                ?type rdfs:subClassOf* :Electrical_Equipment .
+                ?type rdfs:subClassOf* SmartGrid:Electrical_Equipment .
                 {
-                    ?entity :primaryAttachsTo ?prim .
+                    ?entity SmartGrid:primaryAttachsTo ?prim .
                     FILTER regex(str(?prim),  '""" + bus + """') .
                     OPTIONAL {
-                        ?entity a :Line .
-                        ?entity :primaryAttachsTo ?n1 .
-                        ?entity :attachsTo ?n2 .
+                        ?entity a SmartGrid:Line .
+                        ?entity SmartGrid:primaryAttachsTo ?n1 .
+                        ?entity SmartGrid:attachsTo ?n2 .
                     }
                 }
                 UNION
                 {
-                    ?entity :attachsTo ?sec .
+                    ?entity SmartGrid:attachsTo ?sec .
                     FILTER regex(str(?sec), '""" + bus + """') . 
                     OPTIONAL {
-                        ?entity a :Line .
-                        ?entity :primaryAttachsTo ?n1 .
-                        ?entity :attachsTo ?n2 .
+                        ?entity a SmartGrid:Line .
+                        ?entity SmartGrid:primaryAttachsTo ?n1 .
+                        ?entity SmartGrid:attachsTo ?n2 .
                     }
                 }
             } 
