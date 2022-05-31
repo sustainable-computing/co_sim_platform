@@ -53,10 +53,14 @@ void sendMessageToUpperLayer(string message, Ptr<Node> sourceNode, Ptr<Node> des
   std::size_t current;
   //--- get val and val_time
   current = message.find("&");
+  string id = message.substr(0, current);
+  message = message.substr(current+1);
+  current = message.find("&");
   string val = message.substr(0, current);
   string val_time = message.substr(current+1);
   //--- insert data on dataXchgOutput / give to upper layer
-  DataXCHG dataRcv = {Names::FindName(sourceNode),
+  DataXCHG dataRcv = {id,
+                      Names::FindName(sourceNode),
                       Names::FindName(destinationNode),
                       val,
                       stoll(val_time)};
@@ -281,7 +285,7 @@ NS3Netsim::~NS3Netsim()
 
 void NS3Netsim::init(string f_adjmat,
                      string f_coords,
-                     string f_appcon,
+                     string f_devs,
                      string s_linkRate,
                      string s_linkDelay,
                      string s_linkErrorRate,
@@ -330,7 +334,7 @@ void NS3Netsim::init(string f_adjmat,
   //--- set configuration file names
   nodeAdjMatrixFilename = f_adjmat;
   nodeCoordinatesFilename = f_coords;
-  appConnectionsFilename = f_appcon;
+  devicesFilename = f_devs;
 
   //--- load adjacency matrix
   NS_LOG_INFO("Load node adjacency matrix");
@@ -806,7 +810,7 @@ void NS3Netsim::setUpClient(AddressValue address, string protocol, string server
   clientAppContainer.Start(NanoSeconds(0.0));
 }
 
-void NS3Netsim::schedule(string src, string dst, string val, string val_time)
+void NS3Netsim::schedule(string id, string src, string dst, string val, string val_time)
 {
   if (verbose > 1)
   {
@@ -833,7 +837,7 @@ void NS3Netsim::schedule(string src, string dst, string val, string val_time)
     {
       clientApp = DynamicCast<TcpClient>(srcNode->GetApplication(1));
     }
-    std::string msgx = val + "&" + val_time;
+    std::string msgx = id + "&" + val + "&" + val_time;
     // The val_time is in milliseconds, so add "ms" before Time variable creation
     Time schDelay = Time(to_string(stod(val_time)) + "ms") - Simulator::Now();
     clientApp->SetFill(msgx);
@@ -850,7 +854,7 @@ void NS3Netsim::schedule(string src, string dst, string val, string val_time)
     {
       clientApp = DynamicCast<CustomUdpClient>(srcNode->GetApplication(1));
     }
-    std::string msgx = val + "&" + val_time;
+    std::string msgx = id + "&" + val + "&" + val_time;
     // The val_time is in milliseconds, so add "ms" before Time variable creation
     Time schDelay = Time(to_string(stod(val_time)) + "ms") - Simulator::Now();
     clientApp->SetFill(msgx);
@@ -916,7 +920,11 @@ NS3Netsim::runUntil(uint64_t time, string nextStop)
   return std::to_string(next_step);
 }
 
-int NS3Netsim::get_data(string &src, string &dst, string &val_v, string &val_t)
+int NS3Netsim::get_data(string &id, 
+                        string &src, 
+                        string &dst, 
+                        string &val_v, 
+                        string &val_t)  
 {
   int res;
   DataXCHG dataOut;
@@ -932,6 +940,7 @@ int NS3Netsim::get_data(string &src, string &dst, string &val_v, string &val_t)
     res = 1;
     dataOut = dataXchgOutput.front();
     dataXchgOutput.pop();
+    id = dataOut.id;
     src = dataOut.src;
     dst = dataOut.dst;
     val_v = dataOut.val;
@@ -948,7 +957,9 @@ int NS3Netsim::get_data(string &src, string &dst, string &val_v, string &val_t)
     {
       DataXCHG dataSnt = dataXchgOutput.front();
       if (dataSnt.src == src && dataSnt.dst == dst)
-        cout << "NS3Netsim::get_data NS3 OUTPUT Buffer Src: " << dataSnt.src
+        cout << "NS3Netsim::get_data NS3 OUTPUT Buffer "
+             << " ID: " << dataSnt.id
+             << " Src: " << dataSnt.src
              << " Dst: " << dataSnt.dst
              << " Val: " << dataSnt.val
              << " Time: " << dataSnt.time

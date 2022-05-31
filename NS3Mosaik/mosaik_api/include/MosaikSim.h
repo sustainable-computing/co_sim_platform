@@ -196,7 +196,7 @@ class MosaikSim {
   std::map<std::string, MosaikNextSimul> mosaikNSimul;
 
   ///< Map to store extracted data from NS3
-  std::map<std::pair<std::string, std::string>, queue<std::pair<std::string, std::string> > > mapGetData;
+  std::map<std::string, queue<std::pair<std::string, std::string> > > mapGetData;
 
 
   //---
@@ -211,7 +211,7 @@ class MosaikSim {
   //--- Transporter model variables
   //---
   MosaikModel TransporterModel = {.access = "True",
-      .params = {"src", "dst"},
+      .params = {"src", "dst", "eid"},
       .attrs = {"v", "t"}
   };
 
@@ -345,7 +345,7 @@ class MosaikSim {
    */
   AddrPort parseAddress(std::string param);
   void printMsg(char* buffer, int len);
-  std::vector<NetSimConn> readAppConnectionsFile (std::string nodeApplicationFilename);
+  std::vector<NetSimConn> readDevicesFile (std::string devicesFilename);
   void tokenize(std::string const &str, const char delim, std::vector<std::string> &out);
   bool is_number(const std::string& s);
   void replaceAll(std::string& source, const std::string& from, const std::string& to);
