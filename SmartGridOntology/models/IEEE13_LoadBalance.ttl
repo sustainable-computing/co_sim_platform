@@ -535,6 +535,16 @@ SmartGrid:xmat rdf:type owl:AnnotationProperty .
                SmartGrid:coord_y 250 .
 
 
+###  http://www.semanticweb.org/phoenix/ontologies/2022/0/IEEE13#Flow_Switch_632
+:Flow_Switch_632 rdf:type owl:NamedIndividual ,
+                          :Flow_Switch .
+
+
+###  http://www.semanticweb.org/phoenix/ontologies/2022/0/IEEE13#Flow_Switch_671
+:Flow_Switch_671 rdf:type owl:NamedIndividual ,
+                          :Flow_Switch .
+
+
 ###  http://www.semanticweb.org/phoenix/ontologies/2022/0/IEEE13#Generator_IEEE13Nodeckt
 :Generator_IEEE13Nodeckt rdf:type owl:NamedIndividual ,
                                   SmartGrid:Generator ;
@@ -973,152 +983,197 @@ SmartGrid:xmat rdf:type owl:AnnotationProperty .
 
 ###  http://www.semanticweb.org/phoenix/ontologies/2022/0/IEEE13#Power_Controller_611_3
 :Power_Controller_611_3 rdf:type owl:NamedIndividual ,
-                                 :Power_Controller .
+                                 :Power_Controller ;
+                        SmartGrid:feeds :Flow_Switch_632 ,
+                                        :Flow_Switch_671 .
 
 
 ###  http://www.semanticweb.org/phoenix/ontologies/2022/0/IEEE13#Power_Controller_634_1
 :Power_Controller_634_1 rdf:type owl:NamedIndividual ,
-                                 :Power_Controller .
+                                 :Power_Controller ;
+                        SmartGrid:feeds :Flow_Switch_632 ,
+                                        :Flow_Switch_671 .
 
 
 ###  http://www.semanticweb.org/phoenix/ontologies/2022/0/IEEE13#Power_Controller_634_2
 :Power_Controller_634_2 rdf:type owl:NamedIndividual ,
-                                 :Power_Controller .
+                                 :Power_Controller ;
+                        SmartGrid:feeds :Flow_Switch_632 ,
+                                        :Flow_Switch_671 .
 
 
 ###  http://www.semanticweb.org/phoenix/ontologies/2022/0/IEEE13#Power_Controller_634_3
 :Power_Controller_634_3 rdf:type owl:NamedIndividual ,
-                                 :Power_Controller .
+                                 :Power_Controller ;
+                        SmartGrid:feeds :Flow_Switch_632 ,
+                                        :Flow_Switch_671 .
 
 
 ###  http://www.semanticweb.org/phoenix/ontologies/2022/0/IEEE13#Power_Controller_645_2
 :Power_Controller_645_2 rdf:type owl:NamedIndividual ,
-                                 :Power_Controller .
+                                 :Power_Controller ;
+                        SmartGrid:feeds :Flow_Switch_632 ,
+                                        :Flow_Switch_671 .
 
 
 ###  http://www.semanticweb.org/phoenix/ontologies/2022/0/IEEE13#Power_Controller_646_2
 :Power_Controller_646_2 rdf:type owl:NamedIndividual ,
-                                 :Power_Controller .
+                                 :Power_Controller ;
+                        SmartGrid:feeds :Flow_Switch_632 ,
+                                        :Flow_Switch_671 .
 
 
 ###  http://www.semanticweb.org/phoenix/ontologies/2022/0/IEEE13#Power_Controller_652_1
 :Power_Controller_652_1 rdf:type owl:NamedIndividual ,
-                                 :Power_Controller .
+                                 :Power_Controller ;
+                        SmartGrid:feeds :Flow_Switch_632 ,
+                                        :Flow_Switch_671 .
 
 
 ###  http://www.semanticweb.org/phoenix/ontologies/2022/0/IEEE13#Power_Controller_670_1
 :Power_Controller_670_1 rdf:type owl:NamedIndividual ,
-                                 :Power_Controller .
+                                 :Power_Controller ;
+                        SmartGrid:feeds :Flow_Switch_632 ,
+                                        :Flow_Switch_671 .
 
 
 ###  http://www.semanticweb.org/phoenix/ontologies/2022/0/IEEE13#Power_Controller_670_2
 :Power_Controller_670_2 rdf:type owl:NamedIndividual ,
-                                 :Power_Controller .
+                                 :Power_Controller ;
+                        SmartGrid:feeds :Flow_Switch_632 ,
+                                        :Flow_Switch_671 .
 
 
 ###  http://www.semanticweb.org/phoenix/ontologies/2022/0/IEEE13#Power_Controller_670_3
 :Power_Controller_670_3 rdf:type owl:NamedIndividual ,
-                                 :Power_Controller .
+                                 :Power_Controller ;
+                        SmartGrid:feeds :Flow_Switch_632 ,
+                                        :Flow_Switch_671 .
 
 
 ###  http://www.semanticweb.org/phoenix/ontologies/2022/0/IEEE13#Power_Controller_671
 :Power_Controller_671 rdf:type owl:NamedIndividual ,
-                               :Power_Controller .
+                               :Power_Controller ;
+                      SmartGrid:feeds :Flow_Switch_632 ,
+                                      :Flow_Switch_671 .
 
 
 ###  http://www.semanticweb.org/phoenix/ontologies/2022/0/IEEE13#Power_Controller_675_1
 :Power_Controller_675_1 rdf:type owl:NamedIndividual ,
-                                 :Power_Controller .
+                                 :Power_Controller ;
+                        SmartGrid:feeds :Flow_Switch_632 ,
+                                        :Flow_Switch_671 .
 
 
 ###  http://www.semanticweb.org/phoenix/ontologies/2022/0/IEEE13#Power_Controller_675_2
 :Power_Controller_675_2 rdf:type owl:NamedIndividual ,
-                                 :Power_Controller .
+                                 :Power_Controller ;
+                        SmartGrid:feeds :Flow_Switch_632 ,
+                                        :Flow_Switch_671 .
 
 
 ###  http://www.semanticweb.org/phoenix/ontologies/2022/0/IEEE13#Power_Controller_675_3
 :Power_Controller_675_3 rdf:type owl:NamedIndividual ,
-                                 :Power_Controller .
+                                 :Power_Controller ;
+                        SmartGrid:feeds :Flow_Switch_632 ,
+                                        :Flow_Switch_671 .
 
 
 ###  http://www.semanticweb.org/phoenix/ontologies/2022/0/IEEE13#Power_Controller_692_3
 :Power_Controller_692_3 rdf:type owl:NamedIndividual ,
-                                 :Power_Controller .
+                                 :Power_Controller ;
+                        SmartGrid:feeds :Flow_Switch_632 ,
+                                        :Flow_Switch_671 .
 
 
 ###  http://www.semanticweb.org/phoenix/ontologies/2022/0/IEEE13#Power_Meter_611_3
 :Power_Meter_611_3 rdf:type owl:NamedIndividual ,
-                            :Power_Meter .
+                            :Power_Meter ;
+                   SmartGrid:feeds :Power_Controller_611_3 .
 
 
 ###  http://www.semanticweb.org/phoenix/ontologies/2022/0/IEEE13#Power_Meter_634_1
 :Power_Meter_634_1 rdf:type owl:NamedIndividual ,
-                            :Power_Meter .
+                            :Power_Meter ;
+                   SmartGrid:feeds :Power_Controller_634_1 .
 
 
 ###  http://www.semanticweb.org/phoenix/ontologies/2022/0/IEEE13#Power_Meter_634_2
 :Power_Meter_634_2 rdf:type owl:NamedIndividual ,
-                            :Power_Meter .
+                            :Power_Meter ;
+                   SmartGrid:feeds :Power_Controller_634_2 .
 
 
 ###  http://www.semanticweb.org/phoenix/ontologies/2022/0/IEEE13#Power_Meter_634_3
 :Power_Meter_634_3 rdf:type owl:NamedIndividual ,
-                            :Power_Meter .
+                            :Power_Meter ;
+                   SmartGrid:feeds :Power_Controller_634_3 .
 
 
 ###  http://www.semanticweb.org/phoenix/ontologies/2022/0/IEEE13#Power_Meter_645_2
 :Power_Meter_645_2 rdf:type owl:NamedIndividual ,
-                            :Power_Meter .
+                            :Power_Meter ;
+                   SmartGrid:feeds :Power_Controller_645_2 .
 
 
 ###  http://www.semanticweb.org/phoenix/ontologies/2022/0/IEEE13#Power_Meter_646_2
 :Power_Meter_646_2 rdf:type owl:NamedIndividual ,
-                            :Power_Meter .
+                            :Power_Meter ;
+                   SmartGrid:feeds :Power_Controller_646_2 .
 
 
 ###  http://www.semanticweb.org/phoenix/ontologies/2022/0/IEEE13#Power_Meter_652_1
 :Power_Meter_652_1 rdf:type owl:NamedIndividual ,
-                            :Power_Meter .
+                            :Power_Meter ;
+                   SmartGrid:feeds :Power_Controller_652_1 .
 
 
 ###  http://www.semanticweb.org/phoenix/ontologies/2022/0/IEEE13#Power_Meter_670_1
 :Power_Meter_670_1 rdf:type owl:NamedIndividual ,
-                            :Power_Meter .
+                            :Power_Meter ;
+                   SmartGrid:feeds :Power_Controller_670_1 .
 
 
 ###  http://www.semanticweb.org/phoenix/ontologies/2022/0/IEEE13#Power_Meter_670_2
 :Power_Meter_670_2 rdf:type owl:NamedIndividual ,
-                            :Power_Meter .
+                            :Power_Meter ;
+                   SmartGrid:feeds :Power_Controller_670_2 .
 
 
 ###  http://www.semanticweb.org/phoenix/ontologies/2022/0/IEEE13#Power_Meter_670_3
 :Power_Meter_670_3 rdf:type owl:NamedIndividual ,
-                            :Power_Meter .
+                            :Power_Meter ;
+                   SmartGrid:feeds :Power_Controller_670_3 .
 
 
 ###  http://www.semanticweb.org/phoenix/ontologies/2022/0/IEEE13#Power_Meter_671
 :Power_Meter_671 rdf:type owl:NamedIndividual ,
-                          :Power_Meter .
+                          :Power_Meter ;
+                 SmartGrid:feeds :Power_Controller_671 .
 
 
 ###  http://www.semanticweb.org/phoenix/ontologies/2022/0/IEEE13#Power_Meter_675_1
 :Power_Meter_675_1 rdf:type owl:NamedIndividual ,
-                            :Power_Meter .
+                            :Power_Meter ;
+                   SmartGrid:feeds :Power_Controller_675_1 .
 
 
 ###  http://www.semanticweb.org/phoenix/ontologies/2022/0/IEEE13#Power_Meter_675_2
 :Power_Meter_675_2 rdf:type owl:NamedIndividual ,
-                            :Power_Meter .
+                            :Power_Meter ;
+                   SmartGrid:feeds :Power_Controller_675_2 .
 
 
 ###  http://www.semanticweb.org/phoenix/ontologies/2022/0/IEEE13#Power_Meter_675_3
 :Power_Meter_675_3 rdf:type owl:NamedIndividual ,
-                            :Power_Meter .
+                            :Power_Meter ;
+                   SmartGrid:feeds :Power_Controller_675_3 .
 
 
 ###  http://www.semanticweb.org/phoenix/ontologies/2022/0/IEEE13#Power_Meter_692_3
 :Power_Meter_692_3 rdf:type owl:NamedIndividual ,
-                            :Power_Meter .
+                            :Power_Meter ;
+                   SmartGrid:feeds :Power_Controller_692_3 .
 
 
 ###  http://www.semanticweb.org/phoenix/ontologies/2022/0/IEEE13#Switch_671692
