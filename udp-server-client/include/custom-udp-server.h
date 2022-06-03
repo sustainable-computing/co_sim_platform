@@ -1,7 +1,7 @@
 /* -*- Mode:C++; c-file-style:"gnu"; indent-tabs-mode:nil; -*- */
 /*
- * Copyright (c) 2020 Amrinder S. Grewal
- *
+ * Copyright (c) 2022 Talha Ibn Aziz
+ * 
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 2 as
  * published by the Free Software Foundation;
@@ -14,55 +14,87 @@
  * You should have received a copy of the GNU General Public License
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
- *
- * Author:  Amrinder S. Grewal <asgrewal@ualberta.ca>
- * Date:    2020.06.09
+ * 
+ * Author:  Talha Ibn Aziz <taziz@ualberta.ca> <talhaibnaziz6343@gmail.com>
+ * Date:    2022.02.16
  * Company: University of Alberta/Canada - Computing Science
- *
+ * 
+ * Modelled after udp-echo-server.h
  */
 
-#ifndef _CUSTOM_UDP_SERVER_H_
-#define _CUSTOM_UDP_SERVER_H_
+#ifndef CUSTOM_UDP_SERVER_H
+#define CUSTOM_UDP_SERVER_H
 
-#include "ns3/core-module.h"
-#include "ns3/socket.h"
 #include "ns3/application.h"
-#include "ns3/address.h"
+#include "ns3/event-id.h"
 #include "ns3/ptr.h"
+#include "ns3/address.h"
+#include "ns3/traced-callback.h"
 
-using namespace ns3;
-using namespace std;
+namespace ns3 {
+
+class Socket;
+class Packet;
 
 /**
- * \brief Modified version of the udp-server in ns3. The read callback function has been modified to suit the needs
- * of the co-simulator.
+ * \ingroup applications 
+ * \defgroup udpecho UdpEcho
  */
-class CustomUdpServer: public Application {
+
+/**
+ * \ingroup udpecho
+ * \brief A Udp Echo server
+ *
+ * Every packet received is sent back.
+ */
+class CustomUdpServer : public Application 
+{
 public:
   /**
-   * \brief Configures the server
+   * \brief Get the type ID.
+   * \return the object TypeId
    */
   static TypeId GetTypeId (void);
+  CustomUdpServer ();
   /**
    * \brief set the callback function that is called when a packet is received
    * \param callback the function to which the callback is set.
    */
   void SetPacketReceivedCallBack(void (*callback)(Ptr<Socket> socket));
+  virtual ~CustomUdpServer ();
+
+protected:
+  virtual void DoDispose (void);
+
 private:
+
   virtual void StartApplication (void);
   virtual void StopApplication (void);
+
   /**
-   * The over-written read callback function that calls ExtractInformationFromPacketAndSendToUpperLayer to send
-   * a message that a new packet has been received.
+   * \brief Handle a packet reception.
+   *
+   * This function is called by lower layers.
+   *
+   * \param socket the socket the packet was received to.
    */
-  virtual void HandleRead (Ptr<Socket> socket);
+  void HandleRead (Ptr<Socket> socket);
+
+  uint16_t m_port; //!< Port on which we listen for incoming packets.
+  Ptr<Socket> m_socket; //!< IPv4 Socket
+  Ptr<Socket> m_socket6; //!< IPv6 Socket
+  Address m_local; //!< local multicast address
   /// The function that will be called when a packet is received
   void (*m_packetReceivedCallback)(Ptr<Socket> socket);
-  Ptr<Socket>           m_socket; //!< Socket that will be used to send the messages
-  Address               m_local;         //!< Local address to bind to
 
+  /// Callbacks for tracing the packet Rx events
   TracedCallback<Ptr<const Packet> > m_rxTrace;
+
+  /// Callbacks for tracing the packet Rx events, includes source and destination addresses
   TracedCallback<Ptr<const Packet>, const Address &, const Address &> m_rxTraceWithAddresses;
 };
 
-#endif //_CUSTOM_UDP_SERVER_H_
+} // namespace ns3
+
+#endif /* CUSTOM_UDP_SERVER_H */
+

@@ -82,12 +82,11 @@ void MosaikSim::initMosaikCommands(void)
 void MosaikSim::initNetsimProps(void)
 {
   netsimProp["model_name"] = "null";
-  netsimProp["eid_prefix"] = "null";
   netsimProp["start_time"] = "null";
   netsimProp["stop_time"] = "null";
   netsimProp["random_seed"] = "null";
   netsimProp["time_resolution"] = "null";
-  netsimProp["appcon_file"] = "null";
+  netsimProp["devs_file"] = "null";
   netsimProp["adjmat_file"] = "null";
   netsimProp["coords_file"] = "null";
   netsimProp["json_file"] = "null";
@@ -452,14 +451,14 @@ MosaikSim::init(Json::Value args, Json::Value kwargs)
     }
   }
 
-  vecNetSimConn = readAppConnectionsFile(netsimProp["appcon_file"]); // Change this to read from a json file
   vecNetSimConn = readAppConnectionsJSONFile(netsimProp["json_file"]);
+  vecNetSimConn = readDevicesFile(netsimProp["devs_file"]);
   verbose = stoi(netsimProp["verbose"]);
   
   //--- Initialize NS3 class
   objNetsim->init(netsimProp["adjmat_file"],
                   netsimProp["coords_file"],
-                  netsimProp["appcon_file"],
+                  netsimProp["devs_file"],
                   netsimProp["json_file"],
                   netsimProp["linkRate"],
                   netsimProp["linkDelay"],
@@ -566,10 +565,7 @@ MosaikSim::create(Json::Value args, Json::Value kwargs)
   objNetsim->create(netsimParams["src"], netsimParams["dst"]);
 
   //--- generate eid
-  std::string eid = netsimProp["eid_prefix"];
-  eid.append(netsimParams["src"]);
-  eid.append("-");
-  eid.append(netsimParams["dst"]);
+  std::string eid = netsimParams["eid"];
 
   if (verbose > 1)
   {
@@ -697,15 +693,15 @@ MosaikSim::step(Json::Value args, Json::Value kwargs)
 
         //--- verify if entry for the current remoteSimulatorInstance already exist
         //--- if not, create new entry
-        itMapRcvData = mapRcvData.find(remoteSimulatorInstance);
+        itMapRcvData = mapRcvData.find(localSimulatorInstance);
         if (itMapRcvData == mapRcvData.end())
         {
-          mapRcvData[remoteSimulatorInstance] = rcvMsg;
+          mapRcvData[localSimulatorInstance] = rcvMsg;
         }
 
         //--- assign the iterator with the position of the entry
         //--- and assign the values
-        itMapRcvData = mapRcvData.find(remoteSimulatorInstance);
+        itMapRcvData = mapRcvData.find(localSimulatorInstance);
         if (itMapRcvData != mapRcvData.end())
         {
           if (localVariable.compare("v") == 0)
@@ -737,18 +733,35 @@ MosaikSim::step(Json::Value args, Json::Value kwargs)
 
   for (itMapRcvData = mapRcvData.begin(); itMapRcvData != mapRcvData.end(); itMapRcvData++)
   {
-    ///--- There might be multiple data for the same destination
-    while((*itMapRcvData).second.val_V.find(']') != -1
-          && (*itMapRcvData).second.val_V.find(']') != 0)
+    ///--- There might be multiple data from the same source
+    ///--- for the same destination (TCP socket delay - batch)
+    while((*itMapRcvData).second.val_T.find(']') != -1
+          && (*itMapRcvData).second.val_T.find(']') != 0)
     {
       if (verbose > 3)  std::cout << "All contents: val_v = " << (*itMapRcvData).second.val_V
                                   << "   val_t = " << (*itMapRcvData).second.val_T << std::endl;
       (*itMapRcvData).second.val_V = (*itMapRcvData).second.val_V.substr(1);
       (*itMapRcvData).second.val_T = (*itMapRcvData).second.val_T.substr(1);
 
-      ///--- For V
-      size_t end_val = (*itMapRcvData).second.val_V.find(',');
-      if (end_val == -1)  end_val = (*itMapRcvData).second.val_V.find(']');
+      ///--- For V do a stack operation to ensure that we balance the brackets
+      ///--- and do not separate at the segments at the wrong place
+      stack <char> brackets;
+      size_t end_val = -1, data_size = (*itMapRcvData).second.val_V.size();
+      for(size_t brackets_i=0; brackets_i<data_size; brackets_i++)
+      {
+        if((*itMapRcvData).second.val_V[brackets_i] == ',' && brackets.empty())
+        {
+          // Data segment found
+          end_val = brackets_i;
+        }
+        else if((*itMapRcvData).second.val_V[brackets_i] == '{')
+          brackets.push('{');
+        else if((*itMapRcvData).second.val_V[brackets_i] == '[')
+          brackets.push('[');
+        else if((*itMapRcvData).second.val_V[brackets_i] == '}' || (*itMapRcvData).second.val_V[brackets_i] == ']')
+          brackets.pop();
+      }
+      if (end_val == -1)  end_val = data_size-2;
       string val_v = (*itMapRcvData).second.val_V.substr(0, end_val);
       (*itMapRcvData).second.val_V = (*itMapRcvData).second.val_V.substr(end_val);
 
@@ -785,7 +798,8 @@ MosaikSim::step(Json::Value args, Json::Value kwargs)
         double currentNS3Time = objNetsim->getCurrentTime();
         if (currentNS3Time < stod(val_t))
         {
-          objNetsim->schedule((*itMapRcvData).second.val_S,
+          objNetsim->schedule(localSimulatorInstance,
+                              (*itMapRcvData).second.val_S,
                               (*itMapRcvData).second.val_D,
                               val_v,
                               val_t);
@@ -848,12 +862,13 @@ MosaikSim::get_data(Json::Value args, Json::Value kwargs)
   Json::StreamWriterBuilder wbuilder;
   std::string result;
 
+  std::string val_id;
   std::string val_s;
   std::string val_d;
   std::string val_v;
   std::string val_t;
 
-  std::pair<std::string, std::string> keyOut;
+  std::string keyOut;
   std::pair<std::string, std::string> valOut;
 
   obj = args[0];
@@ -887,13 +902,14 @@ MosaikSim::get_data(Json::Value args, Json::Value kwargs)
 
     while (objNetsim->getSizeDataOutput() > 0)
     {
-      objNetsim->get_data(val_s, val_d, val_v, val_t);
+      objNetsim->get_data(val_id, val_s, val_d, val_v, val_t);
 
       if (verbose > 1)
       {
         std::cout << "MosaikSim::get_data --OUT from NS3-- "
                   << "Current Time: " << mosaikTime
-                  << " val_s = " << val_s
+                  << " val_id = " << val_id
+                  << "\n val_s = " << val_s
                   << " val_d = " << val_d
                   << "\n val_v = " << val_v
                   << " val_t = " << val_t
@@ -901,7 +917,7 @@ MosaikSim::get_data(Json::Value args, Json::Value kwargs)
       }
 
       //--- insert data in another buffer
-      keyOut = std::make_pair(val_s, val_d);
+      keyOut = val_id;
       valOut = std::make_pair(val_v, val_t);
       mapGetData[keyOut].push(valOut);
     }
@@ -915,41 +931,9 @@ MosaikSim::get_data(Json::Value args, Json::Value kwargs)
       std::cout << "MosaikSim::get_data get data from: " << *lsi_i << std::endl;
 
     //---
-    //--- get src and dst from local instance
+    //--- verify if data exist in mapGetData
     //---
-    std::string attr;
-    const char delim_tr = '_';
-    const char delim_ds = '-';
-    std::vector<std::string> out;
-    std::vector<std::string>::iterator it;
-    std::string pair_name;
-    std::string src;
-    std::string dst;
-
-    attr = *lsi_i;
-    tokenize(attr, delim_tr, out);
-    it = out.begin();
-    ++it;
-    pair_name = (*it);
-
-    if (verbose > 2)
-      std::cout << "MosaikSim::get_data pair_name: " << pair_name << std::endl;
-
-    attr = pair_name;
-    out.clear();
-    tokenize(attr, delim_ds, out);
-    it = out.begin();
-    src = *it;
-    ++it;
-    dst = *it;
-
-    if (verbose > 2)
-      std::cout << "MosaikSim::get_data src: " << src << " dst: " << dst << std::endl;
-
-    //---
-    //--- make pair and verify if data exist in mapGetData
-    //---
-    keyOut = make_pair(src, dst);
+    keyOut = *lsi_i;
     if (mapGetData.find(keyOut) == mapGetData.end())
     {
       if (verbose > 2)
@@ -1324,17 +1308,17 @@ void MosaikSim::tokenize(std::string const &str, const char delim, std::vector<s
 }
 
 std::vector<NetSimConn>
-MosaikSim::readAppConnectionsFile(std::string nodeApplicationFilename)
+MosaikSim::readDevicesFile(std::string devicesFilename)
 {
   std::vector<NetSimConn> array;
   NetSimConn s_record;
   std::vector<std::pair<std::string, std::string>> dupMap;
 
   if (verbose > 1)
-    std::cout << "MosaikSim::mosaikSid:readAppConnectionsFile " << nodeApplicationFilename << std::endl;
+    std::cout << "MosaikSim::mosaikSid:readDevicesFile " << devicesFilename << std::endl;
 
   std::fstream fin;
-  fin.open(nodeApplicationFilename, ios::in);
+  fin.open(devicesFilename, ios::in);
   vector<string> row;
   string line, word;
 
@@ -1346,36 +1330,27 @@ MosaikSim::readAppConnectionsFile(std::string nodeApplicationFilename)
     {
       row.push_back(word);
     }
-    if (row.size() == 3)
+    if (std::find(dupMap.begin(), dupMap.end(), std::make_pair(row[0], row[1])) != dupMap.end())
     {
-      if (std::find(dupMap.begin(), dupMap.end(), std::make_pair(row[0], row[1])) != dupMap.end())
-      {
-        if (verbose > 2)
-          std::cout << "MosaikSim::readAppConnectionsFile"
-                    << " **DUPLICATE** SRC: " << row[0] << " DST: " << row[1] << std::endl;
-      }
-      else
-      {
-        if (verbose > 2)
-          std::cout << "MosaikSim::readAppConnectionsFile"
-                    << " SRC: " << row[0] << " DST: " << row[1] << std::endl;
-        s_record.src = row[0];
-        s_record.dst = row[1];
-        array.push_back(s_record);
-        dupMap.push_back(std::make_pair(row[0], row[1]));
-      }
+      if (verbose > 2)
+        std::cout << "MosaikSim::readDevicesFile"
+                  << " **DUPLICATE** SRC: " << row[0] << " DST: " << row[1] << std::endl;
     }
     else
     {
       if (verbose > 2)
-        std::cout << "MosaikSim::readAppConnectionsFile"
-                  << " Line IGNORED! Number of elements invalid " << line << std::endl;
+        std::cout << "MosaikSim::readDevicesFile"
+                  << " SRC: " << row[0] << " DST: " << row[1] << std::endl;
+      s_record.src = row[0];
+      s_record.dst = row[1];
+      array.push_back(s_record);
+      dupMap.push_back(std::make_pair(row[0], row[1]));
     }
   }
 
   if (verbose > 2)
   {
-    std::cout << "MosaikSim::readAppConnectionsFile" << std::endl;
+    std::cout << "MosaikSim::readDevicesFile" << std::endl;
     for (auto arr_i = array.begin(); arr_i != array.end(); arr_i++)
     {
       std::cout << "ARRAY TYPE: " << (*arr_i).type << " SRC: " << (*arr_i).src << " DST: " << (*arr_i).dst << std::endl;

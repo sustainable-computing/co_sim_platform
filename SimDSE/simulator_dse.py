@@ -21,6 +21,8 @@ import math
 from pathlib import Path
 
 META = {
+	'api-version': '3.0',
+	'type': 'event-based',
     'models': {
         'Estimator': {
             'public': True,
@@ -41,11 +43,10 @@ class DSESim(mosaik_api.Simulator):
         self.data = {}
 
 
-    def init(self, sid, eid_prefix=None, step_size=1, verbose=0):
+    def init(self, sid, time_resolution, eid_prefix=None, verbose=0):
         if eid_prefix is not None:
             self.eid_prefix = eid_prefix
         self.sid       = sid
-        self.step_size = step_size
         self.verbose   = verbose
         self.cktState  = {}
         self.MsgCount  = 0
@@ -126,17 +127,17 @@ class DSESim(mosaik_api.Simulator):
 
         entities = []
         self.data[eid] = {}
-        self.data[eid]['v'] = 0
-        self.data[eid]['t'] = 0
+        self.data[eid]['v'] = []
+        self.data[eid]['t'] = []
+        self.data[eid]['v'].append(0)
+        self.data[eid]['t'].append(0)
         entities.append({'eid': eid, 'type': model})
 
         return entities
 
 
-    def step(self, time, inputs):
+    def step(self, time, inputs, max_advance):
         if (self.verbose > 5): print('simulator_dse::step INPUT', time, inputs)
-
-        next_step = time + self.step_size
 
         ''' prepare data to be used in get_data '''
         #self.data = {}
@@ -152,6 +153,9 @@ class DSESim(mosaik_api.Simulator):
                 if (param != None and param != 'null' and param != "None"):
 
                     self.MsgCount += 1
+
+                    # For now assume that only one element arrives at a time
+                    param = param[0]
 
                     ''' change to dict because NS-3 need to transmit string '''
                     if isinstance(param, str):
@@ -211,8 +215,11 @@ class DSESim(mosaik_api.Simulator):
 
 
             if (0 == time % self.entities[dse_eid]['acc_period']):
-                self.data[dse_eid]['v'] = self.MsgCount
-                self.data[dse_eid]['t'] = time
+                self.data[dse_eid] = {}
+                self.data[dse_eid]['v'] = []
+                self.data[dse_eid]['t'] = []
+                self.data[dse_eid]['v'].append(self.MsgCount)
+                self.data[dse_eid]['t'].append(time)
                 self.MsgCount = 0
 
             #(self.entities[dse_eid]['vecZ'], _) = self.createZVectors(dse_eid, len(self.entities[dse_eid]['vecZ']))
@@ -239,8 +246,7 @@ class DSESim(mosaik_api.Simulator):
                     spio.savemat(self.entities[dse_eid]['se_result'], mat)
             else:
                 spio.savemat(self.entities[dse_eid]['se_result'], {array_name: v_wls})
-
-        return next_step
+                
 
     def state_estimation(self, ybus, z, ztype, err_cov, iter_max, threshold):
         ztype= np.array(ztype)

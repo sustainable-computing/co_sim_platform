@@ -61,7 +61,7 @@ for i in range(len(df_sets)):
         axs[0].plot(df_sets[i]['t'], VB, '.')
         axs[0].plot(df_sets[i]['t'], VC, '.')
         axs[0].set_xlim(-5, max_t+5)
-        axs[0].grid(b=True, which='both', axis='both')
+        axs[0].grid(visible=True, which='both', axis='both')
         #--- Plot Voltage Angle
         axs[1].set_title(df_names[i] + " - Voltage Angle -  3 Phases")
         VA = []
@@ -76,7 +76,7 @@ for i in range(len(df_sets)):
         axs[1].plot(df_sets[i]['t'], VB, '.')
         axs[1].plot(df_sets[i]['t'], VC, '.')
         axs[1].set_xlim(-5, max_t+5)
-        axs[1].grid(b=True, which='both', axis='both')        
+        axs[1].grid(visible=True, which='both', axis='both')        
         
         #--- Plot Current Magnitude
         axs[2].set_title(df_names[i] + " - Current Magnitude -  3 Phases")
@@ -92,7 +92,7 @@ for i in range(len(df_sets)):
         axs[2].plot(df_sets[i]['t'], IB, '.')
         axs[2].plot(df_sets[i]['t'], IC, '.')
         axs[2].set_xlim(-5, max_t+5)
-        axs[2].grid(b=True, which='both', axis='both')        
+        axs[2].grid(visible=True, which='both', axis='both')        
         
         #--- Plot Current Angle
         axs[3].set_title(df_names[i] + " - Current Angle -  3 Phases")
@@ -108,7 +108,7 @@ for i in range(len(df_sets)):
         axs[3].plot(df_sets[i]['t'], IB, '.')
         axs[3].plot(df_sets[i]['t'], IC, '.')
         axs[3].set_xlim(-5, max_t+5)
-        axs[3].grid(b=True, which='both', axis='both')       
+        axs[3].grid(visible=True, which='both', axis='both')       
     
     if ((df_names[i]).find(smartmeter) != -1):
         #--- Plot Real Power
@@ -142,7 +142,7 @@ for i in range(len(df_sets)):
             gr_title = gr_title + ' C'                
         axs[4].set_title(gr_title)    
         axs[4].set_xlim(-5, max_t+5)
-        axs[4].grid(b=True, which='both', axis='both') 
+        axs[4].grid(visible=True, which='both', axis='both') 
                
         #--- Plot Voltage Magnitude
         gr_title = df_names[i] + " - SM Voltage Magnitude - Phases:"
@@ -178,7 +178,7 @@ for i in range(len(df_sets)):
         axs[6].set_title(df_names[i])
         axs[6].plot(df_sets[i]['t'], df_sets[i]['v'], '.')
         axs[6].set_xlim(-5, max_t+5)
-        axs[6].grid(b=True, which='both', axis='both')
+        axs[6].grid(visible=True, which='both', axis='both')
 
 
 plt.tight_layout()

@@ -160,4 +160,14 @@ string FindNextHop(string clt, string srv, vector<vector<bool>> array);
  */
 void PrintRoutingTable (Ptr<Node>& n, bool v4);
 
+/**
+ * @brief Check if the node is part of the secondary network
+ * or primary network - based on the node name
+ * 
+ * @param nodeName name of the node to be determined
+ * @return true if it is in the secondary network
+ * @return false if it is in the primary network
+ */
+bool isSecondary(string nodeName);
+
 #endif /* SMARTGRID_NS3_HELPER_H_ */

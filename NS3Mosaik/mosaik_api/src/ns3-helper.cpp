@@ -23,7 +23,7 @@
 
 #include "ns3-helper.h"
 #include "json.hpp"
-#define MAX_NODES 100
+#define MAX_NODES 2000
 using namespace std;
 using namespace ns3;
 using json = nlohmann::ordered_json;
@@ -495,4 +495,17 @@ void PrintRoutingTable(Ptr<Node> &n, bool v4)
                 << std::endl;
     }
   }
+}
+
+bool isSecondary(string nodeName)
+{
+  int s_size = nodeName.size();
+
+  /// Secondary node name has to be a number
+  for(int i=0; i<s_size; i++)
+    if(!isdigit(nodeName[i])) return false;
+
+  /// There can be at most 999 primary nodes (for now)
+  if(s_size < 4) return false;
+  return true;
 }

@@ -14,7 +14,11 @@ import pandas as pd
 import sys
 
 
-phasor = 'Phasor_1_1'
+# phasor = 'Phasor_1_1'
+phasor = 'Phasor_1_001'
+phasor1 = 'Phasor_31_0031'
+phasor2 = 'Phasor_32_0032'
+phasor3 = 'Phasor_33_0033'
 smartmeter = 'Smartmeter_6_100061'
 estimator = 'Estimator_1'
 
@@ -45,7 +49,8 @@ plt.subplots_adjust(left=None, bottom=None, right=None, top=None, wspace=None, h
 plt.xlabel('Time (ms)')
 
 for i in range(len(df_sets)):
-    if ((df_names[i]).find(phasor) != -1):
+    if ((df_names[i]).find(phasor3) != -1):
+
         #--- Plot Voltage Magnitude
         axs[0].set_title(df_names[i] + " - Voltage Magnitude -  3 Phases")
         VA = []
@@ -60,7 +65,7 @@ for i in range(len(df_sets)):
         axs[0].plot(df_sets[i]['t'], VB, '.')
         axs[0].plot(df_sets[i]['t'], VC, '.')
         axs[0].set_xlim(-5, max_t+5)
-        axs[0].grid(b=True, which='both', axis='both')
+        axs[0].grid(visible=True, which='both', axis='both')
         #--- Plot Voltage Angle
         axs[1].set_title(df_names[i] + " - Voltage Angle -  3 Phases")
         VA = []
@@ -75,7 +80,7 @@ for i in range(len(df_sets)):
         axs[1].plot(df_sets[i]['t'], VB, '.')
         axs[1].plot(df_sets[i]['t'], VC, '.')
         axs[1].set_xlim(-5, max_t+5)
-        axs[1].grid(b=True, which='both', axis='both')        
+        axs[1].grid(visible=True, which='both', axis='both')        
         
         #--- Plot Current Magnitude
         axs[2].set_title(df_names[i] + " - Current Magnitude -  3 Phases")
@@ -91,7 +96,7 @@ for i in range(len(df_sets)):
         axs[2].plot(df_sets[i]['t'], IB, '.')
         axs[2].plot(df_sets[i]['t'], IC, '.')
         axs[2].set_xlim(-5, max_t+5)
-        axs[2].grid(b=True, which='both', axis='both')        
+        axs[2].grid(visible=True, which='both', axis='both')        
         
         #--- Plot Current Angle
         axs[3].set_title(df_names[i] + " - Current Angle -  3 Phases")
@@ -107,7 +112,7 @@ for i in range(len(df_sets)):
         axs[3].plot(df_sets[i]['t'], IB, '.')
         axs[3].plot(df_sets[i]['t'], IC, '.')
         axs[3].set_xlim(-5, max_t+5)
-        axs[3].grid(b=True, which='both', axis='both')       
+        axs[3].grid(visible=True, which='both', axis='both')       
     
     if ((df_names[i]).find(smartmeter) != -1):
         #--- Plot Real Power
@@ -141,7 +146,7 @@ for i in range(len(df_sets)):
             gr_title = gr_title + ' C'                
         axs[4].set_title(gr_title)    
         axs[4].set_xlim(-5, max_t+5)
-        axs[4].grid(b=True, which='both', axis='both') 
+        axs[4].grid(visible=True, which='both', axis='both') 
                
         #--- Plot Voltage Magnitude
         gr_title = df_names[i] + " - SM Voltage Magnitude - Phases:"
@@ -171,14 +176,14 @@ for i in range(len(df_sets)):
             gr_title = gr_title + ' C'  
         axs[5].set_title(gr_title)
         axs[5].set_xlim(-5, max_t+5)
-        axs[5].grid(b=True, which='both', axis='both')        
+        axs[5].grid(visible=True, which='both', axis='both')        
 
     #--- Plot Amount of received messages in aperiod of time
     if ((df_names[i]).find(estimator) != -1):
         axs[6].set_title(df_names[i])
         axs[6].plot(df_sets[i]['t'], df_sets[i]['v'], '.')
         axs[6].set_xlim(-5, max_t+5)
-        axs[6].grid(b=True, which='both', axis='both')
+        axs[6].grid(visible=True, which='both', axis='both')
         
 
 plt.tight_layout()

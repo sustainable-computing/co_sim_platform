@@ -38,15 +38,18 @@
 #include "ns3/internet-module.h"
 #include "ns3/mobility-module.h"
 #include "ns3/log.h"
+#include "ns3/sixlowpan-module.h"
+#include "ns3/lr-wpan-module.h"
+#include <ns3/propagation-loss-model.h>
+#include <ns3/propagation-delay-model.h>
+#include <ns3/single-model-spectrum-channel.h>
+#include <ns3/constant-position-mobility-model.h>
+#include "ns3/applications-module.h"
 
 #include "ns3/smartgrid-default-simulator-impl.h"
 
-#include "ns3/multi-client-tcp-server-helper.h"
-#include "ns3/multi-client-tcp-server.h"
-#include "ns3/tcp-client-helper.h"
-#include "ns3/tcp-client.h"
-#include "ns3/custom-udp-client-helper.h"
-#include "ns3/custom-udp-server-helper.h"
+#include "ns3/tcp-helper.h"
+#include "ns3/custom-udp-helper.h"
 #include <unordered_map>
 
 using namespace std;
@@ -56,6 +59,7 @@ using namespace ns3;
  * \brief Data exchange structure
  */
 struct DataXCHG {
+    string id;
     string src;
     string dst;
     string val;
@@ -94,7 +98,7 @@ class NS3Netsim {
    *
    * \param f_adjmat: adjacency matrix filename
    * \param f_coords: coordinates filename
-   * \param f_appcon: application connections filename
+   * \param f_devs: devices filename
    * \param s_linkRate: link transmission rate
    * \param s_linkDelay: link delay
    * \param s_linkErrorRate: link error rate on receiver
@@ -105,7 +109,7 @@ class NS3Netsim {
    * \returns None
    *
    */
-  void init (string f_adjmat, string f_coords, string f_appcon, string f_json, string s_linkRate,
+  void init (string f_adjmat, string f_coords, string f_devs, string f_json, string s_linkRate,
              string s_linkDelay, string s_linkErrorRate, string start_time,
              string stop_time, string verb, string s_tcpOrUdp, string s_net);
 
@@ -131,11 +135,13 @@ class NS3Netsim {
    * \returns None
    *
    */
-  void schedule (string src, string dst, string val, string val_time);
+  void schedule (string id, string src, string dst, string val, string val_time);
 
   /**
    * \brief Pass the transmitted information upward to the MOSAIK-NS3 middleware
    *
+   * \param id: the local transporter simulator identifier
+   * (for multiplexing and demultiplexing purposes)
    * \param src: source node name
    * \param dst: destination node name
    * \param val_V: value to be transmitted through the network
@@ -144,7 +150,7 @@ class NS3Netsim {
    * \returns int: return 0, if the buffer was empty, or 1 if one record was extract from the buffer
    *
    */
-  int  get_data (string &src, string &dst, string &val_V, string &val_T);
+  int  get_data (string &id, string &src, string &dst, string &val_V, string &val_T);
 
   /**
    * \brief Execute NS3 simulation until the time established in the parameter
@@ -248,17 +254,17 @@ private:
   MobilityHelper mobility;                      ///< Pointer to mobility (position) helper class
   Ptr<ListPositionAllocator> nodePositionAlloc; ///< Pointer to node position allocation
 
-  string appConnectionsFilename;              ///< Application client-server connections filename
+  string devicesFilename;              ///< Device connections filename
   vector<vector<string>> arrayAppConnections; ///< Application client-server connections vector
 
   vector<string> nodeServerList;  ///< Application servers vector
   vector<string>::iterator iList; ///< Application servers vector iterator
   uint16_t sinkPort;              ///< Application port for all server nodes
 
-  MultiClientTcpServerHelper multiClientTcpServerHelper = MultiClientTcpServerHelper(Address()); ///< Application TCP server helper
+  TcpServerHelper tcpServerHelper = TcpServerHelper(sinkPort); ///< Application TCP server helper
   TcpClientHelper tcpClientHelper = TcpClientHelper(Address()); ///< Application TCP client helper
-  CustomUdpClientHelper customUdpClientHelper = CustomUdpClientHelper(Address()); ///< Application UDP server helper
-  CustomUdpServerHelper customUdpServerHelper = CustomUdpServerHelper(Address()); ///< Application UDP client helper
+  CustomUdpClientHelper customUdpClientHelper = CustomUdpClientHelper(Address()); ///< Application UDP client helper
+  CustomUdpServerHelper customUdpServerHelper = CustomUdpServerHelper(sinkPort); ///< Application UDP server helper
 
   double startTime; ///< Simulation start time
   double stopTime; ///< Simulation stop time

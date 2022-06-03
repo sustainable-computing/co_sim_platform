@@ -53,10 +53,14 @@ void sendMessageToUpperLayer(string message, Ptr<Node> sourceNode, Ptr<Node> des
   std::size_t current;
   //--- get val and val_time
   current = message.find("&");
+  string id = message.substr(0, current);
+  message = message.substr(current+1);
+  current = message.find("&");
   string val = message.substr(0, current);
   string val_time = message.substr(current+1);
   //--- insert data on dataXchgOutput / give to upper layer
-  DataXCHG dataRcv = {Names::FindName(sourceNode),
+  DataXCHG dataRcv = {id,
+                      Names::FindName(sourceNode),
                       Names::FindName(destinationNode),
                       val,
                       stoll(val_time)};
@@ -72,6 +76,9 @@ void ExtractInformationFromPacketAndSendToUpperLayer(Ptr<Socket> socket)
 {
   Address from;
   Ptr<Packet> packet = socket->RecvFrom(from);
+  // std::cout << "Received Packet size: ";
+  // packet->Print(std::cout);
+  // std::cout << std::endl;
   uint32_t srcNodeId;
   if (v4)
   {
@@ -218,12 +225,16 @@ NS3Netsim::NS3Netsim() : linkCount(0), sinkPort(0), startTime(0), verbose(0)
   // LogComponentEnable("Simulator", LOG_LEVEL_ALL);
   // LogComponentEnable("SmartgridDefaultSimulatorImpl", LOG_LEVEL_ALL);
   // LogComponentEnable("SmartgridNs3Main", LOG_LEVEL_ALL);
-  // LogComponentEnable("MultiClientTcpServer", LOG_LEVEL_ALL);
+  // LogComponentEnable("TcpServer", LOG_LEVEL_ALL);
   // LogComponentEnable("TcpClient", LOG_LEVEL_ALL);
+  // LogComponentEnable("CustomUdpServer", LOG_LEVEL_ALL);
+  // LogComponentEnable("CustomUdpClient", LOG_LEVEL_ALL);
   // LogComponentEnable("Socket", LOG_LEVEL_ALL);
   // LogComponentEnable("SocketFactory", LOG_LEVEL_ALL);
   // LogComponentEnable("TcpSocket", LOG_LEVEL_ALL);
   // LogComponentEnable("TcpSocketBase", LOG_LEVEL_ALL);
+  // LogComponentEnable("UdpSocket", LOG_LEVEL_ALL);
+  // LogComponentEnable("UdpSocketBase", LOG_LEVEL_ALL);
   // LogComponentEnable("TcpL4Protocol", LOG_LEVEL_ALL);
   // LogComponentEnable("IpL4Protocol", LOG_LEVEL_ALL);
   // LogComponentEnable ("Ipv4L3Protocol", LOG_LEVEL_ALL);
@@ -236,10 +247,34 @@ NS3Netsim::NS3Netsim() : linkCount(0), sinkPort(0), startTime(0), verbose(0)
   // LogComponentEnable ("Icmpv6L4Protocol", LOG_LEVEL_ALL);
   // LogComponentEnable ("Ipv6StaticRouting", LOG_LEVEL_ALL);
   // LogComponentEnable ("Ipv6Interface", LOG_LEVEL_ALL);
+  // LogComponentEnable ("PointToPointNetDevice", LOG_LEVEL_ALL);
+  // LogComponentEnable ("SixLowPanNetDevice", LOG_LEVEL_ALL);
+  // LogComponentEnable ("LrWpanCsmaCa", LOG_LEVEL_ALL);
+  // LogComponentEnable ("LrWpanErrorModel", LOG_LEVEL_ALL);
+  // LogComponentEnable ("LrWpanInterferenceHelper", LOG_LEVEL_ALL);
+  // LogComponentEnable ("LrWpanMac", LOG_LEVEL_ALL);
+  // LogComponentEnable ("LrWpanNetDevice", LOG_LEVEL_ALL);
+  // LogComponentEnable ("LrWpanPhy", LOG_LEVEL_ALL);
+  // LogComponentEnable ("LrWpanSpectrumSignalParameters", LOG_LEVEL_ALL);
+  // LogComponentEnable ("LrWpanSpectrumValueHelper", LOG_LEVEL_ALL);
+  // LogComponentEnable ("SingleModelSpectrumChannel", LOG_LEVEL_ALL);
+  // LogComponentEnable ("TraceHelper", LOG_LEVEL_ALL);
 
+  // Print node IDs for every log message
+  // LogComponentEnableAll(LOG_PREFIX_NODE); 
+
+  ///-- Set no or "zero" delays before sending the first TCP messages
   // Config::SetDefault("ns3::TcpSocket::TcpNoDelay", BooleanValue(true));
+  
+  ///--- Set the jitter delay before sending solication messages (default is 0 to 10 ms)
+  // Config::SetDefault("ns3::Icmpv6L4Protocol::SolicitationJitter", StringValue ("ns3::UniformRandomVariable[Min=10000.0|Max=10000.0]"));
+  
   //--- To set the nodes as routers for IPv6, where they are hosts by default
   Config::SetDefault("ns3::Ipv6::IpForward", BooleanValue(true));
+
+  // Might cause problems for 6LoWPAN
+  // Packet::EnablePrinting ();
+  // Packet::EnableChecking ();
 }
 
 NS3Netsim::~NS3Netsim()
@@ -250,7 +285,7 @@ NS3Netsim::~NS3Netsim()
 
 void NS3Netsim::init(string f_adjmat,
                      string f_coords,
-                     string f_appcon,
+                     string f_devs,
                      string f_json,
                      string s_linkRate,
                      string s_linkDelay,
@@ -262,14 +297,16 @@ void NS3Netsim::init(string f_adjmat,
                      string s_net)
 {
   allApplications = ApplicationContainer();
+  LrWpanHelper lrwpan;
+  SixLowPanHelper sixlowpan;
   //--- verbose level
   verbose = stoi(verb);
   // save which protocol should be used
   tcpOrUdp = s_tcpOrUdp;
-  std::cout << "Network Mode: " << tcpOrUdp << std::endl;
+  std::cout << "NS3Netsim::init Network Mode: " << tcpOrUdp << std::endl;
   // save which architecture should be used
   netArch = s_net;
-  std::cout << "Network Architecture: " << netArch << std::endl;
+  std::cout << "NS3Netsim::init Network Architecture: " << netArch << std::endl;
   if (netArch == "P2P" || netArch == "CSMA")  v4 = true;
   else  v4 = false;
 
@@ -299,8 +336,8 @@ void NS3Netsim::init(string f_adjmat,
   //--- set configuration file names
   nodeAdjMatrixFilename = f_adjmat;
   nodeCoordinatesFilename = f_coords;
-  appConnectionsFilename = f_appcon;
   string nodeJSONFilename = f_json;
+  devicesFilename = f_devs;
 
   //--- load adjacency matrix
   NS_LOG_INFO("Load node adjacency matrix");
@@ -351,6 +388,7 @@ void NS3Netsim::init(string f_adjmat,
     csma.SetChannelAttribute  ("DataRate", StringValue (LinkRate));
     csma.SetChannelAttribute ("Delay",    StringValue (LinkDelay));
   }
+  int PANID = 1;
   for (size_t i = 0; i < nodeAdjMatrix.size(); i++)
   {
     for (size_t j = i; j < nodeAdjMatrix[i].size(); j++)
@@ -360,7 +398,32 @@ void NS3Netsim::init(string f_adjmat,
         linkCount++;
         NodeContainer n_links = NodeContainer(nodes.Get(i), nodes.Get(j));
         NetDeviceContainer n_devs;
-        if (netArch == "P2P" || netArch == "P2Pv6")
+        /// If IPv6 is the selected protocol and the nodes at the ends of this link
+        /// are part of the secondary network, install 6LoWPAN instead of P2P/CSMA
+        if (!v4 && (isSecondary(arrayNamesCoords[i][0]) || isSecondary(arrayNamesCoords[j][0])))
+        {
+          /// Manual installation is used here
+          /// Helper installation raises some issues for some reason
+          Ptr<SingleModelSpectrumChannel> channel = CreateObject<SingleModelSpectrumChannel> ();
+          Ptr<LogDistancePropagationLossModel> propModel = CreateObject<LogDistancePropagationLossModel> ();
+          Ptr<ConstantSpeedPropagationDelayModel> delayModel = CreateObject<ConstantSpeedPropagationDelayModel> ();
+          channel->AddPropagationLossModel (propModel);
+          channel->SetPropagationDelayModel (delayModel);
+          Ptr<LrWpanNetDevice> dev0 = CreateObject<LrWpanNetDevice> ();
+          Ptr<LrWpanNetDevice> dev1 = CreateObject<LrWpanNetDevice> ();
+          dev0->SetChannel (channel);
+          dev1->SetChannel (channel);
+          n_links.Get(0)->AddDevice(dev0);
+          n_links.Get(1)->AddDevice(dev1);
+          dev0->SetNode(n_links.Get(0));
+          dev1->SetNode(n_links.Get(1));
+          n_devs.Add(dev0);
+          n_devs.Add(dev1);
+
+          lrwpan.AssociateToPan(n_devs, PANID);
+          n_devs = sixlowpan.Install(n_devs);
+        }
+        else if (netArch == "P2P" || netArch == "P2Pv6")
           n_devs = pointToPoint.Install(n_links);
         else if (netArch == "CSMA" || netArch == "CSMAv6") 
           n_devs = csma.Install (n_links);
@@ -380,15 +443,37 @@ void NS3Netsim::init(string f_adjmat,
   //--- set link error rate
   Ptr<RateErrorModel> em = CreateObject<RateErrorModel>();
   em->SetAttribute("ErrorRate", DoubleValue(stod(LinkErrorRate)));
-  for (auto dev = Devices.begin(); dev != Devices.end(); ++dev)
+  if(v4)
   {
-    (*dev).Get(1)->SetAttribute("ReceiveErrorModel", PointerValue(em));
-    if (verbose > 1)
+    for (auto dev = Devices.begin(); dev != Devices.end(); ++dev)
     {
-      std::cout << "int(0) =  " << (*dev).Get(0)->GetAddress()
-                << "  int(1) =  " << (*dev).Get(1)->GetAddress()
-                << " ID = " << (*dev).Get(1)->GetNode()->GetId()
-                << std::endl;
+      (*dev).Get(1)->SetAttribute("ReceiveErrorModel", PointerValue(em));
+      if (verbose > 1)
+      {
+        std::cout << "int(0) =  " << (*dev).Get(0)->GetAddress()
+                  << "  int(1) =  " << (*dev).Get(1)->GetAddress()
+                  << " ID = " << (*dev).Get(1)->GetNode()->GetId()
+                  << std::endl;
+      }
+    }
+  }
+  else
+  {
+    for (auto dev = Devices.begin(); dev != Devices.end(); ++dev)
+    {
+      if (verbose > 1)
+      {
+        std::cout << "int(0) =  " << (*dev).Get(0)->GetAddress()
+                  << "  int(1) =  " << (*dev).Get(1)->GetAddress()
+                  << " ID = " << (*dev).Get(1)->GetNode()->GetId()
+                  << std::endl;
+      }
+      string name1 = arrayNamesCoords[(*dev).Get(0)->GetNode()->GetId()][0];
+      string name2 = arrayNamesCoords[(*dev).Get(1)->GetNode()->GetId()][0];
+      if(isSecondary(name1) || isSecondary(name2))
+        continue;
+      /// For now, no error rate customization for LR-WPAN + 6LoWPAN
+      (*dev).Get(1)->SetAttribute("ReceiveErrorModel", PointerValue(em));
     }
   }
 
@@ -404,7 +489,7 @@ void NS3Netsim::init(string f_adjmat,
     }
     else
     {
-      Ipv6InterfaceContainer i6 = ipv6Address.Assign(*dev);
+      ipv6Address.Assign(*dev);
       ipv6Address.NewNetwork();
     }
   }
@@ -459,6 +544,7 @@ void NS3Netsim::init(string f_adjmat,
     pointToPoint.EnableAsciiAll(ascii.CreateFileStream("traceNS3Netsim.tr"));
   else if (netArch == "CSMA" || netArch == "CSMAv6")
     csma.EnableAsciiAll(ascii.CreateFileStream ("traceNS3Netsim.tr"));
+  if (!v4)  lrwpan.EnableAsciiAll(ascii.CreateFileStream ("traceNS3sixlowpan.tr"));
   // pointToPoint.EnablePcapAll("pcapNS3Netsim.pcap");
   //pointToPoint.EnablePcap("dse", 0, 0, true);
 }
@@ -634,6 +720,13 @@ void NS3Netsim::create(string client, string server)
         hostIfIndex = link_dev.Get(0)->GetIfIndex() + 1;
         hopIfIndex = link_dev.Get(1)->GetIfIndex() + 1;
       }
+      if (!v4 && (isSecondary(clt) || isSecondary(nextHop)))
+      {
+        if(isSecondary(clt))  hostIfIndex /= 2;
+        else hostIfIndex = hostIfIndex - 1;
+        if(isSecondary(nextHop))  hopIfIndex /= 2;
+        else hopIfIndex = hopIfIndex - 1;
+      }
       Ipv6Address nextHopAddress = nextHopIpv6->GetAddress(hopIfIndex, 1).GetAddress();
       staticRouting = ipv6StaticRouter.GetStaticRouting (cltIpv6);
       staticRouting->AddHostRouteTo(destAddress, nextHopAddress, hostIfIndex);
@@ -658,19 +751,19 @@ void NS3Netsim::setUpServer(AddressValue address, string protocol, string server
   if (protocol == "tcp")
   {
     // Set the address with which the application should be created
-    multiClientTcpServerHelper.SetAttribute("Local", address);
-    serverAppContainer = multiClientTcpServerHelper.Install(server);
+    tcpServerHelper.SetAttribute("Port", UintegerValue(sinkPort));
+    // Create a tcp container
+    serverAppContainer = tcpServerHelper.Install(server);
     // Set the call back to extract information from a packet and sent it to the upper layer
-    Ptr<MultiClientTcpServer> serverAppAsCorrectType = DynamicCast<MultiClientTcpServer>(serverAppContainer.Get(0));
+    Ptr<TcpServer> serverAppAsCorrectType = DynamicCast<TcpServer>(serverAppContainer.Get(0));
     // Set the function that should be called when the server receives a packet
     serverAppAsCorrectType->SetPacketReceivedCallBack(ExtractInformationFromPacketAndSendToUpperLayer);
   }
   else if (protocol == "udp")
   {
     // Set the address with which the application should be created
-    if (v4) customUdpServerHelper.SetAttribute("Local", AddressValue(InetSocketAddress(Ipv4Address::GetAny(), sinkPort)));
-    else  customUdpServerHelper.SetAttribute("Local", AddressValue(Inet6SocketAddress(Ipv6Address::GetAny(), sinkPort)));
-    // Create a tcp container
+    customUdpServerHelper.SetAttribute("Port", UintegerValue(sinkPort));
+    // Create a udp container
     serverAppContainer = customUdpServerHelper.Install(server);
     // Set the call back to extract information from a packet and sent it to the upper layer
     Ptr<CustomUdpServer> serverAppAsCorrectType = DynamicCast<CustomUdpServer>(serverAppContainer.Get(0));
@@ -704,13 +797,13 @@ void NS3Netsim::setUpClient(AddressValue address, string protocol, string server
   if (protocol == "tcp")
   {
     // Create a tcp client
-    tcpClientHelper.SetAttribute("Remote", address);
+    tcpClientHelper.SetAttribute("RemoteAddress", address);
     clientAppContainer = tcpClientHelper.Install(client);
   }
   else if (protocol == "udp")
   {
     // Create a udp client
-    customUdpClientHelper.SetAttribute("Remote", address);
+    customUdpClientHelper.SetAttribute("RemoteAddress", address);
     clientAppContainer = customUdpClientHelper.Install(client);
   }
   else
@@ -724,7 +817,7 @@ void NS3Netsim::setUpClient(AddressValue address, string protocol, string server
   clientAppContainer.Start(NanoSeconds(0.0));
 }
 
-void NS3Netsim::schedule(string src, string dst, string val, string val_time)
+void NS3Netsim::schedule(string id, string src, string dst, string val, string val_time)
 {
   if (verbose > 1)
   {
@@ -751,7 +844,14 @@ void NS3Netsim::schedule(string src, string dst, string val, string val_time)
     {
       clientApp = DynamicCast<TcpClient>(srcNode->GetApplication(1));
     }
-    clientApp->ScheduleTransmit(val, val_time);
+    std::string msgx = id + "&" + val + "&" + val_time;
+    // The val_time is in milliseconds, so add "ms" before Time variable creation
+    Time schDelay = Time(to_string(stod(val_time)) + "ms") - Simulator::Now();
+    clientApp->SetFill(msgx);
+    // If asked to schedule immediately or in the past due to Mosaik calling the
+    // same time again, add 1 microsecond for safety
+    if (schDelay.GetNanoSeconds() <= (int64_t)0)  schDelay = Simulator::Now() + Time("1us");
+    clientApp->ScheduleTransmit(schDelay);
   }
   else if (tcpOrUdp == "udp")
   {
@@ -761,7 +861,14 @@ void NS3Netsim::schedule(string src, string dst, string val, string val_time)
     {
       clientApp = DynamicCast<CustomUdpClient>(srcNode->GetApplication(1));
     }
-    clientApp->ScheduleTransmit(val, val_time);
+    std::string msgx = id + "&" + val + "&" + val_time;
+    // The val_time is in milliseconds, so add "ms" before Time variable creation
+    Time schDelay = Time(to_string(stod(val_time)) + "ms") - Simulator::Now();
+    clientApp->SetFill(msgx);
+    // If asked to schedule immediately or in the past due to Mosaik calling the
+    // same time again, add 1 microsecond for safety
+    if (schDelay.GetNanoSeconds() <= (int64_t)0)  schDelay = Simulator::Now() + Time("1us");
+    clientApp->ScheduleTransmit(schDelay);
   }
 }
 
@@ -820,7 +927,11 @@ NS3Netsim::runUntil(uint64_t time, string nextStop)
   return std::to_string(next_step);
 }
 
-int NS3Netsim::get_data(string &src, string &dst, string &val_v, string &val_t)
+int NS3Netsim::get_data(string &id, 
+                        string &src, 
+                        string &dst, 
+                        string &val_v, 
+                        string &val_t)  
 {
   int res;
   DataXCHG dataOut;
@@ -836,6 +947,7 @@ int NS3Netsim::get_data(string &src, string &dst, string &val_v, string &val_t)
     res = 1;
     dataOut = dataXchgOutput.front();
     dataXchgOutput.pop();
+    id = dataOut.id;
     src = dataOut.src;
     dst = dataOut.dst;
     val_v = dataOut.val;
@@ -852,7 +964,9 @@ int NS3Netsim::get_data(string &src, string &dst, string &val_v, string &val_t)
     {
       DataXCHG dataSnt = dataXchgOutput.front();
       if (dataSnt.src == src && dataSnt.dst == dst)
-        cout << "NS3Netsim::get_data NS3 OUTPUT Buffer Src: " << dataSnt.src
+        cout << "NS3Netsim::get_data NS3 OUTPUT Buffer "
+             << " ID: " << dataSnt.id
+             << " Src: " << dataSnt.src
              << " Dst: " << dataSnt.dst
              << " Val: " << dataSnt.val
              << " Time: " << dataSnt.time
