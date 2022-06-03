@@ -197,7 +197,7 @@ class MosaikSim {
   std::map<std::string, MosaikNextSimul> mosaikNSimul;
 
   ///< Map to store extracted data from NS3
-  std::map<std::string, queue<std::pair<std::string, std::string> > > mapGetData;
+  std::map<std::pair<std::string, std::string>, queue<std::pair<std::string, std::string> > > mapGetData;
 
 
   //---
@@ -212,7 +212,7 @@ class MosaikSim {
   //--- Transporter model variables
   //---
   MosaikModel TransporterModel = {.access = "True",
-      .params = {"src", "dst", "eid"},
+      .params = {"src", "dst"},
       .attrs = {"v", "t"}
   };
 

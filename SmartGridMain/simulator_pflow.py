@@ -27,20 +27,20 @@ META = {
     'models': {
         'Sensor': {
             'public': True,
-            'params': ['eid', 'cktTerminal', 'cktPhase', 'cktProperty', 'step_size', 'cktElement','error','verbose'],
+            'params': ['idt', 'step_size', 'verbose'],
             'attrs': ['v', 't'],
             'non-persistent': ['v', 't'],
         },
         'Actuator': {
             'public': True,
-            'params': ['eid', 'cktTerminal', 'cktPhase', 'cktProperty', 'step_size', 'cktElement','error','verbose'],
+            'params': ['idt', 'step_size', 'verbose'],
             'attrs': ['v', 't'],
             'trigger': ['v', 't'],
             'non-persistent': ['v', 't'],
         },
         'Prober': {
             'public': True,
-            'params': ['eid', 'step_size', 'verbose'],
+            'params': ['idt', 'step_size', 'verbose'],
             'attrs': ['v', 't'],
             'non-persistent': ['v', 't'],
         },        
@@ -50,16 +50,13 @@ META = {
     ],    
 }
 
-# Fix all the device simulator codes based on their calls from
-# the Mosaik Master script (simulator_demo.py)
-# Change probers later
 
 class ProberSim:
-    def __init__(self, eid, step_size, objDSS, element, terminal, phase, verbose):
-        self.idt        = eid
+    def __init__(self, idt, step_size, objDSS, action, element, terminal, phase, verbose):
+        self.idt        = idt
         self.step_size  = step_size
         self.objDSS     = objDSS
-        # self.action     = action
+        self.action     = action
         self.elem       = element
         self.term       = terminal
         self.ph         = phase
@@ -71,18 +68,17 @@ class ProberSim:
         if (self.verbose > 0): print('ProberSim::updateValues', self.action, self.elem, self.term, self.ph)
         
         if (0 == time % self.step_size):
-            # No more action variable, set a default action or config value-based
-            # if (self.action == "getV"):
-            #     (VComp, _, _) =  self.objDSS.getCktElementState(self.elem, CKTTerm[self.term].value, CKTPhase[self.ph].value)
-            #     val = self.R2P(VComp)[0] #-- only got the real part    
-            # if (self.action == "getTap"):
-            #     val = self.objDSS.getTrafoTap(self.elem)
-            # if (self.action == "getVPu"):
-            #     (val, _) =  self.objDSS.getVMagAnglePu(self.elem, CKTPhase[self.ph].value)
-            # if (self.action == "getLoad"):
-            #     (val, _) = self.objDSS.getPQ(self.elem)       
-            # if (self.action == "getS"):
-            #     val = self.objDSS.getS(self.elem, CKTTerm[self.term].value, CKTPhase[self.ph].value)          
+            if (self.action == "getV"):
+                (VComp, _, _) =  self.objDSS.getCktElementState(self.elem, CKTTerm[self.term].value, CKTPhase[self.ph].value)
+                val = self.R2P(VComp)[0] #-- only got the real part    
+            if (self.action == "getTap"):
+                val = self.objDSS.getTrafoTap(self.elem)
+            if (self.action == "getVPu"):
+                (val, _) =  self.objDSS.getVMagAnglePu(self.elem, CKTPhase[self.ph].value)
+            if (self.action == "getLoad"):
+                (val, _) = self.objDSS.getPQ(self.elem)       
+            if (self.action == "getS"):
+                val = self.objDSS.getS(self.elem, CKTTerm[self.term].value, CKTPhase[self.ph].value)          
             
             self.priorTime  = time
             self.priorValue = val
@@ -102,11 +98,11 @@ class ProberSim:
 
 
 class SensorSim:
-    def __init__(self, eid, step_size, objDSS, element, terminal, phase, verbose):
-        self.idt        = eid
-        self.step_size  = int(step_size)
+    def __init__(self, idt, step_size, objDSS, action, element, terminal, phase, verbose):
+        self.idt        = idt
+        self.step_size  = step_size
         self.objDSS     = objDSS
-        # self.action     = action
+        self.action     = action
         self.elem       = element
         self.term       = terminal
         self.ph         = phase
@@ -120,12 +116,11 @@ class SensorSim:
         if (self.verbose > 0): print('SensorSim::getValue', self.action, self.elem, self.term, self.ph)
         
         if (0 == time % self.step_size):
-            # no action choice - default action is get voltage value
-            # if (self.action == "getV"):
-            (VComp, _, _) =  self.objDSS.getCktElementState(self.elem, CKTTerm[self.term].value, CKTPhase[self.ph].value)
-            val = self.R2P(VComp)[0] #-- only got the real part
-            # if (self.action == "getTap"):
-            #     val = self.objDSS.getTrafoTap(self.elem)
+            if (self.action == "getV"):
+                (VComp, _, _) =  self.objDSS.getCktElementState(self.elem, CKTTerm[self.term].value, CKTPhase[self.ph].value)
+                val = self.R2P(VComp)[0] #-- only got the real part
+            if (self.action == "getTap"):
+                val = self.objDSS.getTrafoTap(self.elem)
             self.priorTime  = time + self.time_diff_resolution
             self.priorValue = val
         else:
@@ -146,11 +141,11 @@ class SensorSim:
 
 
 class ActuatorSim:
-    def __init__(self, eid, step_size, objDSS, element, terminal, phase, verbose):
-        self.eid        = eid
+    def __init__(self, idt, step_size, objDSS, action, element, terminal, phase, verbose):
+        self.idt        = idt
         self.step_size  = step_size
         self.objDSS     = objDSS
-        # self.action     = action
+        self.action     = action
         self.elem       = element
         self.term       = terminal
         self.ph         = phase
@@ -163,11 +158,10 @@ class ActuatorSim:
         if (self.verbose > 0): print('ActuatorSim::setControl', self.action, self.elem, self.term, self.ph, value)
         
         if (value != 0 and value != None):
-            # No more action choices - default action is set tap
-            # if (self.action == "ctlS"):
-            #     self.objDSS.operateSwitch(int(value), self.elem, CKTTerm[self.term].value, CKTPhase[self.ph].value)
-            # if (self.action == "setTap"):
-            self.objDSS.setTrafoTap(self.elem, tapOrientation=value, tapUnits=1)                
+            if (self.action == "ctlS"):
+                self.objDSS.operateSwitch(int(value), self.elem, CKTTerm[self.term].value, CKTPhase[self.ph].value)
+            if (self.action == "setTap"):
+                self.objDSS.setTrafoTap(self.elem, tapOrientation=value, tapUnits=1)                
              
         self.priorTime  = time
         self.priorValue = value
@@ -192,6 +186,7 @@ class PFlowSim(mosaik_api.Simulator):
     def __init__(self):
         super().__init__(META)
         self.data = {}
+        self.actives = {}
         self.entities = {}
         self.next_step = 0
         self.instances = {}
@@ -199,7 +194,7 @@ class PFlowSim(mosaik_api.Simulator):
         self.loadgen_interval = self.step_size
 
 
-    def init(self, sid, time_resolution, topofile, nwlfile, ilpqfile, step_size, loadgen_interval, verbose=0):	
+    def init(self, sid, time_resolution, topofile, nwlfile, ilpqfile, actsfile, step_size, loadgen_interval, verbose=0):	
         self.sid = sid       
         self.verbose = verbose
         self.loadgen_interval = loadgen_interval
@@ -209,7 +204,7 @@ class PFlowSim(mosaik_api.Simulator):
         self.swcycle = 35
         
         if (self.verbose > 0): print('simulator_pflow::init', self.sid)
-        if (self.verbose > 1): print('simulator_pflow::init', topofile, nwlfile, ilpqfile, verbose)
+        if (self.verbose > 1): print('simulator_pflow::init', topofile, nwlfile, ilpqfile, actsfile, verbose)
 
         #--- start opendss
         self.dssObj = SimDSS(topofile, nwlfile, ilpqfile)
@@ -232,43 +227,50 @@ class PFlowSim(mosaik_api.Simulator):
                                         #Freq       =  1./8640,
                                         Freq       =  1./100,
                                         PhaseShift = math.pi)
+        
+        #--- read acts file
+        self.readActives(actsfile)
     
         sys.stdout.flush()
         return self.meta
 
 
-    def create(self, num, model, cktTerminal, cktPhase, eid, step_size, cktElement, error, verbose):
-        if (self.verbose > 0): print('simulator_pflow::create ', model, ": ", id)
+    def create(self, num, model, idt, step_size, verbose):
+        if (self.verbose > 0): print('simulator_pflow::create ', model, idt)
 
+        eid = '%s_%s' % (model, idt)
         self.data[eid] = {}     
         self.instances[eid] = {}
 
         if (model == 'Prober'):
-            self.instances[eid] = ProberSim(eid,
+            self.instances[eid] = ProberSim(idt,
                                            step_size = step_size, 
-                                           objDSS    = self.dssObj,
-                                           element   = cktElement, 
-                                           terminal  = cktTerminal, 
-                                           phase     = cktPhase,
+                                           objDSS    = self.dssObj, 
+                                           action    = self.actives[eid]['action'], 
+                                           element   = self.actives[eid]['CKTElement'], 
+                                           terminal  = self.actives[eid]['CKTTerminal'], 
+                                           phase     = self.actives[eid]['CKTPhase'],
                                            verbose   = verbose)
 
         if (model == 'Sensor'):
-            self.instances[eid] = SensorSim(eid,
+            self.instances[eid] = SensorSim(idt,
                                            step_size = step_size, 
-                                           objDSS    = self.dssObj,
-                                           element   = cktElement, 
-                                           terminal  = cktTerminal, 
-                                           phase     = cktPhase,
+                                           objDSS    = self.dssObj, 
+                                           action    = self.actives[eid]['action'], 
+                                           element   = self.actives[eid]['CKTElement'], 
+                                           terminal  = self.actives[eid]['CKTTerminal'], 
+                                           phase     = self.actives[eid]['CKTPhase'],
                                            verbose   = verbose)
             
         if (model == 'Actuator'):
-            self.instances[eid] = ActuatorSim(eid, 
+            self.instances[eid] = ActuatorSim(idt, 
                                            step_size = step_size,
-                                           objDSS    = self.dssObj,
-                                           element   = cktElement, 
-                                           terminal  = cktTerminal, 
-                                           phase     = cktPhase,
-                                           verbose   = verbose)            
+                                           objDSS   = self.dssObj, 
+                                           action   = self.actives[eid]['action'], 
+                                           element  = self.actives[eid]['CKTElement'], 
+                                           terminal = self.actives[eid]['CKTTerminal'], 
+                                           phase    = self.actives[eid]['CKTPhase'],
+                                           verbose  = verbose)            
         
         sys.stdout.flush()
         return [{'eid': eid, 'type': model}]
@@ -414,5 +416,31 @@ class PFlowSim(mosaik_api.Simulator):
 
 #     def finalize(self):
 #         print('OpenDSS Final Results:')
-#         self.dssObj.showIinout()
+#         self.dssObj.showIinout()       
+ 
+ 
+    def readActives(self, actsfile):
+
+        current_directory = os.path.dirname(os.path.realpath(__file__))
+        pathToFile = os.path.abspath(
+            os.path.join(current_directory, actsfile)
+        )
+        if not os.path.isfile(pathToFile):
+            print('File Actives does not exist: ' + pathToFile)
+            sys.exit()
+        else:
+            with open(pathToFile, 'r') as csvFile:
+                csvobj = csv.reader(csvFile)
+                for rows in csvobj:
+                    eid = rows[0]
+                    self.actives[eid] = {}
+                    self.actives[eid]['action']      = rows[1]
+                    self.actives[eid]['CKTElement']  = rows[2]
+                    self.actives[eid]['CKTTerminal'] = rows[3]
+                    self.actives[eid]['CKTPhase']    = rows[4]  
+                
+                if (self.verbose > 1):
+                    print ('simulator_pflow::readActives:')
+                    for key in self.actives:                
+                        print(key, self.actives[key])  
 
