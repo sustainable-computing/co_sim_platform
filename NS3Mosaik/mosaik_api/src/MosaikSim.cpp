@@ -82,12 +82,11 @@ void MosaikSim::initMosaikCommands(void)
 void MosaikSim::initNetsimProps(void)
 {
   netsimProp["model_name"] = "null";
-  netsimProp["eid_prefix"] = "null";
   netsimProp["start_time"] = "null";
   netsimProp["stop_time"] = "null";
   netsimProp["random_seed"] = "null";
   netsimProp["time_resolution"] = "null";
-  netsimProp["appcon_file"] = "null";
+  netsimProp["devs_file"] = "null";
   netsimProp["adjmat_file"] = "null";
   netsimProp["coords_file"] = "null";
   netsimProp["json_file"] = "null";
@@ -441,6 +440,7 @@ MosaikSim::init(Json::Value args, Json::Value kwargs)
   {
     param = (item.key()).asString();
     value = (*item).asString();
+
     if (verbose > 2)
       std::cout << "MosaikSim::init param: " << item.key() << " : " << *item << std::endl;
 
@@ -452,7 +452,6 @@ MosaikSim::init(Json::Value args, Json::Value kwargs)
     }
   }
 
-  vecNetSimConn = readAppConnectionsJSONFile(netsimProp["json_file"]);
   vecNetSimConn = readDevicesFile(netsimProp["devs_file"]);
   verbose = stoi(netsimProp["verbose"]);
   
@@ -566,10 +565,7 @@ MosaikSim::create(Json::Value args, Json::Value kwargs)
   objNetsim->create(netsimParams["src"], netsimParams["dst"]);
 
   //--- generate eid
-  std::string eid = netsimProp["eid_prefix"];
-  eid.append(netsimParams["src"]);
-  eid.append("-");
-  eid.append(netsimParams["dst"]);
+  std::string eid = netsimParams["eid"];
 
   if (verbose > 1)
   {
@@ -697,15 +693,15 @@ MosaikSim::step(Json::Value args, Json::Value kwargs)
 
         //--- verify if entry for the current remoteSimulatorInstance already exist
         //--- if not, create new entry
-        itMapRcvData = mapRcvData.find(remoteSimulatorInstance);
+        itMapRcvData = mapRcvData.find(localSimulatorInstance);
         if (itMapRcvData == mapRcvData.end())
         {
-          mapRcvData[remoteSimulatorInstance] = rcvMsg;
+          mapRcvData[localSimulatorInstance] = rcvMsg;
         }
 
         //--- assign the iterator with the position of the entry
         //--- and assign the values
-        itMapRcvData = mapRcvData.find(remoteSimulatorInstance);
+        itMapRcvData = mapRcvData.find(localSimulatorInstance);
         if (itMapRcvData != mapRcvData.end())
         {
           if (localVariable.compare("v") == 0)
@@ -802,7 +798,8 @@ MosaikSim::step(Json::Value args, Json::Value kwargs)
         double currentNS3Time = objNetsim->getCurrentTime();
         if (currentNS3Time < stod(val_t))
         {
-          objNetsim->schedule((*itMapRcvData).second.val_S,
+          objNetsim->schedule(localSimulatorInstance,
+                              (*itMapRcvData).second.val_S,
                               (*itMapRcvData).second.val_D,
                               val_v,
                               val_t);
@@ -865,12 +862,13 @@ MosaikSim::get_data(Json::Value args, Json::Value kwargs)
   Json::StreamWriterBuilder wbuilder;
   std::string result;
 
+  std::string val_id;
   std::string val_s;
   std::string val_d;
   std::string val_v;
   std::string val_t;
 
-  std::pair<std::string, std::string> keyOut;
+  std::string keyOut;
   std::pair<std::string, std::string> valOut;
 
   obj = args[0];
@@ -904,13 +902,14 @@ MosaikSim::get_data(Json::Value args, Json::Value kwargs)
 
     while (objNetsim->getSizeDataOutput() > 0)
     {
-      objNetsim->get_data(val_s, val_d, val_v, val_t);
+      objNetsim->get_data(val_id, val_s, val_d, val_v, val_t);
 
       if (verbose > 1)
       {
         std::cout << "MosaikSim::get_data --OUT from NS3-- "
                   << "Current Time: " << mosaikTime
-                  << " val_s = " << val_s
+                  << " val_id = " << val_id
+                  << "\n val_s = " << val_s
                   << " val_d = " << val_d
                   << "\n val_v = " << val_v
                   << " val_t = " << val_t
@@ -918,7 +917,7 @@ MosaikSim::get_data(Json::Value args, Json::Value kwargs)
       }
 
       //--- insert data in another buffer
-      keyOut = std::make_pair(val_s, val_d);
+      keyOut = val_id;
       valOut = std::make_pair(val_v, val_t);
       mapGetData[keyOut].push(valOut);
     }
@@ -932,41 +931,9 @@ MosaikSim::get_data(Json::Value args, Json::Value kwargs)
       std::cout << "MosaikSim::get_data get data from: " << *lsi_i << std::endl;
 
     //---
-    //--- get src and dst from local instance
+    //--- verify if data exist in mapGetData
     //---
-    std::string attr;
-    const char delim_tr = '_';
-    const char delim_ds = '-';
-    std::vector<std::string> out;
-    std::vector<std::string>::iterator it;
-    std::string pair_name;
-    std::string src;
-    std::string dst;
-
-    attr = *lsi_i;
-    tokenize(attr, delim_tr, out);
-    it = out.begin();
-    ++it;
-    pair_name = (*it);
-
-    if (verbose > 2)
-      std::cout << "MosaikSim::get_data pair_name: " << pair_name << std::endl;
-
-    attr = pair_name;
-    out.clear();
-    tokenize(attr, delim_ds, out);
-    it = out.begin();
-    src = *it;
-    ++it;
-    dst = *it;
-
-    if (verbose > 2)
-      std::cout << "MosaikSim::get_data src: " << src << " dst: " << dst << std::endl;
-
-    //---
-    //--- make pair and verify if data exist in mapGetData
-    //---
-    keyOut = make_pair(src, dst);
+    keyOut = *lsi_i;
     if (mapGetData.find(keyOut) == mapGetData.end())
     {
       if (verbose > 2)
@@ -1341,17 +1308,17 @@ void MosaikSim::tokenize(std::string const &str, const char delim, std::vector<s
 }
 
 std::vector<NetSimConn>
-MosaikSim::readAppConnectionsFile(std::string nodeApplicationFilename)
+MosaikSim::readDevicesFile(std::string devicesFilename)
 {
   std::vector<NetSimConn> array;
   NetSimConn s_record;
   std::vector<std::pair<std::string, std::string>> dupMap;
 
   if (verbose > 1)
-    std::cout << "MosaikSim::mosaikSid:readAppConnectionsFile " << nodeApplicationFilename << std::endl;
+    std::cout << "MosaikSim::mosaikSid:readDevicesFile " << devicesFilename << std::endl;
 
   std::fstream fin;
-  fin.open(nodeApplicationFilename, ios::in);
+  fin.open(devicesFilename, ios::in);
   vector<string> row;
   string line, word;
 
@@ -1363,101 +1330,35 @@ MosaikSim::readAppConnectionsFile(std::string nodeApplicationFilename)
     {
       row.push_back(word);
     }
-    if (row.size() == 3)
+    if (std::find(dupMap.begin(), dupMap.end(), std::make_pair(row[0], row[1])) != dupMap.end())
     {
-      if (std::find(dupMap.begin(), dupMap.end(), std::make_pair(row[0], row[1])) != dupMap.end())
-      {
-        if (verbose > 2)
-          std::cout << "MosaikSim::readAppConnectionsFile"
-                    << " **DUPLICATE** SRC: " << row[0] << " DST: " << row[1] << std::endl;
-      }
-      else
-      {
-        if (verbose > 2)
-          std::cout << "MosaikSim::readAppConnectionsFile"
-                    << " SRC: " << row[0] << " DST: " << row[1] << std::endl;
-        s_record.src = row[0];
-        s_record.dst = row[1];
-        array.push_back(s_record);
-        dupMap.push_back(std::make_pair(row[0], row[1]));
-      }
+      if (verbose > 2)
+        std::cout << "MosaikSim::readDevicesFile"
+                  << " **DUPLICATE** SRC: " << row[0] << " DST: " << row[1] << std::endl;
     }
     else
     {
       if (verbose > 2)
-        std::cout << "MosaikSim::readAppConnectionsFile"
-                  << " Line IGNORED! Number of elements invalid " << line << std::endl;
-    }
-  }
-
-  if (verbose > 2)
-  {
-    std::cout << "MosaikSim::readAppConnectionsFile" << std::endl;
-    for (auto arr_i = array.begin(); arr_i != array.end(); arr_i++)
-    {
-      std::cout << "ARRAY TYPE: " << (*arr_i).type << " SRC: " << (*arr_i).src << " DST: " << (*arr_i).dst << std::endl;
-    }
-  }
-
-  return array;
-}
-
-std::vector<NetSimConn>
-MosaikSim::readAppConnectionsJSONFile(std::string JSON_Filename)
-{
-  NetSimConn s_record;
-  std::vector<NetSimConn> array;
-  std::vector<std::pair<std::string, std::string>> dupMap;
-
-  ifstream connsJSONFile;
-  connsJSONFile.open(JSON_Filename.c_str(), std::ios::in);
-  if (connsJSONFile.fail())
-  {
-    std::cout << "Failed to open :" << JSON_Filename.c_str() << " not found\n";
-    return array;
-  }
-
-  json config;
-  connsJSONFile >> config;
-
-  for (auto& entry: config["app_connections"])
-  {
-    // Check if record is correct
-    if (entry.size() != 3)
-    {
-      if (verbose > 2)
-        std::cout << "MosaikSim::readAppConnectionsJSONFile"
-                  << " Entry IGNORED! Number of elements invalid " << entry << std::endl;
-      
-      continue;
-    }
-    
-    if (std::find(dupMap.begin(), dupMap.end(), std::make_pair(to_string(entry["src"]), to_string(entry["dst"]))) != dupMap.end())
-    {
-      if (verbose > 2)
-        std::cout << "MosaikSim::readAppConnectionsJSONFile"
-                  << " **DUPLICATE** SRC: " << entry["src"] << " DST: " << entry["dst"] << std::endl;
-    }
-    else
-    {
-      s_record.src = to_string(entry["src"]);
-      s_record.dst = to_string(entry["dst"]);
+        std::cout << "MosaikSim::readDevicesFile"
+                  << " SRC: " << row[0] << " DST: " << row[1] << std::endl;
+      s_record.src = row[0];
+      s_record.dst = row[1];
       array.push_back(s_record);
-      dupMap.push_back(std::make_pair(to_string(entry["src"]), to_string(entry["dst"])));
+      dupMap.push_back(std::make_pair(row[0], row[1]));
     }
   }
 
   if (verbose > 2)
   {
-    std::cout << "MosaikSim::readAppConnectionsJSONFile" << std::endl;
+    std::cout << "MosaikSim::readDevicesFile" << std::endl;
     for (auto arr_i = array.begin(); arr_i != array.end(); arr_i++)
     {
       std::cout << "ARRAY TYPE: " << (*arr_i).type << " SRC: " << (*arr_i).src << " DST: " << (*arr_i).dst << std::endl;
     }
   }
+
   return array;
 }
-
 
 void MosaikSim::replaceAll(std::string &source, const std::string &from, const std::string &to)
 {

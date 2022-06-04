@@ -18,7 +18,7 @@ META = {
     'models': {
         'RangeControl': {
             'public': True,
-            'params': ['idt', 'vset', 'bw', 'tdelay', 'verbose'],
+            'params': ['eid', 'vset', 'bw', 'tdelay', 'control_delay', 'verbose'],
             'attrs': ['v', 't'],           
         },      
     },
@@ -43,32 +43,26 @@ class ControlSim(mosaik_api.Simulator):
         self.time = 0
 
         
-    def init(self, sid, time_resolution, eid_prefix=None, control_delay=1, verbose=0):
-        if eid_prefix is not None:
-            self.eid_prefix = eid_prefix
+    def init(self, sid, time_resolution, verbose=0):
         self.sid = sid
-        #-- The time required to take a control decision
-        #-- by default it is the minimum unit = 1 step
-        self.control_delay = control_delay    
         self.verbose = verbose
         
         return self.meta
 
     
-    def create(self, num, model, idt, vset, bw, tdelay):
-        if (self.verbose > 0): print('simulator_controller::create', num, model, idt)
-        
-        eid = '%s%s' % (self.eid_prefix, idt)
+    def create(self, num, model, eid, vset, bw, tdelay, control_delay):
+        if (self.verbose > 0): print('simulator_controller::create', num, model, ": ", eid)
         
         self.entities[eid] = {}
         self.entities[eid]['type'] = model
-        self.entities[eid]['idt'] = idt
+        self.entities[eid]['eid'] = eid
         self.entities[eid]['vset'] = vset
         self.entities[eid]['bw'] = bw
         self.entities[eid]['tdelay'] = tdelay
         self.entities[eid]['tlast'] = 0
         self.entities[eid]['vmax'] = vset
         self.entities[eid]['vmin'] = vset
+        self.entities[eid]['control_delay'] = int(control_delay)
 
 
         self.data[eid] = {}     
@@ -132,7 +126,8 @@ class ControlSim(mosaik_api.Simulator):
                     
                     #--- time
                     # The added value ensures data is sent by NS3 after the control delay
-                    self.data[controller_eid]['t'].append(time + self.control_delay)
+                    self.data[controller_eid]['t'].append(time \
+                        + self.entities[controller_eid]['control_delay'])
 
         sys.stdout.flush()
         

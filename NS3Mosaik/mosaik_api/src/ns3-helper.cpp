@@ -312,36 +312,29 @@ void PrintIpAddresses(NodeContainer nodes, string network)
   Ipv4InterfaceAddress v4iaddr;
   Ipv6InterfaceAddress v6iaddr;
   bool v4 = false;
-  if (network == "P2P" || network == "CSMA")
-    v4 = true;
+  if (network == "P2P" || network == "CSMA")  v4 = true;
   for (NodeList::Iterator i = NodeList::Begin(); i != NodeList::End(); ++i)
   {
     int ifaces;
-    if (v4)
-      ifaces = (*i)->GetObject<Ipv4>()->GetNInterfaces();
-    else
-      ifaces = (*i)->GetObject<Ipv6>()->GetNInterfaces();
+    if (v4) ifaces = (*i)->GetObject<Ipv4>()->GetNInterfaces();
+    else  ifaces = (*i)->GetObject<Ipv6>()->GetNInterfaces();
 
     for (int j = 1; j < ifaces; j++)
     {
-      if (v4)
-        v4iaddr = (*i)->GetObject<Ipv4>()->GetAddress(j, 0);
-      else
-        v6iaddr = (*i)->GetObject<Ipv6>()->GetAddress(j, 1);
+      if (v4) v4iaddr = (*i)->GetObject<Ipv4>()->GetAddress(j, 0);
+      else v6iaddr = (*i)->GetObject<Ipv6>()->GetAddress(j, 1);
       nodeName = Names::FindName((*i));
 
-      if (v4)
-        cout << "Node ID: " << (*i)->GetId() << " - "
-             << "Ifaces: " << (*i)->GetObject<Ipv4>()->GetNInterfaces() << " - "
-             << "Name: " << nodeName << " - "
-             << "IP Addr: " << v4iaddr.GetLocal() << " - "
-             << "IP Mask: " << v4iaddr.GetMask() << endl;
-      else
-        cout << "Node ID: " << (*i)->GetId() << " - "
-             << "Ifaces: " << (*i)->GetObject<Ipv6>()->GetNInterfaces() << " - "
-             << "Name: " << nodeName << " - "
-             << "IP Addr: " << v6iaddr.GetAddress() << " - "
-             << "IP Mask: " << v6iaddr.GetPrefix() << endl;
+      if (v4) cout << "Node ID: " << (*i)->GetId() << " - "
+                   << "Ifaces: " << (*i)->GetObject<Ipv4>()->GetNInterfaces() << " - "
+                   << "Name: " << nodeName << " - "
+                   << "IP Addr: " << v4iaddr.GetLocal() << " - "
+                   << "IP Mask: " << v4iaddr.GetMask() << endl;
+      else    cout << "Node ID: " << (*i)->GetId() << " - "
+                   << "Ifaces: " << (*i)->GetObject<Ipv6>()->GetNInterfaces() << " - "
+                   << "Name: " << nodeName << " - "
+                   << "IP Addr: " << v6iaddr.GetAddress() << " - "
+                   << "IP Mask: " << v6iaddr.GetPrefix() << endl;
     }
   }
   cout << "**** End Print IP Addresses ********" << endl;
@@ -399,72 +392,66 @@ CreateMapIpv6NodeId(NodeContainer nodes)
 
 string FindNextHop(string clt, string srv, vector<vector<bool>> array)
 {
-  Ptr<Node> srcNode = Names::Find<Node>(clt);
-  Ptr<Node> desNode = Names::Find<Node>(srv);
+  Ptr <Node> srcNode = Names::Find<Node>(clt);
+  Ptr <Node> desNode = Names::Find<Node>(srv);
 
   size_t src = srcNode->GetId();
   size_t des = desNode->GetId();
 
-  if (parent[des][src] != -1)
+  if(parent[des][src] != -1)
   {
-    Ptr<Node> nextHopeNode = NodeList::GetNode(parent[des][src]);
+    Ptr <Node> nextHopeNode = NodeList::GetNode(parent[des][src]);
     return Names::FindName(nextHopeNode);
   }
   size_t nextHop;
-  queue<size_t> bfsQ;
+  queue <size_t> bfsQ;
 
   // Searching in the opposite direction so that parents are
   // actually next hops when des is the destination
   bfsQ.push(des);
   parent[des][des] = des;
-  while (!bfsQ.empty())
+  while(!bfsQ.empty())
   {
     nextHop = bfsQ.front();
     bfsQ.pop();
     for (size_t m = 0; m < array[nextHop].size(); m++)
     {
-      if (!array[nextHop][m])
-        continue;
-      if (parent[des][m] != -1)
-        continue;
+      if(!array[nextHop][m]) continue;
+      if(parent[des][m] != -1)  continue;
       bfsQ.push(m);
       parent[des][m] = nextHop;
     }
   }
-  if (parent[des][src] == -1)
-    cerr << "The source and destination are not connected!";
+  if(parent[des][src] == -1)  cerr << "The source and destination are not connected!";
 
-  Ptr<Node> nextHopeNode = NodeList::GetNode(parent[des][src]);
-  return Names::FindName(nextHopeNode);
+  Ptr <Node> nextHopeNode = NodeList::GetNode(parent[des][src]);
+  return Names::FindName(nextHopeNode);  
 }
 
-void PrintRoutingTable(Ptr<Node> &n, bool v4)
+void PrintRoutingTable (Ptr<Node>& n, bool v4)
 {
   if (v4)
   {
     Ptr<Ipv4StaticRouting> routing = 0;
     Ipv4StaticRoutingHelper routingHelper;
-    Ptr<Ipv4> ipv4 = n->GetObject<Ipv4>();
+    Ptr<Ipv4> ipv4 = n->GetObject<Ipv4> ();
     uint32_t nbRoutes = 0;
     Ipv4RoutingTableEntry route;
 
-    routing = routingHelper.GetStaticRouting(ipv4);
+    routing = routingHelper.GetStaticRouting (ipv4);
 
     std::cout << "Routing table of " << Names::FindName(n) << " : " << std::endl;
-    std::cout << "Destination\t\t\t\t"
-              << "Gateway\t\t\t\t\t"
-              << "Interface\t"
-              << "Destination Network" << std::endl;
+    std::cout << "Destination\t\t\t\t" << "Gateway\t\t\t\t\t" << "Interface\t" <<  "Destination Network" << std::endl;
 
-    nbRoutes = routing->GetNRoutes();
+    nbRoutes = routing->GetNRoutes ();
     for (uint32_t i = 0; i < nbRoutes; i++)
     {
-      route = routing->GetRoute(i);
-      std::cout << route.GetDest() << "\t"
-                << route.GetGateway() << "\t"
-                << route.GetInterface() << "\t"
-                << route.GetDestNetwork() << "\t"
-                << route.GetDestNetworkMask() << "\t"
+      route = routing->GetRoute (i);
+      std::cout << route.GetDest () << "\t"
+                << route.GetGateway () << "\t"
+                << route.GetInterface () << "\t"
+                << route.GetDestNetwork () << "\t"
+                << route.GetDestNetworkMask () << "\t"
                 << std::endl;
     }
   }
@@ -472,26 +459,23 @@ void PrintRoutingTable(Ptr<Node> &n, bool v4)
   {
     Ptr<Ipv6StaticRouting> routing = 0;
     Ipv6StaticRoutingHelper routingHelper;
-    Ptr<Ipv6> ipv6 = n->GetObject<Ipv6>();
+    Ptr<Ipv6> ipv6 = n->GetObject<Ipv6> ();
     uint32_t nbRoutes = 0;
     Ipv6RoutingTableEntry route;
 
-    routing = routingHelper.GetStaticRouting(ipv6);
+    routing = routingHelper.GetStaticRouting (ipv6);
 
     std::cout << "Routing table of " << Names::FindName(n) << " : " << std::endl;
-    std::cout << "Destination\t\t\t\t"
-              << "Gateway\t\t\t\t\t"
-              << "Interface\t"
-              << "Prefix to use" << std::endl;
+    std::cout << "Destination\t\t\t\t" << "Gateway\t\t\t\t\t" << "Interface\t" <<  "Prefix to use" << std::endl;
 
-    nbRoutes = routing->GetNRoutes();
+    nbRoutes = routing->GetNRoutes ();
     for (uint32_t i = 0; i < nbRoutes; i++)
     {
-      route = routing->GetRoute(i);
-      std::cout << route.GetDest() << "\t"
-                << route.GetGateway() << "\t"
-                << route.GetInterface() << "\t"
-                << route.GetPrefixToUse() << "\t"
+      route = routing->GetRoute (i);
+      std::cout << route.GetDest () << "\t"
+                << route.GetGateway () << "\t"
+                << route.GetInterface () << "\t"
+                << route.GetPrefixToUse () << "\t"
                 << std::endl;
     }
   }
