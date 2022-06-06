@@ -37,11 +37,16 @@ fig, axs = plt.subplots(len(df_sets))
 fig.set_size_inches(11, 18.5)
 plt.subplots_adjust(left=None, bottom=None, right=None, top=None, wspace=None, hspace=None)
 plt.xlabel('Time (ms)')
-for i in range(len(df_sets)):
-    axs[i].set_title(df_names[i])
-    axs[i].plot(df_sets[i]['t'], df_sets[i]['v'], '.')
-    axs[i].set_xlim(-5, max_t+5)
-    axs[i].grid(visible=True, which='both', axis='both')
+with open('res_values.txt','w') as outfile:
+    for i in range(len(df_sets)):
+        axs[i].set_title(df_names[i])
+        axs[i].plot(df_sets[i]['t'], df_sets[i]['v'], '.')
+        axs[i].set_xlim(-5, max_t+5)
+        axs[i].grid(visible=True, which='both', axis='both')
+        outfile.write(df_names[i])
+        outfile.write('\n')
+        outfile.write('\n'.join(map(str, df_sets[i]['v'])))
+        outfile.write('\n')
 
 plt.tight_layout()
 fig.savefig('Monitor.png', dpi=100)
