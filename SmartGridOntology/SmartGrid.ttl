@@ -241,12 +241,14 @@
 ###  http://www.semanticweb.org/phoenix/ontologies/2022/0/SmartGrid#MVAsc1
 :MVAsc1 rdf:type owl:DatatypeProperty ;
         rdfs:domain :Generator ;
+        rdfs:range xsd:decimal ;
         <http://www.w3.org/2004/02/skos/core#definition> "1-phase short circuit MVA." .
 
 
 ###  http://www.semanticweb.org/phoenix/ontologies/2022/0/SmartGrid#MVAsc3
 :MVAsc3 rdf:type owl:DatatypeProperty ;
         rdfs:domain :Generator ;
+        rdfs:range xsd:decimal ;
         <http://www.w3.org/2004/02/skos/core#definition> "3-phase short circuit" .
 
 
