@@ -9,7 +9,7 @@
 
 <http://www.semanticweb.org/phoenix/ontologies/2022/0/IEEE13> rdf:type owl:Ontology ;
                                                                owl:imports <http://www.semanticweb.org/phoenix/ontologies/2022/0/SmartGrid> ;
-                                                               rdfs:comment "This will model the IEEE13 TapControl" .
+                                                               rdfs:comment "This will model the IEEE13" .
 
 #################################################################
 #    Annotation properties
