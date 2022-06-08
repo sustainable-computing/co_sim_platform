@@ -578,6 +578,21 @@
 :rmat rdf:type owl:DatatypeProperty .
 
 
+###  http://www.semanticweb.org/phoenix/ontologies/2022/0/SmartGrid#sub
+:sub rdf:type owl:DatatypeProperty ;
+     rdfs:domain :Transformer ;
+     rdfs:range [ rdf:type rdfs:Datatype ;
+                  owl:oneOf [ rdf:type rdf:List ;
+                              rdf:first "n" ;
+                              rdf:rest [ rdf:type rdf:List ;
+                                         rdf:first "y" ;
+                                         rdf:rest rdf:nil
+                                       ]
+                            ]
+                ] ;
+     <http://www.w3.org/2004/02/skos/core#definition> "Designate whether the transformer is to be treated as a substation." .
+
+
 ###  http://www.semanticweb.org/phoenix/ontologies/2022/0/SmartGrid#switch_type
 :switch_type rdf:type owl:DatatypeProperty ;
              rdfs:domain :Line .
@@ -594,6 +609,18 @@
 ###  http://www.semanticweb.org/phoenix/ontologies/2022/0/SmartGrid#unit
 :unit rdf:type owl:DatatypeProperty ;
       <http://www.w3.org/2004/02/skos/core#definition> "The unit of measurement the equipment processes on." .
+
+
+###  http://www.semanticweb.org/phoenix/ontologies/2022/0/SmartGrid#vmaxpu
+:vmaxpu rdf:type owl:DatatypeProperty ;
+        rdfs:range xsd:decimal ;
+        <http://www.w3.org/2004/02/skos/core#definition> "The maximum per unit voltage for which the model is assumed to apply." .
+
+
+###  http://www.semanticweb.org/phoenix/ontologies/2022/0/SmartGrid#vminpu
+:vminpu rdf:type owl:DatatypeProperty ;
+        rdfs:range xsd:decimal ;
+        <http://www.w3.org/2004/02/skos/core#definition> "The minium per unit voltage for which the model is assumed to apply" .
 
 
 ###  http://www.semanticweb.org/phoenix/ontologies/2022/0/SmartGrid#vreg
