@@ -137,7 +137,7 @@ with open('../models/IEEE33.ttl', "w+") as outfile:
 :Transformer_{name} rdf:type owl:NamedIndividual ,
                              SmartGrid:Transformer ;
                     SmartGrid:primaryAttachsTo :Bus_{bus1} ;
-                    SmartGrid:atachsTo :Bus_{bus2} ;
+                    SmartGrid:attachsTo :Bus_{bus2} ;
                     SmartGrid:connection_primary "{conn_primary}" ;
                     SmartGrid:connection_secondary "{conn_secondary}" ;
                     SmartGrid:kV_primary {kv_primary} ;
@@ -211,5 +211,5 @@ with open('../models/IEEE33.ttl', "w+") as outfile:
             # end with a .
             bus_instance += ".\n"
         bus_instance += "\n\n"
-        
+
         outfile.write(bus_instance)
