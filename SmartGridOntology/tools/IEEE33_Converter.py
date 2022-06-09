@@ -8,7 +8,7 @@ buses = {}
 coord = {}
 bus_idx = []
 
-with open('./IEEE33.ttl', "w+") as outfile:
+with open('../models/IEEE33.ttl', "w+") as outfile:
 
     # Write out the prefix, headers, and annotated properties
     prefix_info = """
@@ -61,24 +61,6 @@ with open('./IEEE33.ttl', "w+") as outfile:
                 buses[src_node]['connectsTo'].add(dst_node)
                 buses[dst_node]['connectsTo'].add(src_node)    
 
-    # Write out the buses
-    for bus, value in buses.items():
-        bus_instance = """
-:Bus_{name} rdf:type owl:NamedIndividual ,
-                     SmartGrid:Bus ;
-            SmartGrid:locatedAt :{bus_coord} """.format(name=bus, bus_coord=value['locatedAt'])
-        # If there are any connectsTo relations for the node/bus then we write it out
-        if len(buses[bus]['connectsTo']) > 0:
-            bus_instance += """;
-            SmartGrid:connectsTo """
-            for connection in buses[bus]['connectsTo']:
-                bus_instance += """:Bus_{} ,\n""".format(connection)
-            bus_instance = bus_instance[:-2] + '.'
-        else:
-            # end with a .
-            bus_instance += ".\n"
-        bus_instance += "\n\n"
-        outfile.write(bus_instance)
 
     # Write out the coordinates
     for coord, value in coord.items():
@@ -90,6 +72,7 @@ with open('./IEEE33.ttl', "w+") as outfile:
 
 """.format(name=coord, x=value['x'], y=value['y'])
         outfile.write(coord_instance)
+
     # Write out the line data
     with open('../../SmartGridMain/IEEE33/lineData33Full.dss') as linefile:
         for line in linefile.readlines():
@@ -101,8 +84,17 @@ with open('./IEEE33.ttl', "w+") as outfile:
             bus2 = items[3].split('=')[1]
             r1 = items[4].split('=')[1]
             x1 = items[5].split('=')[1]
-
-
+            
+            # Check if bus1 and bus2 is the dict of buses
+            if bus1 not in buses.keys():
+                buses[bus1] = {
+                    'connectsTo': set()
+                }
+            if bus2 not in buses.keys():
+                buses[bus2] = {
+                    'connectsTo': set()
+                }
+    
             line_instance = """
 :Line_{name} rdf:type owl:NamedIndividual ,
                     SmartGrid:Line ;
@@ -130,8 +122,17 @@ with open('./IEEE33.ttl', "w+") as outfile:
             kva = items[8].split('[')[1]
             xhl = items[10].split('=')[1]
             sub = items[11].split('=')[1]
-            
-            # TODO: add sub to the ontology
+
+            # Check if bus1 and bus2 is the dict of buses
+            if bus1 not in buses.keys():
+                buses[bus1] = {
+                    'connectsTo': set()
+                }
+            if bus2 not in buses.keys():
+                buses[bus2] = {
+                    'connectsTo': set()
+                }           
+
             transformer_instance = """
 :Transformer_{name} rdf:type owl:NamedIndividual ,
                              SmartGrid:Transformer ;
@@ -166,7 +167,14 @@ with open('./IEEE33.ttl', "w+") as outfile:
             kv = items[6].split('=')[1]
             vminpu = items[7].split('=')[1]
             vmaxpu = items[8].split('=')[1]
-            # TODO: add vminpu and vmaxpu
+            
+
+            # Check if bus1 is the dict of buses
+            if bus1 not in buses.keys():
+                buses[bus1] = {
+                    'connectsTo': set()
+                }
+         
             load_instance = """
 :Load_{name} rdf:type owl:NamedIndividual ,
                       SmartGrid:Load ;
@@ -183,3 +191,25 @@ with open('./IEEE33.ttl', "w+") as outfile:
 """.format(name=name, nodes_secondary=node_secondary, nodes_primary=node_primary, num_phases=num_phases,
            bus1=bus1, kw=kw, kvar=kvar, kv=kv, vminpu=vminpu, vmaxpu=vmaxpu)
             outfile.write(load_instance)
+
+    # Write out the buses
+    # Do this at the end
+    for bus, value in buses.items():
+        bus_instance = """
+:Bus_{name} rdf:type owl:NamedIndividual ,
+                     SmartGrid:Bus ; """.format(name=bus)
+        if "locatedAt" in value.keys():
+            bus_instance += "SmartGrid:locatedAt :{bus_coord} ;\n".format(bus_coord=value['locatedAt'])
+        
+        # If there are any connectsTo relations for the node/bus then we write it out
+        if len(buses[bus]['connectsTo']) > 0:
+            bus_instance += """SmartGrid:connectsTo """
+            for connection in buses[bus]['connectsTo']:
+                bus_instance += """:Bus_{} ,\n""".format(connection)
+            bus_instance = bus_instance[:-2] + '.'
+        else:
+            # end with a .
+            bus_instance += ".\n"
+        bus_instance += "\n\n"
+        
+        outfile.write(bus_instance)
