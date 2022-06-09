@@ -6,10 +6,11 @@ import re
 
 buses = {}
 coord = {}
+bus_idx = []
 
 with open('./IEEE33.ttl', "w+") as outfile:
 
-    # Write out the prefix and headers
+    # Write out the prefix, headers, and annotated properties
     prefix_info = """
 @prefix : <http://www.semanticweb.org/phoenix/ontologies/2022/0/IEEE33#> .
 @prefix owl: <http://www.w3.org/2002/07/owl#> .
@@ -26,29 +27,57 @@ with open('./IEEE33.ttl', "w+") as outfile:
 <http://www.semanticweb.org/phoenix/ontologies/2022/0/IEEE33> rdf:type owl:Ontology ;
                                                                owl:imports <http://www.semanticweb.org/phoenix/ontologies/2022/0/SmartGrid> ;
                                                                rdfs:comment "This will model the IEEE33" .
+
+
+
+#################################################################
+#    Individuals
+#################################################################
 """
     outfile.write(import_info)
 
     with open('../../SmartGridMain/IEEE33/IEEE33_BusXYFull.csv') as bus_coord_file:
         for line in bus_coord_file.readlines():
             items = re.split(',|\n', line)
-            
             coord_name = f"Coord_{items[1]}_{items[2]}"
             coord[coord_name] = {
                 'x': int(items[1]),
                 'y': int(items[2])
             }
             buses[items[0]] = {
-                'locatedAt': coord_name
+                'locatedAt': coord_name,
+                'connectsTo': set()
             }
+            bus_idx.append(items[0])
+
+    with open('../../SmartGridMain/IEEE33/IEEE33_AdjMatrixFull.txt') as adj_mat_file:
+        for idx, row in enumerate(adj_mat_file.readlines()):
+            values = row.split()
+            src_node = bus_idx[idx]
+            # Get all the indices where there is 1 the row
+            dst_idx = [i for i,r in enumerate(values) if r == '1']
+            for col_idx in dst_idx:
+                dst_node = bus_idx[col_idx]
+                buses[src_node]['connectsTo'].add(dst_node)
+                buses[dst_node]['connectsTo'].add(src_node)    
+
     # Write out the buses
     for bus, value in buses.items():
         bus_instance = """
 :Bus_{name} rdf:type owl:NamedIndividual ,
                      SmartGrid:Bus ;
-            SmartGrid:locatedAt :{bus_coord} .
-""".format(name=bus, bus_coord=value['locatedAt'])
-
+            SmartGrid:locatedAt :{bus_coord} """.format(name=bus, bus_coord=value['locatedAt'])
+        # If there are any connectsTo relations for the node/bus then we write it out
+        if len(buses[bus]['connectsTo']) > 0:
+            bus_instance += """;
+            SmartGrid:connectsTo """
+            for connection in buses[bus]['connectsTo']:
+                bus_instance += """:Bus_{} ,\n""".format(connection)
+            bus_instance = bus_instance[:-2] + '.'
+        else:
+            # end with a .
+            bus_instance += ".\n"
+        bus_instance += "\n\n"
         outfile.write(bus_instance)
 
     # Write out the coordinates
@@ -58,6 +87,7 @@ with open('./IEEE33.ttl', "w+") as outfile:
                        SmartGrid:Coordinates ;
               SmartGrid:coord_x {x} ;
               SmartGrid:coord_y {y} .
+
 """.format(name=coord, x=value['x'], y=value['y'])
         outfile.write(coord_instance)
     # Write out the line data
@@ -80,6 +110,7 @@ with open('./IEEE33.ttl', "w+") as outfile:
             SmartGrid:attachsTo :Bus_{bus2} ;
             SmartGrid:x1 {x1} ;
             SmartGrid:r1 {r1} .
+
 """.format(name=name, bus1=bus1, bus2=bus2, r1=r1, x1=x1)
             outfile.write(line_instance)
 
@@ -113,6 +144,7 @@ with open('./IEEE33.ttl', "w+") as outfile:
                     SmartGrid:Kva {kva} ;
                     SmartGrid:XHL {xhl} ;
                     SmartGrid:sub "{sub}" .
+
 """.format(name=name, bus1=bus1, bus2=bus2, conn_primary=conn_primary, conn_secondary=conn_secondary,
            kv_primary=kv_primary, kv_secondary=kv_secondary, kva=kva, xhl=xhl, sub=sub)
 
@@ -147,6 +179,7 @@ with open('./IEEE33.ttl', "w+") as outfile:
              SmartGrid:kV_primary {kv} ;
              SmartGrid:vminpu {vminpu} ;
              SmartGrid:vmaxpu {vmaxpu} .
+
 """.format(name=name, nodes_secondary=node_secondary, nodes_primary=node_primary, num_phases=num_phases,
            bus1=bus1, kw=kw, kvar=kvar, kv=kv, vminpu=vminpu, vmaxpu=vmaxpu)
             outfile.write(load_instance)
