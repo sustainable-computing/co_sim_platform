@@ -254,25 +254,30 @@
 
 ###  http://www.semanticweb.org/phoenix/ontologies/2022/0/SmartGrid#R
 :R rdf:type owl:DatatypeProperty ;
+   rdfs:domain :regcontrol ;
    <http://www.w3.org/2004/02/skos/core#definition> "R setting" .
 
 
 ###  http://www.semanticweb.org/phoenix/ontologies/2022/0/SmartGrid#X
 :X rdf:type owl:DatatypeProperty ;
+   rdfs:domain :regcontrol ;
    <http://www.w3.org/2004/02/skos/core#definition> "X setting" .
 
 
 ###  http://www.semanticweb.org/phoenix/ontologies/2022/0/SmartGrid#XHL
 :XHL rdf:type owl:DatatypeProperty ;
+     rdfs:domain :Transformer ;
      <http://www.w3.org/2004/02/skos/core#definition> "percent leakage from the H-winding to the L-winding or from winding 1 to winding 2" .
 
 
 ###  http://www.semanticweb.org/phoenix/ontologies/2022/0/SmartGrid#XHT
-:XHT rdf:type owl:DatatypeProperty .
+:XHT rdf:type owl:DatatypeProperty ;
+     rdfs:domain :Transformer .
 
 
 ###  http://www.semanticweb.org/phoenix/ontologies/2022/0/SmartGrid#XLT
-:XLT rdf:type owl:DatatypeProperty .
+:XLT rdf:type owl:DatatypeProperty ;
+     rdfs:domain :Transformer .
 
 
 ###  http://www.semanticweb.org/phoenix/ontologies/2022/0/SmartGrid#angle
@@ -541,41 +546,51 @@
 
 ###  http://www.semanticweb.org/phoenix/ontologies/2022/0/SmartGrid#percent_Load_Loss
 :percent_Load_Loss rdf:type owl:DatatypeProperty ;
+                   rdfs:domain :Transformer ;
                    <http://www.w3.org/2004/02/skos/core#definition> "Percent Losses at rated load. Causes the %r values to be set for winding 1 and 2" .
 
 
 ###  http://www.semanticweb.org/phoenix/ontologies/2022/0/SmartGrid#percent_R
 :percent_R rdf:type owl:DatatypeProperty ;
+           rdfs:domain :Transformer ;
            <http://www.w3.org/2004/02/skos/core#definition> "Percent resistance of this equipment on the rated kVA base." .
 
 
 ###  http://www.semanticweb.org/phoenix/ontologies/2022/0/SmartGrid#phase
-:phase rdf:type owl:DatatypeProperty .
+:phase rdf:type owl:DatatypeProperty ;
+       rdfs:domain :Electrical_Equipment .
 
 
 ###  http://www.semanticweb.org/phoenix/ontologies/2022/0/SmartGrid#ptratio
-:ptratio rdf:type owl:DatatypeProperty .
+:ptratio rdf:type owl:DatatypeProperty ;
+         rdfs:domain :regcontrol .
 
 
 ###  http://www.semanticweb.org/phoenix/ontologies/2022/0/SmartGrid#pu
-:pu rdf:type owl:DatatypeProperty .
+:pu rdf:type owl:DatatypeProperty ;
+    rdfs:domain :Generator .
 
 
 ###  http://www.semanticweb.org/phoenix/ontologies/2022/0/SmartGrid#r0
-:r0 rdf:type owl:DatatypeProperty .
+:r0 rdf:type owl:DatatypeProperty ;
+    rdfs:domain :Electrical_Equipment .
 
 
 ###  http://www.semanticweb.org/phoenix/ontologies/2022/0/SmartGrid#r1
-:r1 rdf:type owl:DatatypeProperty .
+:r1 rdf:type owl:DatatypeProperty ;
+    rdfs:domain :Electrical_Equipment .
 
 
 ###  http://www.semanticweb.org/phoenix/ontologies/2022/0/SmartGrid#rate
 :rate rdf:type owl:DatatypeProperty ;
+      rdfs:domain :Network_Devices ;
       <http://www.w3.org/2004/02/skos/core#definition> "The bandwith for the link" .
 
 
 ###  http://www.semanticweb.org/phoenix/ontologies/2022/0/SmartGrid#rmat
-:rmat rdf:type owl:DatatypeProperty .
+:rmat rdf:type owl:DatatypeProperty ;
+      rdfs:domain :Line ,
+                  :LineCode .
 
 
 ###  http://www.semanticweb.org/phoenix/ontologies/2022/0/SmartGrid#sub
@@ -599,45 +614,55 @@
 
 
 ###  http://www.semanticweb.org/phoenix/ontologies/2022/0/SmartGrid#tap_primary
-:tap_primary rdf:type owl:DatatypeProperty .
+:tap_primary rdf:type owl:DatatypeProperty ;
+             rdfs:domain :Transformer .
 
 
 ###  http://www.semanticweb.org/phoenix/ontologies/2022/0/SmartGrid#tap_secondary
-:tap_secondary rdf:type owl:DatatypeProperty .
+:tap_secondary rdf:type owl:DatatypeProperty ;
+               rdfs:domain :Transformer .
 
 
 ###  http://www.semanticweb.org/phoenix/ontologies/2022/0/SmartGrid#unit
 :unit rdf:type owl:DatatypeProperty ;
+      rdfs:domain :Electrical_Equipment ;
       <http://www.w3.org/2004/02/skos/core#definition> "The unit of measurement the equipment processes on." .
 
 
 ###  http://www.semanticweb.org/phoenix/ontologies/2022/0/SmartGrid#vmaxpu
 :vmaxpu rdf:type owl:DatatypeProperty ;
+        rdfs:domain :Load ;
         rdfs:range xsd:decimal ;
         <http://www.w3.org/2004/02/skos/core#definition> "The maximum per unit voltage for which the model is assumed to apply." .
 
 
 ###  http://www.semanticweb.org/phoenix/ontologies/2022/0/SmartGrid#vminpu
 :vminpu rdf:type owl:DatatypeProperty ;
+        rdfs:domain :Load ;
         rdfs:range xsd:decimal ;
         <http://www.w3.org/2004/02/skos/core#definition> "The minium per unit voltage for which the model is assumed to apply" .
 
 
 ###  http://www.semanticweb.org/phoenix/ontologies/2022/0/SmartGrid#vreg
 :vreg rdf:type owl:DatatypeProperty ;
+      rdfs:domain :regcontrol ;
       <http://www.w3.org/2004/02/skos/core#definition> "Voltage regulator settings, in volts, for the winding being controlled. Multiplying this value times the ptratio yield the voltage across the winding of the controlled transformer" .
 
 
 ###  http://www.semanticweb.org/phoenix/ontologies/2022/0/SmartGrid#x0
-:x0 rdf:type owl:DatatypeProperty .
+:x0 rdf:type owl:DatatypeProperty ;
+    rdfs:domain :Electrical_Equipment .
 
 
 ###  http://www.semanticweb.org/phoenix/ontologies/2022/0/SmartGrid#x1
-:x1 rdf:type owl:DatatypeProperty .
+:x1 rdf:type owl:DatatypeProperty ;
+    rdfs:domain :Electrical_Equipment .
 
 
 ###  http://www.semanticweb.org/phoenix/ontologies/2022/0/SmartGrid#xmat
-:xmat rdf:type owl:DatatypeProperty .
+:xmat rdf:type owl:DatatypeProperty ;
+      rdfs:domain :Line ,
+                  :LineCode .
 
 
 #################################################################

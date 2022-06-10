@@ -517,8 +517,8 @@ class SmartGridGraph:
         WHERE {
             ?entity rdf:type ?type .
             ?type rdfs:subClassOf* SmartGrid:Controller .
-            ?entity SmartGrid:connectsTo ?connnects_to .
-            ?connnects_to SmartGrid:locatedAt ?bus .
+            ?entity SmartGrid:connectsTo ?connects_to .
+            ?connects_to SmartGrid:locatedAt ?bus .
         }    
         """
         res = self.g.query(query_str)

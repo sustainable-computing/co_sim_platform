@@ -64,8 +64,11 @@ def main():
     graph.query_nodes()
 
     controllers = [str(controller) for controller in graph.query_controllers()]
+    print(controllers)
     sensors = graph.query_sensors()
+    print(sensors)
     actuators = graph.query_actuators()
+    print(actuators)
     with open(device_filename, 'w') as csv_file:
         fieldnames = ['type','src','dst','cidx','didx','period','error','cktElement','cktTerminal','cktPhase','cktProperty']
         writer = csv.DictWriter(csv_file, fieldnames=fieldnames)

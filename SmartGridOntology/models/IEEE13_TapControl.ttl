@@ -12,276 +12,32 @@
                                                                rdfs:comment "This will model the IEEE13 TapControl" .
 
 #################################################################
-#    Annotation properties
-#################################################################
-
-###  http://www.semanticweb.org/phoenix/ontologies/2022/0/SmartGrid#Kva
-SmartGrid:Kva rdf:type owl:AnnotationProperty .
-
-
-###  http://www.semanticweb.org/phoenix/ontologies/2022/0/SmartGrid#MVAsc1
-SmartGrid:MVAsc1 rdf:type owl:AnnotationProperty .
-
-
-###  http://www.semanticweb.org/phoenix/ontologies/2022/0/SmartGrid#MVAsc3
-SmartGrid:MVAsc3 rdf:type owl:AnnotationProperty .
-
-
-###  http://www.semanticweb.org/phoenix/ontologies/2022/0/SmartGrid#R
-SmartGrid:R rdf:type owl:AnnotationProperty .
-
-
-###  http://www.semanticweb.org/phoenix/ontologies/2022/0/SmartGrid#X
-SmartGrid:X rdf:type owl:AnnotationProperty .
-
-
-###  http://www.semanticweb.org/phoenix/ontologies/2022/0/SmartGrid#XHL
-SmartGrid:XHL rdf:type owl:AnnotationProperty .
-
-
-###  http://www.semanticweb.org/phoenix/ontologies/2022/0/SmartGrid#XHT
-SmartGrid:XHT rdf:type owl:AnnotationProperty .
-
-
-###  http://www.semanticweb.org/phoenix/ontologies/2022/0/SmartGrid#XLT
-SmartGrid:XLT rdf:type owl:AnnotationProperty .
-
-
-###  http://www.semanticweb.org/phoenix/ontologies/2022/0/SmartGrid#angle
-SmartGrid:angle rdf:type owl:AnnotationProperty .
-
-
-###  http://www.semanticweb.org/phoenix/ontologies/2022/0/SmartGrid#attachsTo
-SmartGrid:attachsTo rdf:type owl:AnnotationProperty .
-
-
-###  http://www.semanticweb.org/phoenix/ontologies/2022/0/SmartGrid#band
-SmartGrid:band rdf:type owl:AnnotationProperty .
-
-
-###  http://www.semanticweb.org/phoenix/ontologies/2022/0/SmartGrid#bank
-SmartGrid:bank rdf:type owl:AnnotationProperty .
-
-
-###  http://www.semanticweb.org/phoenix/ontologies/2022/0/SmartGrid#bus_terminal
-SmartGrid:bus_terminal rdf:type owl:AnnotationProperty .
-
-
-###  http://www.semanticweb.org/phoenix/ontologies/2022/0/SmartGrid#c0
-SmartGrid:c0 rdf:type owl:AnnotationProperty .
-
-
-###  http://www.semanticweb.org/phoenix/ontologies/2022/0/SmartGrid#c1
-SmartGrid:c1 rdf:type owl:AnnotationProperty .
-
-
-###  http://www.semanticweb.org/phoenix/ontologies/2022/0/SmartGrid#cmat
-SmartGrid:cmat rdf:type owl:AnnotationProperty .
-
-
-###  http://www.semanticweb.org/phoenix/ontologies/2022/0/SmartGrid#connection_primary
-SmartGrid:connection_primary rdf:type owl:AnnotationProperty .
-
-
-###  http://www.semanticweb.org/phoenix/ontologies/2022/0/SmartGrid#connection_secondary
-SmartGrid:connection_secondary rdf:type owl:AnnotationProperty .
-
-
-###  http://www.semanticweb.org/phoenix/ontologies/2022/0/SmartGrid#connectsTo
-SmartGrid:connectsTo rdf:type owl:AnnotationProperty .
-
-
-###  http://www.semanticweb.org/phoenix/ontologies/2022/0/SmartGrid#controls
-SmartGrid:controls rdf:type owl:AnnotationProperty .
-
-
-###  http://www.semanticweb.org/phoenix/ontologies/2022/0/SmartGrid#coord_x
-SmartGrid:coord_x rdf:type owl:AnnotationProperty .
-
-
-###  http://www.semanticweb.org/phoenix/ontologies/2022/0/SmartGrid#coord_y
-SmartGrid:coord_y rdf:type owl:AnnotationProperty .
-
-
-###  http://www.semanticweb.org/phoenix/ontologies/2022/0/SmartGrid#ctprim
-SmartGrid:ctprim rdf:type owl:AnnotationProperty .
-
-
-###  http://www.semanticweb.org/phoenix/ontologies/2022/0/SmartGrid#delay
-SmartGrid:delay rdf:type owl:AnnotationProperty .
-
-
-###  http://www.semanticweb.org/phoenix/ontologies/2022/0/SmartGrid#feeds
-SmartGrid:feeds rdf:type owl:AnnotationProperty .
-
-
-###  http://www.semanticweb.org/phoenix/ontologies/2022/0/SmartGrid#freq
-SmartGrid:freq rdf:type owl:AnnotationProperty .
-
-
-###  http://www.semanticweb.org/phoenix/ontologies/2022/0/SmartGrid#isFedBy
-SmartGrid:isFedBy rdf:type owl:AnnotationProperty .
-
-
-###  http://www.semanticweb.org/phoenix/ontologies/2022/0/SmartGrid#kV_primary
-SmartGrid:kV_primary rdf:type owl:AnnotationProperty .
-
-
-###  http://www.semanticweb.org/phoenix/ontologies/2022/0/SmartGrid#kV_secondary
-SmartGrid:kV_secondary rdf:type owl:AnnotationProperty .
-
-
-###  http://www.semanticweb.org/phoenix/ontologies/2022/0/SmartGrid#kW
-SmartGrid:kW rdf:type owl:AnnotationProperty .
-
-
-###  http://www.semanticweb.org/phoenix/ontologies/2022/0/SmartGrid#kvar
-SmartGrid:kvar rdf:type owl:AnnotationProperty .
-
-
-###  http://www.semanticweb.org/phoenix/ontologies/2022/0/SmartGrid#length
-SmartGrid:length rdf:type owl:AnnotationProperty .
-
-
-###  http://www.semanticweb.org/phoenix/ontologies/2022/0/SmartGrid#locatedAt
-SmartGrid:locatedAt rdf:type owl:AnnotationProperty .
-
-
-###  http://www.semanticweb.org/phoenix/ontologies/2022/0/SmartGrid#max_tap
-SmartGrid:max_tap rdf:type owl:AnnotationProperty .
-
-
-###  http://www.semanticweb.org/phoenix/ontologies/2022/0/SmartGrid#measures
-SmartGrid:measures rdf:type owl:AnnotationProperty .
-
-
-###  http://www.semanticweb.org/phoenix/ontologies/2022/0/SmartGrid#min_tap
-SmartGrid:min_tap rdf:type owl:AnnotationProperty .
-
-
-###  http://www.semanticweb.org/phoenix/ontologies/2022/0/SmartGrid#model
-SmartGrid:model rdf:type owl:AnnotationProperty .
-
-
-###  http://www.semanticweb.org/phoenix/ontologies/2022/0/SmartGrid#monitor
-SmartGrid:monitor rdf:type owl:AnnotationProperty .
-
-
-###  http://www.semanticweb.org/phoenix/ontologies/2022/0/SmartGrid#nodes_primary
-SmartGrid:nodes_primary rdf:type owl:AnnotationProperty .
-
-
-###  http://www.semanticweb.org/phoenix/ontologies/2022/0/SmartGrid#nodes_secondary
-SmartGrid:nodes_secondary rdf:type owl:AnnotationProperty .
-
-
-###  http://www.semanticweb.org/phoenix/ontologies/2022/0/SmartGrid#normal_state
-SmartGrid:normal_state rdf:type owl:AnnotationProperty .
-
-
-###  http://www.semanticweb.org/phoenix/ontologies/2022/0/SmartGrid#num_phases
-SmartGrid:num_phases rdf:type owl:AnnotationProperty .
-
-
-###  http://www.semanticweb.org/phoenix/ontologies/2022/0/SmartGrid#num_taps
-SmartGrid:num_taps rdf:type owl:AnnotationProperty .
-
-
-###  http://www.semanticweb.org/phoenix/ontologies/2022/0/SmartGrid#percent_Load_Loss
-SmartGrid:percent_Load_Loss rdf:type owl:AnnotationProperty .
-
-
-###  http://www.semanticweb.org/phoenix/ontologies/2022/0/SmartGrid#percent_R
-SmartGrid:percent_R rdf:type owl:AnnotationProperty .
-
-
-###  http://www.semanticweb.org/phoenix/ontologies/2022/0/SmartGrid#phase
-SmartGrid:phase rdf:type owl:AnnotationProperty .
-
-
-###  http://www.semanticweb.org/phoenix/ontologies/2022/0/SmartGrid#primaryAttachsTo
-SmartGrid:primaryAttachsTo rdf:type owl:AnnotationProperty .
-
-
-###  http://www.semanticweb.org/phoenix/ontologies/2022/0/SmartGrid#ptratio
-SmartGrid:ptratio rdf:type owl:AnnotationProperty .
-
-
-###  http://www.semanticweb.org/phoenix/ontologies/2022/0/SmartGrid#pu
-SmartGrid:pu rdf:type owl:AnnotationProperty .
-
-
-###  http://www.semanticweb.org/phoenix/ontologies/2022/0/SmartGrid#r0
-SmartGrid:r0 rdf:type owl:AnnotationProperty .
-
-
-###  http://www.semanticweb.org/phoenix/ontologies/2022/0/SmartGrid#r1
-SmartGrid:r1 rdf:type owl:AnnotationProperty .
-
-
-###  http://www.semanticweb.org/phoenix/ontologies/2022/0/SmartGrid#rate
-SmartGrid:rate rdf:type owl:AnnotationProperty .
-
-
-###  http://www.semanticweb.org/phoenix/ontologies/2022/0/SmartGrid#rmat
-SmartGrid:rmat rdf:type owl:AnnotationProperty .
-
-
-###  http://www.semanticweb.org/phoenix/ontologies/2022/0/SmartGrid#tap_primary
-SmartGrid:tap_primary rdf:type owl:AnnotationProperty .
-
-
-###  http://www.semanticweb.org/phoenix/ontologies/2022/0/SmartGrid#tap_secondary
-SmartGrid:tap_secondary rdf:type owl:AnnotationProperty .
-
-
-###  http://www.semanticweb.org/phoenix/ontologies/2022/0/SmartGrid#unit
-SmartGrid:unit rdf:type owl:AnnotationProperty .
-
-
-###  http://www.semanticweb.org/phoenix/ontologies/2022/0/SmartGrid#vreg
-SmartGrid:vreg rdf:type owl:AnnotationProperty .
-
-
-###  http://www.semanticweb.org/phoenix/ontologies/2022/0/SmartGrid#x0
-SmartGrid:x0 rdf:type owl:AnnotationProperty .
-
-
-###  http://www.semanticweb.org/phoenix/ontologies/2022/0/SmartGrid#x1
-SmartGrid:x1 rdf:type owl:AnnotationProperty .
-
-
-###  http://www.semanticweb.org/phoenix/ontologies/2022/0/SmartGrid#xmat
-SmartGrid:xmat rdf:type owl:AnnotationProperty .
-
-
-#################################################################
 #    Classes
 #################################################################
 
-###  http://www.semanticweb.org/phoenix/ontologies/2022/0/SmartGrid#Bluetooth
-SmartGrid:Bluetooth rdf:type owl:Class ;
-                    rdfs:subClassOf SmartGrid:Transporter .
+###  http://www.semanticweb.org/phoenix/ontologies/2022/0/IEEE13#Bluetooth
+:Bluetooth rdf:type owl:Class ;
+           rdfs:subClassOf SmartGrid:Transporter .
 
 
-###  http://www.semanticweb.org/phoenix/ontologies/2022/0/SmartGrid#Ethernet
-SmartGrid:Ethernet rdf:type owl:Class ;
-                   rdfs:subClassOf SmartGrid:Transporter .
+###  http://www.semanticweb.org/phoenix/ontologies/2022/0/IEEE13#Ethernet
+:Ethernet rdf:type owl:Class ;
+          rdfs:subClassOf SmartGrid:Transporter .
 
 
-###  http://www.semanticweb.org/phoenix/ontologies/2022/0/SmartGrid#Voltage_Controller
-SmartGrid:Voltage_Controller rdf:type owl:Class ;
-                             rdfs:subClassOf SmartGrid:Controller .
+###  http://www.semanticweb.org/phoenix/ontologies/2022/0/IEEE13#Voltage_Controller
+:Voltage_Controller rdf:type owl:Class ;
+                    rdfs:subClassOf SmartGrid:Controller .
 
 
-###  http://www.semanticweb.org/phoenix/ontologies/2022/0/SmartGrid#Voltage_Sensor
-SmartGrid:Voltage_Sensor rdf:type owl:Class ;
-                         rdfs:subClassOf SmartGrid:Sensor .
+###  http://www.semanticweb.org/phoenix/ontologies/2022/0/IEEE13#Voltage_Sensor
+:Voltage_Sensor rdf:type owl:Class ;
+                rdfs:subClassOf SmartGrid:Sensor .
 
 
-###  http://www.semanticweb.org/phoenix/ontologies/2022/0/SmartGrid#WiFi
-SmartGrid:WiFi rdf:type owl:Class ;
-               rdfs:subClassOf SmartGrid:Transporter .
+###  http://www.semanticweb.org/phoenix/ontologies/2022/0/IEEE13#WiFi
+:WiFi rdf:type owl:Class ;
+      rdfs:subClassOf SmartGrid:Transporter .
 
 
 #################################################################
@@ -290,7 +46,7 @@ SmartGrid:WiFi rdf:type owl:Class ;
 
 ###  http://www.semanticweb.org/phoenix/ontologies/2022/0/IEEE13#Bluetooth_1
 :Bluetooth_1 rdf:type owl:NamedIndividual ,
-                      SmartGrid:Bluetooth .
+                      :Bluetooth .
 
 
 ###  http://www.semanticweb.org/phoenix/ontologies/2022/0/IEEE13#Bus_611
@@ -422,20 +178,20 @@ SmartGrid:WiFi rdf:type owl:Class ;
 ###  http://www.semanticweb.org/phoenix/ontologies/2022/0/IEEE13#Capacitor_Cap1
 :Capacitor_Cap1 rdf:type owl:NamedIndividual ,
                          SmartGrid:Capacitor ;
+                SmartGrid:primaryAttachsTo :Bus_675 ;
                 SmartGrid:kV_primary 4.16 ;
                 SmartGrid:kvar 600 ;
-                SmartGrid:num_phases 3 ;
-                SmartGrid:primaryAttachsTo :Bus_675 .
+                SmartGrid:num_phases 3 .
 
 
 ###  http://www.semanticweb.org/phoenix/ontologies/2022/0/IEEE13#Capacitor_Cap2
 :Capacitor_Cap2 rdf:type owl:NamedIndividual ,
                          SmartGrid:Capacitor ;
+                SmartGrid:primaryAttachsTo :Bus_611 ;
                 SmartGrid:kV_primary 2.4 ;
                 SmartGrid:kvar 100 ;
                 SmartGrid:nodes_primary 3 ;
-                SmartGrid:num_phases 1 ;
-                SmartGrid:primaryAttachsTo :Bus_611 .
+                SmartGrid:num_phases 1 .
 
 
 ###  http://www.semanticweb.org/phoenix/ontologies/2022/0/IEEE13#Coord_0_100
@@ -552,18 +308,18 @@ SmartGrid:WiFi rdf:type owl:Class ;
 
 ###  http://www.semanticweb.org/phoenix/ontologies/2022/0/IEEE13#Ethernet_1
 :Ethernet_1 rdf:type owl:NamedIndividual ,
-                     SmartGrid:Ethernet .
+                     :Ethernet .
 
 
 ###  http://www.semanticweb.org/phoenix/ontologies/2022/0/IEEE13#Generator_IEEE13Nodeckt
 :Generator_IEEE13Nodeckt rdf:type owl:NamedIndividual ,
                                   SmartGrid:Generator ;
+                         SmartGrid:primaryAttachsTo :Bus_SourceBus ;
                          SmartGrid:MVAsc1 21000 ;
                          SmartGrid:MVAsc3 20000 ;
                          SmartGrid:angle 30 ;
                          SmartGrid:kV_secondary 115 ;
                          SmartGrid:num_phases 3 ;
-                         SmartGrid:primaryAttachsTo :Bus_SourceBus ;
                          SmartGrid:pu 1.0001 .
 
 
@@ -642,149 +398,150 @@ SmartGrid:WiFi rdf:type owl:Class ;
 ###  http://www.semanticweb.org/phoenix/ontologies/2022/0/IEEE13#Line_632633
 :Line_632633 rdf:type owl:NamedIndividual ,
                       SmartGrid:Line ;
-             SmartGrid:LineCode :LineCode_mtx602 ;
              SmartGrid:attachsTo :Bus_633 ;
+             SmartGrid:primaryAttachsTo :Bus_632 ;
              SmartGrid:length 500 ;
              SmartGrid:nodes_primary "1 2 3" ;
              SmartGrid:nodes_secondary "1 2 3" ;
              SmartGrid:num_phases 3 ;
-             SmartGrid:primaryAttachsTo :Bus_632 ;
-             SmartGrid:unit "ft" .
+             SmartGrid:unit "ft" ;
+             SmartGrid:LineCode :LineCode_mtx602 .
 
 
 ###  http://www.semanticweb.org/phoenix/ontologies/2022/0/IEEE13#Line_632645
 :Line_632645 rdf:type owl:NamedIndividual ,
                       SmartGrid:Line ;
-             SmartGrid:LineCode :LineCode_mtx603 ;
              SmartGrid:attachsTo :Bus_645 ;
+             SmartGrid:primaryAttachsTo :Bus_632 ;
              SmartGrid:length 500 ;
              SmartGrid:nodes_primary "3 2" ;
              SmartGrid:nodes_secondary "3 2" ;
              SmartGrid:num_phases 2 ;
-             SmartGrid:primaryAttachsTo :Bus_632 ;
-             SmartGrid:unit "ft" .
+             SmartGrid:unit "ft" ;
+             SmartGrid:LineCode :LineCode_mtx603 .
 
 
 ###  http://www.semanticweb.org/phoenix/ontologies/2022/0/IEEE13#Line_632670
 :Line_632670 rdf:type owl:NamedIndividual ,
                       SmartGrid:Line ;
-             SmartGrid:LineCode :LineCode_mtx601 ;
              SmartGrid:attachsTo :Bus_670 ;
+             SmartGrid:primaryAttachsTo :Bus_632 ;
              SmartGrid:length 667 ;
              SmartGrid:nodes_primary "1 2 3" ;
              SmartGrid:nodes_secondary "1 2 3" ;
              SmartGrid:num_phases 3 ;
-             SmartGrid:primaryAttachsTo :Bus_632 ;
-             SmartGrid:unit "ft" .
+             SmartGrid:unit "ft" ;
+             SmartGrid:LineCode :LineCode_mtx601 .
 
 
 ###  http://www.semanticweb.org/phoenix/ontologies/2022/0/IEEE13#Line_645646
 :Line_645646 rdf:type owl:NamedIndividual ,
                       SmartGrid:Line ;
-             SmartGrid:LineCode :LineCode_mtx603 ;
              SmartGrid:attachsTo :Bus_646 ;
+             SmartGrid:primaryAttachsTo :Bus_645 ;
              SmartGrid:length 300 ;
              SmartGrid:nodes_primary "3 2" ;
              SmartGrid:nodes_secondary "3 2" ;
              SmartGrid:num_phases 2 ;
-             SmartGrid:primaryAttachsTo :Bus_645 ;
-             SmartGrid:unit "ft" .
+             SmartGrid:unit "ft" ;
+             SmartGrid:LineCode :LineCode_mtx603 .
 
 
 ###  http://www.semanticweb.org/phoenix/ontologies/2022/0/IEEE13#Line_650632
 :Line_650632 rdf:type owl:NamedIndividual ,
                       SmartGrid:Line ;
-             SmartGrid:LineCode :LineCode_mtx601 ;
              SmartGrid:attachsTo :Bus_632 ;
+             SmartGrid:primaryAttachsTo :Bus_RG60 ;
              SmartGrid:length 2000 ;
              SmartGrid:nodes_primary "1 2 3" ;
              SmartGrid:nodes_secondary "1 2 3" ;
              SmartGrid:num_phases 3 ;
-             SmartGrid:primaryAttachsTo :Bus_RG60 ;
-             SmartGrid:unit "ft" .
+             SmartGrid:unit "ft" ;
+             SmartGrid:LineCode :LineCode_mtx601 .
 
 
 ###  http://www.semanticweb.org/phoenix/ontologies/2022/0/IEEE13#Line_670671
 :Line_670671 rdf:type owl:NamedIndividual ,
                       SmartGrid:Line ;
-             SmartGrid:LineCode :LineCode_mtx601 ;
              SmartGrid:attachsTo :Bus_671 ;
+             SmartGrid:primaryAttachsTo :Bus_670 ;
              SmartGrid:length 1333 ;
              SmartGrid:nodes_primary "1 2 3" ;
              SmartGrid:nodes_secondary "1 2 3" ;
              SmartGrid:num_phases 3 ;
-             SmartGrid:primaryAttachsTo :Bus_670 ;
-             SmartGrid:unit "ft" .
+             SmartGrid:unit "ft" ;
+             SmartGrid:LineCode :LineCode_mtx601 .
 
 
 ###  http://www.semanticweb.org/phoenix/ontologies/2022/0/IEEE13#Line_671680
 :Line_671680 rdf:type owl:NamedIndividual ,
                       SmartGrid:Line ;
-             SmartGrid:LineCode :LineCode_mtx601 ;
              SmartGrid:attachsTo :Bus_680 ;
+             SmartGrid:primaryAttachsTo :Bus_671 ;
              SmartGrid:length 1000 ;
              SmartGrid:nodes_primary "1 2 3" ;
              SmartGrid:nodes_secondary "1 2 3" ;
              SmartGrid:num_phases 3 ;
-             SmartGrid:primaryAttachsTo :Bus_671 ;
-             SmartGrid:unit "ft" .
+             SmartGrid:unit "ft" ;
+             SmartGrid:LineCode :LineCode_mtx601 .
 
 
 ###  http://www.semanticweb.org/phoenix/ontologies/2022/0/IEEE13#Line_671684
 :Line_671684 rdf:type owl:NamedIndividual ,
                       SmartGrid:Line ;
-             SmartGrid:LineCode :LineCode_mtx604 ;
              SmartGrid:attachsTo :Bus_684 ;
+             SmartGrid:primaryAttachsTo :Bus_671 ;
              SmartGrid:length 300 ;
              SmartGrid:nodes_primary "1 3" ;
              SmartGrid:nodes_secondary "1 3" ;
              SmartGrid:num_phases 2 ;
-             SmartGrid:primaryAttachsTo :Bus_671 ;
-             SmartGrid:unit "ft" .
+             SmartGrid:unit "ft" ;
+             SmartGrid:LineCode :LineCode_mtx604 .
 
 
 ###  http://www.semanticweb.org/phoenix/ontologies/2022/0/IEEE13#Line_684611
 :Line_684611 rdf:type owl:NamedIndividual ,
                       SmartGrid:Line ;
-             SmartGrid:LineCode :LineCode_mtx605 ;
              SmartGrid:attachsTo :Bus_611 ;
+             SmartGrid:primaryAttachsTo :Bus_684 ;
              SmartGrid:length 300 ;
              SmartGrid:nodes_primary 3 ;
              SmartGrid:nodes_secondary 3 ;
              SmartGrid:num_phases 1 ;
-             SmartGrid:primaryAttachsTo :Bus_684 ;
-             SmartGrid:unit "ft" .
+             SmartGrid:unit "ft" ;
+             SmartGrid:LineCode :LineCode_mtx605 .
 
 
 ###  http://www.semanticweb.org/phoenix/ontologies/2022/0/IEEE13#Line_684652
 :Line_684652 rdf:type owl:NamedIndividual ,
                       SmartGrid:Line ;
-             SmartGrid:LineCode :LineCode_mtx607 ;
              SmartGrid:attachsTo :Bus_652 ;
+             SmartGrid:primaryAttachsTo :Bus_684 ;
              SmartGrid:length 800 ;
              SmartGrid:nodes_primary 1 ;
              SmartGrid:nodes_secondary 1 ;
              SmartGrid:num_phases 1 ;
-             SmartGrid:primaryAttachsTo :Bus_684 ;
-             SmartGrid:unit "ft" .
+             SmartGrid:unit "ft" ;
+             SmartGrid:LineCode :LineCode_mtx607 .
 
 
 ###  http://www.semanticweb.org/phoenix/ontologies/2022/0/IEEE13#Line_692675
 :Line_692675 rdf:type owl:NamedIndividual ,
                       SmartGrid:Line ;
-             SmartGrid:LineCode :LineCode_mtx606 ;
              SmartGrid:attachsTo :Bus_675 ;
+             SmartGrid:primaryAttachsTo :Bus_692 ;
              SmartGrid:length 500 ;
              SmartGrid:nodes_primary "1 2 3" ;
              SmartGrid:nodes_secondary "1 2 3" ;
              SmartGrid:num_phases 3 ;
-             SmartGrid:primaryAttachsTo :Bus_692 ;
-             SmartGrid:unit "ft" .
+             SmartGrid:unit "ft" ;
+             SmartGrid:LineCode :LineCode_mtx606 .
 
 
 ###  http://www.semanticweb.org/phoenix/ontologies/2022/0/IEEE13#Load_611_3
 :Load_611_3 rdf:type owl:NamedIndividual ,
                      SmartGrid:Load ;
+            SmartGrid:primaryAttachsTo :Bus_611 ;
             SmartGrid:connection_primary "Wye" ;
             SmartGrid:kV_primary 2.4 ;
             SmartGrid:kW 170 ;
@@ -792,13 +549,13 @@ SmartGrid:WiFi rdf:type owl:Class ;
             SmartGrid:model 5 ;
             SmartGrid:nodes_primary "3" ;
             SmartGrid:nodes_secondary "3" ;
-            SmartGrid:num_phases 1 ;
-            SmartGrid:primaryAttachsTo :Bus_611 .
+            SmartGrid:num_phases 1 .
 
 
 ###  http://www.semanticweb.org/phoenix/ontologies/2022/0/IEEE13#Load_634_1
 :Load_634_1 rdf:type owl:NamedIndividual ,
                      SmartGrid:Load ;
+            SmartGrid:primaryAttachsTo :Bus_634 ;
             SmartGrid:connection_primary "Wye" ;
             SmartGrid:kV_primary 0.277 ;
             SmartGrid:kW 160 ;
@@ -806,13 +563,13 @@ SmartGrid:WiFi rdf:type owl:Class ;
             SmartGrid:model 1 ;
             SmartGrid:nodes_primary "1" ;
             SmartGrid:nodes_secondary "1" ;
-            SmartGrid:num_phases 1 ;
-            SmartGrid:primaryAttachsTo :Bus_634 .
+            SmartGrid:num_phases 1 .
 
 
 ###  http://www.semanticweb.org/phoenix/ontologies/2022/0/IEEE13#Load_634_2
 :Load_634_2 rdf:type owl:NamedIndividual ,
                      SmartGrid:Load ;
+            SmartGrid:primaryAttachsTo :Bus_634 ;
             SmartGrid:connection_primary "Wye" ;
             SmartGrid:kV_primary 0.277 ;
             SmartGrid:kW 120 ;
@@ -820,13 +577,13 @@ SmartGrid:WiFi rdf:type owl:Class ;
             SmartGrid:model 1 ;
             SmartGrid:nodes_primary "2" ;
             SmartGrid:nodes_secondary "2" ;
-            SmartGrid:num_phases 1 ;
-            SmartGrid:primaryAttachsTo :Bus_634 .
+            SmartGrid:num_phases 1 .
 
 
 ###  http://www.semanticweb.org/phoenix/ontologies/2022/0/IEEE13#Load_634_3
 :Load_634_3 rdf:type owl:NamedIndividual ,
                      SmartGrid:Load ;
+            SmartGrid:primaryAttachsTo :Bus_634 ;
             SmartGrid:connection_primary "Wye" ;
             SmartGrid:kV_primary 0.277 ;
             SmartGrid:kW 120 ;
@@ -834,13 +591,13 @@ SmartGrid:WiFi rdf:type owl:Class ;
             SmartGrid:model 1 ;
             SmartGrid:nodes_primary "3" ;
             SmartGrid:nodes_secondary "3" ;
-            SmartGrid:num_phases 1 ;
-            SmartGrid:primaryAttachsTo :Bus_634 .
+            SmartGrid:num_phases 1 .
 
 
 ###  http://www.semanticweb.org/phoenix/ontologies/2022/0/IEEE13#Load_645_2
 :Load_645_2 rdf:type owl:NamedIndividual ,
                      SmartGrid:Load ;
+            SmartGrid:primaryAttachsTo :Bus_645 ;
             SmartGrid:connection_primary "Wye" ;
             SmartGrid:kV_primary 2.4 ;
             SmartGrid:kW 170 ;
@@ -848,13 +605,13 @@ SmartGrid:WiFi rdf:type owl:Class ;
             SmartGrid:model 1 ;
             SmartGrid:nodes_primary "2" ;
             SmartGrid:nodes_secondary "2" ;
-            SmartGrid:num_phases 1 ;
-            SmartGrid:primaryAttachsTo :Bus_645 .
+            SmartGrid:num_phases 1 .
 
 
 ###  http://www.semanticweb.org/phoenix/ontologies/2022/0/IEEE13#Load_646_2
 :Load_646_2 rdf:type owl:NamedIndividual ,
                      SmartGrid:Load ;
+            SmartGrid:primaryAttachsTo :Bus_646 ;
             SmartGrid:connection_primary "Delta" ;
             SmartGrid:kV_primary 4.16 ;
             SmartGrid:kW 230 ;
@@ -862,13 +619,13 @@ SmartGrid:WiFi rdf:type owl:Class ;
             SmartGrid:model 2 ;
             SmartGrid:nodes_primary "2 3" ;
             SmartGrid:nodes_secondary "2" ;
-            SmartGrid:num_phases 1 ;
-            SmartGrid:primaryAttachsTo :Bus_646 .
+            SmartGrid:num_phases 1 .
 
 
 ###  http://www.semanticweb.org/phoenix/ontologies/2022/0/IEEE13#Load_652_1
 :Load_652_1 rdf:type owl:NamedIndividual ,
                      SmartGrid:Load ;
+            SmartGrid:primaryAttachsTo :Bus_652 ;
             SmartGrid:connection_primary "Wye" ;
             SmartGrid:kV_primary 2.4 ;
             SmartGrid:kW 128 ;
@@ -876,13 +633,13 @@ SmartGrid:WiFi rdf:type owl:Class ;
             SmartGrid:model 2 ;
             SmartGrid:nodes_primary "1" ;
             SmartGrid:nodes_secondary "1" ;
-            SmartGrid:num_phases 1 ;
-            SmartGrid:primaryAttachsTo :Bus_652 .
+            SmartGrid:num_phases 1 .
 
 
 ###  http://www.semanticweb.org/phoenix/ontologies/2022/0/IEEE13#Load_670_1
 :Load_670_1 rdf:type owl:NamedIndividual ,
                      SmartGrid:Load ;
+            SmartGrid:primaryAttachsTo :Bus_670 ;
             SmartGrid:connection_primary "Wye" ;
             SmartGrid:kV_primary 2.4 ;
             SmartGrid:kW 17 ;
@@ -890,13 +647,13 @@ SmartGrid:WiFi rdf:type owl:Class ;
             SmartGrid:model 1 ;
             SmartGrid:nodes_primary "1" ;
             SmartGrid:nodes_secondary "1" ;
-            SmartGrid:num_phases 1 ;
-            SmartGrid:primaryAttachsTo :Bus_670 .
+            SmartGrid:num_phases 1 .
 
 
 ###  http://www.semanticweb.org/phoenix/ontologies/2022/0/IEEE13#Load_670_2
 :Load_670_2 rdf:type owl:NamedIndividual ,
                      SmartGrid:Load ;
+            SmartGrid:primaryAttachsTo :Bus_670 ;
             SmartGrid:connection_primary "Wye" ;
             SmartGrid:kV_primary 2.4 ;
             SmartGrid:kW 66 ;
@@ -904,13 +661,13 @@ SmartGrid:WiFi rdf:type owl:Class ;
             SmartGrid:model 1 ;
             SmartGrid:nodes_primary "2" ;
             SmartGrid:nodes_secondary "2" ;
-            SmartGrid:num_phases 1 ;
-            SmartGrid:primaryAttachsTo :Bus_670 .
+            SmartGrid:num_phases 1 .
 
 
 ###  http://www.semanticweb.org/phoenix/ontologies/2022/0/IEEE13#Load_670_3
 :Load_670_3 rdf:type owl:NamedIndividual ,
                      SmartGrid:Load ;
+            SmartGrid:primaryAttachsTo :Bus_670 ;
             SmartGrid:connection_primary "Wye" ;
             SmartGrid:kV_primary 2.4 ;
             SmartGrid:kW 117 ;
@@ -918,26 +675,26 @@ SmartGrid:WiFi rdf:type owl:Class ;
             SmartGrid:model 1 ;
             SmartGrid:nodes_primary "3" ;
             SmartGrid:nodes_secondary "3" ;
-            SmartGrid:num_phases 1 ;
-            SmartGrid:primaryAttachsTo :Bus_670 .
+            SmartGrid:num_phases 1 .
 
 
 ###  http://www.semanticweb.org/phoenix/ontologies/2022/0/IEEE13#Load_671
 :Load_671 rdf:type owl:NamedIndividual ,
                    SmartGrid:Load ;
+          SmartGrid:primaryAttachsTo :Bus_671 ;
           SmartGrid:connection_primary "Delta" ;
           SmartGrid:kV_primary 4.16 ;
           SmartGrid:kW 1155 ;
           SmartGrid:kvar 660 ;
           SmartGrid:model 1 ;
           SmartGrid:nodes_primary "1 2 3" ;
-          SmartGrid:num_phases 3 ;
-          SmartGrid:primaryAttachsTo :Bus_671 .
+          SmartGrid:num_phases 3 .
 
 
 ###  http://www.semanticweb.org/phoenix/ontologies/2022/0/IEEE13#Load_675_1
 :Load_675_1 rdf:type owl:NamedIndividual ,
                      SmartGrid:Load ;
+            SmartGrid:primaryAttachsTo :Bus_675 ;
             SmartGrid:connection_primary "Wye" ;
             SmartGrid:kV_primary 2.4 ;
             SmartGrid:kW 485 ;
@@ -945,13 +702,13 @@ SmartGrid:WiFi rdf:type owl:Class ;
             SmartGrid:model 1 ;
             SmartGrid:nodes_primary "1" ;
             SmartGrid:nodes_secondary "1" ;
-            SmartGrid:num_phases 1 ;
-            SmartGrid:primaryAttachsTo :Bus_675 .
+            SmartGrid:num_phases 1 .
 
 
 ###  http://www.semanticweb.org/phoenix/ontologies/2022/0/IEEE13#Load_675_2
 :Load_675_2 rdf:type owl:NamedIndividual ,
                      SmartGrid:Load ;
+            SmartGrid:primaryAttachsTo :Bus_675 ;
             SmartGrid:connection_primary "Wye" ;
             SmartGrid:kV_primary 2.4 ;
             SmartGrid:kW 68 ;
@@ -959,13 +716,13 @@ SmartGrid:WiFi rdf:type owl:Class ;
             SmartGrid:model 1 ;
             SmartGrid:nodes_primary "2" ;
             SmartGrid:nodes_secondary "2" ;
-            SmartGrid:num_phases 1 ;
-            SmartGrid:primaryAttachsTo :Bus_675 .
+            SmartGrid:num_phases 1 .
 
 
 ###  http://www.semanticweb.org/phoenix/ontologies/2022/0/IEEE13#Load_675_3
 :Load_675_3 rdf:type owl:NamedIndividual ,
                      SmartGrid:Load ;
+            SmartGrid:primaryAttachsTo :Bus_675 ;
             SmartGrid:connection_primary "Wye" ;
             SmartGrid:kV_primary 2.4 ;
             SmartGrid:kW 290 ;
@@ -973,13 +730,13 @@ SmartGrid:WiFi rdf:type owl:Class ;
             SmartGrid:model 1 ;
             SmartGrid:nodes_primary "3" ;
             SmartGrid:nodes_secondary "3" ;
-            SmartGrid:num_phases 1 ;
-            SmartGrid:primaryAttachsTo :Bus_675 .
+            SmartGrid:num_phases 1 .
 
 
 ###  http://www.semanticweb.org/phoenix/ontologies/2022/0/IEEE13#Load_692_3
 :Load_692_3 rdf:type owl:NamedIndividual ,
                      SmartGrid:Load ;
+            SmartGrid:primaryAttachsTo :Bus_692 ;
             SmartGrid:connection_primary "Delta" ;
             SmartGrid:kV_primary 4.16 ;
             SmartGrid:kW 170 ;
@@ -987,19 +744,18 @@ SmartGrid:WiFi rdf:type owl:Class ;
             SmartGrid:model 5 ;
             SmartGrid:nodes_primary "3 1" ;
             SmartGrid:nodes_secondary "3" ;
-            SmartGrid:num_phases 1 ;
-            SmartGrid:primaryAttachsTo :Bus_692 .
+            SmartGrid:num_phases 1 .
 
 
 ###  http://www.semanticweb.org/phoenix/ontologies/2022/0/IEEE13#Switch_671692
 :Switch_671692 rdf:type owl:NamedIndividual ,
                         SmartGrid:Switch ;
                SmartGrid:attachsTo :Bus_692 ;
+               SmartGrid:primaryAttachsTo :Bus_671 ;
                SmartGrid:c0 0.0 ;
                SmartGrid:c1 0.0 ;
                SmartGrid:normal_state "open" ;
                SmartGrid:num_phases 3 ;
-               SmartGrid:primaryAttachsTo :Bus_671 ;
                SmartGrid:r0 0.0001 ;
                SmartGrid:r1 0.0001 ;
                SmartGrid:x0 0.0 ;
@@ -1009,34 +765,34 @@ SmartGrid:WiFi rdf:type owl:Class ;
 ###  http://www.semanticweb.org/phoenix/ontologies/2022/0/IEEE13#Transformer_Sub
 :Transformer_Sub rdf:type owl:NamedIndividual ,
                           SmartGrid:Transformer ;
+                 SmartGrid:attachsTo :Bus_650 ;
+                 SmartGrid:primaryAttachsTo :Bus_SourceBus ;
                  SmartGrid:Kva 5000 ;
                  SmartGrid:XHL "(8 1000 /)" ;
-                 SmartGrid:attachsTo :Bus_650 ;
                  SmartGrid:connection_primary "Delta" ;
                  SmartGrid:connection_secondary "Wye" ;
                  SmartGrid:kV_primary 115 ;
                  SmartGrid:kV_secondary 4.16 ;
                  SmartGrid:num_phases 3 ;
                  SmartGrid:percent_R "(.5 1000 /)" ;
-                 SmartGrid:primaryAttachsTo :Bus_SourceBus ;
                  rdfs:comment "This is the transformer at the generating station" .
 
 
 ###  http://www.semanticweb.org/phoenix/ontologies/2022/0/IEEE13#Transformer_XFM1
 :Transformer_XFM1 rdf:type owl:NamedIndividual ,
                            SmartGrid:Transformer ;
+                  SmartGrid:attachsTo :Bus_634 ;
+                  SmartGrid:primaryAttachsTo :Bus_633 ;
                   SmartGrid:Kva 500 ;
                   SmartGrid:XHL 2 ;
                   SmartGrid:XHT 1 ;
                   SmartGrid:XLT 1 ;
-                  SmartGrid:attachsTo :Bus_634 ;
                   SmartGrid:connection_primary "Wye" ;
                   SmartGrid:connection_secondary "Wye" ;
                   SmartGrid:kV_primary 4.16 ;
                   SmartGrid:kV_secondary 0.480 ;
                   SmartGrid:num_phases 3 ;
                   SmartGrid:percent_R 0.55 ;
-                  SmartGrid:primaryAttachsTo :Bus_633 ;
                   rdfs:comment "This is the transformer labelled XFM-1" .
 
 
@@ -1048,36 +804,49 @@ SmartGrid:WiFi rdf:type owl:Class ;
 ###  http://www.semanticweb.org/phoenix/ontologies/2022/0/IEEE13#Voltage_Actuator
 :Voltage_Actuator rdf:type owl:NamedIndividual ,
                            SmartGrid:Actuator ;
-                  SmartGrid:bus_terminal 1 ;
                   SmartGrid:connectsTo :Bus_650 ;
                   SmartGrid:controls :regcontrol_Reg3 ;
+                  SmartGrid:isFedBy :Voltage_Controller ;
                   SmartGrid:locatedAt :Coord_200_350 ;
+                  SmartGrid:bus_terminal 1 ;
                   SmartGrid:phase 3 .
 
 
 ###  http://www.semanticweb.org/phoenix/ontologies/2022/0/IEEE13#Voltage_Controller
 :Voltage_Controller rdf:type owl:NamedIndividual ,
-                             SmartGrid:Voltage_Controller .
+                             :Voltage_Controller ;
+                    SmartGrid:connectsTo :Bus_632 ;
+                    SmartGrid:feeds :Voltage_Actuator ;
+                    SmartGrid:locatedAt :Coord_200_250 .
 
 
 ###  http://www.semanticweb.org/phoenix/ontologies/2022/0/IEEE13#Voltage_Sensor
 :Voltage_Sensor rdf:type owl:NamedIndividual ,
-                         SmartGrid:Voltage_Sensor .
+                         :Voltage_Sensor ;
+                SmartGrid:connectsTo :Bus_611 ;
+                SmartGrid:feeds :Voltage_Controller ;
+                SmartGrid:locatedAt :Coord_0_100 ;
+                SmartGrid:measures :Voltage ;
+                SmartGrid:monitor :Line_684611 ;
+                SmartGrid:bus_terminal 2 ;
+                SmartGrid:phase 3 ;
+                SmartGrid:rate 20 .
 
 
 ###  http://www.semanticweb.org/phoenix/ontologies/2022/0/IEEE13#WiFi_1
 :WiFi_1 rdf:type owl:NamedIndividual ,
-                 SmartGrid:WiFi .
+                 :WiFi .
 
 
 ###  http://www.semanticweb.org/phoenix/ontologies/2022/0/IEEE13#regcontrol_Reg1
 :regcontrol_Reg1 rdf:type owl:NamedIndividual ,
                           SmartGrid:regcontrol ;
+                 SmartGrid:attachsTo :Bus_RG60 ;
+                 SmartGrid:primaryAttachsTo :Bus_650 ;
                  SmartGrid:Kva 1666 ;
                  SmartGrid:R 3 ;
                  SmartGrid:X 9 ;
                  SmartGrid:XHL 0.01 ;
-                 SmartGrid:attachsTo :Bus_RG60 ;
                  SmartGrid:band 2 ;
                  SmartGrid:bank "reg1" ;
                  SmartGrid:ctprim 700 ;
@@ -1090,7 +859,6 @@ SmartGrid:WiFi rdf:type owl:Class ;
                  SmartGrid:num_phases 1 ;
                  SmartGrid:num_taps 32 ;
                  SmartGrid:percent_Load_Loss 0.01 ;
-                 SmartGrid:primaryAttachsTo :Bus_650 ;
                  SmartGrid:ptratio 20 ;
                  SmartGrid:tap_primary 1 ;
                  SmartGrid:tap_secondary 1 ;
@@ -1100,11 +868,12 @@ SmartGrid:WiFi rdf:type owl:Class ;
 ###  http://www.semanticweb.org/phoenix/ontologies/2022/0/IEEE13#regcontrol_Reg2
 :regcontrol_Reg2 rdf:type owl:NamedIndividual ,
                           SmartGrid:regcontrol ;
+                 SmartGrid:attachsTo :Bus_RG60 ;
+                 SmartGrid:primaryAttachsTo :Bus_650 ;
                  SmartGrid:Kva 1666 ;
                  SmartGrid:R 3 ;
                  SmartGrid:X 9 ;
                  SmartGrid:XHL 0.01 ;
-                 SmartGrid:attachsTo :Bus_RG60 ;
                  SmartGrid:band 2 ;
                  SmartGrid:bank "reg1" ;
                  SmartGrid:ctprim 700 ;
@@ -1117,7 +886,6 @@ SmartGrid:WiFi rdf:type owl:Class ;
                  SmartGrid:num_phases 1 ;
                  SmartGrid:num_taps 32 ;
                  SmartGrid:percent_Load_Loss 0.01 ;
-                 SmartGrid:primaryAttachsTo :Bus_650 ;
                  SmartGrid:ptratio 20 ;
                  SmartGrid:tap_primary 1 ;
                  SmartGrid:tap_secondary 1 ;
@@ -1127,11 +895,12 @@ SmartGrid:WiFi rdf:type owl:Class ;
 ###  http://www.semanticweb.org/phoenix/ontologies/2022/0/IEEE13#regcontrol_Reg3
 :regcontrol_Reg3 rdf:type owl:NamedIndividual ,
                           SmartGrid:regcontrol ;
+                 SmartGrid:attachsTo :Bus_RG60 ;
+                 SmartGrid:primaryAttachsTo :Bus_650 ;
                  SmartGrid:Kva 1666 ;
                  SmartGrid:R 3 ;
                  SmartGrid:X 9 ;
                  SmartGrid:XHL 0.01 ;
-                 SmartGrid:attachsTo :Bus_RG60 ;
                  SmartGrid:band 2 ;
                  SmartGrid:bank "reg1" ;
                  SmartGrid:ctprim 700 ;
@@ -1144,7 +913,6 @@ SmartGrid:WiFi rdf:type owl:Class ;
                  SmartGrid:num_phases 1 ;
                  SmartGrid:num_taps 32 ;
                  SmartGrid:percent_Load_Loss 0.01 ;
-                 SmartGrid:primaryAttachsTo :Bus_650 ;
                  SmartGrid:ptratio 20 ;
                  SmartGrid:tap_primary 1 ;
                  SmartGrid:tap_secondary 1 ;

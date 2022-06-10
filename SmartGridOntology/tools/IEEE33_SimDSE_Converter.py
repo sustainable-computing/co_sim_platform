@@ -8,7 +8,7 @@ buses = {}
 coord = {}
 bus_idx = []
 
-with open('../models/IEEE33.ttl', "w+") as outfile:
+with open('../models/IEEE33_SimDSE.ttl', "w+") as outfile:
 
     # Write out the prefix, headers, and annotated properties
     prefix_info = """
@@ -29,6 +29,18 @@ with open('../models/IEEE33.ttl', "w+") as outfile:
                                                                rdfs:comment "This will model the IEEE33" .
 
 
+#################################################################
+#    Classes
+#################################################################
+
+:Phasor rdf:type owl:Class ;
+        rdfs:subClassOf SmartGrid:Sensor .
+
+:SmartMeter rdf:type owl:Class ;
+            rdfs:subClassOf SmartGrid:Sensor .
+
+:Estimator rdf:type owl:Class ;
+           rdfs:subClassOf SmartGrid:Controller .
 
 #################################################################
 #    Individuals
@@ -46,6 +58,7 @@ with open('../models/IEEE33.ttl', "w+") as outfile:
             }
             buses[items[0]] = {
                 'locatedAt': coord_name,
+                'connectsTo': set()
             }
             bus_idx.append(items[0])
 
@@ -57,6 +70,8 @@ with open('../models/IEEE33.ttl', "w+") as outfile:
             dst_idx = [i for i,r in enumerate(values) if r == '1']
             for col_idx in dst_idx:
                 dst_node = bus_idx[col_idx]
+                buses[src_node]['connectsTo'].add(dst_node)
+                buses[dst_node]['connectsTo'].add(src_node)    
 
 
     # Write out the coordinates
@@ -85,9 +100,11 @@ with open('../models/IEEE33.ttl', "w+") as outfile:
             # Check if bus1 and bus2 is the dict of buses
             if bus1 not in buses.keys():
                 buses[bus1] = {
+                    'connectsTo': set()
                 }
             if bus2 not in buses.keys():
                 buses[bus2] = {
+                    'connectsTo': set()
                 }
     
             line_instance = """
@@ -121,9 +138,11 @@ with open('../models/IEEE33.ttl', "w+") as outfile:
             # Check if bus1 and bus2 is the dict of buses
             if bus1 not in buses.keys():
                 buses[bus1] = {
+                    'connectsTo': set()
                 }
             if bus2 not in buses.keys():
                 buses[bus2] = {
+                    'connectsTo': set()
                 }           
 
             transformer_instance = """
@@ -165,6 +184,7 @@ with open('../models/IEEE33.ttl', "w+") as outfile:
             # Check if bus1 is the dict of buses
             if bus1 not in buses.keys():
                 buses[bus1] = {
+                    'connectsTo': set()
                 }
          
             load_instance = """
@@ -189,11 +209,57 @@ with open('../models/IEEE33.ttl', "w+") as outfile:
     for bus, value in buses.items():
         bus_instance = """
 :Bus_{name} rdf:type owl:NamedIndividual ,
-                     SmartGrid:Bus ; 
-""".format(name=bus)
+                     SmartGrid:Bus ; """.format(name=bus)
         if "locatedAt" in value.keys():
-            bus_instance += "SmartGrid:locatedAt :{bus_coord} ; ".format(bus_coord=value['locatedAt'])
+            bus_instance += "SmartGrid:locatedAt :{bus_coord} ;\n".format(bus_coord=value['locatedAt'])
         
-        bus_instance += ".\n\n\n"
+        # If there are any connectsTo relations for the node/bus then we write it out
+        if len(buses[bus]['connectsTo']) > 0:
+            bus_instance += """SmartGrid:connectsTo """
+            for connection in buses[bus]['connectsTo']:
+                bus_instance += """:Bus_{} ,\n""".format(connection)
+            bus_instance = bus_instance[:-2] + '.'
+        else:
+            # end with a .
+            bus_instance += ".\n"
+        bus_instance += "\n\n"
 
         outfile.write(bus_instance)
+
+    with open("../../SmartGridMain/IEEE33/IEEE33_Devices_Test.csv") as device_file:
+        for device in device_file.readlines():
+            device_info = device.split(',')
+            idn = device_info[0]
+            device_type = device_info[1]
+            src = device_info[2]
+            dst = device_info[3]
+            period = device_info[4]
+            error = device_info[5]
+            cktElement = device_info[6]
+            cktTerminal = device_info[7][-1]
+            cktPhase = device_info[8].split('_')
+            cktProperty = device_info[9]
+            
+            device_instance = ""
+            if device_type.lower() == "phasor":
+                device_instance += """
+:Phasor_{name} rdf:type owl:NamedIndividual ,
+                        :Phasor ;
+                SmartGrid:bus_terminal {bus_term} ;
+                SmartGrid:connectsTo {src} ;
+                SmartGrid:phase {phase} ;
+                SmartGrid:monitor {monitor} ;
+                SmartGrid:feeds :Estimator .
+""".format(name=idn, bus_term=cktTerminal,src=src, phase=cktPhase[1], monitor=cktElement)
+            if device_type.lower() == "smartmeter":
+                device_instance += """
+:SmartMeter_{name} rdf:type owl:NamedIndividual ,
+                            :SmartMeter ;
+                    SmartGrid:bus_terminal {bus_term} ;
+                    SmartGrid:connectsTo :Bus_{src} ;
+                    SmartGrid:phase {phase} ;
+                    SmartGrid:monitor :{monitor} ;
+                    SmartGrid:feeds :Estimator .                 
+""".format(name=idn, bus_term=cktTerminal,src=src, phase=cktPhase[1], monitor=cktElement)
+
+            # outfile.write(device_instance)
