@@ -87,8 +87,6 @@ void MosaikSim::initNetsimProps(void)
   netsimProp["random_seed"] = "null";
   netsimProp["time_resolution"] = "null";
   netsimProp["devs_file"] = "null";
-  netsimProp["adjmat_file"] = "null";
-  netsimProp["coords_file"] = "null";
   netsimProp["json_file"] = "null";
   netsimProp["linkRate"] = "null";
   netsimProp["linkDelay"] = "null";
@@ -456,10 +454,8 @@ MosaikSim::init(Json::Value args, Json::Value kwargs)
   verbose = stoi(netsimProp["verbose"]);
   
   //--- Initialize NS3 class
-  objNetsim->init(netsimProp["adjmat_file"],
-                  netsimProp["coords_file"],
+  objNetsim->init(netsimProp["json_file"],
                   netsimProp["devs_file"],
-                  netsimProp["json_file"],
                   netsimProp["linkRate"],
                   netsimProp["linkDelay"],
                   netsimProp["linkErrorRate"],

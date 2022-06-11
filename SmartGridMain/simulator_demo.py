@@ -26,7 +26,7 @@ DSS_EXE_PATH = BASE_DIR + 'SmartGridMain/'
 
 #--- Path relative to OpenDSS scripts directory 
 # IEEE13
-TOPO_RPATH_FILE = 'IEEE13/IEEE13Nodeckt.dss'
+TOPO_RPATH_FILE = 'IEEE13/outfile.dss'
 NWL_RPATH_FILE  = 'IEEE13/IEEE13Nodeckt_NodeWithLoad.csv'
 ILPQ_RPATH_FILE = 'IEEE13/IEEE13Nodeckt_InelasticLoadPQ.csv'
 DEVS_RPATH_FILE = 'IEEE13/IEEE13_Devices.csv'
@@ -42,8 +42,7 @@ NS3_LIB_PATH = BASE_DIR + 'ns-allinone-3.33/ns-3.33/build/lib'
 
 #--- Paths relative to NS3 exec program directory
 # IEEE13
-ADJMAT_RPATH_FILE = DSS_EXE_PATH + 'IEEE13/IEEE13Node-adjacency_matrix.txt'
-COORDS_RPATH_FILE = DSS_EXE_PATH + 'IEEE13/IEEE13Node_BusXY.csv'
+JSON_RPATH_FILE = DSS_EXE_PATH + 'IEEE13/gen_nodes.json'
 # IEEE33
 # ADJMAT_RPATH_FILE   = DSS_EXE_PATH + 'IEEE33/IEEE33_AdjMatrixFull.txt'
 # COORDS_RPATH_FILE   = DSS_EXE_PATH + 'IEEE33/IEEE33_BusXYFull.csv'
@@ -146,6 +145,7 @@ def readActives(actives_tap):
 def main():
     #--- Process input arguments
     parser = argparse.ArgumentParser(description='Run Smartgrid simulation')
+    parser.add_argument( '--json_file', type=str, help='JSON config file', default = JSON_RPATH_FILE )    
     parser.add_argument( '--devs_file', type=str, help='devices connections file', default = DEVS_RPATH_FILE )
     parser.add_argument( '--random_seed', type=int, help='ns-3 random generator seed', default=1 )
     args = parser.parse_args()
@@ -173,8 +173,7 @@ def  create_scenario( world, args ):
 
     pktnetsim = world.start( 'PktNetSim',
         model_name      = 'TransporterModel',
-        adjmat_file     = ADJMAT_RPATH_FILE,
-        coords_file     = COORDS_RPATH_FILE,
+        json_file       = JSON_RPATH_FILE,
         devs_file       = DEVS_RPATH_FILE,
         linkRate        = "512Kbps",
         linkDelay       = "15ms",

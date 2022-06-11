@@ -283,10 +283,8 @@ NS3Netsim::~NS3Netsim()
   NS_LOG_INFO("Done.");
 }
 
-void NS3Netsim::init(string f_adjmat,
-                     string f_coords,
+void NS3Netsim::init(string f_json,
                      string f_devs,
-                     string f_json,
                      string s_linkRate,
                      string s_linkDelay,
                      string s_linkErrorRate,
@@ -334,8 +332,6 @@ void NS3Netsim::init(string f_adjmat,
   stopTime = stod(stop_time);
 
   //--- set configuration file names
-  nodeAdjMatrixFilename = f_adjmat;
-  nodeCoordinatesFilename = f_coords;
   string nodeJSONFilename = f_json;
   devicesFilename = f_devs;
 

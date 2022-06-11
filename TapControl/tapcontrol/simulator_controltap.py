@@ -18,7 +18,7 @@ META = {
     'models': {
         'RangeControl': {
             'public': True,
-            'params': ['idt', 'vset', 'bw', 'tdelay', 'verbose'],
+            'params': ['eid', 'vset', 'bw', 'tdelay', 'control_delay', 'verbose'],
             'attrs': ['v', 't'],           
         },      
     },
@@ -40,34 +40,29 @@ class ControlSim(mosaik_api.Simulator):
         self.entities = {}
         self.data = {}
         self.instances = {}
+        self.time = 0
 
         
-    def init(self, sid, time_resolution, eid_prefix=None, control_delay=1, verbose=0):
-        if eid_prefix is not None:
-            self.eid_prefix = eid_prefix
+    def init(self, sid, time_resolution, verbose=0):
         self.sid = sid
-        #-- The time required to take a control decision
-        #-- by default it is the minimum unit = 1 step
-        self.control_delay = control_delay    
         self.verbose = verbose
         
         return self.meta
 
     
-    def create(self, num, model, idt, vset, bw, tdelay):
-        if (self.verbose > 0): print('simulator_controller::create', num, model, idt)
-        
-        eid = '%s%s' % (self.eid_prefix, idt)
+    def create(self, num, model, eid, vset, bw, tdelay, control_delay):
+        if (self.verbose > 0): print('simulator_controller::create', num, model, ": ", eid)
         
         self.entities[eid] = {}
         self.entities[eid]['type'] = model
-        self.entities[eid]['idt'] = idt
+        self.entities[eid]['eid'] = eid
         self.entities[eid]['vset'] = vset
         self.entities[eid]['bw'] = bw
         self.entities[eid]['tdelay'] = tdelay
         self.entities[eid]['tlast'] = 0
         self.entities[eid]['vmax'] = vset
         self.entities[eid]['vmin'] = vset
+        self.entities[eid]['control_delay'] = int(control_delay)
 
 
         self.data[eid] = {}     
@@ -98,39 +93,42 @@ class ControlSim(mosaik_api.Simulator):
                 vmeas = vlist[i]
                 tmeas = tlist[i]
 
-                #--- Calculate value_v
-                VAR_V = 0
-                                
-                delta_v = float(vmeas.rstrip()) - self.entities[controller_eid]['vset']
-                
-                #--- check if voltage on the range or out
-                if(abs(delta_v) < (self.entities[controller_eid]['bw']/2)):
-                    #--- if in range reset the timer and do not send any control signal
-                    self.entities[controller_eid]['tlast'] = tmeas
+                if (vmeas != None and vmeas != 'null' and vmeas != "None"):
+                    #--- Calculate value_v
                     VAR_V = 0
-                
-                else:
-                    #--- if the voltage is out of band
-                    #--- check for how long the voltage
-                    #--- count or not the propagation delay
-                    if (self.verbose > 1):
-                        print("simulator_controller::step Propagation Delay", time-tmeas)
+                                    
+                    delta_v = float(vmeas.rstrip()) - self.entities[controller_eid]['vset']
                     
-                    delta_t = tmeas - self.entities[controller_eid]['tlast']
-                    #--- if the amount of time out of band is larger then allowed
-                    if (delta_t > self.entities[controller_eid]['tdelay']):
-                        #--- if the Vmeas is greatar than set point, increase tap
-                        if delta_v > 0:
-                            VAR_V = -1
-                        #--- if the Vmeas is smaller than set point, decrease tap
-                        else:  
-                            VAR_V = 1
-                            
-                self.data[controller_eid]['v'].append(VAR_V)
-                
-                #--- time
-                self.data[controller_eid]['t'].append(time + self.control_delay)
-                if (self.verbose > 5):  print(self.data)
+                    #--- check if voltage on the range or out
+                    if(abs(delta_v) < (self.entities[controller_eid]['bw']/2)):
+                        #--- if in range reset the timer and do not send any control signal
+                        self.entities[controller_eid]['tlast'] = tmeas
+                        VAR_V = 0
+                    
+                    else:
+                        #--- if the voltage is out of band
+                        #--- check for how long the voltage
+                        #--- count or not the propagation delay
+                        if (self.verbose > 1):
+                            print("simulator_controller::step Propagation Delay", time-tmeas)
+                        
+                        delta_t = tmeas - self.entities[controller_eid]['tlast']
+                        #--- if the amount of time out of band is larger then allowed
+                        if (delta_t > self.entities[controller_eid]['tdelay']):
+                            #--- if the Vmeas is greater than set point, increase tap
+                            if delta_v > 0:
+                                VAR_V = -1
+                            #--- if the Vmeas is smaller than set point, decrease tap
+                            else:  
+                                VAR_V = 1
+                                
+                    self.data[controller_eid]['v'].append(VAR_V)
+                    
+                    #--- time
+                    # The added value ensures data is sent by NS3 after the control delay
+                    self.data[controller_eid]['t'].append(time \
+                        + self.entities[controller_eid]['control_delay'])
+
         sys.stdout.flush()
         
     
@@ -138,6 +136,7 @@ class ControlSim(mosaik_api.Simulator):
         if (self.verbose > 0): print('simulator_controller::get_data INPUT', outputs)      
 
         data = {}
+        #--- Find data that is present and ready for delivery (now)
         for eid in self.data:
             if(self.data[eid]['t']):
                 data[eid] = self.data[eid]

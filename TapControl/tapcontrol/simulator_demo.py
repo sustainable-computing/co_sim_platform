@@ -29,22 +29,14 @@ DSS_EXE_PATH = BASE_DIR + 'TapControl/tapcontrol/'
 TOPO_RPATH_FILE = 'data/outfile.dss'
 NWL_RPATH_FILE  = 'data/IEEE13Nodeckt_NodeWithLoad.csv'
 ILPQ_RPATH_FILE = 'data/IEEE13Nodeckt_InelasticLoadPQ.csv'
-ACTS_RPATH_FILE = 'data/IEEE13Nodeckt_Actives_Tap.csv'
+DEVS_RPATH_FILE = 'data/gen_devices.csv'
 
 #--- NS3 executables and library directory
 NS3_EXE_PATH = BASE_DIR + 'NS3Mosaik'
 NS3_LIB_PATH = BASE_DIR + 'ns-allinone-3.33/ns-3.33/build/lib'
 
 #--- Paths relative to NS3 exec program directory
-ADJMAT_RPATH_FILE = DSS_EXE_PATH + 'data/IEEE13Node-adjacency_matrix.txt'
-COORDS_RPATH_FILE = DSS_EXE_PATH + 'data/IEEE13Node_BusXY.csv'
-APPCON_RPATH_FILE = DSS_EXE_PATH + 'data/IEEE13Node_AppConnections_Tap.csv'
 JSON_RPATH_FILE = DSS_EXE_PATH + 'data/gen_nodes.json'
-
-#--- Application config path
-APPCON_FILE = DSS_EXE_PATH + 'data/IEEE13Node_AppConnections_Tap.csv'
-ACTS_FILE = DSS_EXE_PATH + ACTS_RPATH_FILE
-
 
 #--- Simulators configuration
 SIM_CONFIG = {
@@ -75,7 +67,7 @@ appconLinks = {}
 
 #--- Sensors and actuators parameters
 global_step_size = 100
-actParams = {}
+devParams = {}
 
 #--- Mosaik Configuration
 MOSAIK_CONFIG = {
@@ -84,6 +76,39 @@ MOSAIK_CONFIG = {
     'start_timeout': 600,  # seconds
     'stop_timeout' : 10,   # seconds    
 }
+
+#--- Load Simulation devices and configurations
+def readDevices(devsfile):
+    
+    global devParams
+    
+    current_directory = os.path.dirname(os.path.realpath(__file__))
+    pathToFile = os.path.abspath(
+        os.path.join(current_directory, devsfile)
+    )
+    if not os.path.isfile(pathToFile):
+        print('File Actives does not exist: ' + pathToFile)
+        sys.exit()
+    else:
+        with open(pathToFile, 'r') as csvFile:
+            csvobj = csv.reader(csvFile)
+            next(csvobj)
+            for rows in csvobj:
+                if(len(rows) == 11):
+                    instance = rows[0] + "_" +  rows[1] + "-" + rows[2] \
+                                + '.' + rows[3] + '.' + rows[4]
+                    devParams[instance] = {}
+                    devParams[instance]['device']      = rows[0]
+                    devParams[instance]['src']         = rows[1]
+                    devParams[instance]['dst']         = rows[2]
+                    devParams[instance]['cidx']        = rows[3]
+                    devParams[instance]['didx']        = rows[4]
+                    devParams[instance]['period']      = rows[5]
+                    devParams[instance]['error']       = rows[6]
+                    devParams[instance]['cktElement']  = rows[7]
+                    devParams[instance]['cktTerminal'] = rows[8]
+                    devParams[instance]['cktPhase']    = rows[9]
+                    devParams[instance]['cktProperty'] = rows[10]
 
 #--- Load application connections
 def readAppConnections(appcon_file):
@@ -122,15 +147,16 @@ def readAppConnectionsJSON(json_file):
 def main():
     #--- Process input arguments
     parser = argparse.ArgumentParser(description='Run Smartgrid simulation')
-    parser.add_argument( '--appcon_file', type=str, help='application connections file', default = APPCON_FILE )    
     parser.add_argument( '--json_file', type=str, help='JSON config file', default = JSON_RPATH_FILE )    
+    parser.add_argument( '--devs_file', type=str, help='devices connections file', default = DEVS_RPATH_FILE )
     parser.add_argument( '--random_seed', type=int, help='ns-3 random generator seed', default=1 )
     args = parser.parse_args()
     print( 'Starting simulation with args: {0}'.format( vars( args ) ) )
     
     # readAppConnections(args.appcon_file)
-    readAppConnectionsJSON(args.json_file)
+    # readAppConnectionsJSON(args.json_file)
     #readActives(ACTS_FILE) -- not necessary in the moment
+    readDevices(args.devs_file)
     world = mosaik.World( sim_config=SIM_CONFIG, mosaik_config=MOSAIK_CONFIG, debug=False )
     create_scenario( world, args )
     
@@ -146,18 +172,14 @@ def  create_scenario( world, args ):
                               topofile = DSS_EXE_PATH + TOPO_RPATH_FILE,
                               nwlfile  = DSS_EXE_PATH + NWL_RPATH_FILE,
                               ilpqfile = DSS_EXE_PATH + ILPQ_RPATH_FILE,
-                              actsfile = DSS_EXE_PATH + ACTS_RPATH_FILE,
                               step_size = global_step_size,
                               loadgen_interval = 80,
                               verbose = 0)    
 
     pktnetsim = world.start( 'PktNetSim',
         model_name      = 'TransporterModel',
-        eid_prefix      = 'Transp_',
-        adjmat_file     = ADJMAT_RPATH_FILE,
-        coords_file     = COORDS_RPATH_FILE,
-        appcon_file     = APPCON_RPATH_FILE,
         json_file       = JSON_RPATH_FILE,
+        devs_file       = DEVS_RPATH_FILE,
         linkRate        = "512Kbps",
         linkDelay       = "15ms",
         linkErrorRate   = "0.0001",
@@ -169,10 +191,7 @@ def  create_scenario( world, args ):
         network         = "P2P" # network architecture: P2P/CSMA/P2Pv6/CSMAv6 (supported architectures)
     )
   
-    controlsim  = world.start('ControlSim',  
-                              eid_prefix='Control_',   
-                              control_delay = 1,
-                              verbose = 0) 
+    controlsim  = world.start('ControlSim', verbose = 0) 
     
     collector   = world.start('Collector',   
                               eid_prefix='Collector_',
@@ -187,92 +206,161 @@ def  create_scenario( world, args ):
     #--- Simulators Instances configuration
     #---
 
-    #--- Sensor instances
+    # Declaring instance lists
     sensors = []
-    for client, server, role in appconLinks:
-        if (role == 'sensing'):
+    controllers = []
+    actuators = []
+    transporters = []
+    for key in devParams.keys():
+        #--- Sensor instances
+        device          = devParams[key]['device']
+        client          = devParams[key]['src']
+        server          = devParams[key]['dst']
+        control_loop    = devParams[key]['cidx']
+        namespace       = devParams[key]['didx']
+        if (device == 'Sensor'):
+            sensor_instance = device + '_' + client + '-' + server \
+                                + '.' + control_loop + '.' + namespace
             created_sensor = False
             for sensor in sensors:
-                sensor_instance = 'Sensor_' + str(client)
                 if (sensor_instance == sensor.eid):
-                    created_sensor = True            
+                    created_sensor = True
             if not created_sensor:
-                sensors.append(pflowsim.Sensor(idt = client, step_size = global_step_size, verbose = 0))
+                sensors.append(pflowsim.Sensor(
+                                cktTerminal = devParams[key]['cktTerminal'],
+                                cktPhase = devParams[key]['cktPhase'],
+                                eid =  sensor_instance,
+                                step_size = devParams[key]['period'],
+                                cktElement = devParams[key]['cktElement'], 
+                                error = devParams[key]['error'],
+                                verbose = 0))
       
-    #--- Controller instances for tap control
-    controllers = []
-    for client, server, role in appconLinks:
-        if (role == 'acting'):
+        #--- Controller and Actuator instances for tap control
+        elif (device == 'Actuator'):
+            # Ignore namespace as one control loop has only one controller/actuator
+            controller_instance = 'Control_' + client + '-' + server \
+                                + '.' + control_loop
             created_control = False
             for controller in controllers:
-                controller_instance = 'Control_' + str(client)
                 if (controller_instance == controller.eid):
                     created_control = True
-            if not created_control:  
-                controllers.append(controlsim.RangeControl(idt=client, vset=2178, bw=13.6125, tdelay=60))
+            if not created_control:
+                controllers.append(
+                    controlsim.RangeControl(
+                        eid      = controller_instance,
+                        vset    = 2178,
+                        bw      = 13.6125,
+                        tdelay  = 60,
+                        control_delay = devParams[key]['period']))
+            created_actuator = False
+            actuator_instance = 'Actuator_' + server \
+                                + '.' + control_loop
+            for actuator in actuators:
+                if (actuator_instance == actuator.eid):
+                    created_actuator = True
+            if not created_actuator:
+                actuators.append(pflowsim.Actuator(
+                                    cktTerminal = devParams[key]['cktTerminal'],
+                                    cktPhase = devParams[key]['cktPhase'],
+                                    eid = actuator_instance,
+                                    step_size = devParams[key]['period'],
+                                    cktElement = devParams[key]['cktElement'], 
+                                    error = devParams[key]['error'],
+                                    verbose=0))
 
-    #--- Transporter instances (Pktnet)
-    transporters = []
-    for client, server, role in appconLinks:
-        created_transporter = False       
+        #--- Transporter instances (Pktnet)
+        created_transporter = False
+        if (device == 'Actuator'):
+            transporter_instance = 'Transp_' + client + '-' + server \
+                                    + '.' + control_loop
+        else:
+            transporter_instance = 'Transp_' + client + '-' + server \
+                                    + '.' + control_loop + '.' + namespace
         for transporter in transporters:
-            transporter_instance = 'Transp_' + str(client) + '-' + str(server)
             if (transporter_instance == transporter.eid):
                 created_transporter = True            
         if not created_transporter:
-            transporters.append(pktnetsim.Transporter(src=client, dst=server))    
-
-    #--- Actuator instances
-    actuators = []
-    for client, server, role in appconLinks:
-        if (role == 'acting'):
-            created_actuator = False       
-            for actuator in actuators:
-                actuator_instance = 'Actuator_' + str(server)
-                if (actuator_instance == actuator.eid):
-                    created_actuator = True            
-            if not created_actuator:
-                actuators.append(pflowsim.Actuator(idt=server, step_size=global_step_size, verbose=0))   
+            transporters.append(pktnetsim.Transporter(
+                                src=client,
+                                dst=server,
+                                eid=transporter_instance))
  
     #--- Monitor instances
     monitor = collector.Monitor()
     
     #--- Prober instance
     probers = []
-    probers.append(pflowsim.Prober(idt = "611-V3",   step_size = global_step_size, verbose = 0))
-    probers.append(pflowsim.Prober(idt = "650-T3",   step_size = global_step_size, verbose = 0))      
-    probers.append(pflowsim.Prober(idt = "611-Load", step_size = global_step_size, verbose = 0))
-    probers.append(pflowsim.Prober(idt = "650-VPu3", step_size = global_step_size, verbose = 0))
+    # probers.append(pflowsim.Prober(idt = "611-V3",   step_size = global_step_size, verbose = 0))
+    # probers.append(pflowsim.Prober(idt = "650-T3",   step_size = global_step_size, verbose = 0))      
+    # probers.append(pflowsim.Prober(idt = "611-Load", step_size = global_step_size, verbose = 0))
+    # probers.append(pflowsim.Prober(idt = "650-VPu3", step_size = global_step_size, verbose = 0))
     
 
     #---
     #--- Simulators interconnections
     #---
     
-    #--- Sensor to PktNet(Transporter)
-    for client, server, role in appconLinks:    
-        if (role == 'sensing'):
-            sensor_instance      = 'Sensor_' + str(client)          
-            transporter_instance = 'Transp_' + str(client) + '-' + str(server)              
+    for key in devParams.keys():
+        device          = devParams[key]['device']
+        client          = devParams[key]['src']
+        server          = devParams[key]['dst']
+        control_loop    = devParams[key]['cidx']
+        namespace       = devParams[key]['didx']
+
+        #--- Sensor to PktNet(Transporter)
+        if (device == 'Sensor'):
+            sensor_instance      = device + '_' + client + '-' + server \
+                                    + '.' + control_loop + '.' + namespace
+            transporter_instance = 'Transp_' + client + '-' + server \
+                                    + '.' + control_loop + '.' + namespace
             for sensor in sensors:
                 if (sensor_instance == sensor.eid):
                     for transporter in transporters:
                         if (transporter_instance == transporter.eid):
-                            world.connect(sensor, transporter, 'v', 't',
-                                weak=True, initial_data={'v': None, 't': None})
+                            world.connect(sensor, transporter, 'v', 't')
                             print('Connect', sensor.eid, 'to', transporter.eid)                        
         
-    #--- PktNet(Transporter) to Controller
-    for client, server, role in appconLinks:    
-        if (role == 'sensing'):
-            controller_instance  = 'Control_' + str(server)          
-            transporter_instance = 'Transp_' + str(client) + '-' + str(server)              
+        elif (device == 'Actuator'):
+            controller_instance  = 'Control_' + client + '-' + server \
+                                    + '.' + control_loop
+            actuator_instance = 'Actuator_' + server + '.' + control_loop
+            transporter_instance = 'Transp_' + client + '-' + server \
+                                    + '.' + control_loop
+
+            #--- Controller to PktNet
             for controller in controllers:
                 if (controller_instance == controller.eid):
                     for transporter in transporters:
                         if (transporter_instance == transporter.eid):
+                            world.connect(controller, transporter, 'v', 't',
+                                weak=True, initial_data={'v': None, 't': None})
+                            print('Connect', controller.eid, 'to', transporter.eid)
+        
+            #--- PktNet(Transporter) to Actuator           
+            for actuator in actuators:
+                if (actuator_instance == actuator.eid):
+                    for transporter in transporters:
+                        if (transporter_instance == transporter.eid):
+                            world.connect(transporter, actuator, 'v', 't',
+                                weak=True, initial_data={'v': None, 't': None})
+                            print('Connect', transporter.eid, 'to', actuator.eid)
+
+            #--- PktNet(Transporter) to Controller
+            #--- Find the transporter that needs to connect to this controller
+            for controller in controllers:
+                if (controller_instance == controller.eid):
+                    for transporter in transporters:
+                        # Find server and control loop of transporter
+                        t_server = transporter.eid
+                        t_control_loop = transporter.eid
+                        t_server = t_server.split('_', 1)[1]
+                        t_server = t_server.split('-', 1)[1]
+                        t_server = t_server.split('.', 1)[0]
+                        t_control_loop = t_control_loop.split('.')[1]
+                        # print(transporter.eid, " Server: ", t_server, " Control Loop: ", t_control_loop)
+                        if (t_server == client and t_control_loop == control_loop):
                             world.connect(transporter, controller, 'v', 't')
-                            print('Connect', transporter.eid, 'to', controller.eid)     
+                            print('Connect', transporter.eid, 'to', controller.eid)
  
     #--- Sensor to Controller
 #     for client, server, role in appconLinks:
@@ -285,31 +373,7 @@ def  create_scenario( world, args ):
 #                         if (controller_instance == controller.eid):
 #                             world.connect(sensor, controller, 'v', 't')
 #                             print('Connect', sensor.eid, 'to', controller.eid)
-
-    #--- Controller to PktNet
-    for client, server, role in appconLinks:    
-        if (role == 'acting'):
-            controller_instance  = 'Control_' + str(client)          
-            transporter_instance = 'Transp_' + str(client) + '-' + str(server)              
-            for controller in controllers:
-                if (controller_instance == controller.eid):
-                    for transporter in transporters:
-                        if (transporter_instance == transporter.eid):
-                            world.connect(controller, transporter, 'v', 't',
-                                weak=True, initial_data={'v': None, 't': None})
-                            print('Connect', controller.eid, 'to', transporter.eid)   
-        
-    #--- PktNet(Transporter) to Actuator
-    for client, server, role in appconLinks:    
-        if (role == 'acting'):
-            actuator_instance  = 'Actuator_' + str(server)          
-            transporter_instance = 'Transp_' + str(client) + '-' + str(server)              
-            for actuator in actuators:
-                if (actuator_instance == actuator.eid):
-                    for transporter in transporters:
-                        if (transporter_instance == transporter.eid):
-                            world.connect(transporter, actuator, 'v', 't')
-                            print('Connect', transporter.eid, 'to', actuator.eid)      
+   
 
     #--- Controller to Actuator
 #     for client, server, role in appconLinks:
@@ -323,6 +387,7 @@ def  create_scenario( world, args ):
 #                             print('Connect', controller.eid, 'to', actuator.eid)                           
 #                             world.connect(controller, actuator, 'v', 't', 
 #                                 time_shifted=True, initial_data={'v': None, 't': None})
+
 
 
     #---

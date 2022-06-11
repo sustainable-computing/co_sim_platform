@@ -9,7 +9,6 @@ OpenDSS Mosaik interface, and Sensor/Actuator Models
 @company University of Alberta - Computing Science
 '''
 
-from tabnanny import verbose
 import mosaik_api
 import os
 import sys

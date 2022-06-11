@@ -96,10 +96,8 @@ class NS3Netsim {
   /**
    * \brief Initialize main NS3 parameters
    *
-   * \param f_adjmat: adjacency matrix filename
-   * \param f_coords: coordinates filename
-   * \param f_devs: devices filename
    * \param f_json: json file containing node info
+   * \param f_devs: devices filename
    * \param s_linkRate: link transmission rate
    * \param s_linkDelay: link delay
    * \param s_linkErrorRate: link error rate on receiver
@@ -110,7 +108,7 @@ class NS3Netsim {
    * \returns None
    *
    */
-  void init (string f_adjmat, string f_coords, string f_devs, string f_json, string s_linkRate,
+  void init (string f_json, string f_devs, string s_linkRate,
              string s_linkDelay, string s_linkErrorRate, string start_time,
              string stop_time, string verb, string s_tcpOrUdp, string s_net);
 
