@@ -39,7 +39,7 @@ META = {
         },
         'Prober': {
             'public': True,
-            'params': ['eid', 'step_size', 'verbose'],
+            'params': ['eid', 'cktTerminal', 'cktPhase', 'cktProperty', 'step_size', 'cktElement','error','verbose'],
             'attrs': ['v', 't'],
             'non-persistent': ['v', 't'],
         },        
@@ -56,7 +56,7 @@ META = {
 class ProberSim:
     def __init__(self, eid, step_size, objDSS, element, terminal, phase, verbose):
         self.idt        = eid
-        self.step_size  = step_size
+        self.step_size  = int(step_size)
         self.objDSS     = objDSS
         # self.action     = action
         self.elem       = element
@@ -67,19 +67,24 @@ class ProberSim:
         self.priorTime  = None
         
     def updateValues(self, time):
-        if (self.verbose > 0): print('ProberSim::updateValues', self.action, self.elem, self.term, self.ph)
+        if (self.verbose > 0): print('ProberSim::updateValues', self.idt, self.elem, self.term, self.ph)
         
         if (0 == time % self.step_size):
-            # No more action variable, set a default action or config value-based
-            # if (self.action == "getV"):
-            #     (VComp, _, _) =  self.objDSS.getCktElementState(self.elem, CKTTerm[self.term].value, CKTPhase[self.ph].value)
-            #     val = self.R2P(VComp)[0] #-- only got the real part    
-            # if (self.action == "getTap"):
-            #     val = self.objDSS.getTrafoTap(self.elem)
-            # if (self.action == "getVPu"):
-            #     (val, _) =  self.objDSS.getVMagAnglePu(self.elem, CKTPhase[self.ph].value)
-            # if (self.action == "getLoad"):
-            #     (val, _) = self.objDSS.getPQ(self.elem)       
+            # No more action variable, use cidx and didx to determine
+            eid = self.idt
+            eid = eid.split('.')
+            cidx = eid[1]
+            didx = eid[2]
+            # 0 = voltage, 1 = tap, 2 = load, 3 = voltage phase angle
+            if (cidx == '0'):
+                (VComp, _, _) =  self.objDSS.getCktElementState(self.elem, CKTTerm[self.term].value, CKTPhase[self.ph].value)
+                val = self.R2P(VComp)[0] #-- only got the real part    
+            if (cidx == '1'):
+                val = self.objDSS.getTrafoTap(self.elem)
+            if (cidx == '3'):
+                (val, _) =  self.objDSS.getVMagAnglePu(self.elem, CKTPhase[self.ph].value)
+            if (cidx == '2'):
+                (val, _) = self.objDSS.getPQ(self.elem)       
             # if (self.action == "getS"):
             #     val = self.objDSS.getS(self.elem, CKTTerm[self.term].value, CKTPhase[self.ph].value)          
             
@@ -237,7 +242,7 @@ class PFlowSim(mosaik_api.Simulator):
 
 
     def create(self, num, model, cktTerminal, cktPhase, eid, step_size, cktElement, error, verbose):
-        if (self.verbose > 0): print('simulator_pflow::create ', model, ": ", id)
+        if (self.verbose > 0): print('simulator_pflow::create ', model, ": ", eid)
 
         self.data[eid] = {}     
         self.instances[eid] = {}

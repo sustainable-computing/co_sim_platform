@@ -169,7 +169,7 @@ def  create_scenario( world, args ):
                               ilpqfile = DSS_EXE_PATH + ILPQ_RPATH_FILE,
                               step_size = 100,
                               loadgen_interval = 80,
-                              verbose = 0)    
+                              verbose = 1)    
 
     pktnetsim = world.start( 'PktNetSim',
         model_name      = 'TransporterModel',
@@ -193,7 +193,7 @@ def  create_scenario( world, args ):
     
     collector   = world.start('Collector',
                               eid_prefix='Collector_',
-                              verbose = 0,
+                              verbose = 2,
                               out_list = False,
                               h5_save = True,
                               h5_panelname = 'Collector',
@@ -209,13 +209,14 @@ def  create_scenario( world, args ):
     controllers = []
     actuators = []
     transporters = []
+    probers = []
     for key in devParams.keys():
-        #--- Sensor instances
         device          = devParams[key]['device']
         client          = devParams[key]['src']
         server          = devParams[key]['dst']
         control_loop    = devParams[key]['cidx']
         namespace       = devParams[key]['didx']
+        #--- Sensor instances
         if (device == 'Sensor'):
             sensor_instance = device + '_' + client + '-' + server \
                                 + '.' + control_loop + '.' + namespace
@@ -225,13 +226,14 @@ def  create_scenario( world, args ):
                     created_sensor = True
             if not created_sensor:
                 sensors.append(pflowsim.Sensor(
-                                cktTerminal = devParams[key]['cktTerminal'],
-                                cktPhase = devParams[key]['cktPhase'],
-                                eid =  sensor_instance,
-                                step_size = devParams[key]['period'],
-                                cktElement = devParams[key]['cktElement'], 
-                                error = devParams[key]['error'],
-                                verbose = 0))
+                    cktTerminal = devParams[key]['cktTerminal'],
+                    cktPhase = devParams[key]['cktPhase'],
+                    eid =  sensor_instance,
+                    step_size = devParams[key]['period'],
+                    cktElement = devParams[key]['cktElement'], 
+                    error = devParams[key]['error'],
+                    verbose = 0
+                ))
       
         #--- Controller and Actuator instances for tap control
         elif (device == 'Actuator'):
@@ -249,7 +251,8 @@ def  create_scenario( world, args ):
                         vset    = 2178,
                         bw      = 13.6125,
                         tdelay  = 60,
-                        control_delay = devParams[key]['period']))
+                        control_delay = devParams[key]['period']
+                    ))
             created_actuator = False
             actuator_instance = 'Actuator_' + server \
                                 + '.' + control_loop
@@ -258,36 +261,49 @@ def  create_scenario( world, args ):
                     created_actuator = True
             if not created_actuator:
                 actuators.append(pflowsim.Actuator(
-                                    cktTerminal = devParams[key]['cktTerminal'],
-                                    cktPhase = devParams[key]['cktPhase'],
-                                    eid = actuator_instance,
-                                    step_size = devParams[key]['period'],
-                                    cktElement = devParams[key]['cktElement'], 
-                                    error = devParams[key]['error'],
-                                    verbose=0))
+                    cktTerminal = devParams[key]['cktTerminal'],
+                    cktPhase = devParams[key]['cktPhase'],
+                    eid = actuator_instance,
+                    step_size = devParams[key]['period'],
+                    cktElement = devParams[key]['cktElement'], 
+                    error = devParams[key]['error'],
+                    verbose=0
+                ))
 
-        #--- Transporter instances (Pktnet)
-        created_transporter = False
-        if (device == 'Actuator'):
-            transporter_instance = 'Transp_' + client + '-' + server \
-                                    + '.' + control_loop
+        #--- Probers do not need transporters
+        if (device == 'Prober'):
+            prober_instance = 'Prober_' + client + '.' \
+                            + control_loop + '.' + namespace
+            probers.append(pflowsim.Prober(
+                cktTerminal = devParams[key]['cktTerminal'],
+                cktPhase = devParams[key]['cktPhase'],
+                eid = prober_instance,
+                step_size = devParams[key]['period'],
+                cktElement = devParams[key]['cktElement'],
+                error = devParams[key]['error'],
+                verbose = 1
+            ))
         else:
-            transporter_instance = 'Transp_' + client + '-' + server \
-                                    + '.' + control_loop + '.' + namespace
-        for transporter in transporters:
-            if (transporter_instance == transporter.eid):
-                created_transporter = True            
-        if not created_transporter:
-            transporters.append(pktnetsim.Transporter(
-                                src=client,
-                                dst=server,
-                                eid=transporter_instance))
+            #--- Transporter instances (Pktnet)
+            created_transporter = False
+            if (device == 'Actuator'):
+                transporter_instance = 'Transp_' + client + '-' + server \
+                                        + '.' + control_loop
+            else:
+                transporter_instance = 'Transp_' + client + '-' + server \
+                                        + '.' + control_loop + '.' + namespace
+            for transporter in transporters:
+                if (transporter_instance == transporter.eid):
+                    created_transporter = True            
+            if not created_transporter:
+                transporters.append(pktnetsim.Transporter(
+                    src=client,
+                    dst=server,
+                    eid=transporter_instance
+                ))
 
     #--- Monitor instances
     monitor = collector.Monitor()
-
-    #--- Prober instances
-    probers = []
 
     # probers.append(pflowsim.Prober(idt = "611-V3",   step_size = global_step_size, verbose = 0))
     # probers.append(pflowsim.Prober(idt = "650-T3",   step_size = global_step_size, verbose = 0))      
