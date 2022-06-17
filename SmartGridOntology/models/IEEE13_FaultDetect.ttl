@@ -1,0 +1,1274 @@
+@prefix : <http://www.semanticweb.org/phoenix/ontologies/2022/0/IEEE13_FaultDetect#> .
+@prefix owl: <http://www.w3.org/2002/07/owl#> .
+@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix xml: <http://www.w3.org/XML/1998/namespace> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix SmartGrid: <http://www.semanticweb.org/phoenix/ontologies/2022/0/SmartGrid#> .
+@base <http://www.semanticweb.org/phoenix/ontologies/2022/0/IEEE13_FaultDetect> .
+
+<http://www.semanticweb.org/phoenix/ontologies/2022/0/IEEE13_FaultDetect> rdf:type owl:Ontology ;
+                                                                           owl:imports <http://www.semanticweb.org/phoenix/ontologies/2022/0/SmartGrid> ;
+                                                                           rdfs:comment "This will model the IEEE13 fault detection using current sensors" .
+
+#################################################################
+#    Classes
+#################################################################
+
+###  http://www.semanticweb.org/phoenix/ontologies/2022/0/IEEE13_FaultDetect#Current_Sensor
+:Current_Sensor rdf:type owl:Class ;
+                rdfs:subClassOf SmartGrid:Sensor .
+
+
+###  http://www.semanticweb.org/phoenix/ontologies/2022/0/IEEE13_FaultDetect#Fault_Detector
+:Fault_Detector rdf:type owl:Class ;
+                rdfs:subClassOf SmartGrid:Controller .
+
+
+#################################################################
+#    Individuals
+#################################################################
+
+###  http://www.semanticweb.org/phoenix/ontologies/2022/0/IEEE13_FaultDetect#Ampere
+:Ampere rdf:type owl:NamedIndividual ,
+                 SmartGrid:Quantity .
+
+
+###  http://www.semanticweb.org/phoenix/ontologies/2022/0/IEEE13_FaultDetect#Bus_611
+:Bus_611 rdf:type owl:NamedIndividual ,
+                  SmartGrid:Bus ;
+         SmartGrid:connectsTo :Bus_684 ;
+         SmartGrid:locatedAt :Coord_0_100 .
+
+
+###  http://www.semanticweb.org/phoenix/ontologies/2022/0/IEEE13_FaultDetect#Bus_632
+:Bus_632 rdf:type owl:NamedIndividual ,
+                  SmartGrid:Bus ;
+         SmartGrid:connectsTo :Bus_633 ,
+                              :Bus_645 ,
+                              :Bus_670 ,
+                              :Bus_RG60 ;
+         SmartGrid:locatedAt :Coord_200_250 .
+
+
+###  http://www.semanticweb.org/phoenix/ontologies/2022/0/IEEE13_FaultDetect#Bus_633
+:Bus_633 rdf:type owl:NamedIndividual ,
+                  SmartGrid:Bus ;
+         SmartGrid:connectsTo :Bus_632 ,
+                              :Bus_634 ;
+         SmartGrid:locatedAt :Coord_350_250 .
+
+
+###  http://www.semanticweb.org/phoenix/ontologies/2022/0/IEEE13_FaultDetect#Bus_634
+:Bus_634 rdf:type owl:NamedIndividual ,
+                  SmartGrid:Bus ;
+         SmartGrid:connectsTo :Bus_633 ;
+         SmartGrid:locatedAt :Coord_400_250 .
+
+
+###  http://www.semanticweb.org/phoenix/ontologies/2022/0/IEEE13_FaultDetect#Bus_645
+:Bus_645 rdf:type owl:NamedIndividual ,
+                  SmartGrid:Bus ;
+         SmartGrid:connectsTo :Bus_632 ,
+                              :Bus_646 ;
+         SmartGrid:locatedAt :Coord_100_250 .
+
+
+###  http://www.semanticweb.org/phoenix/ontologies/2022/0/IEEE13_FaultDetect#Bus_646
+:Bus_646 rdf:type owl:NamedIndividual ,
+                  SmartGrid:Bus ;
+         SmartGrid:connectsTo :Bus_645 ;
+         SmartGrid:locatedAt :Coord_0_250 .
+
+
+###  http://www.semanticweb.org/phoenix/ontologies/2022/0/IEEE13_FaultDetect#Bus_650
+:Bus_650 rdf:type owl:NamedIndividual ,
+                  SmartGrid:Bus ;
+         SmartGrid:connectsTo :Bus_RG60 ,
+                              :Bus_SourceBus ;
+         SmartGrid:locatedAt :Coord_200_350 .
+
+
+###  http://www.semanticweb.org/phoenix/ontologies/2022/0/IEEE13_FaultDetect#Bus_652
+:Bus_652 rdf:type owl:NamedIndividual ,
+                  SmartGrid:Bus ;
+         SmartGrid:connectsTo :Bus_684 ;
+         SmartGrid:locatedAt :Coord_100_0 .
+
+
+###  http://www.semanticweb.org/phoenix/ontologies/2022/0/IEEE13_FaultDetect#Bus_670
+:Bus_670 rdf:type owl:NamedIndividual ,
+                  SmartGrid:Bus ;
+         SmartGrid:connectsTo :Bus_632 ,
+                              :Bus_671 ;
+         SmartGrid:locatedAt :Coord_200_200 .
+
+
+###  http://www.semanticweb.org/phoenix/ontologies/2022/0/IEEE13_FaultDetect#Bus_671
+:Bus_671 rdf:type owl:NamedIndividual ,
+                  SmartGrid:Bus ;
+         SmartGrid:connectsTo :Bus_670 ,
+                              :Bus_680 ,
+                              :Bus_684 ,
+                              :Bus_692 ;
+         SmartGrid:locatedAt :Coord_200_100 .
+
+
+###  http://www.semanticweb.org/phoenix/ontologies/2022/0/IEEE13_FaultDetect#Bus_675
+:Bus_675 rdf:type owl:NamedIndividual ,
+                  SmartGrid:Bus ;
+         SmartGrid:connectsTo :Bus_692 ;
+         SmartGrid:locatedAt :Coord_400_100 .
+
+
+###  http://www.semanticweb.org/phoenix/ontologies/2022/0/IEEE13_FaultDetect#Bus_680
+:Bus_680 rdf:type owl:NamedIndividual ,
+                  SmartGrid:Bus ;
+         SmartGrid:connectsTo :Bus_671 ;
+         SmartGrid:locatedAt :Coord_200_0 .
+
+
+###  http://www.semanticweb.org/phoenix/ontologies/2022/0/IEEE13_FaultDetect#Bus_684
+:Bus_684 rdf:type owl:NamedIndividual ,
+                  SmartGrid:Bus ;
+         SmartGrid:connectsTo :Bus_611 ,
+                              :Bus_652 ,
+                              :Bus_671 ;
+         SmartGrid:locatedAt :Coord_100_100 .
+
+
+###  http://www.semanticweb.org/phoenix/ontologies/2022/0/IEEE13_FaultDetect#Bus_692
+:Bus_692 rdf:type owl:NamedIndividual ,
+                  SmartGrid:Bus ;
+         SmartGrid:connectsTo :Bus_671 ,
+                              :Bus_675 ;
+         SmartGrid:locatedAt :Coord_250_100 .
+
+
+###  http://www.semanticweb.org/phoenix/ontologies/2022/0/IEEE13_FaultDetect#Bus_RG60
+:Bus_RG60 rdf:type owl:NamedIndividual ,
+                   SmartGrid:Bus ;
+          SmartGrid:connectsTo :Bus_632 ,
+                               :Bus_650 ;
+          SmartGrid:locatedAt :Coord_200_300 .
+
+
+###  http://www.semanticweb.org/phoenix/ontologies/2022/0/IEEE13_FaultDetect#Bus_SourceBus
+:Bus_SourceBus rdf:type owl:NamedIndividual ,
+                        SmartGrid:Bus ;
+               SmartGrid:connectsTo :Bus_650 ;
+               SmartGrid:locatedAt :Coord_200_400 .
+
+
+###  http://www.semanticweb.org/phoenix/ontologies/2022/0/IEEE13_FaultDetect#Capacitor_Cap1
+:Capacitor_Cap1 rdf:type owl:NamedIndividual ,
+                         SmartGrid:Capacitor ;
+                SmartGrid:primaryAttachsTo :Bus_675 ;
+                SmartGrid:kV_primary 4.16 ;
+                SmartGrid:kvar 600 ;
+                SmartGrid:num_phases 3 .
+
+
+###  http://www.semanticweb.org/phoenix/ontologies/2022/0/IEEE13_FaultDetect#Capacitor_Cap2
+:Capacitor_Cap2 rdf:type owl:NamedIndividual ,
+                         SmartGrid:Capacitor ;
+                SmartGrid:primaryAttachsTo :Bus_611 ;
+                SmartGrid:kV_primary 2.4 ;
+                SmartGrid:kvar 100 ;
+                SmartGrid:nodes_primary 3 ;
+                SmartGrid:num_phases 1 .
+
+
+###  http://www.semanticweb.org/phoenix/ontologies/2022/0/IEEE13_FaultDetect#Circuit_IEEE13Nodeckt
+:Circuit_IEEE13Nodeckt rdf:type owl:NamedIndividual ,
+                                SmartGrid:Circuit ;
+                       SmartGrid:primaryAttachsTo :Bus_SourceBus ;
+                       SmartGrid:MVAsc1 21000 ;
+                       SmartGrid:MVAsc3 20000 ;
+                       SmartGrid:angle 30 ;
+                       SmartGrid:kV_primary 115 ;
+                       SmartGrid:num_phases 3 ;
+                       SmartGrid:pu 1.0001 .
+
+
+###  http://www.semanticweb.org/phoenix/ontologies/2022/0/IEEE13_FaultDetect#Coord_0_100
+:Coord_0_100 rdf:type owl:NamedIndividual ,
+                      SmartGrid:Coordinates ;
+             SmartGrid:coord_x 0 ;
+             SmartGrid:coord_y 100 .
+
+
+###  http://www.semanticweb.org/phoenix/ontologies/2022/0/IEEE13_FaultDetect#Coord_0_250
+:Coord_0_250 rdf:type owl:NamedIndividual ,
+                      SmartGrid:Coordinates ;
+             SmartGrid:coord_x 0 ;
+             SmartGrid:coord_y 250 .
+
+
+###  http://www.semanticweb.org/phoenix/ontologies/2022/0/IEEE13_FaultDetect#Coord_100_0
+:Coord_100_0 rdf:type owl:NamedIndividual ,
+                      SmartGrid:Coordinates ;
+             SmartGrid:coord_x 100 ;
+             SmartGrid:coord_y 0 .
+
+
+###  http://www.semanticweb.org/phoenix/ontologies/2022/0/IEEE13_FaultDetect#Coord_100_100
+:Coord_100_100 rdf:type owl:NamedIndividual ,
+                        SmartGrid:Coordinates ;
+               SmartGrid:coord_x 100 ;
+               SmartGrid:coord_y 100 .
+
+
+###  http://www.semanticweb.org/phoenix/ontologies/2022/0/IEEE13_FaultDetect#Coord_100_250
+:Coord_100_250 rdf:type owl:NamedIndividual ,
+                        SmartGrid:Coordinates ;
+               SmartGrid:coord_x 100 ;
+               SmartGrid:coord_y 250 .
+
+
+###  http://www.semanticweb.org/phoenix/ontologies/2022/0/IEEE13_FaultDetect#Coord_200_0
+:Coord_200_0 rdf:type owl:NamedIndividual ,
+                      SmartGrid:Coordinates ;
+             SmartGrid:coord_x 200 ;
+             SmartGrid:coord_y 0 .
+
+
+###  http://www.semanticweb.org/phoenix/ontologies/2022/0/IEEE13_FaultDetect#Coord_200_100
+:Coord_200_100 rdf:type owl:NamedIndividual ,
+                        SmartGrid:Coordinates ;
+               SmartGrid:coord_x 200 ;
+               SmartGrid:coord_y 100 .
+
+
+###  http://www.semanticweb.org/phoenix/ontologies/2022/0/IEEE13_FaultDetect#Coord_200_200
+:Coord_200_200 rdf:type owl:NamedIndividual ,
+                        SmartGrid:Coordinates ;
+               SmartGrid:coord_x 200 ;
+               SmartGrid:coord_y 200 .
+
+
+###  http://www.semanticweb.org/phoenix/ontologies/2022/0/IEEE13_FaultDetect#Coord_200_250
+:Coord_200_250 rdf:type owl:NamedIndividual ,
+                        SmartGrid:Coordinates ;
+               SmartGrid:coord_x 200 ;
+               SmartGrid:coord_y 250 .
+
+
+###  http://www.semanticweb.org/phoenix/ontologies/2022/0/IEEE13_FaultDetect#Coord_200_300
+:Coord_200_300 rdf:type owl:NamedIndividual ,
+                        SmartGrid:Coordinates ;
+               SmartGrid:coord_x 200 ;
+               SmartGrid:coord_y 300 .
+
+
+###  http://www.semanticweb.org/phoenix/ontologies/2022/0/IEEE13_FaultDetect#Coord_200_350
+:Coord_200_350 rdf:type owl:NamedIndividual ,
+                        SmartGrid:Coordinates ;
+               SmartGrid:coord_x 200 ;
+               SmartGrid:coord_y 350 .
+
+
+###  http://www.semanticweb.org/phoenix/ontologies/2022/0/IEEE13_FaultDetect#Coord_200_400
+:Coord_200_400 rdf:type owl:NamedIndividual ,
+                        SmartGrid:Coordinates ;
+               SmartGrid:coord_x 200 ;
+               SmartGrid:coord_y 400 .
+
+
+###  http://www.semanticweb.org/phoenix/ontologies/2022/0/IEEE13_FaultDetect#Coord_250_100
+:Coord_250_100 rdf:type owl:NamedIndividual ,
+                        SmartGrid:Coordinates ;
+               SmartGrid:coord_x 250 ;
+               SmartGrid:coord_y 100 .
+
+
+###  http://www.semanticweb.org/phoenix/ontologies/2022/0/IEEE13_FaultDetect#Coord_350_250
+:Coord_350_250 rdf:type owl:NamedIndividual ,
+                        SmartGrid:Coordinates ;
+               SmartGrid:coord_x 350 ;
+               SmartGrid:coord_y 250 .
+
+
+###  http://www.semanticweb.org/phoenix/ontologies/2022/0/IEEE13_FaultDetect#Coord_400_100
+:Coord_400_100 rdf:type owl:NamedIndividual ,
+                        SmartGrid:Coordinates ;
+               SmartGrid:coord_x 400 ;
+               SmartGrid:coord_y 100 .
+
+
+###  http://www.semanticweb.org/phoenix/ontologies/2022/0/IEEE13_FaultDetect#Coord_400_250
+:Coord_400_250 rdf:type owl:NamedIndividual ,
+                        SmartGrid:Coordinates ;
+               SmartGrid:coord_x 400 ;
+               SmartGrid:coord_y 250 .
+
+
+###  http://www.semanticweb.org/phoenix/ontologies/2022/0/IEEE13_FaultDetect#Current_Sensor_611_3
+:Current_Sensor_611_3 rdf:type owl:NamedIndividual ,
+                               :Current_Sensor ;
+                      SmartGrid:connectsTo :Bus_611 ;
+                      SmartGrid:feeds :Fault_Detector ;
+                      SmartGrid:measures :Ampere ;
+                      SmartGrid:monitor :Load_611_3 ;
+                      SmartGrid:bus_terminal 1 ;
+                      SmartGrid:phase 3 ;
+                      SmartGrid:rate 20 .
+
+
+###  http://www.semanticweb.org/phoenix/ontologies/2022/0/IEEE13_FaultDetect#Current_Sensor_632633
+:Current_Sensor_632633 rdf:type owl:NamedIndividual ,
+                                :Current_Sensor ;
+                       SmartGrid:connectsTo :Bus_632 ;
+                       SmartGrid:feeds :Fault_Detector ;
+                       SmartGrid:measures :Ampere ;
+                       SmartGrid:monitor :Line_632633 ;
+                       SmartGrid:bus_terminal 1 ;
+                       SmartGrid:phase 123 ;
+                       SmartGrid:rate 20 .
+
+
+###  http://www.semanticweb.org/phoenix/ontologies/2022/0/IEEE13_FaultDetect#Current_Sensor_632645
+:Current_Sensor_632645 rdf:type owl:NamedIndividual ,
+                                :Current_Sensor ;
+                       SmartGrid:connectsTo :Bus_632 ;
+                       SmartGrid:feeds :Fault_Detector ;
+                       SmartGrid:measures :Ampere ;
+                       SmartGrid:monitor :Load_652_1 ;
+                       SmartGrid:bus_terminal 1 ;
+                       SmartGrid:phase 23 ;
+                       SmartGrid:rate 20 .
+
+
+###  http://www.semanticweb.org/phoenix/ontologies/2022/0/IEEE13_FaultDetect#Current_Sensor_632670
+:Current_Sensor_632670 rdf:type owl:NamedIndividual ,
+                                :Current_Sensor ;
+                       SmartGrid:connectsTo :Bus_632 ;
+                       SmartGrid:feeds :Fault_Detector ;
+                       SmartGrid:measures :Ampere ;
+                       SmartGrid:monitor :Line_632670 ;
+                       SmartGrid:bus_terminal 1 ;
+                       SmartGrid:phase 123 ;
+                       SmartGrid:rate 20 .
+
+
+###  http://www.semanticweb.org/phoenix/ontologies/2022/0/IEEE13_FaultDetect#Current_Sensor_634_1
+:Current_Sensor_634_1 rdf:type owl:NamedIndividual ,
+                               :Current_Sensor ;
+                      SmartGrid:connectsTo :Bus_634 ;
+                      SmartGrid:feeds :Fault_Detector ;
+                      SmartGrid:measures :Ampere ;
+                      SmartGrid:monitor :Load_634_1 ;
+                      SmartGrid:bus_terminal 1 ;
+                      SmartGrid:phase 1 ;
+                      SmartGrid:rate 20 .
+
+
+###  http://www.semanticweb.org/phoenix/ontologies/2022/0/IEEE13_FaultDetect#Current_Sensor_634_2
+:Current_Sensor_634_2 rdf:type owl:NamedIndividual ,
+                               :Current_Sensor ;
+                      SmartGrid:connectsTo :Bus_634 ;
+                      SmartGrid:feeds :Fault_Detector ;
+                      SmartGrid:measures :Ampere ;
+                      SmartGrid:monitor :Load_634_2 ;
+                      SmartGrid:bus_terminal 1 ;
+                      SmartGrid:phase 2 ;
+                      SmartGrid:rate 20 .
+
+
+###  http://www.semanticweb.org/phoenix/ontologies/2022/0/IEEE13_FaultDetect#Current_Sensor_634_3
+:Current_Sensor_634_3 rdf:type owl:NamedIndividual ,
+                               :Current_Sensor ;
+                      SmartGrid:connectsTo :Bus_634 ;
+                      SmartGrid:feeds :Fault_Detector ;
+                      SmartGrid:measures :Ampere ;
+                      SmartGrid:monitor :Load_634_3 ;
+                      SmartGrid:bus_terminal 1 ;
+                      SmartGrid:phase 3 ;
+                      SmartGrid:rate 20 .
+
+
+###  http://www.semanticweb.org/phoenix/ontologies/2022/0/IEEE13_FaultDetect#Current_Sensor_645646
+:Current_Sensor_645646 rdf:type owl:NamedIndividual ,
+                                :Current_Sensor ;
+                       SmartGrid:connectsTo :Bus_645 ;
+                       SmartGrid:feeds :Fault_Detector ;
+                       SmartGrid:measures :Ampere ;
+                       SmartGrid:monitor :Line_645646 ;
+                       SmartGrid:bus_terminal 1 ;
+                       SmartGrid:phase 23 ;
+                       SmartGrid:rate 20 .
+
+
+###  http://www.semanticweb.org/phoenix/ontologies/2022/0/IEEE13_FaultDetect#Current_Sensor_645_2
+:Current_Sensor_645_2 rdf:type owl:NamedIndividual ,
+                               :Current_Sensor ;
+                      SmartGrid:connectsTo :Bus_645 ;
+                      SmartGrid:feeds :Fault_Detector ;
+                      SmartGrid:measures :Ampere ;
+                      SmartGrid:monitor :Load_645_2 ;
+                      SmartGrid:bus_terminal 1 ;
+                      SmartGrid:phase 2 ;
+                      SmartGrid:rate 20 .
+
+
+###  http://www.semanticweb.org/phoenix/ontologies/2022/0/IEEE13_FaultDetect#Current_Sensor_646_2
+:Current_Sensor_646_2 rdf:type owl:NamedIndividual ,
+                               :Current_Sensor ;
+                      SmartGrid:connectsTo :Bus_646 ;
+                      SmartGrid:feeds :Fault_Detector ;
+                      SmartGrid:measures :Ampere ;
+                      SmartGrid:monitor :Load_646_2 ;
+                      SmartGrid:bus_terminal 1 ;
+                      SmartGrid:phase 2 ;
+                      SmartGrid:rate 20 .
+
+
+###  http://www.semanticweb.org/phoenix/ontologies/2022/0/IEEE13_FaultDetect#Current_Sensor_650632
+:Current_Sensor_650632 rdf:type owl:NamedIndividual ,
+                                :Current_Sensor ;
+                       SmartGrid:connectsTo :Bus_650 ;
+                       SmartGrid:feeds :Fault_Detector ;
+                       SmartGrid:measures :Ampere ;
+                       SmartGrid:monitor :Line_650632 ;
+                       SmartGrid:bus_terminal 1 ;
+                       SmartGrid:phase 123 ;
+                       SmartGrid:rate 20 .
+
+
+###  http://www.semanticweb.org/phoenix/ontologies/2022/0/IEEE13_FaultDetect#Current_Sensor_652_1
+:Current_Sensor_652_1 rdf:type owl:NamedIndividual ,
+                               :Current_Sensor ;
+                      SmartGrid:connectsTo :Bus_652 ;
+                      SmartGrid:feeds :Fault_Detector ;
+                      SmartGrid:measures :Ampere ;
+                      SmartGrid:monitor :Load_652_1 ;
+                      SmartGrid:bus_terminal 1 ;
+                      SmartGrid:phase 1 ;
+                      SmartGrid:rate 20 .
+
+
+###  http://www.semanticweb.org/phoenix/ontologies/2022/0/IEEE13_FaultDetect#Current_Sensor_670671
+:Current_Sensor_670671 rdf:type owl:NamedIndividual ,
+                                :Current_Sensor ;
+                       SmartGrid:connectsTo :Bus_670 ;
+                       SmartGrid:feeds :Fault_Detector ;
+                       SmartGrid:measures :Ampere ;
+                       SmartGrid:monitor :Line_670671 ;
+                       SmartGrid:bus_terminal 1 ;
+                       SmartGrid:phase 123 ;
+                       SmartGrid:rate 20 .
+
+
+###  http://www.semanticweb.org/phoenix/ontologies/2022/0/IEEE13_FaultDetect#Current_Sensor_670_1
+:Current_Sensor_670_1 rdf:type owl:NamedIndividual ,
+                               :Current_Sensor ;
+                      SmartGrid:connectsTo :Bus_670 ;
+                      SmartGrid:feeds :Fault_Detector ;
+                      SmartGrid:measures :Ampere ;
+                      SmartGrid:monitor :Load_670_1 ;
+                      SmartGrid:bus_terminal 1 ;
+                      SmartGrid:phase 1 ;
+                      SmartGrid:rate 20 .
+
+
+###  http://www.semanticweb.org/phoenix/ontologies/2022/0/IEEE13_FaultDetect#Current_Sensor_670_2
+:Current_Sensor_670_2 rdf:type owl:NamedIndividual ,
+                               :Current_Sensor ;
+                      SmartGrid:connectsTo :Bus_670 ;
+                      SmartGrid:feeds :Fault_Detector ;
+                      SmartGrid:measures :Ampere ;
+                      SmartGrid:monitor :Load_670_2 ;
+                      SmartGrid:bus_terminal 1 ;
+                      SmartGrid:phase 2 ;
+                      SmartGrid:rate 20 .
+
+
+###  http://www.semanticweb.org/phoenix/ontologies/2022/0/IEEE13_FaultDetect#Current_Sensor_670_3
+:Current_Sensor_670_3 rdf:type owl:NamedIndividual ,
+                               :Current_Sensor ;
+                      SmartGrid:connectsTo :Bus_670 ;
+                      SmartGrid:feeds :Fault_Detector ;
+                      SmartGrid:measures :Ampere ;
+                      SmartGrid:monitor :Load_670_3 ;
+                      SmartGrid:bus_terminal 1 ;
+                      SmartGrid:phase 3 ;
+                      SmartGrid:rate 20 .
+
+
+###  http://www.semanticweb.org/phoenix/ontologies/2022/0/IEEE13_FaultDetect#Current_Sensor_671
+:Current_Sensor_671 rdf:type owl:NamedIndividual ,
+                             :Current_Sensor ;
+                    SmartGrid:connectsTo :Bus_671 ;
+                    SmartGrid:feeds :Fault_Detector ;
+                    SmartGrid:measures :Ampere ;
+                    SmartGrid:monitor :Load_671 ;
+                    SmartGrid:bus_terminal 1 ;
+                    SmartGrid:phase 123 ;
+                    SmartGrid:rate 20 .
+
+
+###  http://www.semanticweb.org/phoenix/ontologies/2022/0/IEEE13_FaultDetect#Current_Sensor_671680
+:Current_Sensor_671680 rdf:type owl:NamedIndividual ,
+                                :Current_Sensor ;
+                       SmartGrid:connectsTo :Bus_671 ;
+                       SmartGrid:feeds :Fault_Detector ;
+                       SmartGrid:measures :Ampere ;
+                       SmartGrid:monitor :Line_671680 ;
+                       SmartGrid:bus_terminal 1 ;
+                       SmartGrid:phase 123 ;
+                       SmartGrid:rate 20 .
+
+
+###  http://www.semanticweb.org/phoenix/ontologies/2022/0/IEEE13_FaultDetect#Current_Sensor_671684
+:Current_Sensor_671684 rdf:type owl:NamedIndividual ,
+                                :Current_Sensor ;
+                       SmartGrid:connectsTo :Bus_671 ;
+                       SmartGrid:feeds :Fault_Detector ;
+                       SmartGrid:measures :Ampere ;
+                       SmartGrid:monitor :Line_671684 ;
+                       SmartGrid:bus_terminal 1 ;
+                       SmartGrid:phase 13 ;
+                       SmartGrid:rate 20 .
+
+
+###  http://www.semanticweb.org/phoenix/ontologies/2022/0/IEEE13_FaultDetect#Current_Sensor_671692
+:Current_Sensor_671692 rdf:type owl:NamedIndividual ,
+                                :Current_Sensor ;
+                       SmartGrid:connectsTo :Bus_671 ;
+                       SmartGrid:feeds :Fault_Detector ;
+                       SmartGrid:measures :Ampere ;
+                       SmartGrid:monitor :Switch_671692 ;
+                       SmartGrid:bus_terminal 1 ;
+                       SmartGrid:phase 123 ;
+                       SmartGrid:rate 20 .
+
+
+###  http://www.semanticweb.org/phoenix/ontologies/2022/0/IEEE13_FaultDetect#Current_Sensor_675_1
+:Current_Sensor_675_1 rdf:type owl:NamedIndividual ,
+                               :Current_Sensor ;
+                      SmartGrid:connectsTo :Bus_675 ;
+                      SmartGrid:feeds :Fault_Detector ;
+                      SmartGrid:measures :Ampere ;
+                      SmartGrid:monitor :Load_675_1 ;
+                      SmartGrid:bus_terminal 1 ;
+                      SmartGrid:phase 1 ;
+                      SmartGrid:rate 20 .
+
+
+###  http://www.semanticweb.org/phoenix/ontologies/2022/0/IEEE13_FaultDetect#Current_Sensor_675_2
+:Current_Sensor_675_2 rdf:type owl:NamedIndividual ,
+                               :Current_Sensor ;
+                      SmartGrid:connectsTo :Bus_675 ;
+                      SmartGrid:feeds :Fault_Detector ;
+                      SmartGrid:measures :Ampere ;
+                      SmartGrid:monitor :Load_675_2 ;
+                      SmartGrid:bus_terminal 1 ;
+                      SmartGrid:phase 2 ;
+                      SmartGrid:rate 20 .
+
+
+###  http://www.semanticweb.org/phoenix/ontologies/2022/0/IEEE13_FaultDetect#Current_Sensor_675_3
+:Current_Sensor_675_3 rdf:type owl:NamedIndividual ,
+                               :Current_Sensor ;
+                      SmartGrid:connectsTo :Bus_675 ;
+                      SmartGrid:feeds :Fault_Detector ;
+                      SmartGrid:measures :Ampere ;
+                      SmartGrid:monitor :Load_675_3 ;
+                      SmartGrid:bus_terminal 1 ;
+                      SmartGrid:phase 3 ;
+                      SmartGrid:rate 20 .
+
+
+###  http://www.semanticweb.org/phoenix/ontologies/2022/0/IEEE13_FaultDetect#Current_Sensor_684611
+:Current_Sensor_684611 rdf:type owl:NamedIndividual ,
+                                :Current_Sensor ;
+                       SmartGrid:connectsTo :Bus_684 ;
+                       SmartGrid:feeds :Fault_Detector ;
+                       SmartGrid:measures :Ampere ;
+                       SmartGrid:monitor :Line_684611 ;
+                       SmartGrid:bus_terminal 1 ;
+                       SmartGrid:phase 3 ;
+                       SmartGrid:rate 20 .
+
+
+###  http://www.semanticweb.org/phoenix/ontologies/2022/0/IEEE13_FaultDetect#Current_Sensor_684652
+:Current_Sensor_684652 rdf:type owl:NamedIndividual ,
+                                :Current_Sensor ;
+                       SmartGrid:connectsTo :Bus_684 ;
+                       SmartGrid:feeds :Fault_Detector ;
+                       SmartGrid:measures :Ampere ;
+                       SmartGrid:monitor :Line_684652 ;
+                       SmartGrid:bus_terminal 1 ;
+                       SmartGrid:phase 1 ;
+                       SmartGrid:rate 20 .
+
+
+###  http://www.semanticweb.org/phoenix/ontologies/2022/0/IEEE13_FaultDetect#Current_Sensor_692675
+:Current_Sensor_692675 rdf:type owl:NamedIndividual ,
+                                :Current_Sensor ;
+                       SmartGrid:connectsTo :Bus_692 ;
+                       SmartGrid:feeds :Fault_Detector ;
+                       SmartGrid:measures :Ampere ;
+                       SmartGrid:monitor :Line_692675 ;
+                       SmartGrid:bus_terminal 1 ;
+                       SmartGrid:phase 123 ;
+                       SmartGrid:rate 20 .
+
+
+###  http://www.semanticweb.org/phoenix/ontologies/2022/0/IEEE13_FaultDetect#Current_Sensor_692_3
+:Current_Sensor_692_3 rdf:type owl:NamedIndividual ,
+                               :Current_Sensor ;
+                      SmartGrid:connectsTo :Bus_692 ;
+                      SmartGrid:feeds :Fault_Detector ;
+                      SmartGrid:measures :Ampere ;
+                      SmartGrid:monitor :Load_692_3 ;
+                      SmartGrid:bus_terminal 1 ;
+                      SmartGrid:phase 3 ;
+                      SmartGrid:rate 20 .
+
+
+###  http://www.semanticweb.org/phoenix/ontologies/2022/0/IEEE13_FaultDetect#Current_Sensor_Cap1
+:Current_Sensor_Cap1 rdf:type owl:NamedIndividual ,
+                              :Current_Sensor ;
+                     SmartGrid:connectsTo :Bus_675 ;
+                     SmartGrid:feeds :Fault_Detector ;
+                     SmartGrid:measures :Ampere ;
+                     SmartGrid:monitor :Capacitor_Cap1 ;
+                     SmartGrid:bus_terminal 1 ;
+                     SmartGrid:phase 123 ;
+                     SmartGrid:rate 20 .
+
+
+###  http://www.semanticweb.org/phoenix/ontologies/2022/0/IEEE13_FaultDetect#Current_Sensor_Cap2
+:Current_Sensor_Cap2 rdf:type owl:NamedIndividual ,
+                              :Current_Sensor ;
+                     SmartGrid:connectsTo :Bus_611 ;
+                     SmartGrid:feeds :Fault_Detector ;
+                     SmartGrid:measures :Ampere ;
+                     SmartGrid:monitor :Capacitor_Cap2 ;
+                     SmartGrid:bus_terminal 1 ;
+                     SmartGrid:phase 3 ;
+                     SmartGrid:rate 20 .
+
+
+###  http://www.semanticweb.org/phoenix/ontologies/2022/0/IEEE13_FaultDetect#Current_Sensor_Sub
+:Current_Sensor_Sub rdf:type owl:NamedIndividual ,
+                             :Current_Sensor ;
+                    SmartGrid:connectsTo :Bus_SourceBus ;
+                    SmartGrid:feeds :Fault_Detector ;
+                    SmartGrid:measures :Ampere ;
+                    SmartGrid:monitor :Transformer_Sub ;
+                    SmartGrid:bus_terminal 1 ;
+                    SmartGrid:phase 123 ;
+                    SmartGrid:rate 20 .
+
+
+###  http://www.semanticweb.org/phoenix/ontologies/2022/0/IEEE13_FaultDetect#Current_Sensor_XFM1
+:Current_Sensor_XFM1 rdf:type owl:NamedIndividual ,
+                              :Current_Sensor ;
+                     SmartGrid:connectsTo :Bus_633 ;
+                     SmartGrid:feeds :Fault_Detector ;
+                     SmartGrid:measures :Ampere ;
+                     SmartGrid:monitor :Transformer_XFM1 ;
+                     SmartGrid:bus_terminal 1 ;
+                     SmartGrid:phase 123 ;
+                     SmartGrid:rate 20 .
+
+
+###  http://www.semanticweb.org/phoenix/ontologies/2022/0/IEEE13_FaultDetect#Current_Sensor_reg1
+:Current_Sensor_reg1 rdf:type owl:NamedIndividual ,
+                              :Current_Sensor ;
+                     SmartGrid:connectsTo :Bus_650 ;
+                     SmartGrid:feeds :Fault_Detector ;
+                     SmartGrid:measures :Ampere ;
+                     SmartGrid:monitor :regcontrol_Reg1 ;
+                     SmartGrid:bus_terminal 1 ;
+                     SmartGrid:phase 1 ;
+                     SmartGrid:rate 20 .
+
+
+###  http://www.semanticweb.org/phoenix/ontologies/2022/0/IEEE13_FaultDetect#Current_Sensor_reg2
+:Current_Sensor_reg2 rdf:type owl:NamedIndividual ,
+                              :Current_Sensor ;
+                     SmartGrid:connectsTo :Bus_650 ;
+                     SmartGrid:feeds :Fault_Detector ;
+                     SmartGrid:measures :Ampere ;
+                     SmartGrid:monitor :regcontrol_Reg2 ;
+                     SmartGrid:bus_terminal 1 ;
+                     SmartGrid:phase 2 ;
+                     SmartGrid:rate 20 .
+
+
+###  http://www.semanticweb.org/phoenix/ontologies/2022/0/IEEE13_FaultDetect#Current_Sensor_reg3
+:Current_Sensor_reg3 rdf:type owl:NamedIndividual ,
+                              :Current_Sensor ;
+                     SmartGrid:connectsTo :Bus_650 ;
+                     SmartGrid:feeds :Fault_Detector ;
+                     SmartGrid:measures :Ampere ;
+                     SmartGrid:monitor :regcontrol_Reg3 ;
+                     SmartGrid:bus_terminal 1 ;
+                     SmartGrid:phase 3 ;
+                     SmartGrid:rate 20 .
+
+
+###  http://www.semanticweb.org/phoenix/ontologies/2022/0/IEEE13_FaultDetect#Fault_Detector
+:Fault_Detector rdf:type owl:NamedIndividual ,
+                         :Fault_Detector ;
+                SmartGrid:connectsTo :Bus_632 .
+
+
+###  http://www.semanticweb.org/phoenix/ontologies/2022/0/IEEE13_FaultDetect#LineCode_mtx601
+:LineCode_mtx601 rdf:type owl:NamedIndividual ,
+                          SmartGrid:LineCode ;
+                 SmartGrid:freq 60 ;
+                 SmartGrid:num_phases 3 ;
+                 SmartGrid:rmat "(0.3465 | 0.1560 0.3375 | 0.1580 0.1535 0.3414 )" ;
+                 SmartGrid:unit "mi" ;
+                 SmartGrid:xmat "(1.0179 | 0.5017 1.0478 | 0.4236 0.3849 1.0348 )" .
+
+
+###  http://www.semanticweb.org/phoenix/ontologies/2022/0/IEEE13_FaultDetect#LineCode_mtx602
+:LineCode_mtx602 rdf:type owl:NamedIndividual ,
+                          SmartGrid:LineCode ;
+                 SmartGrid:freq 60 ;
+                 SmartGrid:num_phases 3 ;
+                 SmartGrid:rmat "(0.7526 | 0.1580 0.7475 | 0.1560 0.1535 0.7436 )" ;
+                 SmartGrid:unit "mi" ;
+                 SmartGrid:xmat "(1.1814 | 0.4236 1.1983 | 0.5017 0.3849 1.2112 )" .
+
+
+###  http://www.semanticweb.org/phoenix/ontologies/2022/0/IEEE13_FaultDetect#LineCode_mtx603
+:LineCode_mtx603 rdf:type owl:NamedIndividual ,
+                          SmartGrid:LineCode ;
+                 SmartGrid:freq 60 ;
+                 SmartGrid:num_phases 2 ;
+                 SmartGrid:rmat "(1.3238 | 0.2066 1.3294 )" ;
+                 SmartGrid:unit "mi" ;
+                 SmartGrid:xmat "(1.3569 | 0.4591 1.3471 )" .
+
+
+###  http://www.semanticweb.org/phoenix/ontologies/2022/0/IEEE13_FaultDetect#LineCode_mtx604
+:LineCode_mtx604 rdf:type owl:NamedIndividual ,
+                          SmartGrid:LineCode ;
+                 SmartGrid:freq 60 ;
+                 SmartGrid:num_phases 2 ;
+                 SmartGrid:rmat "(1.3238 | 0.2066 1.3294 )" ;
+                 SmartGrid:unit "mi" ;
+                 SmartGrid:xmat "(1.3569 | 0.4591 1.3471 )" .
+
+
+###  http://www.semanticweb.org/phoenix/ontologies/2022/0/IEEE13_FaultDetect#LineCode_mtx605
+:LineCode_mtx605 rdf:type owl:NamedIndividual ,
+                          SmartGrid:LineCode ;
+                 SmartGrid:freq 60 ;
+                 SmartGrid:num_phases 1 ;
+                 SmartGrid:rmat "(1.3292 )" ;
+                 SmartGrid:unit "mi" ;
+                 SmartGrid:xmat "(1.3475 )" .
+
+
+###  http://www.semanticweb.org/phoenix/ontologies/2022/0/IEEE13_FaultDetect#LineCode_mtx606
+:LineCode_mtx606 rdf:type owl:NamedIndividual ,
+                          SmartGrid:LineCode ;
+                 SmartGrid:cmat "[257 | 0 257 | 0 0 257]" ;
+                 SmartGrid:freq 60 ;
+                 SmartGrid:num_phases 3 ;
+                 SmartGrid:rmat "(0.7982 | 0.3192 0.7891 | 0.2849 0.3192 0.7982 )" ;
+                 SmartGrid:unit "mi" ;
+                 SmartGrid:xmat "(0.4463 | 0.0328 0.4041 | -0.0143 0.0328 0.4463 )" .
+
+
+###  http://www.semanticweb.org/phoenix/ontologies/2022/0/IEEE13_FaultDetect#LineCode_mtx607
+:LineCode_mtx607 rdf:type owl:NamedIndividual ,
+                          SmartGrid:LineCode ;
+                 SmartGrid:cmat "[236]" ;
+                 SmartGrid:freq 60 ;
+                 SmartGrid:num_phases 1 ;
+                 SmartGrid:rmat "(1.3425 )" ;
+                 SmartGrid:unit "mi" ;
+                 SmartGrid:xmat "(0.5124 )" .
+
+
+###  http://www.semanticweb.org/phoenix/ontologies/2022/0/IEEE13_FaultDetect#Line_632633
+:Line_632633 rdf:type owl:NamedIndividual ,
+                      SmartGrid:Line ;
+             SmartGrid:attachsTo :Bus_633 ;
+             SmartGrid:primaryAttachsTo :Bus_632 ;
+             SmartGrid:length 500 ;
+             SmartGrid:nodes_primary "1 2 3" ;
+             SmartGrid:nodes_secondary "1 2 3" ;
+             SmartGrid:num_phases 3 ;
+             SmartGrid:unit "ft" ;
+             SmartGrid:LineCode :LineCode_mtx602 .
+
+
+###  http://www.semanticweb.org/phoenix/ontologies/2022/0/IEEE13_FaultDetect#Line_632645
+:Line_632645 rdf:type owl:NamedIndividual ,
+                      SmartGrid:Line ;
+             SmartGrid:attachsTo :Bus_645 ;
+             SmartGrid:primaryAttachsTo :Bus_632 ;
+             SmartGrid:length 500 ;
+             SmartGrid:nodes_primary "3 2" ;
+             SmartGrid:nodes_secondary "3 2" ;
+             SmartGrid:num_phases 2 ;
+             SmartGrid:unit "ft" ;
+             SmartGrid:LineCode :LineCode_mtx603 .
+
+
+###  http://www.semanticweb.org/phoenix/ontologies/2022/0/IEEE13_FaultDetect#Line_632670
+:Line_632670 rdf:type owl:NamedIndividual ,
+                      SmartGrid:Line ;
+             SmartGrid:attachsTo :Bus_670 ;
+             SmartGrid:primaryAttachsTo :Bus_632 ;
+             SmartGrid:length 667 ;
+             SmartGrid:nodes_primary "1 2 3" ;
+             SmartGrid:nodes_secondary "1 2 3" ;
+             SmartGrid:num_phases 3 ;
+             SmartGrid:unit "ft" ;
+             SmartGrid:LineCode :LineCode_mtx601 .
+
+
+###  http://www.semanticweb.org/phoenix/ontologies/2022/0/IEEE13_FaultDetect#Line_645646
+:Line_645646 rdf:type owl:NamedIndividual ,
+                      SmartGrid:Line ;
+             SmartGrid:attachsTo :Bus_646 ;
+             SmartGrid:primaryAttachsTo :Bus_645 ;
+             SmartGrid:length 300 ;
+             SmartGrid:nodes_primary "3 2" ;
+             SmartGrid:nodes_secondary "3 2" ;
+             SmartGrid:num_phases 2 ;
+             SmartGrid:unit "ft" ;
+             SmartGrid:LineCode :LineCode_mtx603 .
+
+
+###  http://www.semanticweb.org/phoenix/ontologies/2022/0/IEEE13_FaultDetect#Line_650632
+:Line_650632 rdf:type owl:NamedIndividual ,
+                      SmartGrid:Line ;
+             SmartGrid:attachsTo :Bus_632 ;
+             SmartGrid:primaryAttachsTo :Bus_RG60 ;
+             SmartGrid:length 2000 ;
+             SmartGrid:nodes_primary "1 2 3" ;
+             SmartGrid:nodes_secondary "1 2 3" ;
+             SmartGrid:num_phases 3 ;
+             SmartGrid:unit "ft" ;
+             SmartGrid:LineCode :LineCode_mtx601 .
+
+
+###  http://www.semanticweb.org/phoenix/ontologies/2022/0/IEEE13_FaultDetect#Line_670671
+:Line_670671 rdf:type owl:NamedIndividual ,
+                      SmartGrid:Line ;
+             SmartGrid:attachsTo :Bus_671 ;
+             SmartGrid:primaryAttachsTo :Bus_670 ;
+             SmartGrid:length 1333 ;
+             SmartGrid:nodes_primary "1 2 3" ;
+             SmartGrid:nodes_secondary "1 2 3" ;
+             SmartGrid:num_phases 3 ;
+             SmartGrid:unit "ft" ;
+             SmartGrid:LineCode :LineCode_mtx601 .
+
+
+###  http://www.semanticweb.org/phoenix/ontologies/2022/0/IEEE13_FaultDetect#Line_671680
+:Line_671680 rdf:type owl:NamedIndividual ,
+                      SmartGrid:Line ;
+             SmartGrid:attachsTo :Bus_680 ;
+             SmartGrid:primaryAttachsTo :Bus_671 ;
+             SmartGrid:length 1000 ;
+             SmartGrid:nodes_primary "1 2 3" ;
+             SmartGrid:nodes_secondary "1 2 3" ;
+             SmartGrid:num_phases 3 ;
+             SmartGrid:unit "ft" ;
+             SmartGrid:LineCode :LineCode_mtx601 .
+
+
+###  http://www.semanticweb.org/phoenix/ontologies/2022/0/IEEE13_FaultDetect#Line_671684
+:Line_671684 rdf:type owl:NamedIndividual ,
+                      SmartGrid:Line ;
+             SmartGrid:attachsTo :Bus_684 ;
+             SmartGrid:primaryAttachsTo :Bus_671 ;
+             SmartGrid:length 300 ;
+             SmartGrid:nodes_primary "1 3" ;
+             SmartGrid:nodes_secondary "1 3" ;
+             SmartGrid:num_phases 2 ;
+             SmartGrid:unit "ft" ;
+             SmartGrid:LineCode :LineCode_mtx604 .
+
+
+###  http://www.semanticweb.org/phoenix/ontologies/2022/0/IEEE13_FaultDetect#Line_684611
+:Line_684611 rdf:type owl:NamedIndividual ,
+                      SmartGrid:Line ;
+             SmartGrid:attachsTo :Bus_611 ;
+             SmartGrid:primaryAttachsTo :Bus_684 ;
+             SmartGrid:length 300 ;
+             SmartGrid:nodes_primary 3 ;
+             SmartGrid:nodes_secondary 3 ;
+             SmartGrid:num_phases 1 ;
+             SmartGrid:unit "ft" ;
+             SmartGrid:LineCode :LineCode_mtx605 .
+
+
+###  http://www.semanticweb.org/phoenix/ontologies/2022/0/IEEE13_FaultDetect#Line_684652
+:Line_684652 rdf:type owl:NamedIndividual ,
+                      SmartGrid:Line ;
+             SmartGrid:attachsTo :Bus_652 ;
+             SmartGrid:primaryAttachsTo :Bus_684 ;
+             SmartGrid:length 800 ;
+             SmartGrid:nodes_primary 1 ;
+             SmartGrid:nodes_secondary 1 ;
+             SmartGrid:num_phases 1 ;
+             SmartGrid:unit "ft" ;
+             SmartGrid:LineCode :LineCode_mtx607 .
+
+
+###  http://www.semanticweb.org/phoenix/ontologies/2022/0/IEEE13_FaultDetect#Line_692675
+:Line_692675 rdf:type owl:NamedIndividual ,
+                      SmartGrid:Line ;
+             SmartGrid:attachsTo :Bus_675 ;
+             SmartGrid:primaryAttachsTo :Bus_692 ;
+             SmartGrid:length 500 ;
+             SmartGrid:nodes_primary "1 2 3" ;
+             SmartGrid:nodes_secondary "1 2 3" ;
+             SmartGrid:num_phases 3 ;
+             SmartGrid:unit "ft" ;
+             SmartGrid:LineCode :LineCode_mtx606 .
+
+
+###  http://www.semanticweb.org/phoenix/ontologies/2022/0/IEEE13_FaultDetect#Load_611_3
+:Load_611_3 rdf:type owl:NamedIndividual ,
+                     SmartGrid:Load ;
+            SmartGrid:primaryAttachsTo :Bus_611 ;
+            SmartGrid:connection_primary "Wye" ;
+            SmartGrid:kV_primary 2.4 ;
+            SmartGrid:kW 170 ;
+            SmartGrid:kvar 80 ;
+            SmartGrid:model 5 ;
+            SmartGrid:nodes_primary "3" ;
+            SmartGrid:nodes_secondary "3" ;
+            SmartGrid:num_phases 1 .
+
+
+###  http://www.semanticweb.org/phoenix/ontologies/2022/0/IEEE13_FaultDetect#Load_634_1
+:Load_634_1 rdf:type owl:NamedIndividual ,
+                     SmartGrid:Load ;
+            SmartGrid:primaryAttachsTo :Bus_634 ;
+            SmartGrid:connection_primary "Wye" ;
+            SmartGrid:kV_primary 0.277 ;
+            SmartGrid:kW 160 ;
+            SmartGrid:kvar 110 ;
+            SmartGrid:model 1 ;
+            SmartGrid:nodes_primary "1" ;
+            SmartGrid:nodes_secondary "1" ;
+            SmartGrid:num_phases 1 .
+
+
+###  http://www.semanticweb.org/phoenix/ontologies/2022/0/IEEE13_FaultDetect#Load_634_2
+:Load_634_2 rdf:type owl:NamedIndividual ,
+                     SmartGrid:Load ;
+            SmartGrid:primaryAttachsTo :Bus_634 ;
+            SmartGrid:connection_primary "Wye" ;
+            SmartGrid:kV_primary 0.277 ;
+            SmartGrid:kW 120 ;
+            SmartGrid:kvar 90 ;
+            SmartGrid:model 1 ;
+            SmartGrid:nodes_primary "2" ;
+            SmartGrid:nodes_secondary "2" ;
+            SmartGrid:num_phases 1 .
+
+
+###  http://www.semanticweb.org/phoenix/ontologies/2022/0/IEEE13_FaultDetect#Load_634_3
+:Load_634_3 rdf:type owl:NamedIndividual ,
+                     SmartGrid:Load ;
+            SmartGrid:primaryAttachsTo :Bus_634 ;
+            SmartGrid:connection_primary "Wye" ;
+            SmartGrid:kV_primary 0.277 ;
+            SmartGrid:kW 120 ;
+            SmartGrid:kvar 90 ;
+            SmartGrid:model 1 ;
+            SmartGrid:nodes_primary "3" ;
+            SmartGrid:nodes_secondary "3" ;
+            SmartGrid:num_phases 1 .
+
+
+###  http://www.semanticweb.org/phoenix/ontologies/2022/0/IEEE13_FaultDetect#Load_645_2
+:Load_645_2 rdf:type owl:NamedIndividual ,
+                     SmartGrid:Load ;
+            SmartGrid:primaryAttachsTo :Bus_645 ;
+            SmartGrid:connection_primary "Wye" ;
+            SmartGrid:kV_primary 2.4 ;
+            SmartGrid:kW 170 ;
+            SmartGrid:kvar 125 ;
+            SmartGrid:model 1 ;
+            SmartGrid:nodes_primary "2" ;
+            SmartGrid:nodes_secondary "2" ;
+            SmartGrid:num_phases 1 .
+
+
+###  http://www.semanticweb.org/phoenix/ontologies/2022/0/IEEE13_FaultDetect#Load_646_2
+:Load_646_2 rdf:type owl:NamedIndividual ,
+                     SmartGrid:Load ;
+            SmartGrid:primaryAttachsTo :Bus_646 ;
+            SmartGrid:connection_primary "Delta" ;
+            SmartGrid:kV_primary 4.16 ;
+            SmartGrid:kW 230 ;
+            SmartGrid:kvar 132 ;
+            SmartGrid:model 2 ;
+            SmartGrid:nodes_primary "2 3" ;
+            SmartGrid:nodes_secondary "2" ;
+            SmartGrid:num_phases 1 .
+
+
+###  http://www.semanticweb.org/phoenix/ontologies/2022/0/IEEE13_FaultDetect#Load_652_1
+:Load_652_1 rdf:type owl:NamedIndividual ,
+                     SmartGrid:Load ;
+            SmartGrid:primaryAttachsTo :Bus_652 ;
+            SmartGrid:connection_primary "Wye" ;
+            SmartGrid:kV_primary 2.4 ;
+            SmartGrid:kW 128 ;
+            SmartGrid:kvar 86 ;
+            SmartGrid:model 2 ;
+            SmartGrid:nodes_primary "1" ;
+            SmartGrid:nodes_secondary "1" ;
+            SmartGrid:num_phases 1 .
+
+
+###  http://www.semanticweb.org/phoenix/ontologies/2022/0/IEEE13_FaultDetect#Load_670_1
+:Load_670_1 rdf:type owl:NamedIndividual ,
+                     SmartGrid:Load ;
+            SmartGrid:primaryAttachsTo :Bus_670 ;
+            SmartGrid:connection_primary "Wye" ;
+            SmartGrid:kV_primary 2.4 ;
+            SmartGrid:kW 17 ;
+            SmartGrid:kvar 10 ;
+            SmartGrid:model 1 ;
+            SmartGrid:nodes_primary "1" ;
+            SmartGrid:nodes_secondary "1" ;
+            SmartGrid:num_phases 1 .
+
+
+###  http://www.semanticweb.org/phoenix/ontologies/2022/0/IEEE13_FaultDetect#Load_670_2
+:Load_670_2 rdf:type owl:NamedIndividual ,
+                     SmartGrid:Load ;
+            SmartGrid:primaryAttachsTo :Bus_670 ;
+            SmartGrid:connection_primary "Wye" ;
+            SmartGrid:kV_primary 2.4 ;
+            SmartGrid:kW 66 ;
+            SmartGrid:kvar 38 ;
+            SmartGrid:model 1 ;
+            SmartGrid:nodes_primary "2" ;
+            SmartGrid:nodes_secondary "2" ;
+            SmartGrid:num_phases 1 .
+
+
+###  http://www.semanticweb.org/phoenix/ontologies/2022/0/IEEE13_FaultDetect#Load_670_3
+:Load_670_3 rdf:type owl:NamedIndividual ,
+                     SmartGrid:Load ;
+            SmartGrid:primaryAttachsTo :Bus_670 ;
+            SmartGrid:connection_primary "Wye" ;
+            SmartGrid:kV_primary 2.4 ;
+            SmartGrid:kW 117 ;
+            SmartGrid:kvar 68 ;
+            SmartGrid:model 1 ;
+            SmartGrid:nodes_primary "3" ;
+            SmartGrid:nodes_secondary "3" ;
+            SmartGrid:num_phases 1 .
+
+
+###  http://www.semanticweb.org/phoenix/ontologies/2022/0/IEEE13_FaultDetect#Load_671
+:Load_671 rdf:type owl:NamedIndividual ,
+                   SmartGrid:Load ;
+          SmartGrid:primaryAttachsTo :Bus_671 ;
+          SmartGrid:connection_primary "Delta" ;
+          SmartGrid:kV_primary 4.16 ;
+          SmartGrid:kW 1155 ;
+          SmartGrid:kvar 660 ;
+          SmartGrid:model 1 ;
+          SmartGrid:nodes_primary "1 2 3" ;
+          SmartGrid:num_phases 3 .
+
+
+###  http://www.semanticweb.org/phoenix/ontologies/2022/0/IEEE13_FaultDetect#Load_675_1
+:Load_675_1 rdf:type owl:NamedIndividual ,
+                     SmartGrid:Load ;
+            SmartGrid:primaryAttachsTo :Bus_675 ;
+            SmartGrid:connection_primary "Wye" ;
+            SmartGrid:kV_primary 2.4 ;
+            SmartGrid:kW 485 ;
+            SmartGrid:kvar 190 ;
+            SmartGrid:model 1 ;
+            SmartGrid:nodes_primary "1" ;
+            SmartGrid:nodes_secondary "1" ;
+            SmartGrid:num_phases 1 .
+
+
+###  http://www.semanticweb.org/phoenix/ontologies/2022/0/IEEE13_FaultDetect#Load_675_2
+:Load_675_2 rdf:type owl:NamedIndividual ,
+                     SmartGrid:Load ;
+            SmartGrid:primaryAttachsTo :Bus_675 ;
+            SmartGrid:connection_primary "Wye" ;
+            SmartGrid:kV_primary 2.4 ;
+            SmartGrid:kW 68 ;
+            SmartGrid:kvar 60 ;
+            SmartGrid:model 1 ;
+            SmartGrid:nodes_primary "2" ;
+            SmartGrid:nodes_secondary "2" ;
+            SmartGrid:num_phases 1 .
+
+
+###  http://www.semanticweb.org/phoenix/ontologies/2022/0/IEEE13_FaultDetect#Load_675_3
+:Load_675_3 rdf:type owl:NamedIndividual ,
+                     SmartGrid:Load ;
+            SmartGrid:primaryAttachsTo :Bus_675 ;
+            SmartGrid:connection_primary "Wye" ;
+            SmartGrid:kV_primary 2.4 ;
+            SmartGrid:kW 290 ;
+            SmartGrid:kvar 212 ;
+            SmartGrid:model 1 ;
+            SmartGrid:nodes_primary "3" ;
+            SmartGrid:nodes_secondary "3" ;
+            SmartGrid:num_phases 1 .
+
+
+###  http://www.semanticweb.org/phoenix/ontologies/2022/0/IEEE13_FaultDetect#Load_692_3
+:Load_692_3 rdf:type owl:NamedIndividual ,
+                     SmartGrid:Load ;
+            SmartGrid:primaryAttachsTo :Bus_692 ;
+            SmartGrid:connection_primary "Delta" ;
+            SmartGrid:kV_primary 4.16 ;
+            SmartGrid:kW 170 ;
+            SmartGrid:kvar 151 ;
+            SmartGrid:model 5 ;
+            SmartGrid:nodes_primary "3 1" ;
+            SmartGrid:nodes_secondary "3" ;
+            SmartGrid:num_phases 1 .
+
+
+###  http://www.semanticweb.org/phoenix/ontologies/2022/0/IEEE13_FaultDetect#Switch_671692
+:Switch_671692 rdf:type owl:NamedIndividual ,
+                        SmartGrid:Switch ;
+               SmartGrid:attachsTo :Bus_692 ;
+               SmartGrid:primaryAttachsTo :Bus_671 ;
+               SmartGrid:c0 0.0 ;
+               SmartGrid:c1 0.0 ;
+               SmartGrid:normal_state "open" ;
+               SmartGrid:num_phases 3 ;
+               SmartGrid:r0 0.0001 ;
+               SmartGrid:r1 0.0001 ;
+               SmartGrid:x0 0.0 ;
+               SmartGrid:x1 0.0 .
+
+
+###  http://www.semanticweb.org/phoenix/ontologies/2022/0/IEEE13_FaultDetect#Transformer_Sub
+:Transformer_Sub rdf:type owl:NamedIndividual ,
+                          SmartGrid:Transformer ;
+                 SmartGrid:attachsTo :Bus_650 ;
+                 SmartGrid:primaryAttachsTo :Bus_SourceBus ;
+                 SmartGrid:Kva 5000 ;
+                 SmartGrid:XHL "(8 1000 /)" ;
+                 SmartGrid:connection_primary "Delta" ;
+                 SmartGrid:connection_secondary "Wye" ;
+                 SmartGrid:kV_primary 115 ;
+                 SmartGrid:kV_secondary 4.16 ;
+                 SmartGrid:num_phases 3 ;
+                 SmartGrid:percent_R "(.5 1000 /)" ;
+                 rdfs:comment "This is the transformer at the generating station" .
+
+
+###  http://www.semanticweb.org/phoenix/ontologies/2022/0/IEEE13_FaultDetect#Transformer_XFM1
+:Transformer_XFM1 rdf:type owl:NamedIndividual ,
+                           SmartGrid:Transformer ;
+                  SmartGrid:attachsTo :Bus_634 ;
+                  SmartGrid:primaryAttachsTo :Bus_633 ;
+                  SmartGrid:Kva 500 ;
+                  SmartGrid:XHL 2 ;
+                  SmartGrid:XHT 1 ;
+                  SmartGrid:XLT 1 ;
+                  SmartGrid:connection_primary "Wye" ;
+                  SmartGrid:connection_secondary "Wye" ;
+                  SmartGrid:kV_primary 4.16 ;
+                  SmartGrid:kV_secondary 0.480 ;
+                  SmartGrid:num_phases 3 ;
+                  SmartGrid:percent_R 0.55 ;
+                  rdfs:comment "This is the transformer labelled XFM-1" .
+
+
+###  http://www.semanticweb.org/phoenix/ontologies/2022/0/IEEE13_FaultDetect#regcontrol_Reg1
+:regcontrol_Reg1 rdf:type owl:NamedIndividual ,
+                          SmartGrid:regcontrol ;
+                 SmartGrid:attachsTo :Bus_RG60 ;
+                 SmartGrid:primaryAttachsTo :Bus_650 ;
+                 SmartGrid:Kva 1666 ;
+                 SmartGrid:R 3 ;
+                 SmartGrid:X 9 ;
+                 SmartGrid:XHL 0.01 ;
+                 SmartGrid:band 2 ;
+                 SmartGrid:bank "reg1" ;
+                 SmartGrid:ctprim 700 ;
+                 SmartGrid:kV_primary 2.4 ;
+                 SmartGrid:kV_secondary 2.4 ;
+                 SmartGrid:max_tap 1.05 ;
+                 SmartGrid:min_tap 0.95 ;
+                 SmartGrid:nodes_primary 1 ;
+                 SmartGrid:nodes_secondary 1 ;
+                 SmartGrid:num_phases 1 ;
+                 SmartGrid:num_taps 32 ;
+                 SmartGrid:percent_Load_Loss 0.01 ;
+                 SmartGrid:ptratio 20 ;
+                 SmartGrid:tap_primary 1 ;
+                 SmartGrid:tap_secondary 1 ;
+                 SmartGrid:vreg 122 .
+
+
+###  http://www.semanticweb.org/phoenix/ontologies/2022/0/IEEE13_FaultDetect#regcontrol_Reg2
+:regcontrol_Reg2 rdf:type owl:NamedIndividual ,
+                          SmartGrid:regcontrol ;
+                 SmartGrid:attachsTo :Bus_RG60 ;
+                 SmartGrid:primaryAttachsTo :Bus_650 ;
+                 SmartGrid:Kva 1666 ;
+                 SmartGrid:R 3 ;
+                 SmartGrid:X 9 ;
+                 SmartGrid:XHL 0.01 ;
+                 SmartGrid:band 2 ;
+                 SmartGrid:bank "reg1" ;
+                 SmartGrid:ctprim 700 ;
+                 SmartGrid:kV_primary 2.4 ;
+                 SmartGrid:kV_secondary 2.4 ;
+                 SmartGrid:max_tap 1.05 ;
+                 SmartGrid:min_tap 0.95 ;
+                 SmartGrid:nodes_primary 2 ;
+                 SmartGrid:nodes_secondary 2 ;
+                 SmartGrid:num_phases 1 ;
+                 SmartGrid:num_taps 32 ;
+                 SmartGrid:percent_Load_Loss 0.01 ;
+                 SmartGrid:ptratio 20 ;
+                 SmartGrid:tap_primary 1 ;
+                 SmartGrid:tap_secondary 1 ;
+                 SmartGrid:vreg 122 .
+
+
+###  http://www.semanticweb.org/phoenix/ontologies/2022/0/IEEE13_FaultDetect#regcontrol_Reg3
+:regcontrol_Reg3 rdf:type owl:NamedIndividual ,
+                          SmartGrid:regcontrol ;
+                 SmartGrid:attachsTo :Bus_RG60 ;
+                 SmartGrid:primaryAttachsTo :Bus_650 ;
+                 SmartGrid:Kva 1666 ;
+                 SmartGrid:R 3 ;
+                 SmartGrid:X 9 ;
+                 SmartGrid:XHL 0.01 ;
+                 SmartGrid:band 2 ;
+                 SmartGrid:bank "reg1" ;
+                 SmartGrid:ctprim 700 ;
+                 SmartGrid:kV_primary 2.4 ;
+                 SmartGrid:kV_secondary 2.4 ;
+                 SmartGrid:max_tap 1.05 ;
+                 SmartGrid:min_tap 0.95 ;
+                 SmartGrid:nodes_primary 3 ;
+                 SmartGrid:nodes_secondary 3 ;
+                 SmartGrid:num_phases 1 ;
+                 SmartGrid:num_taps 32 ;
+                 SmartGrid:percent_Load_Loss 0.01 ;
+                 SmartGrid:ptratio 20 ;
+                 SmartGrid:tap_primary 1 ;
+                 SmartGrid:tap_secondary 1 ;
+                 SmartGrid:vreg 122 .
+
+
+###  Generated by the OWL API (version 4.5.9.2019-02-01T07:24:44Z) https://github.com/owlcs/owlapi

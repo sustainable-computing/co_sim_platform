@@ -64,11 +64,8 @@ def main():
     graph.query_nodes()
 
     controllers = [str(controller) for controller in graph.query_controllers()]
-    print(controllers)
     sensors = graph.query_sensors()
-    print(sensors)
     actuators = graph.query_actuators()
-    print(actuators)
     with open(device_filename, 'w') as csv_file:
         fieldnames = ['type','src','dst','cidx','didx','period','error','cktElement','cktTerminal','cktPhase','cktProperty']
         writer = csv.DictWriter(csv_file, fieldnames=fieldnames)
@@ -107,8 +104,8 @@ def main():
     with open(outfilename, 'wt') as outfile:
         outfile.write('!---- pre object declareation\n')
         outfile.write(pre_object_opendss())
-        outfile.write('!---- Generated Circuit/generator\n')
-        outfile.write(graph.query_generator().get_opendss())
+        outfile.write('!---- Generated Circuit\n')
+        outfile.write(graph.query_circuit().get_opendss())
         outfile.write('\n!---- Generated Transformer\n')
         outfile.write('\n'.join([trans.get_opendss() for trans in graph.query_transformers()]))
         outfile.write('\n!---- Generated RegControls\n')

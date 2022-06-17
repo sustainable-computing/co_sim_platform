@@ -1,28 +1,37 @@
-@prefix : <http://www.semanticweb.org/phoenix/ontologies/2022/0/IEEE13#> .
+@prefix : <http://www.semanticweb.org/phoenix/ontologies/2022/0/IEEE13_base#> .
 @prefix owl: <http://www.w3.org/2002/07/owl#> .
 @prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
 @prefix xml: <http://www.w3.org/XML/1998/namespace> .
 @prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
 @prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
 @prefix SmartGrid: <http://www.semanticweb.org/phoenix/ontologies/2022/0/SmartGrid#> .
-@base <http://www.semanticweb.org/phoenix/ontologies/2022/0/IEEE13> .
+@base <http://www.semanticweb.org/phoenix/ontologies/2022/0/IEEE13_base> .
 
-<http://www.semanticweb.org/phoenix/ontologies/2022/0/IEEE13> rdf:type owl:Ontology ;
-                                                               owl:imports <http://www.semanticweb.org/phoenix/ontologies/2022/0/SmartGrid> ;
-                                                               rdfs:comment "This will model the IEEE13" .
+<http://www.semanticweb.org/phoenix/ontologies/2022/0/IEEE13_base> rdf:type owl:Ontology ;
+                                                                    owl:imports <http://www.semanticweb.org/phoenix/ontologies/2022/0/SmartGrid> ;
+                                                                    rdfs:comment "This will model the IEEE13" .
+
+#################################################################
+#    Classes
+#################################################################
+
+###  http://www.semanticweb.org/phoenix/ontologies/2022/0/IEEE13_base#1901
+<http://www.semanticweb.org/phoenix/ontologies/2022/0/IEEE13_base#1901> rdf:type owl:Class ;
+                                                                        rdfs:subClassOf SmartGrid:Transporter .
+
 
 #################################################################
 #    Individuals
 #################################################################
 
-###  http://www.semanticweb.org/phoenix/ontologies/2022/0/IEEE13#Bus_611
+###  http://www.semanticweb.org/phoenix/ontologies/2022/0/IEEE13_base#Bus_611
 :Bus_611 rdf:type owl:NamedIndividual ,
                   SmartGrid:Bus ;
          SmartGrid:connectsTo :Bus_684 ;
          SmartGrid:locatedAt :Coord_0_100 .
 
 
-###  http://www.semanticweb.org/phoenix/ontologies/2022/0/IEEE13#Bus_632
+###  http://www.semanticweb.org/phoenix/ontologies/2022/0/IEEE13_base#Bus_632
 :Bus_632 rdf:type owl:NamedIndividual ,
                   SmartGrid:Bus ;
          SmartGrid:connectsTo :Bus_633 ,
@@ -32,7 +41,7 @@
          SmartGrid:locatedAt :Coord_200_250 .
 
 
-###  http://www.semanticweb.org/phoenix/ontologies/2022/0/IEEE13#Bus_633
+###  http://www.semanticweb.org/phoenix/ontologies/2022/0/IEEE13_base#Bus_633
 :Bus_633 rdf:type owl:NamedIndividual ,
                   SmartGrid:Bus ;
          SmartGrid:connectsTo :Bus_632 ,
@@ -40,14 +49,14 @@
          SmartGrid:locatedAt :Coord_350_250 .
 
 
-###  http://www.semanticweb.org/phoenix/ontologies/2022/0/IEEE13#Bus_634
+###  http://www.semanticweb.org/phoenix/ontologies/2022/0/IEEE13_base#Bus_634
 :Bus_634 rdf:type owl:NamedIndividual ,
                   SmartGrid:Bus ;
          SmartGrid:connectsTo :Bus_633 ;
          SmartGrid:locatedAt :Coord_400_250 .
 
 
-###  http://www.semanticweb.org/phoenix/ontologies/2022/0/IEEE13#Bus_645
+###  http://www.semanticweb.org/phoenix/ontologies/2022/0/IEEE13_base#Bus_645
 :Bus_645 rdf:type owl:NamedIndividual ,
                   SmartGrid:Bus ;
          SmartGrid:connectsTo :Bus_632 ,
@@ -55,14 +64,14 @@
          SmartGrid:locatedAt :Coord_100_250 .
 
 
-###  http://www.semanticweb.org/phoenix/ontologies/2022/0/IEEE13#Bus_646
+###  http://www.semanticweb.org/phoenix/ontologies/2022/0/IEEE13_base#Bus_646
 :Bus_646 rdf:type owl:NamedIndividual ,
                   SmartGrid:Bus ;
          SmartGrid:connectsTo :Bus_645 ;
          SmartGrid:locatedAt :Coord_0_250 .
 
 
-###  http://www.semanticweb.org/phoenix/ontologies/2022/0/IEEE13#Bus_650
+###  http://www.semanticweb.org/phoenix/ontologies/2022/0/IEEE13_base#Bus_650
 :Bus_650 rdf:type owl:NamedIndividual ,
                   SmartGrid:Bus ;
          SmartGrid:connectsTo :Bus_RG60 ,
@@ -70,14 +79,14 @@
          SmartGrid:locatedAt :Coord_200_350 .
 
 
-###  http://www.semanticweb.org/phoenix/ontologies/2022/0/IEEE13#Bus_652
+###  http://www.semanticweb.org/phoenix/ontologies/2022/0/IEEE13_base#Bus_652
 :Bus_652 rdf:type owl:NamedIndividual ,
                   SmartGrid:Bus ;
          SmartGrid:connectsTo :Bus_684 ;
          SmartGrid:locatedAt :Coord_100_0 .
 
 
-###  http://www.semanticweb.org/phoenix/ontologies/2022/0/IEEE13#Bus_670
+###  http://www.semanticweb.org/phoenix/ontologies/2022/0/IEEE13_base#Bus_670
 :Bus_670 rdf:type owl:NamedIndividual ,
                   SmartGrid:Bus ;
          SmartGrid:connectsTo :Bus_632 ,
@@ -85,7 +94,7 @@
          SmartGrid:locatedAt :Coord_200_200 .
 
 
-###  http://www.semanticweb.org/phoenix/ontologies/2022/0/IEEE13#Bus_671
+###  http://www.semanticweb.org/phoenix/ontologies/2022/0/IEEE13_base#Bus_671
 :Bus_671 rdf:type owl:NamedIndividual ,
                   SmartGrid:Bus ;
          SmartGrid:connectsTo :Bus_670 ,
@@ -95,21 +104,21 @@
          SmartGrid:locatedAt :Coord_200_100 .
 
 
-###  http://www.semanticweb.org/phoenix/ontologies/2022/0/IEEE13#Bus_675
+###  http://www.semanticweb.org/phoenix/ontologies/2022/0/IEEE13_base#Bus_675
 :Bus_675 rdf:type owl:NamedIndividual ,
                   SmartGrid:Bus ;
          SmartGrid:connectsTo :Bus_692 ;
          SmartGrid:locatedAt :Coord_400_100 .
 
 
-###  http://www.semanticweb.org/phoenix/ontologies/2022/0/IEEE13#Bus_680
+###  http://www.semanticweb.org/phoenix/ontologies/2022/0/IEEE13_base#Bus_680
 :Bus_680 rdf:type owl:NamedIndividual ,
                   SmartGrid:Bus ;
          SmartGrid:connectsTo :Bus_671 ;
          SmartGrid:locatedAt :Coord_200_0 .
 
 
-###  http://www.semanticweb.org/phoenix/ontologies/2022/0/IEEE13#Bus_684
+###  http://www.semanticweb.org/phoenix/ontologies/2022/0/IEEE13_base#Bus_684
 :Bus_684 rdf:type owl:NamedIndividual ,
                   SmartGrid:Bus ;
          SmartGrid:connectsTo :Bus_611 ,
@@ -118,7 +127,7 @@
          SmartGrid:locatedAt :Coord_100_100 .
 
 
-###  http://www.semanticweb.org/phoenix/ontologies/2022/0/IEEE13#Bus_692
+###  http://www.semanticweb.org/phoenix/ontologies/2022/0/IEEE13_base#Bus_692
 :Bus_692 rdf:type owl:NamedIndividual ,
                   SmartGrid:Bus ;
          SmartGrid:connectsTo :Bus_671 ,
@@ -126,7 +135,7 @@
          SmartGrid:locatedAt :Coord_250_100 .
 
 
-###  http://www.semanticweb.org/phoenix/ontologies/2022/0/IEEE13#Bus_RG60
+###  http://www.semanticweb.org/phoenix/ontologies/2022/0/IEEE13_base#Bus_RG60
 :Bus_RG60 rdf:type owl:NamedIndividual ,
                    SmartGrid:Bus ;
           SmartGrid:connectsTo :Bus_632 ,
@@ -134,14 +143,14 @@
           SmartGrid:locatedAt :Coord_200_300 .
 
 
-###  http://www.semanticweb.org/phoenix/ontologies/2022/0/IEEE13#Bus_SourceBus
+###  http://www.semanticweb.org/phoenix/ontologies/2022/0/IEEE13_base#Bus_SourceBus
 :Bus_SourceBus rdf:type owl:NamedIndividual ,
                         SmartGrid:Bus ;
                SmartGrid:connectsTo :Bus_650 ;
                SmartGrid:locatedAt :Coord_200_400 .
 
 
-###  http://www.semanticweb.org/phoenix/ontologies/2022/0/IEEE13#Capacitor_Cap1
+###  http://www.semanticweb.org/phoenix/ontologies/2022/0/IEEE13_base#Capacitor_Cap1
 :Capacitor_Cap1 rdf:type owl:NamedIndividual ,
                          SmartGrid:Capacitor ;
                 SmartGrid:kV_primary 4.16 ;
@@ -150,7 +159,7 @@
                 SmartGrid:primaryAttachsTo :Bus_675 .
 
 
-###  http://www.semanticweb.org/phoenix/ontologies/2022/0/IEEE13#Capacitor_Cap2
+###  http://www.semanticweb.org/phoenix/ontologies/2022/0/IEEE13_base#Capacitor_Cap2
 :Capacitor_Cap2 rdf:type owl:NamedIndividual ,
                          SmartGrid:Capacitor ;
                 SmartGrid:kV_primary 2.4 ;
@@ -160,131 +169,131 @@
                 SmartGrid:primaryAttachsTo :Bus_611 .
 
 
-###  http://www.semanticweb.org/phoenix/ontologies/2022/0/IEEE13#Coord_0_100
+###  http://www.semanticweb.org/phoenix/ontologies/2022/0/IEEE13_base#Circuit_IEEE13Nodeckt
+:Circuit_IEEE13Nodeckt rdf:type owl:NamedIndividual ,
+                                SmartGrid:Circuit ;
+                       SmartGrid:primaryAttachsTo :Bus_SourceBus ;
+                       SmartGrid:MVAsc1 21000 ;
+                       SmartGrid:MVAsc3 20000 ;
+                       SmartGrid:angle 30 ;
+                       SmartGrid:kV_primary 115 ;
+                       SmartGrid:num_phases 3 ;
+                       SmartGrid:pu 1.0001 .
+
+
+###  http://www.semanticweb.org/phoenix/ontologies/2022/0/IEEE13_base#Coord_0_100
 :Coord_0_100 rdf:type owl:NamedIndividual ,
                       SmartGrid:Coordinates ;
              SmartGrid:coord_x 0 ;
              SmartGrid:coord_y 100 .
 
 
-###  http://www.semanticweb.org/phoenix/ontologies/2022/0/IEEE13#Coord_0_250
+###  http://www.semanticweb.org/phoenix/ontologies/2022/0/IEEE13_base#Coord_0_250
 :Coord_0_250 rdf:type owl:NamedIndividual ,
                       SmartGrid:Coordinates ;
              SmartGrid:coord_x 0 ;
              SmartGrid:coord_y 250 .
 
 
-###  http://www.semanticweb.org/phoenix/ontologies/2022/0/IEEE13#Coord_100_0
+###  http://www.semanticweb.org/phoenix/ontologies/2022/0/IEEE13_base#Coord_100_0
 :Coord_100_0 rdf:type owl:NamedIndividual ,
                       SmartGrid:Coordinates ;
              SmartGrid:coord_x 100 ;
              SmartGrid:coord_y 0 .
 
 
-###  http://www.semanticweb.org/phoenix/ontologies/2022/0/IEEE13#Coord_100_100
+###  http://www.semanticweb.org/phoenix/ontologies/2022/0/IEEE13_base#Coord_100_100
 :Coord_100_100 rdf:type owl:NamedIndividual ,
                         SmartGrid:Coordinates ;
                SmartGrid:coord_x 100 ;
                SmartGrid:coord_y 100 .
 
 
-###  http://www.semanticweb.org/phoenix/ontologies/2022/0/IEEE13#Coord_100_250
+###  http://www.semanticweb.org/phoenix/ontologies/2022/0/IEEE13_base#Coord_100_250
 :Coord_100_250 rdf:type owl:NamedIndividual ,
                         SmartGrid:Coordinates ;
                SmartGrid:coord_x 100 ;
                SmartGrid:coord_y 250 .
 
 
-###  http://www.semanticweb.org/phoenix/ontologies/2022/0/IEEE13#Coord_200_0
+###  http://www.semanticweb.org/phoenix/ontologies/2022/0/IEEE13_base#Coord_200_0
 :Coord_200_0 rdf:type owl:NamedIndividual ,
                       SmartGrid:Coordinates ;
              SmartGrid:coord_x 200 ;
              SmartGrid:coord_y 0 .
 
 
-###  http://www.semanticweb.org/phoenix/ontologies/2022/0/IEEE13#Coord_200_100
+###  http://www.semanticweb.org/phoenix/ontologies/2022/0/IEEE13_base#Coord_200_100
 :Coord_200_100 rdf:type owl:NamedIndividual ,
                         SmartGrid:Coordinates ;
                SmartGrid:coord_x 200 ;
                SmartGrid:coord_y 100 .
 
 
-###  http://www.semanticweb.org/phoenix/ontologies/2022/0/IEEE13#Coord_200_200
+###  http://www.semanticweb.org/phoenix/ontologies/2022/0/IEEE13_base#Coord_200_200
 :Coord_200_200 rdf:type owl:NamedIndividual ,
                         SmartGrid:Coordinates ;
                SmartGrid:coord_x 200 ;
                SmartGrid:coord_y 200 .
 
 
-###  http://www.semanticweb.org/phoenix/ontologies/2022/0/IEEE13#Coord_200_250
+###  http://www.semanticweb.org/phoenix/ontologies/2022/0/IEEE13_base#Coord_200_250
 :Coord_200_250 rdf:type owl:NamedIndividual ,
                         SmartGrid:Coordinates ;
                SmartGrid:coord_x 200 ;
                SmartGrid:coord_y 250 .
 
 
-###  http://www.semanticweb.org/phoenix/ontologies/2022/0/IEEE13#Coord_200_300
+###  http://www.semanticweb.org/phoenix/ontologies/2022/0/IEEE13_base#Coord_200_300
 :Coord_200_300 rdf:type owl:NamedIndividual ,
                         SmartGrid:Coordinates ;
                SmartGrid:coord_x 200 ;
                SmartGrid:coord_y 300 .
 
 
-###  http://www.semanticweb.org/phoenix/ontologies/2022/0/IEEE13#Coord_200_350
+###  http://www.semanticweb.org/phoenix/ontologies/2022/0/IEEE13_base#Coord_200_350
 :Coord_200_350 rdf:type owl:NamedIndividual ,
                         SmartGrid:Coordinates ;
                SmartGrid:coord_x 200 ;
                SmartGrid:coord_y 350 .
 
 
-###  http://www.semanticweb.org/phoenix/ontologies/2022/0/IEEE13#Coord_200_400
+###  http://www.semanticweb.org/phoenix/ontologies/2022/0/IEEE13_base#Coord_200_400
 :Coord_200_400 rdf:type owl:NamedIndividual ,
                         SmartGrid:Coordinates ;
                SmartGrid:coord_x 200 ;
                SmartGrid:coord_y 400 .
 
 
-###  http://www.semanticweb.org/phoenix/ontologies/2022/0/IEEE13#Coord_250_100
+###  http://www.semanticweb.org/phoenix/ontologies/2022/0/IEEE13_base#Coord_250_100
 :Coord_250_100 rdf:type owl:NamedIndividual ,
                         SmartGrid:Coordinates ;
                SmartGrid:coord_x 250 ;
                SmartGrid:coord_y 100 .
 
 
-###  http://www.semanticweb.org/phoenix/ontologies/2022/0/IEEE13#Coord_350_250
+###  http://www.semanticweb.org/phoenix/ontologies/2022/0/IEEE13_base#Coord_350_250
 :Coord_350_250 rdf:type owl:NamedIndividual ,
                         SmartGrid:Coordinates ;
                SmartGrid:coord_x 350 ;
                SmartGrid:coord_y 250 .
 
 
-###  http://www.semanticweb.org/phoenix/ontologies/2022/0/IEEE13#Coord_400_100
+###  http://www.semanticweb.org/phoenix/ontologies/2022/0/IEEE13_base#Coord_400_100
 :Coord_400_100 rdf:type owl:NamedIndividual ,
                         SmartGrid:Coordinates ;
                SmartGrid:coord_x 400 ;
                SmartGrid:coord_y 100 .
 
 
-###  http://www.semanticweb.org/phoenix/ontologies/2022/0/IEEE13#Coord_400_250
+###  http://www.semanticweb.org/phoenix/ontologies/2022/0/IEEE13_base#Coord_400_250
 :Coord_400_250 rdf:type owl:NamedIndividual ,
                         SmartGrid:Coordinates ;
                SmartGrid:coord_x 400 ;
                SmartGrid:coord_y 250 .
 
 
-###  http://www.semanticweb.org/phoenix/ontologies/2022/0/IEEE13#Generator_IEEE13Nodeckt
-:Generator_IEEE13Nodeckt rdf:type owl:NamedIndividual ,
-                                  SmartGrid:Generator ;
-                         SmartGrid:MVAsc1 21000 ;
-                         SmartGrid:MVAsc3 20000 ;
-                         SmartGrid:angle 30 ;
-                         SmartGrid:kV_secondary 115 ;
-                         SmartGrid:num_phases 3 ;
-                         SmartGrid:primaryAttachsTo :Bus_SourceBus ;
-                         SmartGrid:pu 1.0001 .
-
-
-###  http://www.semanticweb.org/phoenix/ontologies/2022/0/IEEE13#LineCode_mtx601
+###  http://www.semanticweb.org/phoenix/ontologies/2022/0/IEEE13_base#LineCode_mtx601
 :LineCode_mtx601 rdf:type owl:NamedIndividual ,
                           SmartGrid:LineCode ;
                  SmartGrid:freq 60 ;
@@ -294,7 +303,7 @@
                  SmartGrid:xmat "(1.0179 | 0.5017 1.0478 | 0.4236 0.3849 1.0348 )" .
 
 
-###  http://www.semanticweb.org/phoenix/ontologies/2022/0/IEEE13#LineCode_mtx602
+###  http://www.semanticweb.org/phoenix/ontologies/2022/0/IEEE13_base#LineCode_mtx602
 :LineCode_mtx602 rdf:type owl:NamedIndividual ,
                           SmartGrid:LineCode ;
                  SmartGrid:freq 60 ;
@@ -304,7 +313,7 @@
                  SmartGrid:xmat "(1.1814 | 0.4236 1.1983 | 0.5017 0.3849 1.2112 )" .
 
 
-###  http://www.semanticweb.org/phoenix/ontologies/2022/0/IEEE13#LineCode_mtx603
+###  http://www.semanticweb.org/phoenix/ontologies/2022/0/IEEE13_base#LineCode_mtx603
 :LineCode_mtx603 rdf:type owl:NamedIndividual ,
                           SmartGrid:LineCode ;
                  SmartGrid:freq 60 ;
@@ -314,7 +323,7 @@
                  SmartGrid:xmat "(1.3569 | 0.4591 1.3471 )" .
 
 
-###  http://www.semanticweb.org/phoenix/ontologies/2022/0/IEEE13#LineCode_mtx604
+###  http://www.semanticweb.org/phoenix/ontologies/2022/0/IEEE13_base#LineCode_mtx604
 :LineCode_mtx604 rdf:type owl:NamedIndividual ,
                           SmartGrid:LineCode ;
                  SmartGrid:freq 60 ;
@@ -324,7 +333,7 @@
                  SmartGrid:xmat "(1.3569 | 0.4591 1.3471 )" .
 
 
-###  http://www.semanticweb.org/phoenix/ontologies/2022/0/IEEE13#LineCode_mtx605
+###  http://www.semanticweb.org/phoenix/ontologies/2022/0/IEEE13_base#LineCode_mtx605
 :LineCode_mtx605 rdf:type owl:NamedIndividual ,
                           SmartGrid:LineCode ;
                  SmartGrid:freq 60 ;
@@ -334,7 +343,7 @@
                  SmartGrid:xmat "(1.3475 )" .
 
 
-###  http://www.semanticweb.org/phoenix/ontologies/2022/0/IEEE13#LineCode_mtx606
+###  http://www.semanticweb.org/phoenix/ontologies/2022/0/IEEE13_base#LineCode_mtx606
 :LineCode_mtx606 rdf:type owl:NamedIndividual ,
                           SmartGrid:LineCode ;
                  SmartGrid:cmat "[257 | 0 257 | 0 0 257]" ;
@@ -345,7 +354,7 @@
                  SmartGrid:xmat "(0.4463 | 0.0328 0.4041 | -0.0143 0.0328 0.4463 )" .
 
 
-###  http://www.semanticweb.org/phoenix/ontologies/2022/0/IEEE13#LineCode_mtx607
+###  http://www.semanticweb.org/phoenix/ontologies/2022/0/IEEE13_base#LineCode_mtx607
 :LineCode_mtx607 rdf:type owl:NamedIndividual ,
                           SmartGrid:LineCode ;
                  SmartGrid:cmat "[236]" ;
@@ -356,7 +365,7 @@
                  SmartGrid:xmat "(0.5124 )" .
 
 
-###  http://www.semanticweb.org/phoenix/ontologies/2022/0/IEEE13#Line_632633
+###  http://www.semanticweb.org/phoenix/ontologies/2022/0/IEEE13_base#Line_632633
 :Line_632633 rdf:type owl:NamedIndividual ,
                       SmartGrid:Line ;
              SmartGrid:LineCode :LineCode_mtx602 ;
@@ -369,7 +378,7 @@
              SmartGrid:unit "ft" .
 
 
-###  http://www.semanticweb.org/phoenix/ontologies/2022/0/IEEE13#Line_632645
+###  http://www.semanticweb.org/phoenix/ontologies/2022/0/IEEE13_base#Line_632645
 :Line_632645 rdf:type owl:NamedIndividual ,
                       SmartGrid:Line ;
              SmartGrid:LineCode :LineCode_mtx603 ;
@@ -382,7 +391,7 @@
              SmartGrid:unit "ft" .
 
 
-###  http://www.semanticweb.org/phoenix/ontologies/2022/0/IEEE13#Line_632670
+###  http://www.semanticweb.org/phoenix/ontologies/2022/0/IEEE13_base#Line_632670
 :Line_632670 rdf:type owl:NamedIndividual ,
                       SmartGrid:Line ;
              SmartGrid:LineCode :LineCode_mtx601 ;
@@ -395,7 +404,7 @@
              SmartGrid:unit "ft" .
 
 
-###  http://www.semanticweb.org/phoenix/ontologies/2022/0/IEEE13#Line_645646
+###  http://www.semanticweb.org/phoenix/ontologies/2022/0/IEEE13_base#Line_645646
 :Line_645646 rdf:type owl:NamedIndividual ,
                       SmartGrid:Line ;
              SmartGrid:LineCode :LineCode_mtx603 ;
@@ -408,7 +417,7 @@
              SmartGrid:unit "ft" .
 
 
-###  http://www.semanticweb.org/phoenix/ontologies/2022/0/IEEE13#Line_650632
+###  http://www.semanticweb.org/phoenix/ontologies/2022/0/IEEE13_base#Line_650632
 :Line_650632 rdf:type owl:NamedIndividual ,
                       SmartGrid:Line ;
              SmartGrid:LineCode :LineCode_mtx601 ;
@@ -421,7 +430,7 @@
              SmartGrid:unit "ft" .
 
 
-###  http://www.semanticweb.org/phoenix/ontologies/2022/0/IEEE13#Line_670671
+###  http://www.semanticweb.org/phoenix/ontologies/2022/0/IEEE13_base#Line_670671
 :Line_670671 rdf:type owl:NamedIndividual ,
                       SmartGrid:Line ;
              SmartGrid:LineCode :LineCode_mtx601 ;
@@ -434,7 +443,7 @@
              SmartGrid:unit "ft" .
 
 
-###  http://www.semanticweb.org/phoenix/ontologies/2022/0/IEEE13#Line_671680
+###  http://www.semanticweb.org/phoenix/ontologies/2022/0/IEEE13_base#Line_671680
 :Line_671680 rdf:type owl:NamedIndividual ,
                       SmartGrid:Line ;
              SmartGrid:LineCode :LineCode_mtx601 ;
@@ -447,7 +456,7 @@
              SmartGrid:unit "ft" .
 
 
-###  http://www.semanticweb.org/phoenix/ontologies/2022/0/IEEE13#Line_671684
+###  http://www.semanticweb.org/phoenix/ontologies/2022/0/IEEE13_base#Line_671684
 :Line_671684 rdf:type owl:NamedIndividual ,
                       SmartGrid:Line ;
              SmartGrid:LineCode :LineCode_mtx604 ;
@@ -460,7 +469,7 @@
              SmartGrid:unit "ft" .
 
 
-###  http://www.semanticweb.org/phoenix/ontologies/2022/0/IEEE13#Line_684611
+###  http://www.semanticweb.org/phoenix/ontologies/2022/0/IEEE13_base#Line_684611
 :Line_684611 rdf:type owl:NamedIndividual ,
                       SmartGrid:Line ;
              SmartGrid:LineCode :LineCode_mtx605 ;
@@ -473,7 +482,7 @@
              SmartGrid:unit "ft" .
 
 
-###  http://www.semanticweb.org/phoenix/ontologies/2022/0/IEEE13#Line_684652
+###  http://www.semanticweb.org/phoenix/ontologies/2022/0/IEEE13_base#Line_684652
 :Line_684652 rdf:type owl:NamedIndividual ,
                       SmartGrid:Line ;
              SmartGrid:LineCode :LineCode_mtx607 ;
@@ -486,7 +495,7 @@
              SmartGrid:unit "ft" .
 
 
-###  http://www.semanticweb.org/phoenix/ontologies/2022/0/IEEE13#Line_692675
+###  http://www.semanticweb.org/phoenix/ontologies/2022/0/IEEE13_base#Line_692675
 :Line_692675 rdf:type owl:NamedIndividual ,
                       SmartGrid:Line ;
              SmartGrid:LineCode :LineCode_mtx606 ;
@@ -499,7 +508,7 @@
              SmartGrid:unit "ft" .
 
 
-###  http://www.semanticweb.org/phoenix/ontologies/2022/0/IEEE13#Load_611_3
+###  http://www.semanticweb.org/phoenix/ontologies/2022/0/IEEE13_base#Load_611_3
 :Load_611_3 rdf:type owl:NamedIndividual ,
                      SmartGrid:Load ;
             SmartGrid:connection_primary "Wye" ;
@@ -513,7 +522,7 @@
             SmartGrid:primaryAttachsTo :Bus_611 .
 
 
-###  http://www.semanticweb.org/phoenix/ontologies/2022/0/IEEE13#Load_634_1
+###  http://www.semanticweb.org/phoenix/ontologies/2022/0/IEEE13_base#Load_634_1
 :Load_634_1 rdf:type owl:NamedIndividual ,
                      SmartGrid:Load ;
             SmartGrid:connection_primary "Wye" ;
@@ -527,7 +536,7 @@
             SmartGrid:primaryAttachsTo :Bus_634 .
 
 
-###  http://www.semanticweb.org/phoenix/ontologies/2022/0/IEEE13#Load_634_2
+###  http://www.semanticweb.org/phoenix/ontologies/2022/0/IEEE13_base#Load_634_2
 :Load_634_2 rdf:type owl:NamedIndividual ,
                      SmartGrid:Load ;
             SmartGrid:connection_primary "Wye" ;
@@ -541,7 +550,7 @@
             SmartGrid:primaryAttachsTo :Bus_634 .
 
 
-###  http://www.semanticweb.org/phoenix/ontologies/2022/0/IEEE13#Load_634_3
+###  http://www.semanticweb.org/phoenix/ontologies/2022/0/IEEE13_base#Load_634_3
 :Load_634_3 rdf:type owl:NamedIndividual ,
                      SmartGrid:Load ;
             SmartGrid:connection_primary "Wye" ;
@@ -555,7 +564,7 @@
             SmartGrid:primaryAttachsTo :Bus_634 .
 
 
-###  http://www.semanticweb.org/phoenix/ontologies/2022/0/IEEE13#Load_645_2
+###  http://www.semanticweb.org/phoenix/ontologies/2022/0/IEEE13_base#Load_645_2
 :Load_645_2 rdf:type owl:NamedIndividual ,
                      SmartGrid:Load ;
             SmartGrid:connection_primary "Wye" ;
@@ -569,7 +578,7 @@
             SmartGrid:primaryAttachsTo :Bus_645 .
 
 
-###  http://www.semanticweb.org/phoenix/ontologies/2022/0/IEEE13#Load_646_2
+###  http://www.semanticweb.org/phoenix/ontologies/2022/0/IEEE13_base#Load_646_2
 :Load_646_2 rdf:type owl:NamedIndividual ,
                      SmartGrid:Load ;
             SmartGrid:connection_primary "Delta" ;
@@ -583,7 +592,7 @@
             SmartGrid:primaryAttachsTo :Bus_646 .
 
 
-###  http://www.semanticweb.org/phoenix/ontologies/2022/0/IEEE13#Load_652_1
+###  http://www.semanticweb.org/phoenix/ontologies/2022/0/IEEE13_base#Load_652_1
 :Load_652_1 rdf:type owl:NamedIndividual ,
                      SmartGrid:Load ;
             SmartGrid:connection_primary "Wye" ;
@@ -597,7 +606,7 @@
             SmartGrid:primaryAttachsTo :Bus_652 .
 
 
-###  http://www.semanticweb.org/phoenix/ontologies/2022/0/IEEE13#Load_670_1
+###  http://www.semanticweb.org/phoenix/ontologies/2022/0/IEEE13_base#Load_670_1
 :Load_670_1 rdf:type owl:NamedIndividual ,
                      SmartGrid:Load ;
             SmartGrid:connection_primary "Wye" ;
@@ -611,7 +620,7 @@
             SmartGrid:primaryAttachsTo :Bus_670 .
 
 
-###  http://www.semanticweb.org/phoenix/ontologies/2022/0/IEEE13#Load_670_2
+###  http://www.semanticweb.org/phoenix/ontologies/2022/0/IEEE13_base#Load_670_2
 :Load_670_2 rdf:type owl:NamedIndividual ,
                      SmartGrid:Load ;
             SmartGrid:connection_primary "Wye" ;
@@ -625,7 +634,7 @@
             SmartGrid:primaryAttachsTo :Bus_670 .
 
 
-###  http://www.semanticweb.org/phoenix/ontologies/2022/0/IEEE13#Load_670_3
+###  http://www.semanticweb.org/phoenix/ontologies/2022/0/IEEE13_base#Load_670_3
 :Load_670_3 rdf:type owl:NamedIndividual ,
                      SmartGrid:Load ;
             SmartGrid:connection_primary "Wye" ;
@@ -639,7 +648,7 @@
             SmartGrid:primaryAttachsTo :Bus_670 .
 
 
-###  http://www.semanticweb.org/phoenix/ontologies/2022/0/IEEE13#Load_671
+###  http://www.semanticweb.org/phoenix/ontologies/2022/0/IEEE13_base#Load_671
 :Load_671 rdf:type owl:NamedIndividual ,
                    SmartGrid:Load ;
           SmartGrid:connection_primary "Delta" ;
@@ -652,7 +661,7 @@
           SmartGrid:primaryAttachsTo :Bus_671 .
 
 
-###  http://www.semanticweb.org/phoenix/ontologies/2022/0/IEEE13#Load_675_1
+###  http://www.semanticweb.org/phoenix/ontologies/2022/0/IEEE13_base#Load_675_1
 :Load_675_1 rdf:type owl:NamedIndividual ,
                      SmartGrid:Load ;
             SmartGrid:connection_primary "Wye" ;
@@ -666,7 +675,7 @@
             SmartGrid:primaryAttachsTo :Bus_675 .
 
 
-###  http://www.semanticweb.org/phoenix/ontologies/2022/0/IEEE13#Load_675_2
+###  http://www.semanticweb.org/phoenix/ontologies/2022/0/IEEE13_base#Load_675_2
 :Load_675_2 rdf:type owl:NamedIndividual ,
                      SmartGrid:Load ;
             SmartGrid:connection_primary "Wye" ;
@@ -680,7 +689,7 @@
             SmartGrid:primaryAttachsTo :Bus_675 .
 
 
-###  http://www.semanticweb.org/phoenix/ontologies/2022/0/IEEE13#Load_675_3
+###  http://www.semanticweb.org/phoenix/ontologies/2022/0/IEEE13_base#Load_675_3
 :Load_675_3 rdf:type owl:NamedIndividual ,
                      SmartGrid:Load ;
             SmartGrid:connection_primary "Wye" ;
@@ -694,7 +703,7 @@
             SmartGrid:primaryAttachsTo :Bus_675 .
 
 
-###  http://www.semanticweb.org/phoenix/ontologies/2022/0/IEEE13#Load_692_3
+###  http://www.semanticweb.org/phoenix/ontologies/2022/0/IEEE13_base#Load_692_3
 :Load_692_3 rdf:type owl:NamedIndividual ,
                      SmartGrid:Load ;
             SmartGrid:connection_primary "Delta" ;
@@ -708,7 +717,7 @@
             SmartGrid:primaryAttachsTo :Bus_692 .
 
 
-###  http://www.semanticweb.org/phoenix/ontologies/2022/0/IEEE13#Switch_671692
+###  http://www.semanticweb.org/phoenix/ontologies/2022/0/IEEE13_base#Switch_671692
 :Switch_671692 rdf:type owl:NamedIndividual ,
                         SmartGrid:Switch ;
                SmartGrid:attachsTo :Bus_692 ;
@@ -723,7 +732,7 @@
                SmartGrid:x1 0.0 .
 
 
-###  http://www.semanticweb.org/phoenix/ontologies/2022/0/IEEE13#Transformer_Sub
+###  http://www.semanticweb.org/phoenix/ontologies/2022/0/IEEE13_base#Transformer_Sub
 :Transformer_Sub rdf:type owl:NamedIndividual ,
                           SmartGrid:Transformer ;
                  SmartGrid:Kva 5000 ;
@@ -739,7 +748,7 @@
                  rdfs:comment "This is the transformer at the generating station" .
 
 
-###  http://www.semanticweb.org/phoenix/ontologies/2022/0/IEEE13#Transformer_XFM1
+###  http://www.semanticweb.org/phoenix/ontologies/2022/0/IEEE13_base#Transformer_XFM1
 :Transformer_XFM1 rdf:type owl:NamedIndividual ,
                            SmartGrid:Transformer ;
                   SmartGrid:Kva 500 ;
@@ -757,7 +766,7 @@
                   rdfs:comment "This is the transformer labelled XFM-1" .
 
 
-###  http://www.semanticweb.org/phoenix/ontologies/2022/0/IEEE13#regcontrol_Reg1
+###  http://www.semanticweb.org/phoenix/ontologies/2022/0/IEEE13_base#regcontrol_Reg1
 :regcontrol_Reg1 rdf:type owl:NamedIndividual ,
                           SmartGrid:regcontrol ;
                  SmartGrid:Kva 1666 ;
@@ -784,7 +793,7 @@
                  SmartGrid:vreg 122 .
 
 
-###  http://www.semanticweb.org/phoenix/ontologies/2022/0/IEEE13#regcontrol_Reg2
+###  http://www.semanticweb.org/phoenix/ontologies/2022/0/IEEE13_base#regcontrol_Reg2
 :regcontrol_Reg2 rdf:type owl:NamedIndividual ,
                           SmartGrid:regcontrol ;
                  SmartGrid:Kva 1666 ;
@@ -811,7 +820,7 @@
                  SmartGrid:vreg 122 .
 
 
-###  http://www.semanticweb.org/phoenix/ontologies/2022/0/IEEE13#regcontrol_Reg3
+###  http://www.semanticweb.org/phoenix/ontologies/2022/0/IEEE13_base#regcontrol_Reg3
 :regcontrol_Reg3 rdf:type owl:NamedIndividual ,
                           SmartGrid:regcontrol ;
                  SmartGrid:Kva 1666 ;

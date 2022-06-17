@@ -1,13 +1,13 @@
-@prefix : <http://www.semanticweb.org/phoenix/ontologies/2022/0/IEEE13#> .
+@prefix : <http://www.semanticweb.org/phoenix/ontologies/2022/0/IEEE13_TapControl#> .
 @prefix owl: <http://www.w3.org/2002/07/owl#> .
 @prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
 @prefix xml: <http://www.w3.org/XML/1998/namespace> .
 @prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
 @prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
 @prefix SmartGrid: <http://www.semanticweb.org/phoenix/ontologies/2022/0/SmartGrid#> .
-@base <http://www.semanticweb.org/phoenix/ontologies/2022/0/IEEE13> .
+@base <http://www.semanticweb.org/phoenix/ontologies/2022/0/IEEE13_TapControl> .
 
-<http://www.semanticweb.org/phoenix/ontologies/2022/0/IEEE13> rdf:type owl:Ontology ;
+<http://www.semanticweb.org/phoenix/ontologies/2022/0/IEEE13_TapControl> rdf:type owl:Ontology ;
                                                                owl:imports <http://www.semanticweb.org/phoenix/ontologies/2022/0/SmartGrid> ;
                                                                rdfs:comment "This will model the IEEE13 TapControl" .
 
@@ -192,6 +192,17 @@
                 SmartGrid:kvar 100 ;
                 SmartGrid:nodes_primary 3 ;
                 SmartGrid:num_phases 1 .
+
+###  http://www.semanticweb.org/phoenix/ontologies/2022/0/IEEE13#Circuit_IEEE13Nodeckt
+:Circuit_IEEE13Nodeckt rdf:type owl:NamedIndividual ,
+                                SmartGrid:Circuit ;
+                       SmartGrid:primaryAttachsTo :Bus_SourceBus ;
+                       SmartGrid:MVAsc1 21000 ;
+                       SmartGrid:MVAsc3 20000 ;
+                       SmartGrid:angle 30 ;
+                       SmartGrid:kV_primary 115 ;
+                       SmartGrid:num_phases 3 ;
+                       SmartGrid:pu 1.0001 .
 
 
 ###  http://www.semanticweb.org/phoenix/ontologies/2022/0/IEEE13#Coord_0_100
