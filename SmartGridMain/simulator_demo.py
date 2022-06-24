@@ -16,6 +16,7 @@ import mosaik
 import argparse
 from datetime import datetime
 from pathlib import Path
+import time
 
 #--- Base Directory
 BASE_DIR = os.getcwd()
@@ -59,6 +60,9 @@ SIM_CONFIG = {
     'Collector': {
         'python': 'simulator_collector:Collector',
     },
+    'InfluxDB': {
+        'python': 'simulator_influxdb:InfluxDB',
+    },
     'ControlSim': {
         'python': 'simulator_controltap:ControlSim',       
     },
@@ -76,7 +80,7 @@ SIM_CONFIG = {
 }
 
 #--- Simulation total time
-END_TIME =  10000	#  10 secs
+END_TIME =  20000	#  10 secs
 
 #--- Application connection links
 appconLinks = {}
@@ -148,9 +152,12 @@ def main():
     parser.add_argument( '--json_file', type=str, help='JSON config file', default = JSON_RPATH_FILE )    
     parser.add_argument( '--devs_file', type=str, help='devices connections file', default = DEVS_RPATH_FILE )
     parser.add_argument( '--random_seed', type=int, help='ns-3 random generator seed', default=1 )
+    parser.add_argument( '--influxdb', action='store_true')
+    parser.set_defaults(influxdb=False)
     args = parser.parse_args()
     print( 'Starting simulation with args: {0}'.format( vars( args ) ) )
     
+
     readDevices(args.devs_file)
     world = mosaik.World( sim_config=SIM_CONFIG, mosaik_config=MOSAIK_CONFIG, debug=False )
     create_scenario( world, args )
@@ -169,7 +176,7 @@ def  create_scenario( world, args ):
                               ilpqfile = DSS_EXE_PATH + ILPQ_RPATH_FILE,
                               step_size = 100,
                               loadgen_interval = 80,
-                              verbose = 1)    
+                              verbose = 0)    
 
     pktnetsim = world.start( 'PktNetSim',
         model_name      = 'TransporterModel',
@@ -193,13 +200,12 @@ def  create_scenario( world, args ):
     
     collector   = world.start('Collector',
                               eid_prefix='Collector_',
-                              verbose = 2,
+                              verbose = 0,
                               out_list = False,
                               h5_save = True,
                               h5_panelname = 'Collector',
                               h5_storename='CollectorStore.hd5')
-
- 
+    
     #---
     #--- Simulators Instances configuration
     #---
@@ -281,7 +287,7 @@ def  create_scenario( world, args ):
                 step_size = devParams[key]['period'],
                 cktElement = devParams[key]['cktElement'],
                 error = devParams[key]['error'],
-                verbose = 1
+                verbose = 0
             ))
         else:
             #--- Transporter instances (Pktnet)
@@ -304,6 +310,33 @@ def  create_scenario( world, args ):
 
     #--- Monitor instances
     monitor = collector.Monitor()
+
+    # If influxdb is enabled then we store the data
+    if args.influxdb:
+        inflxudb    = world.start('InfluxDB',
+                              url="http://192.168.1.204:8086",
+                              token="dTQQcpp4ytMeyEKPdtaaBJyGaY3vTumvcOIwvEkeRRa5JI5HBI1S032rtE3jYVndWL5TymrUYq37PfCSRsLfDA==",
+                              org="workspace",
+                              bucket="OpenDSS"
+                              )
+        #--- InfluxDB instance
+        inflxudb_connection = inflxudb.InfluxDB_Connection()
+        #--- Sensors to influxdb
+        mosaik.util.connect_many_to_one(world, sensors, inflxudb_connection, 'v', 't')
+        for sensor in sensors:
+            print('Connect', sensor.eid, 'to', inflxudb_connection.sid)        
+        mosaik.util.connect_many_to_one(world, controllers, inflxudb_connection, 'v', 't')
+        for controller in controllers:
+            print('Connect', controller.eid, 'to', inflxudb_connection.sid)
+        mosaik.util.connect_many_to_one(world, actuators, inflxudb_connection, 'v', 't')
+        for actuator in actuators:
+            print('Connect', actuator.sid, 'to', inflxudb_connection.sid)
+        mosaik.util.connect_many_to_one(world, probers, inflxudb_connection, 'v', 't')
+        for prober in probers:
+            print('Connect', prober.sid, 'to', inflxudb_connection.sid)
+
+
+
 
     # probers.append(pflowsim.Prober(idt = "611-V3",   step_size = global_step_size, verbose = 0))
     # probers.append(pflowsim.Prober(idt = "650-T3",   step_size = global_step_size, verbose = 0))      
@@ -418,6 +451,8 @@ def  create_scenario( world, args ):
     for sensor in sensors:
         print('Connect', sensor.eid, 'to', monitor.sid)
 
+    
+
     #--- PktNet(Transporter) to Monitor
 #     mosaik.util.connect_many_to_one(world, transporters, monitor, 'v', 't')
 #     for transporter in transporters:    
@@ -432,7 +467,7 @@ def  create_scenario( world, args ):
     mosaik.util.connect_many_to_one(world, actuators, monitor, 'v', 't')
     for actuator in actuators:
         print('Connect', actuator.eid, 'to', monitor.sid)
-        
+    
     #--- Prober to Monitor
     mosaik.util.connect_many_to_one(world, probers, monitor, 'v', 't')
     for prober in probers:
@@ -440,11 +475,11 @@ def  create_scenario( world, args ):
         
 
 if __name__ == '__main__':
-    sim_start_time = datetime.now()
+    sim_start_time = time.perf_counter()
 
     # Run the simulation.
     main()
 
-    delta_sim_time = datetime.now() - sim_start_time
-    print( 'simulation took {} seconds'.format( delta_sim_time.total_seconds() ) )
+    delta_sim_time = time.perf_counter() - sim_start_time
+    print( 'simulation took {} seconds'.format( delta_sim_time ) )
 
