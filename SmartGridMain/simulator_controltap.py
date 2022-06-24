@@ -9,17 +9,21 @@ Mosaik interface for the controller simulator.
 @company University of Alberta - Computing Science
 '''
 
+import queue
+from tabnanny import verbose
 import mosaik_api
 import sys
 
 META = {
     'api-version': '3.0',
-    'type': 'event-based',
+    'type': 'hybrid',
     'models': {
         'RangeControl': {
             'public': True,
             'params': ['eid', 'vset', 'bw', 'tdelay', 'control_delay', 'verbose'],
-            'attrs': ['v', 't'],           
+            'attrs': ['v', 't'],
+            'trigger': ['v', 't'],
+            'non-persistent': ['v', 't'],
         },      
     },
     'extra_methods': [
@@ -41,7 +45,7 @@ class ControlSim(mosaik_api.Simulator):
         self.data = {}
         self.instances = {}
         self.time = 0
-
+        self.eventQueue = queue.PriorityQueue()
         
     def init(self, sid, time_resolution, verbose=0):
         self.sid = sid
@@ -76,12 +80,15 @@ class ControlSim(mosaik_api.Simulator):
     def step(self, time, inputs, max_advance):
         if (self.verbose > 0): print('simulator_controller::step: ', time, ' Max Advance: ', max_advance)
         if (self.verbose > 1): print('simulator_controller::step INPUT: ', inputs)
+        if (self.verbose > 3): print('simulator_controller::step DATA: ', self.data)
         
+        self.time = time
         #---
         #--- prepare data to be used in get_data and calculate control action
         #---
         for controller_eid, attrs in inputs.items():
-            self.data[controller_eid] = {}
+            #--- Save control data for processing in next step
+            #--- List is used as multiple sensor data might be received
             self.data[controller_eid]['v'] = []
             self.data[controller_eid]['t'] = []
 
@@ -125,12 +132,28 @@ class ControlSim(mosaik_api.Simulator):
                     self.data[controller_eid]['v'].append(VAR_V)
                     
                     #--- time
-                    # The added value ensures data is sent by NS3 after the control delay
-                    self.data[controller_eid]['t'].append(time \
-                        + self.entities[controller_eid]['control_delay'])
+                    self.data[controller_eid]['t'].append(time)
 
-        sys.stdout.flush()
+
+        #--- schedule control events to calculate LBTS
+        for controller_eid in self.entities:
+            if (time % self.entities[controller_eid]['control_delay'] == 0):
+                self.eventQueue.put(time + self.entities[controller_eid]['control_delay'])
+
+        while (not self.eventQueue.empty() and self.eventQueue.queue[0] == time):
+            self.eventQueue.get()
+
+        if (self.verbose > 3): print('simulator_controller::step after DATA: ', self.data)
         
+        #--- if there is an event in the future, return next step time
+        if not self.eventQueue.empty():
+            if (self.verbose > 0):
+                print ("simulator_controller::step next_step = ", self.eventQueue.queue[0])
+            sys.stdout.flush()
+            return self.eventQueue.queue[0]
+        
+        sys.stdout.flush()
+
     
     def get_data(self, outputs):
         if (self.verbose > 0): print('simulator_controller::get_data INPUT', outputs)      
@@ -138,8 +161,18 @@ class ControlSim(mosaik_api.Simulator):
         data = {}
         #--- Find data that is present and ready for delivery (now)
         for eid in self.data:
-            if(self.data[eid]['t']):
-                data[eid] = self.data[eid]
+            if (self.data[eid] and self.data[eid]['t']):
+                #--- check the latest updated control action (only one is generated)
+                if (self.time % self.entities[eid]['control_delay'] == 0):
+                    data[eid] = {}
+                    data[eid]['t'] = []
+                    data[eid]['v'] = []
+                    #--- send current time + 1 to avoid NS3 roll back
+                    data[eid]['t'].append(self.time + 1)
+                    data[eid]['v'].append(self.data[eid]['v'][len(self.data[eid]['v'])-1])
+                    #--- Need to clear as other controller instances might have input
+                    #--- and this data might be returned again (although not required)
+                    self.data[eid] = {}
 
         if (self.verbose > 1): print('simulator_controller::get_data OUTPUT data =', data)
         sys.stdout.flush()

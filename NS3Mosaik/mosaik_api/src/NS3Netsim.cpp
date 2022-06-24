@@ -32,6 +32,9 @@
 #include "ns3/smartgrid-default-simulator-impl.h"
 #include <cassert>
 
+//--- Conditional compilation for performance evaluation
+#define PERFORMANCE_TEST 0
+
 using namespace std;
 using namespace ns3;
 
@@ -65,6 +68,7 @@ void sendMessageToUpperLayer(string message, Ptr<Node> sourceNode, Ptr<Node> des
                       val,
                       stoll(val_time)};
   dataXchgOutput.push(dataRcv);
+  dataXchgTime.push((uint64_t)Simulator::Now().GetMilliSeconds());
 }
 
 /**
@@ -880,35 +884,54 @@ NS3Netsim::runUntil(uint64_t time, string nextStop)
   //--- run scheduler until a given time
   sim = DynamicCast<SmartgridDefaultSimulatorImpl>(Simulator::GetImplementation());
   uint64_t max_advance = stoul(nextStop);
-  //--- "+1" because NS3 executes until a given time (not including)
-  if (time < (uint64_t)stopTime-1)
-    sim->RunUntil(MilliSeconds(time + 1));
-  //--- Do not execute end time events to avoid socket wait problem
-  else
-    sim->RunUntil(MilliSeconds((uint64_t)stopTime-1));
-
-  if (verbose > 3)
+  currentTime = time;
+  uint64_t next_step;
+  bool relevance = false;
+  uint64_t runUntil_time = time;
+  while(!relevance)
   {
-    DataXCHG dataSnt;
-    for (auto it = 0; it != dataXchgOutput.size(); ++it)
+    #ifdef PERFORMANCE_TEST
+      int test_level = PERFORMANCE_TEST;
+      if (test_level > 0)  relevance = true;
+      else  relevance = false;
+    #endif
+    //--- "+1" because NS3 executes until a given time (not including)
+    if (runUntil_time < (uint64_t)stopTime-1)
+      sim->RunUntil(MilliSeconds(runUntil_time + 1));
+    //--- Do not execute end time events to avoid socket wait problem
+    else
+      sim->RunUntil(MilliSeconds((uint64_t)stopTime-1));
+
+    if (verbose > 3)
     {
-      dataSnt = dataXchgOutput.front();
-      cout << "NS3Netsim::runUntil NS3 OUTPUT Buffer Src: " << dataSnt.src
-           << " Dst: " << dataSnt.dst
-           << " Val: " << dataSnt.val
-           << " Time: " << dataSnt.time
-           << endl;
-      dataXchgOutput.pop();
-      dataXchgOutput.push(dataSnt);
+      DataXCHG dataSnt;
+      for (auto it = 0; it != dataXchgOutput.size(); ++it)
+      {
+        dataSnt = dataXchgOutput.front();
+        cout << "NS3Netsim::runUntil NS3 OUTPUT Buffer Src: " << dataSnt.src
+            << " Dst: " << dataSnt.dst
+            << " Val: " << dataSnt.val
+            << " Time: " << dataSnt.time
+            << endl;
+        dataXchgOutput.pop();
+        dataXchgOutput.push(dataSnt);
+      }
     }
-  }
 
-  //--- Get the next new event
-  uint64_t next_step = (uint64_t)sim->Next().GetMilliSeconds();
-  if (verbose > 1)
-  {
-    std::cout << "NS3Netsim::runUntil After_run NS3 time: " << Simulator::Now().GetMilliSeconds() << std::endl;
-    std::cout << "NS3Netsim::runUntil next event: " << next_step << std::endl;
+    //--- Get the next new event
+    next_step = (uint64_t)sim->Next().GetMilliSeconds();
+    //--- If next step exceeds max advance time
+    if (next_step > max_advance || next_step >= (stopTime-1))  relevance = true;
+    //--- OR If there is a message received by a server,
+    //--- a relevant event has been processed
+    else if (!dataXchgOutput.empty()) relevance = true;
+    runUntil_time = next_step;
+
+    if (verbose > 1)
+    {
+      std::cout << "NS3Netsim::runUntil After_run NS3 time: " << Simulator::Now().GetMilliSeconds() << std::endl;
+      std::cout << "NS3Netsim::runUntil next event: " << next_step << std::endl;
+    }
   }
   //--- Return a step time so that Mosaik has to give "stop" command
   if (next_step == (uint64_t)stopTime-1)
@@ -920,6 +943,10 @@ NS3Netsim::runUntil(uint64_t time, string nextStop)
     else
       return std::to_string((uint64_t)stopTime-1);
   }
+  //--- If there is data in buffer, a relevent event has been processed
+  //--- return the current time of NS3 as the next event time for Mosaik
+  if (!dataXchgOutput.empty() && time < Simulator::Now().GetMilliSeconds())
+    return std::to_string(Simulator::Now().GetMilliSeconds());
   return std::to_string(next_step);
 }
 
@@ -936,13 +963,15 @@ int NS3Netsim::get_data(string &id,
   {
     std::cout << "NS3Netsim::get_data" << std::endl;
     std::cout << "NS3Netsim::get_data NS3-OUTPUT-QUEUE-SIZE: " << dataXchgOutput.size() << std::endl;
+    std::cout << "NS3Netsim::get_data NS3-time queue: " << dataXchgTime.size() << " front: " << dataXchgTime.front() << std::endl;
   }
 
-  if (!dataXchgOutput.empty())
+  if (!dataXchgOutput.empty() && dataXchgTime.front() <= currentTime)
   {
     res = 1;
     dataOut = dataXchgOutput.front();
     dataXchgOutput.pop();
+    dataXchgTime.pop();
     id = dataOut.id;
     src = dataOut.src;
     dst = dataOut.dst;
@@ -977,7 +1006,9 @@ int NS3Netsim::get_data(string &id,
 
 bool NS3Netsim::checkEmptyDataOutput(void)
 {
-  return dataXchgOutput.empty();
+  if (!dataXchgOutput.empty() && dataXchgTime.front() <= currentTime)
+    return dataXchgOutput.empty();
+  else  return true;
 }
 
 int NS3Netsim::getSizeDataOutput(void)

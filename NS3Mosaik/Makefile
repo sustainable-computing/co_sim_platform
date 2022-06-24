@@ -62,12 +62,12 @@ CXFLAGS +=
 #---------------
 #--- LXFLAGS ---
 #---------------
-# LXFLAGS = -ljsoncpp\
-#           ${NS3_LIB}/libns3.33-*-optimized.so\
-
-
 LXFLAGS = -ljsoncpp\
-         ${NS3_LIB}/libns3.33-*-debug.so\
+          ${NS3_LIB}/libns3.33-*-optimized.so\
+
+
+# LXFLAGS = -ljsoncpp\
+#          ${NS3_LIB}/libns3.33-*-debug.so\
 
 
 #------------------------#

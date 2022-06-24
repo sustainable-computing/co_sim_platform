@@ -169,7 +169,7 @@ def  create_scenario( world, args ):
                               ilpqfile = DSS_EXE_PATH + ILPQ_RPATH_FILE,
                               step_size = 100,
                               loadgen_interval = 80,
-                              verbose = 1)    
+                              verbose = 0)    
 
     pktnetsim = world.start( 'PktNetSim',
         model_name      = 'TransporterModel',
@@ -193,7 +193,7 @@ def  create_scenario( world, args ):
     
     collector   = world.start('Collector',
                               eid_prefix='Collector_',
-                              verbose = 2,
+                              verbose = 0,
                               out_list = False,
                               h5_save = True,
                               h5_panelname = 'Collector',
@@ -267,7 +267,7 @@ def  create_scenario( world, args ):
                     step_size = devParams[key]['period'],
                     cktElement = devParams[key]['cktElement'], 
                     error = devParams[key]['error'],
-                    verbose=0
+                    verbose = 0
                 ))
 
         #--- Probers do not need transporters
@@ -281,7 +281,7 @@ def  create_scenario( world, args ):
                 step_size = devParams[key]['period'],
                 cktElement = devParams[key]['cktElement'],
                 error = devParams[key]['error'],
-                verbose = 1
+                verbose = 0
             ))
         else:
             #--- Transporter instances (Pktnet)
