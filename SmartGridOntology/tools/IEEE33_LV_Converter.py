@@ -8,26 +8,25 @@ buses = {}
 coord = {}
 bus_idx = []
 
-with open('../models/IEEE33.ttl', "w+") as outfile:
+with open('../models/IEEE33_LV_base.ttl', "w+") as outfile:
 
     # Write out the prefix, headers, and annotated properties
     prefix_info = """
-@prefix : <http://www.semanticweb.org/phoenix/ontologies/2022/0/IEEE33#> .
+@prefix : <http://www.semanticweb.org/phoenix/ontologies/2022/0/IEEE33_LV_base#> .
 @prefix owl: <http://www.w3.org/2002/07/owl#> .
 @prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
 @prefix xml: <http://www.w3.org/XML/1998/namespace> .
 @prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
 @prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
 @prefix SmartGrid: <http://www.semanticweb.org/phoenix/ontologies/2022/0/SmartGrid#> .
-@base <http://www.semanticweb.org/phoenix/ontologies/2022/0/IEEE33> .
+@base <http://www.semanticweb.org/phoenix/ontologies/2022/0/IEEE33_LV_base> .
 """
     outfile.write(prefix_info)
 
     import_info = """
-<http://www.semanticweb.org/phoenix/ontologies/2022/0/IEEE33> rdf:type owl:Ontology ;
+<http://www.semanticweb.org/phoenix/ontologies/2022/0/IEEE33_LV_base> rdf:type owl:Ontology ;
                                                                owl:imports <http://www.semanticweb.org/phoenix/ontologies/2022/0/SmartGrid> ;
                                                                rdfs:comment "This will model the IEEE33" .
-
 
 
 #################################################################
@@ -35,6 +34,20 @@ with open('../models/IEEE33.ttl', "w+") as outfile:
 #################################################################
 """
     outfile.write(import_info)
+
+    # Write out the circuit information
+    circuit_instance = """
+:Circuit_Master33 rdf:type owl:NamedIndividual ,
+                           SmartGrid:Circuit ;
+                  SmartGrid:primaryAttachesTo :Bus_1 ;
+                  SmartGrid:MVAsc1 5000000 ;
+                  SmartGrid:MVAsc3 5000000 ;
+                  SmartGrid:kV_primary 12.66 ;
+                  SmartGrid:num_phases 3 ;
+                  SmartGrid:pu 1 .
+    """
+    outfile.write(circuit_instance)
+    
 
     with open('../../SmartGridMain/IEEE33/IEEE33_BusXYFull.csv') as bus_coord_file:
         for line in bus_coord_file.readlines():
@@ -46,6 +59,7 @@ with open('../models/IEEE33.ttl', "w+") as outfile:
             }
             buses[items[0]] = {
                 'locatedAt': coord_name,
+                'connectsTo': set()
             }
             bus_idx.append(items[0])
 
@@ -57,6 +71,8 @@ with open('../models/IEEE33.ttl', "w+") as outfile:
             dst_idx = [i for i,r in enumerate(values) if r == '1']
             for col_idx in dst_idx:
                 dst_node = bus_idx[col_idx]
+                buses[src_node]['connectsTo'].add(dst_node)
+                buses[dst_node]['connectsTo'].add(src_node)    
 
 
     # Write out the coordinates
@@ -85,9 +101,11 @@ with open('../models/IEEE33.ttl', "w+") as outfile:
             # Check if bus1 and bus2 is the dict of buses
             if bus1 not in buses.keys():
                 buses[bus1] = {
+                    'connectsTo': set()
                 }
             if bus2 not in buses.keys():
                 buses[bus2] = {
+                    'connectsTo': set()
                 }
     
             line_instance = """
@@ -121,9 +139,11 @@ with open('../models/IEEE33.ttl', "w+") as outfile:
             # Check if bus1 and bus2 is the dict of buses
             if bus1 not in buses.keys():
                 buses[bus1] = {
+                    'connectsTo': set()
                 }
             if bus2 not in buses.keys():
                 buses[bus2] = {
+                    'connectsTo': set()
                 }           
 
             transformer_instance = """
@@ -165,6 +185,7 @@ with open('../models/IEEE33.ttl', "w+") as outfile:
             # Check if bus1 is the dict of buses
             if bus1 not in buses.keys():
                 buses[bus1] = {
+                    'connectsTo': set()
                 }
          
             load_instance = """
@@ -189,11 +210,19 @@ with open('../models/IEEE33.ttl', "w+") as outfile:
     for bus, value in buses.items():
         bus_instance = """
 :Bus_{name} rdf:type owl:NamedIndividual ,
-                     SmartGrid:Bus ; 
-""".format(name=bus)
+                     SmartGrid:Bus """.format(name=bus)
         if "locatedAt" in value.keys():
-            bus_instance += "SmartGrid:locatedAt :{bus_coord} ; ".format(bus_coord=value['locatedAt'])
+            bus_instance += ";\nSmartGrid:locatedAt :{bus_coord} ".format(bus_coord=value['locatedAt'])
         
-        bus_instance += ".\n\n\n"
+        # If there are any connectsTo relations for the node/bus then we write it out
+        if len(buses[bus]['connectsTo']) > 0:
+            bus_instance += """;\nSmartGrid:connectsTo """
+            for connection in buses[bus]['connectsTo']:
+                bus_instance += """:Bus_{} ,\n""".format(connection)
+            bus_instance = bus_instance[:-2] + '.'
+        else:
+            # end with a .
+            bus_instance += ".\n"
+        bus_instance += "\n"
 
         outfile.write(bus_instance)

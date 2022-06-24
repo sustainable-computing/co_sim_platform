@@ -692,6 +692,12 @@
                  <http://www.w3.org/2004/02/skos/core#definition> "A class of characteristics for different equipment of the ontology" .
 
 
+###  http://www.semanticweb.org/phoenix/ontologies/2022/0/SmartGrid#Circuit
+:Circuit rdf:type owl:Class ;
+         rdfs:subClassOf :Characteristics ;
+         <http://www.w3.org/2004/02/skos/core#definition> "A class to define the properties of an OpenDSS circuit" .
+
+
 ###  http://www.semanticweb.org/phoenix/ontologies/2022/0/SmartGrid#Communication_Node
 :Communication_Node rdf:type owl:Class ;
                     rdfs:subClassOf :Network_Devices ;

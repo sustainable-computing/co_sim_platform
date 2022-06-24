@@ -12,7 +12,8 @@ from .SmartGrid import *
 class SmartGridGraph:
     def __init__(self, file):
         self.g = Graph().parse(file)
-        self.generator = None
+        self.circuit = None
+        self.generators = {}
         self.buses = {}
         self.nodes = {}
         # Get the child of the bus
@@ -25,6 +26,38 @@ class SmartGridGraph:
         self.linecode = {}
         self.transformers = {}
         self.regcontrols = {}
+
+    # There should be only one but in reality there could be multiple circuits
+    def query_circuit(self):
+        query_str = """
+        SELECT *
+        WHERE {
+            ?circuit a SmartGrid:Circuit .
+            ?circuit SmartGrid:primaryAttachsTo ?bus1 .
+            ?circuit SmartGrid:MVAsc1 ?MVAsc1 .
+            ?circuit SmartGrid:MVAsc3 ?MVAsc3 .
+            ?circuit SmartGrid:angle ?angle .
+            ?circuit SmartGrid:kV_primary ?kv_sec .
+            ?circuit SmartGrid:num_phases ?num_phases .
+            ?circuit SmartGrid:pu ?pu .
+        }    
+        """
+
+        res = self.g.query(query_str)
+        for row in res:
+            circuit = Circuit(
+                circuit = row['circuit'],
+                bus1 = row['bus1'],
+                kv_sec = row['kv_sec'],
+                pu = row['pu'],
+                num_phases = row['num_phases'],
+                MVAsc1 = row['MVAsc1'],
+                MVAsc3 = row['MVAsc3'],
+                angle = row['angle']
+            )
+            self.circuit = circuit
+
+        return self.circuit
 
     def query_generator(self):
         query_str = """
@@ -42,7 +75,7 @@ class SmartGridGraph:
         """
 
         res = self.g.query(query_str)
-
+        generators = []
         for row in res:
             gen = Generator(
                 gen = row['gen'],
@@ -53,11 +86,10 @@ class SmartGridGraph:
                 MVAsc1 = row['MVAsc1'],
                 MVAsc3 = row['MVAsc3'],
                 angle = row['angle']
-            )   
-            self.generator = gen
-            # There should only be one generator
-            break
-        return gen
+            )
+            generators.append(gen)
+        
+        return generators
 
     def query_transformers(self):
         query_str = """
@@ -486,7 +518,7 @@ class SmartGridGraph:
         res = self.g.query(query_str)
         sensors = []
         for row in res:
-            if '1' in row['bus'] and row['bus1'] is not None:
+            if '1' in row['bus']:
                 src = row['bus1']
             elif '2' in row['bus'] and row['bus2'] is not None:
                 src = row['bus2']

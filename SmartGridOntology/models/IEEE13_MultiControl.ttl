@@ -403,6 +403,16 @@ SmartGrid:xmat rdf:type owl:AnnotationProperty .
                 SmartGrid:num_phases 1 ;
                 SmartGrid:primaryAttachsTo :Bus_611 .
 
+:Circuit_IEEE13Nodeckt rdf:type owl:NamedIndividual ,
+                                SmartGrid:Circuit ;
+                       SmartGrid:primaryAttachsTo :Bus_SourceBus ;
+                       SmartGrid:MVAsc1 21000 ;
+                       SmartGrid:MVAsc3 20000 ;
+                       SmartGrid:angle 30 ;
+                       SmartGrid:kV_primary 115 ;
+                       SmartGrid:num_phases 3 ;
+                       SmartGrid:pu 1.0001 .
+
 
 ###  http://www.semanticweb.org/phoenix/ontologies/2022/0/IEEE13#Coord_0_100
 :Coord_0_100 rdf:type owl:NamedIndividual ,
@@ -514,19 +524,6 @@ SmartGrid:xmat rdf:type owl:AnnotationProperty .
                         SmartGrid:Coordinates ;
                SmartGrid:coord_x 400 ;
                SmartGrid:coord_y 250 .
-
-
-###  http://www.semanticweb.org/phoenix/ontologies/2022/0/IEEE13#Generator_IEEE13Nodeckt
-:Generator_IEEE13Nodeckt rdf:type owl:NamedIndividual ,
-                                  SmartGrid:Generator ;
-                         SmartGrid:MVAsc1 21000 ;
-                         SmartGrid:MVAsc3 20000 ;
-                         SmartGrid:angle 30 ;
-                         SmartGrid:kV_secondary 115 ;
-                         SmartGrid:num_phases 3 ;
-                         SmartGrid:primaryAttachsTo :Bus_SourceBus ;
-                         SmartGrid:pu 1.0001 .
-
 
 ###  http://www.semanticweb.org/phoenix/ontologies/2022/0/IEEE13#LineCode_mtx601
 :LineCode_mtx601 rdf:type owl:NamedIndividual ,

@@ -2,7 +2,7 @@
 Clear 
 Set DefaultBaseFrequency=60 
 
-!---- Generated Circuit/generator
+!---- Generated Circuit
 new circuit.IEEE13Nodeckt 
 ~ basekv=115 pu=1.0001 phases=3 bus1=SourceBus 
 ~ Angle=30 

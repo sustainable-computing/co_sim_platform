@@ -8,23 +8,25 @@ buses = {}
 coord = {}
 bus_idx = []
 
-with open('../models/IEEE33_SimDSE.ttl', "w+") as outfile:
+filename_prefix = 'IEEE33_SimDSE_Full'
+
+with open(f'../models/{filename_prefix}.ttl', "w+") as outfile:
 
     # Write out the prefix, headers, and annotated properties
-    prefix_info = """
-@prefix : <http://www.semanticweb.org/phoenix/ontologies/2022/0/IEEE33#> .
+    prefix_info = f"""
+@prefix : <http://www.semanticweb.org/phoenix/ontologies/2022/0/{filename_prefix}#> .
 @prefix owl: <http://www.w3.org/2002/07/owl#> .
 @prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
 @prefix xml: <http://www.w3.org/XML/1998/namespace> .
 @prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
 @prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
 @prefix SmartGrid: <http://www.semanticweb.org/phoenix/ontologies/2022/0/SmartGrid#> .
-@base <http://www.semanticweb.org/phoenix/ontologies/2022/0/IEEE33> .
+@base <http://www.semanticweb.org/phoenix/ontologies/2022/0/{filename_prefix}> .
 """
     outfile.write(prefix_info)
 
-    import_info = """
-<http://www.semanticweb.org/phoenix/ontologies/2022/0/IEEE33> rdf:type owl:Ontology ;
+    import_info = f"""
+<http://www.semanticweb.org/phoenix/ontologies/2022/0/{filename_prefix}> rdf:type owl:Ontology ;
                                                                owl:imports <http://www.semanticweb.org/phoenix/ontologies/2022/0/SmartGrid> ;
                                                                rdfs:comment "This will model the IEEE33" .
 
@@ -47,6 +49,26 @@ with open('../models/IEEE33_SimDSE.ttl', "w+") as outfile:
 #################################################################
 """
     outfile.write(import_info)
+
+    # Write out the circuit information
+    circuit_instance = """
+:Circuit_Master33 rdf:type owl:NamedIndividual ,
+                           SmartGrid:Circuit ;
+                  SmartGrid:primaryAttachesTo :Bus_1 ;
+                  SmartGrid:MVAsc1 5000000 ;
+                  SmartGrid:MVAsc3 5000000 ;
+                  SmartGrid:kV_primary 12.66 ;
+                  SmartGrid:num_phases 3 ;
+                  SmartGrid:pu 1 .
+    """
+    outfile.write(circuit_instance)
+
+    # Write out the estimator instance
+    estimator_instance = """
+:Estimator_1 rdf:type owl:NamedIndividual ,
+                    :Estimator .
+    """
+    outfile.write(estimator_instance)
 
     with open('../../SmartGridMain/IEEE33/IEEE33_BusXYFull.csv') as bus_coord_file:
         for line in bus_coord_file.readlines():
@@ -209,24 +231,24 @@ with open('../models/IEEE33_SimDSE.ttl', "w+") as outfile:
     for bus, value in buses.items():
         bus_instance = """
 :Bus_{name} rdf:type owl:NamedIndividual ,
-                     SmartGrid:Bus ; """.format(name=bus)
+                     SmartGrid:Bus """.format(name=bus)
         if "locatedAt" in value.keys():
-            bus_instance += "SmartGrid:locatedAt :{bus_coord} ;\n".format(bus_coord=value['locatedAt'])
+            bus_instance += ";\nSmartGrid:locatedAt :{bus_coord} ".format(bus_coord=value['locatedAt'])
         
         # If there are any connectsTo relations for the node/bus then we write it out
         if len(buses[bus]['connectsTo']) > 0:
-            bus_instance += """SmartGrid:connectsTo """
+            bus_instance += """;\nSmartGrid:connectsTo """
             for connection in buses[bus]['connectsTo']:
                 bus_instance += """:Bus_{} ,\n""".format(connection)
             bus_instance = bus_instance[:-2] + '.'
         else:
             # end with a .
             bus_instance += ".\n"
-        bus_instance += "\n\n"
+        bus_instance += "\n"
 
         outfile.write(bus_instance)
 
-    with open("../../SmartGridMain/IEEE33/IEEE33_Devices_Test.csv") as device_file:
+    with open("../../SmartGridMain/IEEE33/IEEE33_DevicesFull.csv") as device_file:
         for device in device_file.readlines():
             device_info = device.split(',')
             idn = device_info[0]
@@ -235,7 +257,9 @@ with open('../models/IEEE33_SimDSE.ttl', "w+") as outfile:
             dst = device_info[3]
             period = device_info[4]
             error = device_info[5]
-            cktElement = device_info[6]
+            cktElement = device_info[6].replace('.','_',1).replace('l','L',1)
+            if '.' in cktElement:
+                cktElement = cktElement[:-2]
             cktTerminal = device_info[7][-1]
             cktPhase = device_info[8].split('_')
             cktProperty = device_info[9]
@@ -246,20 +270,19 @@ with open('../models/IEEE33_SimDSE.ttl', "w+") as outfile:
 :Phasor_{name} rdf:type owl:NamedIndividual ,
                         :Phasor ;
                 SmartGrid:bus_terminal {bus_term} ;
-                SmartGrid:connectsTo {src} ;
+                SmartGrid:connectsTo :Bus_{src} ;
                 SmartGrid:phase {phase} ;
-                SmartGrid:monitor {monitor} ;
-                SmartGrid:feeds :Estimator .
+                SmartGrid:monitor :{monitor} ;
+                SmartGrid:feeds :Estimator_1 .
 """.format(name=idn, bus_term=cktTerminal,src=src, phase=cktPhase[1], monitor=cktElement)
             if device_type.lower() == "smartmeter":
                 device_instance += """
 :SmartMeter_{name} rdf:type owl:NamedIndividual ,
                             :SmartMeter ;
-                    SmartGrid:bus_terminal {bus_term} ;
-                    SmartGrid:connectsTo :Bus_{src} ;
-                    SmartGrid:phase {phase} ;
-                    SmartGrid:monitor :{monitor} ;
-                    SmartGrid:feeds :Estimator .                 
+                SmartGrid:bus_terminal {bus_term} ;
+                SmartGrid:connectsTo :Bus_{src} ;
+                SmartGrid:phase {phase} ;
+                SmartGrid:monitor :{monitor} ;
+                SmartGrid:feeds :Estimator_1 .                 
 """.format(name=idn, bus_term=cktTerminal,src=src, phase=cktPhase[1], monitor=cktElement)
-
-            # outfile.write(device_instance)
+            outfile.write(device_instance)
