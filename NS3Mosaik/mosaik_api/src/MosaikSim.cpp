@@ -884,13 +884,12 @@ MosaikSim::get_data(Json::Value args, Json::Value kwargs)
   }
 
   //--- check if NS3 output buffer is not empty and get all data
-  if (objNetsim->checkEmptyDataOutput() == 1)
+  if (objNetsim->checkEmptyDataOutput())
   {
     if (verbose > 2)
       std::cout << "MosaikSim::get_data NO output data on NS3 !! " << std::endl;
-
-    //--- there something in the buffer, retrieve to MosaikSim
   }
+  //--- there something in the buffer, retrieve to MosaikSim
   else
   {
     if (verbose > 2)

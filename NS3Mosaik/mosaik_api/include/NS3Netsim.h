@@ -68,6 +68,7 @@ struct DataXCHG {
 
 static vector<DataXCHG> dataXchgInput;  ///< Input data exchange vector
 static queue<DataXCHG> dataXchgOutput; ///< Output data exchange vector
+static queue<uint64_t> dataXchgTime; ///< Output data timestamps
 static map<Ipv4Address, uint32_t> mapIpv4NodeId; ///< Map from client Ipv4 to Node Id
 static map<Ipv6Address, uint32_t> mapIpv6NodeId; ///< Map from client Ipv6 to Node Id
 static unordered_map<uint32_t , string> fragmentBuffers;
@@ -267,6 +268,7 @@ private:
 
   double startTime; ///< Simulation start time
   double stopTime; ///< Simulation stop time
+  uint64_t currentTime;
   int verbose;      ///< Verbose level
 
   map<uint32_t, Ptr<Socket>> mapNodeSocket; ///< Map from client Nodes Id to the socket

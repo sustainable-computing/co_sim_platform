@@ -273,7 +273,7 @@ def  create_scenario( world, args ):
                     step_size = devParams[key]['period'],
                     cktElement = devParams[key]['cktElement'], 
                     error = devParams[key]['error'],
-                    verbose=0
+                    verbose = 0
                 ))
 
         #--- Probers do not need transporters
