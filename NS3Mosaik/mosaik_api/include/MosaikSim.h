@@ -216,12 +216,20 @@ class MosaikSim {
       .attrs = {"v", "t"}
   };
 
-  MosaikMeta TransporterMeta = {.api_version = {"3.0"},
+#if PERFORMANCE_TEST > 1
+  MosaikMeta TransporterMeta = {
+      .api_version = {"2.6"},
+      .model = "Transporter",
+      .props = {TransporterModel}
+  };
+#else
+  MosaikMeta TransporterMeta = {
+      .api_version = {"3.0"},
       .type = "event-based",
       .model = "Transporter",
       .props = {TransporterModel}
   };
-
+#endif
 
 
   //---

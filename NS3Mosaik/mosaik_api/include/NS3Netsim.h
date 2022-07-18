@@ -28,6 +28,9 @@
 #ifndef NS3NETSIM_H_
 #define NS3NETSIM_H_
 
+//--- Conditional compilation for performance evaluation
+#define PERFORMANCE_TEST 3
+
 #include <iostream>
 #include <iomanip>
 

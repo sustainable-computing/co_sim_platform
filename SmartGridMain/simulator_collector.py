@@ -16,9 +16,11 @@ import warnings
 import pandas as pd
 import sys
 
+from simulator_demo import Mosaik_2
+
 META = {
-	'api-version': '3.0',
-	'type': 'event-based',
+	# 'api-version': '3.0',
+	# 'type': 'event-based',
 	'models': {
 		'Monitor': {
 			'public': True,
@@ -38,19 +40,32 @@ class Collector(mosaik_api.Simulator):
 		self.step_size = None
 		self.time_list=[]
 
+	if Mosaik_2:
+		def init(self, sid, eid_prefix=None, verbose=0, out_list = True, 
+				h5_save=True, h5_panelname = None, h5_storename='collectorname'):
+			if eid_prefix is not None:
+				self.eid_prefix = eid_prefix
+			self.sid          = sid
+			self.verbose      = verbose
+			self.out_list     = out_list
+			self.h5_save      = h5_save
+			self.h5_storename = h5_storename
+			self.h5_panelname = h5_panelname
 
-	def init(self, sid, time_resolution, eid_prefix=None, verbose=0, out_list = True, 
-			h5_save=True, h5_panelname = None, h5_storename='collectorname'):
-		if eid_prefix is not None:
-			self.eid_prefix = eid_prefix
-		self.sid          = sid
-		self.verbose      = verbose
-		self.out_list     = out_list
-		self.h5_save      = h5_save
-		self.h5_storename = h5_storename
-		self.h5_panelname = h5_panelname
+			return self.meta
+	else:
+		def init(self, sid, time_resolution, eid_prefix=None, verbose=0, out_list = True, 
+				h5_save=True, h5_panelname = None, h5_storename='collectorname'):
+			if eid_prefix is not None:
+				self.eid_prefix = eid_prefix
+			self.sid          = sid
+			self.verbose      = verbose
+			self.out_list     = out_list
+			self.h5_save      = h5_save
+			self.h5_storename = h5_storename
+			self.h5_panelname = h5_panelname
 
-		return self.meta
+			return self.meta
 
 
 	def create(self, num, model):
@@ -61,26 +76,48 @@ class Collector(mosaik_api.Simulator):
 		sys.stdout.flush()
 		return [{'eid': self.eid, 'type': model}]
 
-	
-	def step(self, time, inputs, max_advance):
-		if (self.verbose > 0):  print('Collector::step time ', time, ' Max Advance ', max_advance)
-		if (self.verbose > 1): 	print('Collector::step inputs: ', inputs)
-		data = inputs[self.eid]
-		for attr, values in data.items():
-			for src, value in values.items():
-				if (value not in ['None',  None]):
-					# For now, only using the latest data to plot and avoid overlapping data
-					value = value[len(value)-1]
-					if isinstance(value, np.float64) or isinstance(value, float):
-						value = np.around(value, decimals = 6)
-					if isinstance(value, str):
-						value = int(value)
-					self.data[src][attr].append(value)
-#  				self.data[src][attr].append(value)
-# 				else:
-# 					self.data[src][attr].append(np.NaN)					
-		self.time_list.append(time)
-		sys.stdout.flush()
+
+	if Mosaik_2:
+		def step(self, time, inputs):
+			if (self.verbose > 0):  print('Collector::step time ', time)
+			if (self.verbose > 1): 	print('Collector::step inputs: ', inputs)
+			data = inputs[self.eid]
+			for attr, values in data.items():
+				for src, value in values.items():
+					if (value not in ['None',  None]):
+						# For now, only using the latest data to plot and avoid overlapping data
+						value = value[len(value)-1]
+						if isinstance(value, np.float64) or isinstance(value, float):
+							value = np.around(value, decimals = 6)
+						if isinstance(value, str):
+							value = int(value)
+						self.data[src][attr].append(value)
+	#  				self.data[src][attr].append(value)
+	# 				else:
+	# 					self.data[src][attr].append(np.NaN)					
+			self.time_list.append(time)
+			sys.stdout.flush()
+			return time + 1
+	else:	
+		def step(self, time, inputs, max_advance):
+			if (self.verbose > 0):  print('Collector::step time ', time, ' Max Advance ', max_advance)
+			if (self.verbose > 1): 	print('Collector::step inputs: ', inputs)
+			data = inputs[self.eid]
+			for attr, values in data.items():
+				for src, value in values.items():
+					if (value not in ['None',  None]):
+						# For now, only using the latest data to plot and avoid overlapping data
+						value = value[len(value)-1]
+						if isinstance(value, np.float64) or isinstance(value, float):
+							value = np.around(value, decimals = 6)
+						if isinstance(value, str):
+							value = int(value)
+						self.data[src][attr].append(value)
+	#  				self.data[src][attr].append(value)
+	# 				else:
+	# 					self.data[src][attr].append(np.NaN)					
+			self.time_list.append(time)
+			sys.stdout.flush()
 		
 			
 	def finalize(self):

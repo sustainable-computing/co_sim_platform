@@ -14,9 +14,11 @@ from tabnanny import verbose
 import mosaik_api
 import sys
 
+from simulator_demo import Mosaik_2
+
 META = {
-    'api-version': '3.0',
-    'type': 'hybrid',
+    # 'api-version': '3.0',
+    # 'type': 'hybrid',
     'models': {
         'RangeControl': {
             'public': True,
@@ -47,11 +49,18 @@ class ControlSim(mosaik_api.Simulator):
         self.time = 0
         self.eventQueue = queue.PriorityQueue()
         
-    def init(self, sid, time_resolution, verbose=0):
-        self.sid = sid
-        self.verbose = verbose
-        
-        return self.meta
+    if Mosaik_2:
+        def init(self, sid, verbose=0):
+            self.sid = sid
+            self.verbose = verbose
+            
+            return self.meta
+    else:
+        def init(self, sid, time_resolution, verbose=0):
+            self.sid = sid
+            self.verbose = verbose
+
+            return self.meta
 
     
     def create(self, num, model, eid, vset, bw, tdelay, control_delay):
@@ -76,83 +85,145 @@ class ControlSim(mosaik_api.Simulator):
         sys.stdout.flush()
         return entities   
     
-
-    def step(self, time, inputs, max_advance):
-        if (self.verbose > 0): print('simulator_controller::step: ', time, ' Max Advance: ', max_advance)
-        if (self.verbose > 1): print('simulator_controller::step INPUT: ', inputs)
-        if (self.verbose > 3): print('simulator_controller::step DATA: ', self.data)
-        
-        self.time = time
-        #---
-        #--- prepare data to be used in get_data and calculate control action
-        #---
-        for controller_eid, attrs in inputs.items():
-            #--- Save control data for processing in next step
-            #--- List is used as multiple sensor data might be received
-            self.data[controller_eid]['v'] = []
-            self.data[controller_eid]['t'] = []
-
-            vlist = list(attrs['v'].values())[0]
-            tlist = list(attrs['t'].values())[0]
+    if Mosaik_2:
+        def step(self, time, inputs):
+            if (self.verbose > 0): print('simulator_controller::step: ', time)
+            if (self.verbose > 1): print('simulator_controller::step INPUT: ', inputs)
+            if (self.verbose > 3): print('simulator_controller::step DATA: ', self.data)
             
-            #--- Handling multiple data simultaneously (if required)
-            for i in range(0, len(vlist)):
-                vmeas = vlist[i]
-                tmeas = tlist[i]
+            self.time = time
+            #---
+            #--- prepare data to be used in get_data and calculate control action
+            #---
+            for controller_eid, attrs in inputs.items():
+                #--- Save control data for processing in next step
+                #--- List is used as multiple sensor data might be received
+                self.data[controller_eid]['v'] = []
+                self.data[controller_eid]['t'] = []
 
-                if (vmeas != None and vmeas != 'null' and vmeas != "None"):
-                    #--- Calculate value_v
-                    VAR_V = 0
-                                    
-                    delta_v = float(vmeas.rstrip()) - self.entities[controller_eid]['vset']
-                    
-                    #--- check if voltage on the range or out
-                    if(abs(delta_v) < (self.entities[controller_eid]['bw']/2)):
-                        #--- if in range reset the timer and do not send any control signal
-                        self.entities[controller_eid]['tlast'] = tmeas
+                vlist = list(attrs['v'].values())[0]
+                tlist = list(attrs['t'].values())[0]
+                
+                #--- Handling multiple data simultaneously (if required)
+                for i in range(0, len(vlist)):
+                    vmeas = vlist[i]
+                    tmeas = tlist[i]
+
+                    if (vmeas != None and vmeas != 'null' and vmeas != "None"):
+                        #--- Calculate value_v
                         VAR_V = 0
-                    
-                    else:
-                        #--- if the voltage is out of band
-                        #--- check for how long the voltage
-                        #--- count or not the propagation delay
-                        if (self.verbose > 1):
-                            print("simulator_controller::step Propagation Delay", time-tmeas)
+                                        
+                        delta_v = float(vmeas.rstrip()) - self.entities[controller_eid]['vset']
                         
-                        delta_t = tmeas - self.entities[controller_eid]['tlast']
-                        #--- if the amount of time out of band is larger then allowed
-                        if (delta_t > self.entities[controller_eid]['tdelay']):
-                            #--- if the Vmeas is greater than set point, increase tap
-                            if delta_v > 0:
-                                VAR_V = -1
-                            #--- if the Vmeas is smaller than set point, decrease tap
-                            else:  
-                                VAR_V = 1
-                                
-                    self.data[controller_eid]['v'].append(VAR_V)
-                    
-                    #--- time
-                    self.data[controller_eid]['t'].append(time)
+                        #--- check if voltage on the range or out
+                        if(abs(delta_v) < (self.entities[controller_eid]['bw']/2)):
+                            #--- if in range reset the timer and do not send any control signal
+                            self.entities[controller_eid]['tlast'] = tmeas
+                            VAR_V = 0
+                        
+                        else:
+                            #--- if the voltage is out of band
+                            #--- check for how long the voltage
+                            #--- count or not the propagation delay
+                            if (self.verbose > 1):
+                                print("simulator_controller::step Propagation Delay", time-tmeas)
+                            
+                            delta_t = tmeas - self.entities[controller_eid]['tlast']
+                            #--- if the amount of time out of band is larger then allowed
+                            if (delta_t > self.entities[controller_eid]['tdelay']):
+                                #--- if the Vmeas is greater than set point, increase tap
+                                if delta_v > 0:
+                                    VAR_V = -1
+                                #--- if the Vmeas is smaller than set point, decrease tap
+                                else:  
+                                    VAR_V = 1
+                                    
+                        self.data[controller_eid]['v'].append(VAR_V)
+                        
+                        #--- time
+                        self.data[controller_eid]['t'].append(time)
 
-
-        #--- schedule control events to calculate LBTS
-        for controller_eid in self.entities:
-            if (time % self.entities[controller_eid]['control_delay'] == 0):
-                self.eventQueue.put(time + self.entities[controller_eid]['control_delay'])
-
-        while (not self.eventQueue.empty() and self.eventQueue.queue[0] == time):
-            self.eventQueue.get()
-
-        if (self.verbose > 3): print('simulator_controller::step after DATA: ', self.data)
-        
-        #--- if there is an event in the future, return next step time
-        if not self.eventQueue.empty():
-            if (self.verbose > 0):
-                print ("simulator_controller::step next_step = ", self.eventQueue.queue[0])
+            if (self.verbose > 3): print('simulator_controller::step after DATA: ', self.data)
+            
             sys.stdout.flush()
-            return self.eventQueue.queue[0]
-        
-        sys.stdout.flush()
+            return self.time + 1
+    else:
+        def step(self, time, inputs, max_advance):
+            if (self.verbose > 0): print('simulator_controller::step: ', time, ' Max Advance: ', max_advance)
+            if (self.verbose > 1): print('simulator_controller::step INPUT: ', inputs)
+            if (self.verbose > 3): print('simulator_controller::step DATA: ', self.data)
+            
+            self.time = time
+            #---
+            #--- prepare data to be used in get_data and calculate control action
+            #---
+            for controller_eid, attrs in inputs.items():
+                #--- Save control data for processing in next step
+                #--- List is used as multiple sensor data might be received
+                self.data[controller_eid]['v'] = []
+                self.data[controller_eid]['t'] = []
+
+                vlist = list(attrs['v'].values())[0]
+                tlist = list(attrs['t'].values())[0]
+                
+                #--- Handling multiple data simultaneously (if required)
+                for i in range(0, len(vlist)):
+                    vmeas = vlist[i]
+                    tmeas = tlist[i]
+
+                    if (vmeas != None and vmeas != 'null' and vmeas != "None"):
+                        #--- Calculate value_v
+                        VAR_V = 0
+                                        
+                        delta_v = float(vmeas.rstrip()) - self.entities[controller_eid]['vset']
+                        
+                        #--- check if voltage on the range or out
+                        if(abs(delta_v) < (self.entities[controller_eid]['bw']/2)):
+                            #--- if in range reset the timer and do not send any control signal
+                            self.entities[controller_eid]['tlast'] = tmeas
+                            VAR_V = 0
+                        
+                        else:
+                            #--- if the voltage is out of band
+                            #--- check for how long the voltage
+                            #--- count or not the propagation delay
+                            if (self.verbose > 1):
+                                print("simulator_controller::step Propagation Delay", time-tmeas)
+                            
+                            delta_t = tmeas - self.entities[controller_eid]['tlast']
+                            #--- if the amount of time out of band is larger then allowed
+                            if (delta_t > self.entities[controller_eid]['tdelay']):
+                                #--- if the Vmeas is greater than set point, increase tap
+                                if delta_v > 0:
+                                    VAR_V = -1
+                                #--- if the Vmeas is smaller than set point, decrease tap
+                                else:  
+                                    VAR_V = 1
+                                    
+                        self.data[controller_eid]['v'].append(VAR_V)
+                        
+                        #--- time
+                        self.data[controller_eid]['t'].append(time)
+
+
+            #--- schedule control events to calculate LBTS
+            for controller_eid in self.entities:
+                if (time % self.entities[controller_eid]['control_delay'] == 0):
+                    self.eventQueue.put(time + self.entities[controller_eid]['control_delay'])
+
+            while (not self.eventQueue.empty() and self.eventQueue.queue[0] == time):
+                self.eventQueue.get()
+
+            if (self.verbose > 3): print('simulator_controller::step after DATA: ', self.data)
+            
+            #--- if there is an event in the future, return next step time
+            if not self.eventQueue.empty():
+                if (self.verbose > 0):
+                    print ("simulator_controller::step next_step = ", self.eventQueue.queue[0])
+                sys.stdout.flush()
+                return self.eventQueue.queue[0]
+            
+            sys.stdout.flush()
 
     
     def get_data(self, outputs):
@@ -173,6 +244,24 @@ class ControlSim(mosaik_api.Simulator):
                     #--- Need to clear as other controller instances might have input
                     #--- and this data might be returned again (although not required)
                     self.data[eid] = {}
+                elif Mosaik_2:
+                    data[eid] = {}
+                    data[eid]['t'] = []
+                    data[eid]['v'] = []
+                    data[eid]['t'].append(None)
+                    data[eid]['v'].append(None)
+                    #--- Need to clear as other controller instances might have input
+                    #--- and this data might be returned again (although not required)
+                    self.data[eid] = {}
+            elif Mosaik_2:
+                data[eid] = {}
+                data[eid]['t'] = []
+                data[eid]['v'] = []
+                data[eid]['t'].append(None)
+                data[eid]['v'].append(None)
+                #--- Need to clear as other controller instances might have input
+                #--- and this data might be returned again (although not required)
+                self.data[eid] = {}
 
         if (self.verbose > 1): print('simulator_controller::get_data OUTPUT data =', data)
         sys.stdout.flush()

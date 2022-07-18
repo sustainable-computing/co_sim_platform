@@ -20,9 +20,11 @@ import numpy as np
 import opendssdirect as dss
 import math
 
+from simulator_demo import Mosaik_2
+
 META = {
-    'api-version': '3.0',
-    'type': 'hybrid',
+    # 'api-version': '3.0',
+    # 'type': 'hybrid',
     'models': {
         'Sensor': {
             'public': True,
@@ -203,220 +205,435 @@ class PFlowSim(mosaik_api.Simulator):
         self.loadgen_interval = self.step_size
 
 
-    def init(self, sid, time_resolution, topofile, nwlfile, ilpqfile, step_size, loadgen_interval, verbose=0):	
-        self.sid = sid       
-        self.verbose = verbose
-        self.loadgen_interval = loadgen_interval
-        self.step_size = step_size
-        
-        self.swpos = 0
-        self.swcycle = 35
-        
-        if (self.verbose > 0): print('simulator_pflow::init', self.sid)
-        if (self.verbose > 1): print('simulator_pflow::init', topofile, nwlfile, ilpqfile, verbose)
+    if Mosaik_2:
+        def init(self, sid, topofile, nwlfile, ilpqfile, step_size, loadgen_interval, verbose=0):	
+            self.sid = sid       
+            self.verbose = verbose
+            self.loadgen_interval = loadgen_interval
+            self.step_size = step_size
+            
+            self.swpos = 0
+            self.swcycle = 35
+            
+            if (self.verbose > 0): print('simulator_pflow::init', self.sid)
+            if (self.verbose > 1): print('simulator_pflow::init', topofile, nwlfile, ilpqfile, verbose)
 
-        #--- start opendss
-        self.dssObj = SimDSS(topofile, nwlfile, ilpqfile)
-        if (self.verbose > 2):
-            self.dssObj.showLoads()
-            self.dssObj.showVNodes()
-            self.dssObj.showIinout()
-            self.dssObj.showVMagAnglePu()
-            dss.run_command("Show Buses")
-            dss.run_command("Show Voltages LN nodes")
-            dss.run_command("Show Taps")
-             
-        #--- create instance of LoadGenerator
-        self.objLoadGen = LoadGenerator(nwlfile,
-                                        PFLimInf   =  0.95,
-                                        PFLimSup   =  0.99,
-                                        LoadLimInf = -1.65,
-                                        LoadLimSup =  0.70,
-                                        AmpGain    =  0.30,
-                                        #Freq       =  1./8640,
-                                        Freq       =  1./100,
-                                        PhaseShift = math.pi)
+            #--- start opendss
+            self.dssObj = SimDSS(topofile, nwlfile, ilpqfile)
+            if (self.verbose > 2):
+                self.dssObj.showLoads()
+                self.dssObj.showVNodes()
+                self.dssObj.showIinout()
+                self.dssObj.showVMagAnglePu()
+                dss.run_command("Show Buses")
+                dss.run_command("Show Voltages LN nodes")
+                dss.run_command("Show Taps")
+                
+            #--- create instance of LoadGenerator
+            self.objLoadGen = LoadGenerator(nwlfile,
+                                            PFLimInf   =  0.95,
+                                            PFLimSup   =  0.99,
+                                            LoadLimInf = -1.65,
+                                            LoadLimSup =  0.70,
+                                            AmpGain    =  0.30,
+                                            #Freq       =  1./8640,
+                                            Freq       =  1./100,
+                                            PhaseShift = math.pi)
+        
+            sys.stdout.flush()
+            return self.meta
+
+        def create(self, num, model, cktTerminal, cktPhase, eid, step_size, cktElement, error, verbose):
+            if (self.verbose > 0): print('simulator_pflow::create ', model, ": ", eid)
+
+            self.data[eid] = {}     
+            self.instances[eid] = {}
+
+            if (model == 'Prober'):
+                self.instances[eid] = ProberSim(eid,
+                                            step_size = step_size, 
+                                            objDSS    = self.dssObj,
+                                            element   = cktElement, 
+                                            terminal  = cktTerminal, 
+                                            phase     = cktPhase,
+                                            verbose   = verbose)
+
+            if (model == 'Sensor'):
+                self.instances[eid] = SensorSim(eid,
+                                            step_size = step_size, 
+                                            objDSS    = self.dssObj,
+                                            element   = cktElement, 
+                                            terminal  = cktTerminal, 
+                                            phase     = cktPhase,
+                                            verbose   = verbose)
+                
+            if (model == 'Actuator'):
+                self.instances[eid] = ActuatorSim(eid, 
+                                            step_size = step_size,
+                                            objDSS    = self.dssObj,
+                                            element   = cktElement, 
+                                            terminal  = cktTerminal, 
+                                            phase     = cktPhase,
+                                            verbose   = verbose)            
+            
+            sys.stdout.flush()
+            return [{'eid': eid, 'type': model}]
+
+        def step(self, time, inputs):
+            if (self.verbose > 0): print('simulator_pflow::step time = ', time)
+            if (self.verbose > 1): print('simulator_pflow::step inputs = ', inputs)
     
-        sys.stdout.flush()
-        return self.meta
+            self.time = time
+            #--- Based on Sensor data interval, LoadGen called accordingly
+
+            # If this is an event-based step or duplicate step, only perform Actuation
+            # As this is a priority simulator, input only comes after the step is performed
+            if (time % self.step_size == 0):
+                self.next_step = time + self.step_size
+                
+                #---
+                #--- process inputs data
+                #--- 
+
+                #--- Calculate how many times load generator
+                #--- needs to be called
+                prev_step = time - self.step_size
+                if  (prev_step < 0):
+                    loadGen_cnt = 1
+                    prev_step = -1
+                else:   loadGen_cnt = math.floor(time/self.loadgen_interval) \
+                        - math.floor(prev_step/self.loadgen_interval)
+
+                #--- Activate load generator
+                for i in range(0, loadGen_cnt):
+                    if (self.verbose > 1): print("Generating load for: ", \
+                        self.loadgen_interval * ( math.ceil( (prev_step+1)/self.loadgen_interval ) + i))
+                    #-- get a new sample from loadgen
+                    ePQ = self.objLoadGen.createLoads()
+                    #-- execute processing of the the new elastic load
+                    self.dssObj.setLoads(ePQ)
+    
+
+            #--- Create step load on Bus 611
+    #         if (time > 50 and time < 350):
+    #             dss.run_command("New Load.611.3 Bus1=611.3  kW=206.4   kvar=96")   # 20%
+    #             self.dssObj._updateSystemState()      
+    #         else:
+    #             dss.run_command("New Load.611.3 Bus1=611.3  kW=170   kvar=80") 
+    #             self.dssObj._updateSystemState()           
+    
 
 
-    def create(self, num, model, cktTerminal, cktPhase, eid, step_size, cktElement, error, verbose):
-        if (self.verbose > 0): print('simulator_pflow::create ', model, ": ", eid)
+            #--- Attack at the switch
+    #         period = 90000 # half of the t_delay
+    #         xx = 0 if (np.abs(np.sin(2 * np.pi * (1./period)*time + 3/4*np.pi)) > 0.97) else 1 
+    #          
+    #         if (0 == xx):
+    #             #--- switch off
+    #             self.dssObj.operateSwitch(0, "Line.671692", (CKTTerm.SNDBUS).value, (CKTPhase.PHASE_ALL).value)
+    #         else: 
+    #             #-- switch on
+    #             self.dssObj.operateSwitch(1, "Line.671692", (CKTTerm.SNDBUS).value, (CKTPhase.PHASE_ALL).value)
 
-        self.data[eid] = {}     
-        self.instances[eid] = {}
 
-        if (model == 'Prober'):
-            self.instances[eid] = ProberSim(eid,
-                                           step_size = step_size, 
-                                           objDSS    = self.dssObj,
-                                           element   = cktElement, 
-                                           terminal  = cktTerminal, 
-                                           phase     = cktPhase,
-                                           verbose   = verbose)
-
-        if (model == 'Sensor'):
-            self.instances[eid] = SensorSim(eid,
-                                           step_size = step_size, 
-                                           objDSS    = self.dssObj,
-                                           element   = cktElement, 
-                                           terminal  = cktTerminal, 
-                                           phase     = cktPhase,
-                                           verbose   = verbose)
-            
-        if (model == 'Actuator'):
-            self.instances[eid] = ActuatorSim(eid, 
-                                           step_size = step_size,
-                                           objDSS    = self.dssObj,
-                                           element   = cktElement, 
-                                           terminal  = cktTerminal, 
-                                           phase     = cktPhase,
-                                           verbose   = verbose)            
+            #--- Switch on PVSystem
+    #         if (time > 200 and time < 400):
+    #             dss.run_command("New XYCurve.MyPVsT_680 npts=4 xarray=[19.044 22.106 29.697 25.297] yarray=[0 0.781 0.966 0.030]")
+    #             dss.run_command("New PVSystem.PV_680 phases=3 bus1=680 kV=4.16 conn=wye kVA=800  irrad=1.016  Pmpp=523.589 temperature=29.049 PF=1 P-TCurve=MyPVsT_680")
+    #             self.dssObj._updateSystemState()      
+    #         else:
+    #             dss.run_command("New PVSystem.PV_680 phases=3 bus1=680 kV=4.16 conn=wye kVA=0") 
+    #             self.dssObj._updateSystemState()            
         
-        sys.stdout.flush()
-        return [{'eid': eid, 'type': model}]
 
 
-    def step(self, time, inputs, max_advance):
-        if (self.verbose > 0): print('simulator_pflow::step time = ', time, ' Max Advance = ', max_advance)
-        if (self.verbose > 1): print('simulator_pflow::step inputs = ', inputs)
- 
-        self.time = time
-        #--- Based on Sensor data interval, LoadGen called accordingly
-
-        # If this is an event-based step or duplicate step, only perform Actuation
-        # As this is a priority simulator, input only comes after the step is performed
-        if (time % self.step_size == 0):
-            self.next_step = time + self.step_size
-               
-            #---
-            #--- process inputs data
+            #--- Use actuators to update opendss state with actions received by controllers (Mosaik)
+            for eid, attrs in inputs.items():
+                vlist = list(attrs['v'].values())[0]
+                tlist = list(attrs['t'].values())[0]
+                if not vlist:
+                    continue
+                for i in range(0, len(vlist)):
+                    value_v = vlist[i]
+                    value_t = tlist[i]
+                    if (value_v != 'None' and value_v != None):
+                        if (self.verbose > 1): print('simulator_pflow::step Propagation delay =', time - value_t)
+                        self.instances[eid].setControl(value_v, time)
+                
             #--- 
-
-            #--- Calculate how many times load generator
-            #--- needs to be called
-            prev_step = time - self.step_size
-            if  (prev_step < 0):
-                loadGen_cnt = 1
-                prev_step = -1
-            else:   loadGen_cnt = math.floor(time/self.loadgen_interval) \
-                    - math.floor(prev_step/self.loadgen_interval)
-
-            #--- Activate load generator
-            for i in range(0, loadGen_cnt):
-                if (self.verbose > 1): print("Generating load for: ", \
-                    self.loadgen_interval * ( math.ceil( (prev_step+1)/self.loadgen_interval ) + i))
-                #-- get a new sample from loadgen
-                ePQ = self.objLoadGen.createLoads()
-                #-- execute processing of the the new elastic load
-                self.dssObj.setLoads(ePQ)
- 
-
-        #--- Create step load on Bus 611
-#         if (time > 50 and time < 350):
-#             dss.run_command("New Load.611.3 Bus1=611.3  kW=206.4   kvar=96")   # 20%
-#             self.dssObj._updateSystemState()      
-#         else:
-#             dss.run_command("New Load.611.3 Bus1=611.3  kW=170   kvar=80") 
-#             self.dssObj._updateSystemState()           
- 
-
-
-        #--- Attack at the switch
-#         period = 90000 # half of the t_delay
-#         xx = 0 if (np.abs(np.sin(2 * np.pi * (1./period)*time + 3/4*np.pi)) > 0.97) else 1 
-#          
-#         if (0 == xx):
-#             #--- switch off
-#             self.dssObj.operateSwitch(0, "Line.671692", (CKTTerm.SNDBUS).value, (CKTPhase.PHASE_ALL).value)
-#         else: 
-#             #-- switch on
-#             self.dssObj.operateSwitch(1, "Line.671692", (CKTTerm.SNDBUS).value, (CKTPhase.PHASE_ALL).value)
-
-
-        #--- Switch on PVSystem
-#         if (time > 200 and time < 400):
-#             dss.run_command("New XYCurve.MyPVsT_680 npts=4 xarray=[19.044 22.106 29.697 25.297] yarray=[0 0.781 0.966 0.030]")
-#             dss.run_command("New PVSystem.PV_680 phases=3 bus1=680 kV=4.16 conn=wye kVA=800  irrad=1.016  Pmpp=523.589 temperature=29.049 PF=1 P-TCurve=MyPVsT_680")
-#             self.dssObj._updateSystemState()      
-#         else:
-#             dss.run_command("New PVSystem.PV_680 phases=3 bus1=680 kV=4.16 conn=wye kVA=0") 
-#             self.dssObj._updateSystemState()            
-      
-
-
-        #--- Use actuators to update opendss state with actions received by controllers (Mosaik)
-        for eid, attrs in inputs.items():
-            vlist = list(attrs['v'].values())[0]
-            tlist = list(attrs['t'].values())[0]
-            for i in range(0, len(vlist)):
-                value_v = vlist[i]
-                value_t = tlist[i]
-                if (value_v != 'None' and value_v != None):
-                    if (self.verbose > 1): print('simulator_pflow::step Propagation delay =', time - value_t)
-                    self.instances[eid].setControl(value_v, time)
+            #--- get new set of sensor data from OpenDSS
+            #---   
+            for instance_eid in self.instances:
+                if(instance_eid.find("Sensor") > -1)  :
+                    self.instances[instance_eid].updateValues(time)
             
-        #--- 
-        #--- get new set of sensor data from OpenDSS
-        #---   
-        for instance_eid in self.instances:
-            if(instance_eid.find("Sensor") > -1)  :
-                self.instances[instance_eid].updateValues(time)
-        
-        #--- 
-        #--- get new set of prober data from OpenDSS
-        #---   
-        for instance_eid in self.instances:
-            if(instance_eid.find("Prober") > -1)  :
-                self.instances[instance_eid].updateValues(time)        
+            #--- 
+            #--- get new set of prober data from OpenDSS
+            #---   
+            for instance_eid in self.instances:
+                if(instance_eid.find("Prober") > -1)  :
+                    self.instances[instance_eid].updateValues(time)
 
-        if(self.verbose > 1):
-            print('simulator_pflow::step next_step = ', self.next_step)
-        sys.stdout.flush()
-        return self.next_step
- 
- 
-    def get_data(self, outputs):
-        if (self.verbose > 0): print('simulator_pflow::get_data INPUT', outputs)
+            if(self.verbose > 1):
+                print('simulator_pflow::step next_step = ', self.next_step)
+            sys.stdout.flush()
+            return self.next_step
         
-        data = {}
-        for instance_eid in self.instances:
-            # Acuators provide data only when there is actuation
-            if (instance_eid.find("Actuator") > -1):
-                val_v, val_t = self.instances[instance_eid].getLastValue()
-                self.data[instance_eid]['v'] = val_v
-                self.data[instance_eid]['t'] = val_t
-                if (val_t != None):
+        def get_data(self, outputs):
+            if (self.verbose > 0): print('simulator_pflow::get_data INPUT', outputs)
+            
+            data = {}
+            for instance_eid in self.instances:
+                # Acuators provide data only when there is actuation
+                if (instance_eid.find("Actuator") > -1):
+                    val_v, val_t = self.instances[instance_eid].getLastValue()
+                    self.data[instance_eid]['v'] = val_v
+                    self.data[instance_eid]['t'] = val_t
+                    if (val_t != None):
+                        data[instance_eid] = {}
+                        data[instance_eid]['v'] = []
+                        data[instance_eid]['t'] = []
+                        data[instance_eid]['v'].append(self.data[instance_eid]['v'])
+                        data[instance_eid]['t'].append(self.data[instance_eid]['t'])
+                    else:
+                        data[instance_eid] = {}
+                        data[instance_eid]['v'] = []
+                        data[instance_eid]['t'] = []
+                        data[instance_eid]['v'].append(None)
+                        data[instance_eid]['t'].append(None)
+                # All other models provide data at fixed intervals
+                elif (self.time % self.step_size == 0):
+                    val_v, val_t = self.instances[instance_eid].getLastValue()
+                    self.data[instance_eid]['v'] = val_v
+                    self.data[instance_eid]['t'] = val_t
                     data[instance_eid] = {}
                     data[instance_eid]['v'] = []
                     data[instance_eid]['t'] = []
                     data[instance_eid]['v'].append(self.data[instance_eid]['v'])
                     data[instance_eid]['t'].append(self.data[instance_eid]['t'])
-            # All other models provide data at fixed intervals
-            elif (self.time % self.step_size == 0):
-                val_v, val_t = self.instances[instance_eid].getLastValue()
-                self.data[instance_eid]['v'] = val_v
-                self.data[instance_eid]['t'] = val_t
-                data[instance_eid] = {}
-                data[instance_eid]['v'] = []
-                data[instance_eid]['t'] = []
-                data[instance_eid]['v'].append(self.data[instance_eid]['v'])
-                data[instance_eid]['t'].append(self.data[instance_eid]['t'])
 
-        if (self.verbose > 1): print('simulator_pflow::get_data data:', data)
+            if (self.verbose > 1): print('simulator_pflow::get_data data:', data)
 
-        sys.stdout.flush()
-        return data 
- 
- 
-    def set_next(self, pflow, instance, parameters):
-        if (self.verbose > 2): print('simulator_pflow::set_next', instance, parameters)
+            sys.stdout.flush()
+            return data
+
+        def set_next(self, pflow, instance, parameters):
+            if (self.verbose > 2): print('simulator_pflow::set_next', instance, parameters)
+            
+            if instance not in self.instances[pflow]:
+                self.instances[pflow][instance] = parameters   
+    else:
+        def init(self, sid, time_resolution, topofile, nwlfile, ilpqfile, step_size, loadgen_interval, verbose=0):	
+            self.sid = sid       
+            self.verbose = verbose
+            self.loadgen_interval = loadgen_interval
+            self.step_size = step_size
+            
+            self.swpos = 0
+            self.swcycle = 35
+            
+            if (self.verbose > 0): print('simulator_pflow::init', self.sid)
+            if (self.verbose > 1): print('simulator_pflow::init', topofile, nwlfile, ilpqfile, verbose)
+
+            #--- start opendss
+            self.dssObj = SimDSS(topofile, nwlfile, ilpqfile)
+            if (self.verbose > 2):
+                self.dssObj.showLoads()
+                self.dssObj.showVNodes()
+                self.dssObj.showIinout()
+                self.dssObj.showVMagAnglePu()
+                dss.run_command("Show Buses")
+                dss.run_command("Show Voltages LN nodes")
+                dss.run_command("Show Taps")
+                
+            #--- create instance of LoadGenerator
+            self.objLoadGen = LoadGenerator(nwlfile,
+                                            PFLimInf   =  0.95,
+                                            PFLimSup   =  0.99,
+                                            LoadLimInf = -1.65,
+                                            LoadLimSup =  0.70,
+                                            AmpGain    =  0.30,
+                                            #Freq       =  1./8640,
+                                            Freq       =  1./100,
+                                            PhaseShift = math.pi)
         
-        if instance not in self.instances[pflow]:
-            self.instances[pflow][instance] = parameters    
+            sys.stdout.flush()
+            return self.meta
 
-#     def finalize(self):
-#         print('OpenDSS Final Results:')
-#         self.dssObj.showIinout()
+        def create(self, num, model, cktTerminal, cktPhase, eid, step_size, cktElement, error, verbose):
+            if (self.verbose > 0): print('simulator_pflow::create ', model, ": ", eid)
+
+            self.data[eid] = {}     
+            self.instances[eid] = {}
+
+            if (model == 'Prober'):
+                self.instances[eid] = ProberSim(eid,
+                                            step_size = step_size, 
+                                            objDSS    = self.dssObj,
+                                            element   = cktElement, 
+                                            terminal  = cktTerminal, 
+                                            phase     = cktPhase,
+                                            verbose   = verbose)
+
+            if (model == 'Sensor'):
+                self.instances[eid] = SensorSim(eid,
+                                            step_size = step_size, 
+                                            objDSS    = self.dssObj,
+                                            element   = cktElement, 
+                                            terminal  = cktTerminal, 
+                                            phase     = cktPhase,
+                                            verbose   = verbose)
+                
+            if (model == 'Actuator'):
+                self.instances[eid] = ActuatorSim(eid, 
+                                            step_size = step_size,
+                                            objDSS    = self.dssObj,
+                                            element   = cktElement, 
+                                            terminal  = cktTerminal, 
+                                            phase     = cktPhase,
+                                            verbose   = verbose)            
+            
+            sys.stdout.flush()
+            return [{'eid': eid, 'type': model}]
+
+        def step(self, time, inputs, max_advance):
+            if (self.verbose > 0): print('simulator_pflow::step time = ', time, ' Max Advance = ', max_advance)
+            if (self.verbose > 1): print('simulator_pflow::step inputs = ', inputs)
+    
+            self.time = time
+            #--- Based on Sensor data interval, LoadGen called accordingly
+
+            # If this is an event-based step or duplicate step, only perform Actuation
+            # As this is a priority simulator, input only comes after the step is performed
+            if (time % self.step_size == 0):
+                self.next_step = time + self.step_size
+                
+                #---
+                #--- process inputs data
+                #--- 
+
+                #--- Calculate how many times load generator
+                #--- needs to be called
+                prev_step = time - self.step_size
+                if  (prev_step < 0):
+                    loadGen_cnt = 1
+                    prev_step = -1
+                else:   loadGen_cnt = math.floor(time/self.loadgen_interval) \
+                        - math.floor(prev_step/self.loadgen_interval)
+
+                #--- Activate load generator
+                for i in range(0, loadGen_cnt):
+                    if (self.verbose > 1): print("Generating load for: ", \
+                        self.loadgen_interval * ( math.ceil( (prev_step+1)/self.loadgen_interval ) + i))
+                    #-- get a new sample from loadgen
+                    ePQ = self.objLoadGen.createLoads()
+                    #-- execute processing of the the new elastic load
+                    self.dssObj.setLoads(ePQ)
+    
+
+            #--- Create step load on Bus 611
+    #         if (time > 50 and time < 350):
+    #             dss.run_command("New Load.611.3 Bus1=611.3  kW=206.4   kvar=96")   # 20%
+    #             self.dssObj._updateSystemState()      
+    #         else:
+    #             dss.run_command("New Load.611.3 Bus1=611.3  kW=170   kvar=80") 
+    #             self.dssObj._updateSystemState()           
+    
+
+
+            #--- Attack at the switch
+    #         period = 90000 # half of the t_delay
+    #         xx = 0 if (np.abs(np.sin(2 * np.pi * (1./period)*time + 3/4*np.pi)) > 0.97) else 1 
+    #          
+    #         if (0 == xx):
+    #             #--- switch off
+    #             self.dssObj.operateSwitch(0, "Line.671692", (CKTTerm.SNDBUS).value, (CKTPhase.PHASE_ALL).value)
+    #         else: 
+    #             #-- switch on
+    #             self.dssObj.operateSwitch(1, "Line.671692", (CKTTerm.SNDBUS).value, (CKTPhase.PHASE_ALL).value)
+
+
+            #--- Switch on PVSystem
+    #         if (time > 200 and time < 400):
+    #             dss.run_command("New XYCurve.MyPVsT_680 npts=4 xarray=[19.044 22.106 29.697 25.297] yarray=[0 0.781 0.966 0.030]")
+    #             dss.run_command("New PVSystem.PV_680 phases=3 bus1=680 kV=4.16 conn=wye kVA=800  irrad=1.016  Pmpp=523.589 temperature=29.049 PF=1 P-TCurve=MyPVsT_680")
+    #             self.dssObj._updateSystemState()      
+    #         else:
+    #             dss.run_command("New PVSystem.PV_680 phases=3 bus1=680 kV=4.16 conn=wye kVA=0") 
+    #             self.dssObj._updateSystemState()            
+        
+
+
+            #--- Use actuators to update opendss state with actions received by controllers (Mosaik)
+            for eid, attrs in inputs.items():
+                vlist = list(attrs['v'].values())[0]
+                tlist = list(attrs['t'].values())[0]
+                for i in range(0, len(vlist)):
+                    value_v = vlist[i]
+                    value_t = tlist[i]
+                    if (value_v != 'None' and value_v != None):
+                        if (self.verbose > 1): print('simulator_pflow::step Propagation delay =', time - value_t)
+                        self.instances[eid].setControl(value_v, time)
+                
+            #--- 
+            #--- get new set of sensor data from OpenDSS
+            #---   
+            for instance_eid in self.instances:
+                if(instance_eid.find("Sensor") > -1)  :
+                    self.instances[instance_eid].updateValues(time)
+            
+            #--- 
+            #--- get new set of prober data from OpenDSS
+            #---   
+            for instance_eid in self.instances:
+                if(instance_eid.find("Prober") > -1)  :
+                    self.instances[instance_eid].updateValues(time)
+
+            if(self.verbose > 1):
+                print('simulator_pflow::step next_step = ', self.next_step)
+            sys.stdout.flush()
+            return self.next_step
+    
+    
+        def get_data(self, outputs):
+            if (self.verbose > 0): print('simulator_pflow::get_data INPUT', outputs)
+            
+            data = {}
+            for instance_eid in self.instances:
+                # Acuators provide data only when there is actuation
+                if (instance_eid.find("Actuator") > -1):
+                    val_v, val_t = self.instances[instance_eid].getLastValue()
+                    self.data[instance_eid]['v'] = val_v
+                    self.data[instance_eid]['t'] = val_t
+                    if (val_t != None):
+                        data[instance_eid] = {}
+                        data[instance_eid]['v'] = []
+                        data[instance_eid]['t'] = []
+                        data[instance_eid]['v'].append(self.data[instance_eid]['v'])
+                        data[instance_eid]['t'].append(self.data[instance_eid]['t'])
+                # All other models provide data at fixed intervals
+                elif (self.time % self.step_size == 0):
+                    val_v, val_t = self.instances[instance_eid].getLastValue()
+                    self.data[instance_eid]['v'] = val_v
+                    self.data[instance_eid]['t'] = val_t
+                    data[instance_eid] = {}
+                    data[instance_eid]['v'] = []
+                    data[instance_eid]['t'] = []
+                    data[instance_eid]['v'].append(self.data[instance_eid]['v'])
+                    data[instance_eid]['t'].append(self.data[instance_eid]['t'])
+
+            if (self.verbose > 1): print('simulator_pflow::get_data data:', data)
+
+            sys.stdout.flush()
+            return data 
+
+        def set_next(self, pflow, instance, parameters):
+            if (self.verbose > 2): print('simulator_pflow::set_next', instance, parameters)
+            
+            if instance not in self.instances[pflow]:
+                self.instances[pflow][instance] = parameters    
+
+    #     def finalize(self):
+    #         print('OpenDSS Final Results:')
+    #         self.dssObj.showIinout()
 

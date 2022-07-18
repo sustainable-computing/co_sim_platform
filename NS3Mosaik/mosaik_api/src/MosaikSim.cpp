@@ -486,9 +486,14 @@ MosaikSim::meta(void)
   Json::Value obj;
   Json::StreamWriterBuilder wbuilder;
 
-  obj["api_version"] = mosaikMeta.api_version;
-  obj["type"] = mosaikMeta.type;
-  obj["models"][mosaikMeta.model]["public"] = mosaikMeta.props->access;
+  #if PERFORMANCE_TEST == 1 || PERFORMANCE_TEST ==3
+    obj["api_version"] = mosaikMeta.api_version;
+    obj["models"][mosaikMeta.model]["public"] = mosaikMeta.props->access;
+  #else
+    obj["api_version"] = mosaikMeta.api_version;
+    obj["type"] = mosaikMeta.type;
+    obj["models"][mosaikMeta.model]["public"] = mosaikMeta.props->access;
+  #endif
 
   int attr_size = sizeof(mosaikMeta.props->attrs) / sizeof(mosaikMeta.props->attrs[0]);
   for (int i = 0; i < attr_size; i++)
@@ -621,8 +626,10 @@ MosaikSim::step(Json::Value args, Json::Value kwargs)
   //---
   std::string time_next_step;
   mosaikTime = args[0].asUInt64();
-  uint64_t maxAdvance = args[2].asUInt64();
-  time_next_step = std::to_string(maxAdvance);
+  #if PERFORMANCE_TEST < 2
+    uint64_t maxAdvance = args[2].asUInt64();
+    time_next_step = std::to_string(maxAdvance);
+  #endif
 
   if (verbose > 1)
   {
@@ -635,6 +642,7 @@ MosaikSim::step(Json::Value args, Json::Value kwargs)
   //---
   struct rcvData
   {
+    std::string val_id;
     std::string val_S;
     std::string val_D;
     std::string val_V;
@@ -709,6 +717,7 @@ MosaikSim::step(Json::Value args, Json::Value kwargs)
             (*itMapRcvData).second.val_T = attr_values;
           }
           std::pair<std::string, std::string> pair = netsimEntities[localSimulatorInstance];
+          (*itMapRcvData).second.val_id = localSimulatorInstance;
           (*itMapRcvData).second.val_S = pair.first;
           (*itMapRcvData).second.val_D = pair.second;
         }
@@ -768,7 +777,8 @@ MosaikSim::step(Json::Value args, Json::Value kwargs)
       (*itMapRcvData).second.val_T = (*itMapRcvData).second.val_T.substr(end_val);
       if (verbose > 1)
       {
-        std::cout << "MosaikSim::step NS3_SCHEDULE(src=" << (*itMapRcvData).second.val_S
+        std::cout << "MosaikSim::step NS3_SCHEDULE(id=" << (*itMapRcvData).second.val_id
+                  << ", src=" << (*itMapRcvData).second.val_S
                   << ", dst=" << (*itMapRcvData).second.val_D
                   << ", val_V=" << val_v
                   << ", time=" << val_t
@@ -784,7 +794,8 @@ MosaikSim::step(Json::Value args, Json::Value kwargs)
 
         if (verbose > 1)
         {
-          std::cout << "MosaikSim::step NS3_SCHEDULE(src=" << (*itMapRcvData).second.val_S
+          std::cout << "MosaikSim::step NS3_SCHEDULE(id=" << (*itMapRcvData).second.val_id
+                    << ", src=" << (*itMapRcvData).second.val_S
                     << ", dst=" << (*itMapRcvData).second.val_D
                     << ", val_V=" << val_v
                     << ", time=" << val_t
@@ -794,7 +805,7 @@ MosaikSim::step(Json::Value args, Json::Value kwargs)
         double currentNS3Time = objNetsim->getCurrentTime();
         if (currentNS3Time < stod(val_t))
         {
-          objNetsim->schedule(localSimulatorInstance,
+          objNetsim->schedule((*itMapRcvData).second.val_id,
                               (*itMapRcvData).second.val_S,
                               (*itMapRcvData).second.val_D,
                               val_v,
@@ -835,6 +846,9 @@ MosaikSim::step(Json::Value args, Json::Value kwargs)
   //--- This is the look ahead and is not supposed to be executed yet
   //--- The output data is made available in the appropriate step
 
+  #if PERFORMANCE_TEST == 3
+    time_next_step = to_string(mosaikTime + 1);
+  #endif
   if (verbose > 1)
   {
     std::cout << "MosaikSim::step time_next_step = " << time_next_step << std::endl;
@@ -933,8 +947,10 @@ MosaikSim::get_data(Json::Value args, Json::Value kwargs)
     {
       if (verbose > 2)
         std::cout << "MosaikSim::get_data No element in mapGetData " << std::endl;
-      //objRes[*lsi_i]["v"] = "None";
-      //objRes[*lsi_i]["t"] = "None";
+      #if PERFORMANCE_TEST > 1
+        objRes[*lsi_i]["v"].append("None");
+        objRes[*lsi_i]["t"].append("None");
+      #endif
     }
     else
     {

@@ -32,9 +32,6 @@
 #include "ns3/smartgrid-default-simulator-impl.h"
 #include <cassert>
 
-//--- Conditional compilation for performance evaluation
-#define PERFORMANCE_TEST 0
-
 using namespace std;
 using namespace ns3;
 
@@ -829,7 +826,8 @@ void NS3Netsim::schedule(string id, string src, string dst, string val, string v
     std::cout << "NS3Netsim::schedule NS3_Time: " << Simulator::Now().GetMilliSeconds()
               << " Event_Val_Time: " << val_time << std::endl;
     std::cout << "NS3Netsim::schedule("
-              << "source=" << src
+              << "id=" << id
+              << ", source=" << src
               << ", destination=" << dst
               << ", value=" << val
               << ", delay=" << val_time
@@ -878,12 +876,16 @@ NS3Netsim::runUntil(uint64_t time, string nextStop)
   if (verbose > 1)
   {
     std::cout << "NS3Netsim::runUntil(time=" << time << " + 1)" << std::endl;
-    std::cout << "NS3Netsim::Max Advance time = " << nextStop << std::endl;
+    #if PERFORMANCE_TEST < 2
+      std::cout << "NS3Netsim::Max Advance time = " << nextStop << std::endl;
+    #endif
   }
 
   //--- run scheduler until a given time
   sim = DynamicCast<SmartgridDefaultSimulatorImpl>(Simulator::GetImplementation());
-  uint64_t max_advance = stoul(nextStop);
+  #if PERFORMANCE_TEST < 2
+      uint64_t max_advance = stoul(nextStop);
+  #endif
   currentTime = time;
   uint64_t next_step;
   bool relevance = false;
@@ -891,9 +893,8 @@ NS3Netsim::runUntil(uint64_t time, string nextStop)
   while(!relevance)
   {
     #ifdef PERFORMANCE_TEST
-      int test_level = PERFORMANCE_TEST;
-      if (test_level > 0)  relevance = true;
-      else  relevance = false;
+      if (PERFORMANCE_TEST == 1 || PERFORMANCE_TEST == 3)
+        relevance = true;
     #endif
     //--- "+1" because NS3 executes until a given time (not including)
     if (runUntil_time < (uint64_t)stopTime-1)
@@ -920,11 +921,13 @@ NS3Netsim::runUntil(uint64_t time, string nextStop)
 
     //--- Get the next new event
     next_step = (uint64_t)sim->Next().GetMilliSeconds();
-    //--- If next step exceeds max advance time
-    if (next_step > max_advance || next_step >= (stopTime-1))  relevance = true;
-    //--- OR If there is a message received by a server,
-    //--- a relevant event has been processed
-    else if (!dataXchgOutput.empty()) relevance = true;
+    #if PERFORMANCE_TEST < 2
+      //--- If next step exceeds max advance time
+      if (next_step > max_advance || next_step >= (stopTime-1))  relevance = true;
+      //--- OR If there is a message received by a server,
+      //--- a relevant event has been processed
+      else if (!dataXchgOutput.empty()) relevance = true;
+    #endif
     runUntil_time = next_step;
 
     if (verbose > 1)

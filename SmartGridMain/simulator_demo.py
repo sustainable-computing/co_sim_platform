@@ -17,6 +17,9 @@ import argparse
 from datetime import datetime
 from pathlib import Path
 
+#--- Performance test for Mosaik 2.0 vs Mosaik 3.0.0
+Mosaik_2 = True
+
 #--- Base Directory
 BASE_DIR = os.getcwd()
 BASE_DIR = str((Path(BASE_DIR)).parent) + "/"
@@ -167,7 +170,7 @@ def  create_scenario( world, args ):
                               topofile = DSS_EXE_PATH + TOPO_RPATH_FILE,
                               nwlfile  = DSS_EXE_PATH + NWL_RPATH_FILE,
                               ilpqfile = DSS_EXE_PATH + ILPQ_RPATH_FILE,
-                              step_size = 100,
+                              step_size = 1,
                               loadgen_interval = 80,
                               verbose = 0)    
 
@@ -353,7 +356,7 @@ def  create_scenario( world, args ):
                     for transporter in transporters:
                         if (transporter_instance == transporter.eid):
                             world.connect(controller, transporter, 'v', 't',
-                                weak=True, initial_data={'v': None, 't': None})
+                                time_shifted=True, initial_data={'v': [None], 't': [None]})
                             print('Connect', controller.eid, 'to', transporter.eid)
         
             #--- PktNet(Transporter) to Actuator           
@@ -362,7 +365,7 @@ def  create_scenario( world, args ):
                     for transporter in transporters:
                         if (transporter_instance == transporter.eid):
                             world.connect(transporter, actuator, 'v', 't',
-                                weak=True, initial_data={'v': None, 't': None})
+                                time_shifted=True, initial_data={'v': [None], 't': [None]})
                             print('Connect', transporter.eid, 'to', actuator.eid)
 
             #--- PktNet(Transporter) to Controller
