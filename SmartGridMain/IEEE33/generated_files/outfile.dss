@@ -7,7 +7,102 @@ new circuit.Master33
 ~ basekv=12.66 pu=1 phases=3 bus1=1 
 ~ MVAsc3=5000000 MVAsc1=5000000 
 !---- Generated Transformer
-
+New Transformer.TR2 Windings=2 sub=y XHL=4 
+~ wdg=1 bus=2 conn=Delta kv=12.66 kva=800  
+~ wdg=2 bus=2001 conn=Wye kv=0.416 kva=800 
+New Transformer.TR3 Windings=2 sub=y XHL=4 
+~ wdg=1 bus=3 conn=Delta kv=12.66 kva=800  
+~ wdg=2 bus=3001 conn=Wye kv=0.416 kva=800 
+New Transformer.TR4 Windings=2 sub=y XHL=4 
+~ wdg=1 bus=4 conn=Delta kv=12.66 kva=800  
+~ wdg=2 bus=4001 conn=Wye kv=0.416 kva=800 
+New Transformer.TR5 Windings=2 sub=y XHL=4 
+~ wdg=1 bus=5 conn=Delta kv=12.66 kva=800  
+~ wdg=2 bus=5001 conn=Wye kv=0.416 kva=800 
+New Transformer.TR6 Windings=2 sub=y XHL=4 
+~ wdg=1 bus=6 conn=Delta kv=12.66 kva=800  
+~ wdg=2 bus=6001 conn=Wye kv=0.416 kva=800 
+New Transformer.TR7 Windings=2 sub=y XHL=4 
+~ wdg=1 bus=7 conn=Delta kv=12.66 kva=800  
+~ wdg=2 bus=7001 conn=Wye kv=0.416 kva=800 
+New Transformer.TR8 Windings=2 sub=y XHL=4 
+~ wdg=1 bus=8 conn=Delta kv=12.66 kva=800  
+~ wdg=2 bus=8001 conn=Wye kv=0.416 kva=800 
+New Transformer.TR9 Windings=2 sub=y XHL=4 
+~ wdg=1 bus=9 conn=Delta kv=12.66 kva=800  
+~ wdg=2 bus=9001 conn=Wye kv=0.416 kva=800 
+New Transformer.TR10 Windings=2 sub=y XHL=4 
+~ wdg=1 bus=10 conn=Delta kv=12.66 kva=800  
+~ wdg=2 bus=10001 conn=Wye kv=0.416 kva=800 
+New Transformer.TR11 Windings=2 sub=y XHL=4 
+~ wdg=1 bus=11 conn=Delta kv=12.66 kva=800  
+~ wdg=2 bus=11001 conn=Wye kv=0.416 kva=800 
+New Transformer.TR12 Windings=2 sub=y XHL=4 
+~ wdg=1 bus=12 conn=Delta kv=12.66 kva=800  
+~ wdg=2 bus=12001 conn=Wye kv=0.416 kva=800 
+New Transformer.TR13 Windings=2 sub=y XHL=4 
+~ wdg=1 bus=13 conn=Delta kv=12.66 kva=800  
+~ wdg=2 bus=13001 conn=Wye kv=0.416 kva=800 
+New Transformer.TR14 Windings=2 sub=y XHL=4 
+~ wdg=1 bus=14 conn=Delta kv=12.66 kva=800  
+~ wdg=2 bus=14001 conn=Wye kv=0.416 kva=800 
+New Transformer.TR15 Windings=2 sub=y XHL=4 
+~ wdg=1 bus=15 conn=Delta kv=12.66 kva=800  
+~ wdg=2 bus=15001 conn=Wye kv=0.416 kva=800 
+New Transformer.TR16 Windings=2 sub=y XHL=4 
+~ wdg=1 bus=16 conn=Delta kv=12.66 kva=800  
+~ wdg=2 bus=16001 conn=Wye kv=0.416 kva=800 
+New Transformer.TR17 Windings=2 sub=y XHL=4 
+~ wdg=1 bus=17 conn=Delta kv=12.66 kva=800  
+~ wdg=2 bus=17001 conn=Wye kv=0.416 kva=800 
+New Transformer.TR18 Windings=2 sub=y XHL=4 
+~ wdg=1 bus=18 conn=Delta kv=12.66 kva=800  
+~ wdg=2 bus=18001 conn=Wye kv=0.416 kva=800 
+New Transformer.TR19 Windings=2 sub=y XHL=4 
+~ wdg=1 bus=19 conn=Delta kv=12.66 kva=800  
+~ wdg=2 bus=19001 conn=Wye kv=0.416 kva=800 
+New Transformer.TR20 Windings=2 sub=y XHL=4 
+~ wdg=1 bus=20 conn=Delta kv=12.66 kva=800  
+~ wdg=2 bus=20001 conn=Wye kv=0.416 kva=800 
+New Transformer.TR21 Windings=2 sub=y XHL=4 
+~ wdg=1 bus=21 conn=Delta kv=12.66 kva=800  
+~ wdg=2 bus=21001 conn=Wye kv=0.416 kva=800 
+New Transformer.TR22 Windings=2 sub=y XHL=4 
+~ wdg=1 bus=22 conn=Delta kv=12.66 kva=800  
+~ wdg=2 bus=22001 conn=Wye kv=0.416 kva=800 
+New Transformer.TR23 Windings=2 sub=y XHL=4 
+~ wdg=1 bus=23 conn=Delta kv=12.66 kva=800  
+~ wdg=2 bus=23001 conn=Wye kv=0.416 kva=800 
+New Transformer.TR24 Windings=2 sub=y XHL=4 
+~ wdg=1 bus=24 conn=Delta kv=12.66 kva=800  
+~ wdg=2 bus=24001 conn=Wye kv=0.416 kva=800 
+New Transformer.TR25 Windings=2 sub=y XHL=4 
+~ wdg=1 bus=25 conn=Delta kv=12.66 kva=800  
+~ wdg=2 bus=25001 conn=Wye kv=0.416 kva=800 
+New Transformer.TR26 Windings=2 sub=y XHL=4 
+~ wdg=1 bus=26 conn=Delta kv=12.66 kva=800  
+~ wdg=2 bus=26001 conn=Wye kv=0.416 kva=800 
+New Transformer.TR27 Windings=2 sub=y XHL=4 
+~ wdg=1 bus=27 conn=Delta kv=12.66 kva=800  
+~ wdg=2 bus=27001 conn=Wye kv=0.416 kva=800 
+New Transformer.TR28 Windings=2 sub=y XHL=4 
+~ wdg=1 bus=28 conn=Delta kv=12.66 kva=800  
+~ wdg=2 bus=28001 conn=Wye kv=0.416 kva=800 
+New Transformer.TR29 Windings=2 sub=y XHL=4 
+~ wdg=1 bus=29 conn=Delta kv=12.66 kva=800  
+~ wdg=2 bus=29001 conn=Wye kv=0.416 kva=800 
+New Transformer.TR30 Windings=2 sub=y XHL=4 
+~ wdg=1 bus=30 conn=Delta kv=12.66 kva=800  
+~ wdg=2 bus=30001 conn=Wye kv=0.416 kva=800 
+New Transformer.TR31 Windings=2 sub=y XHL=4 
+~ wdg=1 bus=31 conn=Delta kv=12.66 kva=800  
+~ wdg=2 bus=31001 conn=Wye kv=0.416 kva=800 
+New Transformer.TR32 Windings=2 sub=y XHL=4 
+~ wdg=1 bus=32 conn=Delta kv=12.66 kva=800  
+~ wdg=2 bus=32001 conn=Wye kv=0.416 kva=800 
+New Transformer.TR33 Windings=2 sub=y XHL=4 
+~ wdg=1 bus=33 conn=Delta kv=12.66 kva=800  
+~ wdg=2 bus=33001 conn=Wye kv=0.416 kva=800 
 !---- Generated RegControls
 
 !---- Generated Line Codes
