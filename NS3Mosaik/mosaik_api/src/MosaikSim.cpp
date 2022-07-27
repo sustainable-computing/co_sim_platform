@@ -486,7 +486,7 @@ MosaikSim::meta(void)
   Json::Value obj;
   Json::StreamWriterBuilder wbuilder;
 
-  #if PERFORMANCE_TEST == 1 || PERFORMANCE_TEST ==3
+  #if PERFORMANCE_TEST > 1
     obj["api_version"] = mosaikMeta.api_version;
     obj["models"][mosaikMeta.model]["public"] = mosaikMeta.props->access;
   #else
@@ -846,7 +846,7 @@ MosaikSim::step(Json::Value args, Json::Value kwargs)
   //--- This is the look ahead and is not supposed to be executed yet
   //--- The output data is made available in the appropriate step
 
-  #if PERFORMANCE_TEST == 3
+  #if PERFORMANCE_TEST > 1
     time_next_step = to_string(mosaikTime + 1);
   #endif
   if (verbose > 1)

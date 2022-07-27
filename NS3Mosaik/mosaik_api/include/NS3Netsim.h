@@ -29,6 +29,10 @@
 #define NS3NETSIM_H_
 
 //--- Conditional compilation for performance evaluation
+//--- 0. MOSAIK 3 with ns-3 relevance filtering
+//--- 1. MOSAIK 3 without ns-3 relevance filtering
+//--- 2. MOSAIK 2 with ns-3 relevance filtering (useless actually)
+//--- 3. MOSAIK 2 without ns-3 relevance filtering
 #define PERFORMANCE_TEST 3
 
 #include <iostream>
