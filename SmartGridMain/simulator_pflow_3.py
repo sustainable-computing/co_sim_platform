@@ -10,6 +10,8 @@ Works only with MOSAIK 3 and later versions
 @company University of Alberta - Computing Science
 '''
 
+import queue
+import random
 import mosaik_api
 import os
 import sys
@@ -27,28 +29,235 @@ META = {
     'models': {
         'Sensor': {
             'public': True,
-            'params': ['eid', 'cktTerminal', 'cktPhase', 'cktProperty', 'step_size', 'cktElement','error','verbose'],
+            'params': ['eid', 'cktTerminal', 'cktPhase', 'cktProperty', 'step_size', 'cktElement', 'error', 'verbose'],
             'attrs': ['v', 't'],
             'non-persistent': ['v', 't'],
         },
         'Actuator': {
             'public': True,
-            'params': ['eid', 'cktTerminal', 'cktPhase', 'cktProperty', 'step_size', 'cktElement','error','verbose'],
+            'params': ['eid', 'cktTerminal', 'cktPhase', 'cktProperty', 'step_size', 'cktElement', 'error', 'verbose'],
             'attrs': ['v', 't'],
             'trigger': ['v', 't'],
             'non-persistent': ['v', 't'],
         },
         'Prober': {
             'public': True,
-            'params': ['eid', 'cktTerminal', 'cktPhase', 'cktProperty', 'step_size', 'cktElement','error','verbose'],
+            'params': ['eid', 'cktTerminal', 'cktPhase', 'cktProperty', 'step_size', 'cktElement', 'error', 'verbose'],
             'attrs': ['v', 't'],
             'non-persistent': ['v', 't'],
-        },        
+        },
+        'Phasor': {
+            'public': True,
+            'params': ['eid', 'cktTerminal', 'cktPhase', 'cktProperty', 'step_size', 'cktElement', 'error', 'verbose'],
+            'attrs': ['v', 't'],
+            'non-persistent': ['v', 't'],
+        },   
+        'Smartmeter': {
+            'public': True,
+            'params': ['eid', 'cktTerminal', 'cktPhase', 'cktProperty', 'step_size', 'cktElement', 'error', 'verbose'],
+            'attrs': ['v', 't'],
+            'non-persistent': ['v', 't'],
+        },    
     },
     'extra_methods': [
         'set_next'
     ],    
 }
+
+class PhasorSim:
+    def __init__(self,
+             sid,
+             cktTerminal,
+             cktPhase,
+             step_size, 
+             objDSS,  
+             cktElement, 
+             error, 
+             verbose):
+        self.idt        = sid
+        self.objDSS     = objDSS
+        self.cktElement = cktElement
+        self.cktTerminal = cktTerminal
+        self.cktPhase   = cktPhase
+        self.error      = float(error)
+        self.verbose    = verbose
+        self.priorValue = None
+        self.priorTime  = None
+        self.time_diff_resolution = 1e-9
+        self.randomTime = random.randint(0, 1)
+        self.step_size = int(step_size)
+    
+    def updateValues(self, time):
+        if (self.verbose > 2): print(self.idt,'::updateValues', 
+                                     self.cktElement, self.cktTerminal, self.cktPhase)
+
+        if(0 == (time % self.step_size)):
+            val = {}
+            val['IDT'] = self.idt  
+            val['TYPE'] = 'Phasor'
+            
+            if (self.cktPhase == 'PHASE_1'):
+                phases = ['PHASE_1']
+            elif (self.cktPhase == 'PHASE_2'):
+                phases = ['PHASE_2']
+            elif (self.cktPhase == 'PHASE_3'):
+                phases = ['PHASE_3']
+            elif (self.cktPhase == 'PHASE_12'):
+                phases = ['PHASE_1', 'PHASE_2']            
+            elif (self.cktPhase == 'PHASE_13'):
+                phases = ['PHASE_1', 'PHASE_3']
+            elif (self.cktPhase == 'PHASE_23'):
+                phases = ['PHASE_2', 'PHASE_3']              
+            elif (self.cktPhase == 'PHASE_123'):
+                phases = ['PHASE_1', 'PHASE_2', 'PHASE_3']
+
+            for ph in phases:
+                (VComp, IComp, _) = self.objDSS.getCktElementState(self.cktElement, 
+                                                     CKTTerm[self.cktTerminal].value, 
+                                                     CKTPhase[ph].value)
+
+                VComp = self.addNoise(VComp)
+                IComp = self.addNoise(IComp)
+                (VMag, VAng) = self.R2P(VComp)
+                (IMag, IAng) = self.R2P(IComp)
+                
+                if (ph == 'PHASE_1'):
+                    val['VA'] = (VMag, VAng)
+                    val['IA'] = (IMag, IAng)
+                elif (ph == 'PHASE_2'):
+                    val['VB'] = (VMag, VAng)
+                    val['IB'] = (IMag, IAng)
+                elif (ph == 'PHASE_3'):
+                    val['VC'] = (VMag, VAng)
+                    val['IC'] = (IMag, IAng)
+
+            self.priorTime  = time + self.time_diff_resolution
+            self.priorValue = val
+            if (self.verbose > 0): print('Phasor::updateValues Time = ', self.priorTime, 'Value = ', self.priorValue)
+            if (self.verbose > 2): print('Phasor[', self.idt, ']::updateValues v =', val) 
+
+            return (time + self.step_size)
+        else:
+            self.priorTime  = None
+            self.priorValue = None
+            if (self.verbose > 2): print('Phasor[', self.idt, ']::updateValues v =', val) 
+
+            return -1
+
+    def getLastValue(self):
+        if(self.priorValue != None):
+            self.priorValue['TS'] = self.priorTime
+        return self.priorValue, self.priorTime
+
+    def R2P(self, x):
+        return np.abs(x), np.angle(x)
+    
+    def addNoise(self, x):
+        noiseReal = np.random.normal(0, self.error, 1)
+        noiseImag = np.random.normal(0, self.error, 1)
+        noise = complex(noiseReal, noiseImag)
+        return x + noise
+
+
+class SmartmeterSim:
+    def __init__(self,
+             sid,
+             cktTerminal,
+             cktPhase,
+             step_size, 
+             objDSS,  
+             cktElement, 
+             error, 
+             verbose):
+        self.idt        = sid
+        self.objDSS     = objDSS
+        self.cktElement = cktElement
+        self.cktTerminal = cktTerminal
+        self.cktPhase   = cktPhase
+        self.error      = float(error)
+        self.verbose    = verbose
+        self.priorValue = None
+        self.priorTime  = None
+        self.time_diff_resolution = 1e-9
+        self.randomTime = random.randint(0, 1)
+        self.step_size = int(step_size)
+    
+    def updateValues(self, time):
+        self.objSmartmeterSim.updateValues(time)
+        if(0 == (time % self.step_size)):
+            if (self.verbose > 2): print('Smartmeter::updateValues', 
+                                    self.cktElement, self.cktTerminal, self.cktPhase)
+        
+        # if (0 == time % (self.step_size + self.randomTime)):
+        # for now assume that there is no randomTime
+        if (0 == time % (self.step_size)):
+            val = {}
+            val['IDT'] = self.idt
+            val['TYPE'] = 'Smartmeter'
+            
+            if (self.cktPhase == 'PHASE_1'):
+                phases = ['PHASE_1']
+            elif (self.cktPhase == 'PHASE_2'):
+                phases = ['PHASE_2']
+            elif (self.cktPhase == 'PHASE_3'):
+                phases = ['PHASE_3']
+            elif (self.cktPhase == 'PHASE_12'):
+                phases = ['PHASE_1', 'PHASE_2']            
+            elif (self.cktPhase == 'PHASE_13'):
+                phases = ['PHASE_1', 'PHASE_3']
+            elif (self.cktPhase == 'PHASE_23'):
+                phases = ['PHASE_2', 'PHASE_3']              
+            elif (self.cktPhase == 'PHASE_123'):
+                phases = ['PHASE_1', 'PHASE_2', 'PHASE_3']
+
+            for ph in phases:
+                (VComp, IComp, _) = self.objDSS.getCktElementState(self.cktElement,                               
+                                                     CKTTerm[self.cktTerminal].value, 
+                                                     CKTPhase[ph].value)
+                
+                VComp = self.addNoise(VComp)
+                IComp = self.addNoise(IComp)                
+                (VMag, _) = self.R2P(VComp)
+                SP = (VComp * np.conj(-IComp)).real
+                
+                #--- for voltage
+                if (ph == 'PHASE_1'):
+                    val['VA'] = VMag
+                    val['SPA'] = SP
+                elif (ph == 'PHASE_2'):
+                    val['VB'] = VMag
+                    val['SPB'] = SP
+                elif (ph == 'PHASE_3'):
+                    val['VC'] = VMag
+                    val['SPC'] = SP
+
+            self.priorTime  = time + self.time_diff_resolution
+            self.priorValue = val
+            if (self.verbose > 0): print('Smartmeter::updateValues Time = ', self.priorTime, 'Value = ', self.priorValue)
+            if (self.verbose > 2): print('Smartmeter[', self.idt, ']::updateValues v =', val)
+        
+            return (time + self.step_size)
+        else:
+            self.priorTime  = None
+            self.priorValue = None 
+            if (self.verbose > 2): print('Smartmeter[', self.idt, ']::updateValues v =', val)
+        
+            return -1 
+
+    def getLastValue(self):
+        if(self.priorValue != None):
+            self.priorValue['TS'] = self.priorTime
+        return self.priorValue, self.priorTime
+
+    def R2P(self, x):
+        return np.abs(x), np.angle(x)
+    
+    def addNoise(self, x):
+        noiseReal = np.random.normal(0, self.error, 1)
+        noiseImag = np.random.normal(0, self.error, 1)
+        noise = complex(noiseReal, noiseImag)
+        return x + noise
+
 
 class ProberSim:
     def __init__(self, eid, step_size, objDSS, element, terminal, phase, verbose):
@@ -118,7 +327,7 @@ class SensorSim:
         
         
     def updateValues(self, time):
-        if (self.verbose > 0): print('SensorSim::getValue', self.action, self.elem, self.term, self.ph)
+        if (self.verbose > 0): print('SensorSim::getValue', self.elem, self.term, self.ph)
         
         if (0 == time % self.step_size):
             # no action choice - default action is get voltage value
@@ -129,13 +338,20 @@ class SensorSim:
             #     val = self.objDSS.getTrafoTap(self.elem)
             self.priorTime  = time + self.time_diff_resolution
             self.priorValue = val
+            if (self.verbose > 0): print('SensorSim::getValue Time = ', self.priorTime, 'Value = ', self.priorValue)
+            if (self.verbose > 1): print('SensorSim::getValue Next step = ', time + self.step_size)
+            if (self.verbose > 2): print('SensorSim[', self.idt, ']::getValue v =', val)        
+
+            return (time + self.step_size)
         else:
             self.priorTime  = None
-            self.priorValue = None          
-            
-        if (self.verbose > 0): print('SensorSim::getValue Time = ', self.priorTime, 'Value = ', self.priorValue)
-        if (self.verbose > 2): print('SensorSim[', self.idt, ']::getValue v =', val)        
+            self.priorValue = None
+            if (self.verbose > 0): print('SensorSim::getValue Time = ', self.priorTime, 'Value = ', self.priorValue)
+            if (self.verbose > 2): print('SensorSim[', self.idt, ']::getValue v =', val)        
 
+            return -1
+            
+        
 
     def getLastValue(self):
         return self.priorValue, self.priorTime
@@ -149,7 +365,7 @@ class SensorSim:
 class ActuatorSim:
     def __init__(self, eid, step_size, objDSS, element, terminal, phase, verbose):
         self.eid        = eid
-        self.step_size  = step_size
+        self.step_size  = int(step_size)
         self.objDSS     = objDSS
         # self.action     = action
         self.elem       = element
@@ -198,9 +414,11 @@ class PFlowSim(mosaik_api.Simulator):
         self.instances = {}
         self.step_size = 1
         self.loadgen_interval = self.step_size
+        self.time = -1
+        self.next_steps = queue.PriorityQueue()
 
 
-    def init(self, sid, time_resolution, topofile, nwlfile, ilpqfile, step_size, loadgen_interval, verbose=0):	
+    def init(self, sid, time_resolution, topofile, nwlfile, step_size, loadgen_interval, ilpqfile="", verbose=0):	
         self.sid = sid       
         self.verbose = verbose
         self.loadgen_interval = loadgen_interval
@@ -230,8 +448,9 @@ class PFlowSim(mosaik_api.Simulator):
                                         LoadLimInf = -1.65,
                                         LoadLimSup =  0.70,
                                         AmpGain    =  0.30,
-                                        #Freq       =  1./8640,
+                                        # Freq       =  1./8640,
                                         Freq       =  1./100,
+                                        # Freq       =  1./1250,
                                         PhaseShift = math.pi)
     
         sys.stdout.flush()
@@ -242,6 +461,28 @@ class PFlowSim(mosaik_api.Simulator):
 
         self.data[eid] = {}     
         self.instances[eid] = {}
+
+        if (model == 'Phasor'): 
+            self.instances[eid] = PhasorSim(eid,
+                                            cktTerminal  = cktTerminal, 
+                                            cktPhase     = cktPhase,
+                                            step_size    = step_size,
+                                            objDSS       = self.dssObj,
+                                            cktElement   = cktElement,
+                                            error        = error,
+                                            verbose      = verbose
+                                           ) 
+                
+        if (model == 'Smartmeter'): 
+            self.instances[eid] = SmartmeterSim(eid,
+                                            cktTerminal  = cktTerminal, 
+                                            cktPhase     = cktPhase,
+                                            step_size    = step_size,
+                                            objDSS       = self.dssObj,
+                                            cktElement   = cktElement,
+                                            error        = error,
+                                            verbose      = verbose
+                                           )
 
         if (model == 'Prober'):
             self.instances[eid] = ProberSim(eid,
@@ -277,36 +518,33 @@ class PFlowSim(mosaik_api.Simulator):
         if (self.verbose > 0): print('simulator_pflow::step time = ', time, ' Max Advance = ', max_advance)
         if (self.verbose > 1): print('simulator_pflow::step inputs = ', inputs)
 
+        self.prev_step = self.time
         self.time = time
         #--- Based on Sensor data interval, LoadGen called accordingly
 
-        # If this is an event-based step or duplicate step, only perform Actuation
-        # As this is a priority simulator, input only comes after the step is performed
-        if (time % self.step_size == 0):
-            self.next_step = time + self.step_size
-            
+        #--- Actuation data may arrive at the same time step as Sensor data
+        #--- generation and thus trigger the same time step multipe times.
+        #--- Avoid duplicate processing of load data.
+        if (time != self.prev_step):
             #---
             #--- process inputs data
             #--- 
 
             #--- Calculate how many times load generator
             #--- needs to be called
-            prev_step = time - self.step_size
-            if  (prev_step < 0):
+            if  (self.prev_step < 0):
                 loadGen_cnt = 1
-                prev_step = -1
             else:   loadGen_cnt = math.floor(time/self.loadgen_interval) \
-                    - math.floor(prev_step/self.loadgen_interval)
+                    - math.floor(self.prev_step/self.loadgen_interval)
 
             #--- Activate load generator
             for i in range(0, loadGen_cnt):
                 if (self.verbose > 1): print("Generating load for: ", \
-                    self.loadgen_interval * ( math.ceil( (prev_step+1)/self.loadgen_interval ) + i))
+                    self.loadgen_interval * ( math.ceil( (self.prev_step+1)/self.loadgen_interval ) + i))
                 #-- get a new sample from loadgen
                 ePQ = self.objLoadGen.createLoads()
                 #-- execute processing of the the new elastic load
                 self.dssObj.setLoads(ePQ)
-
 
         #--- Create step load on Bus 611
 #         if (time > 50 and time < 350):
@@ -356,15 +594,26 @@ class PFlowSim(mosaik_api.Simulator):
         #--- get new set of sensor data from OpenDSS
         #---   
         for instance_eid in self.instances:
-            if(instance_eid.find("Sensor") > -1)  :
-                self.instances[instance_eid].updateValues(time)
-        
+            if (instance_eid.find("Sensor") > -1) or \
+                (instance_eid.find("Phasor") > -1) or \
+                (instance_eid.find("Smartmeter") > -1):
+                self.next_step = self.instances[instance_eid].updateValues(time)
+                if self.next_step != -1:
+                    self.next_steps.put(-self.next_step)
+
         #--- 
         #--- get new set of prober data from OpenDSS
         #---   
         for instance_eid in self.instances:
-            if(instance_eid.find("Prober") > -1)  :
+            if instance_eid.find("Prober") > -1:
                 self.instances[instance_eid].updateValues(time)
+                    
+
+        #--- Filter the next time steps and return the earliest next time step
+        self.next_step = -self.next_steps.queue[0]
+        #--- For a time-based simulator, there is always a next step
+        while(self.time >= -self.next_steps.queue[0]):
+            self.next_step = -self.next_steps.get()
 
         if(self.verbose > 1):
             print('simulator_pflow::step next_step = ', self.next_step)

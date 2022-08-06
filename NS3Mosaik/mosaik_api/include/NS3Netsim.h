@@ -33,7 +33,7 @@
 //--- 1. MOSAIK 3 without ns-3 relevance filtering
 //--- 2. MOSAIK 2 with ns-3 relevance filtering (useless actually)
 //--- 3. MOSAIK 2 without ns-3 relevance filtering
-#define PERFORMANCE_TEST 3
+#define PERFORMANCE_TEST 0
 
 #include <iostream>
 #include <iomanip>

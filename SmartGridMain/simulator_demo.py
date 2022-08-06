@@ -17,12 +17,14 @@ import argparse
 from datetime import datetime
 from pathlib import Path
 
+import numpy as np
+
 #--- Performance test for Mosaik 2 vs Mosaik 3
-Mosaik_2 = True
+Mosaik_2 = False
 #--- Scenario selection:
 #--- 1. Tap Control with IEEE13
 #--- 2. State Estimation with IEEE33 and secondary test feeders
-Scenario = 1
+Scenario = 2
 
 #--- Base Directory
 BASE_DIR = os.getcwd()
@@ -40,10 +42,12 @@ if Scenario == 1:
     DEVS_RPATH_FILE = 'IEEE13/IEEE13_Devices.csv'
 elif Scenario == 2:
     # IEEE33
-    TOPO_RPATH_FILE = 'IEEE33/master33Full.dss'
+    TOPO_RPATH_FILE = 'IEEE33/outfile.dss'
     NWL_RPATH_FILE  = 'IEEE33/IEEE33_NodeWithLoadFull.csv'
     ILPQ_RPATH_FILE = 'IEEE33/IEEE33_InelasticLoadPQ.csv'
-    ACTS_RPATH_FILE = 'IEEE33/IEEE33_Nodeckt_Actives_Tap.csv'
+    # DEVS_RPATH_FILE = 'IEEE33/IEEE33_Devices.csv'
+    DEVS_RPATH_FILE = 'IEEE33/IEEE33_Devices_Test.csv'
+    # DEVS_RPATH_FILE = 'IEEE33/IEEE33_Devices_Test_1.csv'
 
 #--- NS3 executables and library directory
 NS3_EXE_PATH = BASE_DIR + 'NS3Mosaik'
@@ -55,15 +59,7 @@ if Scenario == 1:
     JSON_RPATH_FILE = DSS_EXE_PATH + 'IEEE13/gen_nodes.json'
 elif Scenario == 2:
     # IEEE33
-    ADJMAT_RPATH_FILE   = DSS_EXE_PATH + 'IEEE33/IEEE33_AdjMatrixFull.txt'
-    COORDS_RPATH_FILE   = DSS_EXE_PATH + 'IEEE33/IEEE33_BusXYFull.csv'
-    APPCON_RPATH_FILE   = DSS_EXE_PATH + 'IEEE33/IEEE33_NodeAppConnections_Tap.csv'
-
-#--- Application config path
-# IEEE13
-# IEEE33
-# APPCON_FILE = DSS_EXE_PATH + 'IEEE33/IEEE33_NodeAppConnections_Tap.csv'
-
+    JSON_RPATH_FILE = DSS_EXE_PATH + 'IEEE33/gen_nodes.json'
 
 #--- Simulators configuration
 if Mosaik_2:
@@ -105,10 +101,14 @@ else:
                     'NS_LOG': "SmartgridNs3Main=all",
             }
         },
+        'Estimator': {
+            'python': 'simulator_dse:Estimator',       
+        },
     }
 
 #--- Simulation total time
-END_TIME =  10000	#  10 secs
+# END_TIME =  10000	#  10 secs
+END_TIME =  40000	#  40 secs
 
 #--- Application connection links
 appconLinks = {}
@@ -222,7 +222,7 @@ def  create_scenario( world, args ):
         start_time      = 0,
         stop_time       = END_TIME,
         random_seed     = args.random_seed,
-        verbose         = 0,
+        verbose         = 2,
         tcpOrUdp        = "tcp", # transport layer protocols: tcp/udp
         # network architecture: P2P/CSMA/P2Pv6/CSMAv6 (supported backbone architectures)
         # When P2Pv6 or CSMAv6 is selected, secondary network is automatically fitted with
@@ -230,15 +230,20 @@ def  create_scenario( world, args ):
         network         = "P2P"
     )
   
-    controlsim  = world.start('ControlSim', verbose = 0)
+    if Scenario == 1:
+        controlsim  = world.start('ControlSim', verbose = 0)
+    else:
+        estimator  = world.start('Estimator',
+                eid_prefix = 'DSESim_',
+                verbose = 2)
     
     collector   = world.start('Collector',
-                              eid_prefix='Collector_',
-                              verbose = 0,
-                              out_list = False,
-                              h5_save = True,
-                              h5_panelname = 'Collector',
-                              h5_storename='CollectorStore.hd5')
+                    eid_prefix = 'Collector_',
+                    verbose = 0,
+                    out_list = False,
+                    h5_save = True,
+                    h5_panelname = 'Collector',
+                    h5_storename ='CollectorStore.hd5')
 
  
     #---
@@ -251,6 +256,9 @@ def  create_scenario( world, args ):
     actuators = []
     transporters = []
     probers = []
+    smartmeters = []
+    phasors = []
+    created_estimator_conn = []
     for key in devParams.keys():
         device          = devParams[key]['device']
         client          = devParams[key]['src']
@@ -275,7 +283,43 @@ def  create_scenario( world, args ):
                     error = devParams[key]['error'],
                     verbose = 0
                 ))
-      
+        elif (device == 'Phasor'):
+            #--- Does not make sense to transfer data through ns-3
+            #--- to construct self-loops (source = destination)
+            if client == server: continue
+            phasor_instance = device + '_' + client + '-' + server \
+                                + '.' + control_loop + '.' + namespace
+            created_phasor = False
+            for phasor in phasors:
+                if (phasor_instance == phasor.eid):
+                    created_phasor = True
+            if not created_phasor:
+                phasors.append(pflowsim.Phasor(
+                    cktTerminal = devParams[key]['cktTerminal'],
+                    cktPhase = devParams[key]['cktPhase'],
+                    eid = phasor_instance, 
+                    step_size = devParams[key]['period'],  
+                    cktElement = devParams[key]['cktElement'], 
+                    error = devParams[key]['error'], 
+                    verbose = 0
+                ))
+        elif (device == "SmartMeter"):
+            smartmeter_instance = device + '_' + client + '-' + server \
+                                + '.' + control_loop + '.' + namespace
+            created_smartmeter = False
+            for smartmeter in smartmeters:
+                if (smartmeter_instance == smartmeter.eid):
+                    created_smartmeter = True
+            if not created_smartmeter:
+                smartmeters.append(pflowsim.Smartmeter(
+                    cktTerminal = devParams[key]['cktTerminal'],
+                    cktPhase = devParams[key]['cktPhase'],
+                    eid = smartmeter_instance, 
+                    step_size = devParams[key]['period'],  
+                    cktElement = devParams[key]['cktElement'], 
+                    error = devParams[key]['error'], 
+                    verbose = 0
+                ))
         #--- Controller and Actuator instances for tap control
         elif (device == 'Actuator'):
             # Ignore namespace as one control loop has only one controller/actuator
@@ -343,6 +387,23 @@ def  create_scenario( world, args ):
                     eid=transporter_instance
                 ))
 
+    #--- DSE instance
+    dsesim = estimator.DSESim(
+        idt = 1, 
+        ymat_file = 'IEEE33/IEEE33_YMatrix.npy', 
+        devs_file = DEVS_RPATH_FILE,
+        acc_period = 100, 
+        max_iter = 5, 
+        threshold = 0.001,
+        baseS = 100e3/3,            # single phase power base
+        baseV = 12.66e3/np.sqrt(3),
+        baseNode = 1,               # single phase voltage base
+        basePF = 0.99,
+        se_period = 1000, # state estimation period in ms
+        pseudo_loads = 'IEEE33/loadPseudo.mat',
+        se_result = 'IEEE33/wls_results.mat' # save the wls results
+    )
+
     #--- Monitor instances
     monitor = collector.Monitor()
 
@@ -379,8 +440,47 @@ def  create_scenario( world, args ):
                     for transporter in transporters:
                         if (transporter_instance == transporter.eid):
                             world.connect(sensor, transporter, 'v', 't')
-                            print('Connect', sensor.eid, 'to', transporter.eid)                        
+                            print('Connect', sensor.eid, 'to', transporter.eid)
         
+        #--- Phasor to PktNet(Transporter) to Estimator(DSESim)
+        elif (device == 'Phasor'):
+            phasor_instance = device + '_' + client + '-' + server \
+                                    + '.' + control_loop + '.' + namespace
+            transporter_instance = 'Transp_' + client + '-' + server \
+                                    + '.' + control_loop + '.' + namespace
+            for phasor in phasors:
+                if (phasor_instance == phasor.eid):
+                    for transporter in transporters:
+                        if (transporter_instance == transporter.eid):
+                            world.connect(phasor, transporter, 'v', 't')
+                            # print('Connect', phasor.eid, 'to', transporter.eid)
+            if transporter_instance not in created_estimator_conn:
+                for transporter in transporters:
+                    if (transporter_instance == transporter.eid):
+                        created_estimator_conn.append(transporter_instance) 
+                        world.connect(transporter, dsesim, 'v', 't')
+                        # print('Connect', transporter.eid, 'to', dsesim.eid)
+            
+        #--- Smartmeter to PktNet(Transporter) to DSE(Estimator)
+        elif (device == 'SmartMeter'):
+            smartmeter_instance = device + '_' + client + '-' + server \
+                                    + '.' + control_loop + '.' + namespace
+            transporter_instance = 'Transp_' + client + '-' + server \
+                                    + '.' + control_loop + '.' + namespace
+            for smartmeter in smartmeters:
+                if (smartmeter_instance == smartmeter.eid):
+                    for transporter in transporters:
+                        if (transporter_instance == transporter.eid):
+                            world.connect(smartmeter, transporter, 'v', 't')
+                            # print('Connect', smartmeter.eid, 'to', transporter.eid)
+            if transporter_instance not in created_estimator_conn:
+                for transporter in transporters:
+                    if (transporter_instance == transporter.eid):
+                        created_estimator_conn.append(transporter_instance) 
+                        world.connect(transporter, dsesim, 'v', 't')
+                        # print('Connect', transporter.eid, 'to', dsesim.eid)
+
+        #--- PktNet(Transporter) to Controller to PktNet(Transporter) to Actuator
         elif (device == 'Actuator'):
             controller_instance  = 'Control_' + client + '-' + server \
                                     + '.' + control_loop
@@ -477,7 +577,20 @@ def  create_scenario( world, args ):
     #--- Prober to Monitor
     mosaik.util.connect_many_to_one(world, probers, monitor, 'v', 't')
     for prober in probers:
-        print('Connect', prober.eid, 'to', monitor.sid)    
+        print('Connect', prober.eid, 'to', monitor.sid)
+
+    #--- Phasor to Monitor
+    mosaik.util.connect_many_to_one(world, phasors, monitor, 'v', 't')
+    # for phasor in phasors:
+    #     print('Connect', phasor.eid, 'to', monitor.sid)
+
+    #--- Smartmeter to Monitor
+    mosaik.util.connect_many_to_one(world, smartmeters, monitor, 'v', 't')
+    # for smartmeter in smartmeters:
+    #     print('Connect', smartmeter.eid, 'to', monitor.sid)
+
+    #--- DSESim to Monitor
+    world.connect(dsesim, monitor, 'v', 't')
         
 
 if __name__ == '__main__':
