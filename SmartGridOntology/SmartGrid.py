@@ -18,32 +18,29 @@ class Transformer():
         self.kv_primary = kwargs['kv_primary']
         self.kv_secondary = kwargs['kv_secondary']
         self.percent_r = kwargs['percent_r']
+        self.sub = kwargs['sub']
 
     def get_opendss(self):
         """
         Generate the OpenDSS code for the transformer
         """
         opendss = f"New Transformer.{self.name} "
-        opendss += f"Phases={self.num_phases} "
+        opendss += f"Phases={self.num_phases} " if self.num_phases is not None else ""
         opendss += "Windings=2 "
+        opendss += f"sub={self.sub} " if self.sub is not None else ""
         opendss += f"XHL={self.XHL} \n"
         opendss += f"~ wdg=1 bus={self.bus_primary} "
         opendss += f"conn={self.connection_primary} "
         opendss += f"kv={self.kv_primary} "
         opendss += f"kva={self.kva} "
-        opendss += f"%r={self.percent_r} "
-        if self.XHT is not None:
-            opendss += f"XHT={self.XHT} \n"
-        else:
-            opendss += ' \n'
+        opendss += f"%r={self.percent_r} " if self.percent_r is not None else ""
+        opendss += f"XHT={self.XHT} \n" if self.percent_r is not None else ' \n'
         opendss += f"~ wdg=2 bus={self.bus_secondary} "
         opendss += f"conn={self.connection_secondary} "
         opendss += f"kv={self.kv_secondary} "
         opendss += f"kva={self.kva} "
-        opendss += f"%r={self.percent_r} "
-        if self.XLT is not None:
-            opendss += f"XLT={self.XLT} "
-
+        opendss += f"%r={self.percent_r} " if self.percent_r is not None else ""
+        opendss += f"XLT={self.XLT} " if self.XLT is not None else ""
         return opendss
 
 
@@ -105,25 +102,39 @@ class Line():
         self.bus1 = self.bus1.split('_')[1]
         self.bus2 = kwargs['bus2'].split('#')[1]
         self.bus2 = self.bus2.split('_')[1]
-        self.linecode = kwargs['linecode'].split('#')[1].split('_')[1]
+        if kwargs['linecode'] is not None:
+            self.linecode = kwargs['linecode'].split('#')[1].split('_')[1]
+        else:
+            self.linecode = None
         self.length = kwargs['length']
         self.length_unit = kwargs['length_unit']
-        self.nodes_primary = kwargs['nodes_primary'].strip().replace(' ','.')
-        self.nodes_secondary = kwargs['nodes_secondary'].strip().replace(' ','.')
+        if kwargs['nodes_primary'] is not None:
+            self.nodes_primary = kwargs['nodes_primary'].strip().replace(' ','.')
+        else:
+            self.nodes_primary = None
+        if kwargs['nodes_secondary'] is not None:
+            self.nodes_secondary = kwargs['nodes_secondary'].strip().replace(' ','.')
+        else:
+            self.nodes_secondary = None
         self.num_phases = kwargs['num_phases']
+        self.x1 = kwargs['x1']
+        self.r1 = kwargs['r1']
     
     def get_opendss(self):
         """
         Generate the OpenDSS code for the line
         """
         opendss = f"New Line.{self.name} "
-        opendss += f"Phases={self.num_phases} "
-        opendss += f"Bus1={self.bus1}.{self.nodes_primary} "
-        opendss += f"Bus2={self.bus2}.{self.nodes_secondary} "
-        opendss += f"LineCode={self.linecode} "
-        opendss += f"Length={self.length} "
-        opendss += f"units={self.length_unit} "
-
+        opendss += f"Phases={self.num_phases} " if self.num_phases is not None else ""
+        opendss += f"Bus1={self.bus1}" 
+        opendss += f".{self.nodes_primary} " if self.nodes_primary is not None else " "
+        opendss += f"Bus2={self.bus2}"
+        opendss += f".{self.nodes_secondary} " if self.nodes_secondary is not None else " "
+        opendss += f"LineCode={self.linecode} " if self.linecode is not None else ""
+        opendss += f"Length={self.length} " if self.length is not None else ""
+        opendss += f"units={self.length_unit} " if self.length_unit is not None else ""
+        opendss += f"x1={self.x1} " if self.x1 is not None else ""
+        opendss += f"r1={self.r1} " if self.r1 is not None else ""
         return opendss
 
     def __str__(self):
@@ -174,26 +185,29 @@ class Load():
         self.kw = kwargs['kw']
         self.kvar = kwargs['kvar']
         self.model = kwargs['model']
-        self.nodes_primary = kwargs['nodes_primary'].replace(' ','.')
+        if kwargs['nodes_primary'] is not None:
+            self.nodes_primary = kwargs['nodes_primary'].replace(' ','.')
+        else:
+            self.nodes_primary = None
         if kwargs['nodes_secondary'] is not None:
             self.nodes_secondary = kwargs['nodes_secondary'].replace(' ','.')
         else:
             self.nodes_secondary = None
         self.num_phases = kwargs['num_phases']
+        self.vminpu = kwargs['vminpu']
+        self.vmaxpu = kwargs['vmaxpu']
 
     def get_opendss(self):
         """
         Generate the OpenDSS code for the Load
         """
         opendss = f"New Load.{self.name}"
-        if self.nodes_secondary is not None:
-            opendss += f".{self.nodes_secondary} "
-        else:
-            opendss += ' '
-        opendss += f"Bus1={self.bus1}.{self.nodes_primary} "
-        opendss += f"Phases={self.num_phases} "
-        opendss += f"Conn={self.conn} "
-        opendss += f"Model={self.model} "
+        opendss += f".{self.nodes_secondary} " if self.nodes_secondary is not None else " "
+        opendss += f"Bus1={self.bus1}"
+        opendss += f".{self.nodes_primary} " if self.nodes_primary is not None else " "
+        opendss += f"Phases={self.num_phases} " if self.num_phases is not None else ""
+        opendss += f"Conn={self.conn} " if self.conn is not None else ""
+        opendss += f"Model={self.model} " if self.model is not None else ""
         opendss += f"kV={self.kv_primary} "
         opendss += f"kW={self.kw} "
         opendss += f"kvar={self.kvar} "
@@ -378,7 +392,7 @@ class Circuit():
         opendss += f"pu={self.pu} "
         opendss += f"phases={self.num_phases} "
         opendss += f"bus1={self.bus1} \n"
-        opendss += f"~ Angle={self.angle} \n"
+        opendss += "" if self.angle is None else f"~ Angle={self.angle} \n"
         opendss += f"~ MVAsc3={self.MVAsc3} MVAsc1={self.MVAsc1} "
         return opendss
 

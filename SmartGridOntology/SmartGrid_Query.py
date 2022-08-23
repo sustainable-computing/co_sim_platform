@@ -36,10 +36,10 @@ class SmartGridGraph:
             ?circuit SmartGrid:primaryAttachsTo ?bus1 .
             ?circuit SmartGrid:MVAsc1 ?MVAsc1 .
             ?circuit SmartGrid:MVAsc3 ?MVAsc3 .
-            ?circuit SmartGrid:angle ?angle .
             ?circuit SmartGrid:kV_primary ?kv_sec .
             ?circuit SmartGrid:num_phases ?num_phases .
             ?circuit SmartGrid:pu ?pu .
+            OPTIONAL { ?circuit SmartGrid:angle ?angle . }
         }    
         """
 
@@ -98,18 +98,17 @@ class SmartGridGraph:
             ?trans a SmartGrid:Transformer .
             ?trans SmartGrid:primaryAttachsTo ?prim_bus .
             ?trans SmartGrid:attachsTo ?sec_bus .
-            ?trans SmartGrid:num_phases ?num_phases .
             ?trans SmartGrid:Kva ?Kva .
             ?trans SmartGrid:XHL ?xhl .
             ?trans SmartGrid:connection_primary ?conn_prim .
             ?trans SmartGrid:connection_secondary ?conn_sec .
             ?trans SmartGrid:kV_primary ?kv_prim .
             ?trans SmartGrid:kV_secondary ?kv_sec .
-            ?trans SmartGrid:percent_R ?percent_R .
-            OPTIONAL {
-                ?trans SmartGrid:XHT ?xht .
-                ?trans SmartGrid:XLT ?xlt .
-            }
+            OPTIONAL { ?trans SmartGrid:num_phases ?num_phases . }
+            OPTIONAL { ?trans SmartGrid:percent_R ?percent_R . }
+            OPTIONAL { ?trans SmartGrid:XHT ?xht . }
+            OPTIONAL { ?trans SmartGrid:XLT ?xlt . }
+            OPTIONAL { ?trans SmartGrid:sub ?sub . }
         }
         """
         res = self.g.query(query_str)
@@ -129,7 +128,8 @@ class SmartGridGraph:
                 connection_secondary = row['conn_sec'],
                 kv_primary = row['kv_prim'],
                 kv_secondary = row['kv_sec'],
-                percent_r = row['percent_R']
+                percent_r = row['percent_R'],
+                sub = row['sub']
             )
             transformers.append(trans)
         return transformers 
@@ -264,12 +264,14 @@ class SmartGridGraph:
             ?line a SmartGrid:Line .
             ?line SmartGrid:primaryAttachsTo ?bus1 .
             ?line SmartGrid:attachsTo ?bus2 .
-            ?line SmartGrid:LineCode ?linecode .
-            ?line SmartGrid:length ?length .
-            ?line SmartGrid:nodes_primary ?n_prim .
-            ?line SmartGrid:nodes_secondary ?n_sec .
-            ?line SmartGrid:num_phases ?num_phases .
-            ?line SmartGrid:unit ?unit .
+            OPTIONAL { ?line SmartGrid:x1 ?x1 . }
+            OPTIONAL { ?line SmartGrid:r1 ?r1 . }
+            OPTIONAL { ?line SmartGrid:LineCode ?linecode . }
+            OPTIONAL { ?line SmartGrid:length ?length . }
+            OPTIONAL { ?line SmartGrid:nodes_primary ?n_prim .  }
+            OPTIONAL { ?line SmartGrid:nodes_secondary ?n_sec . }
+            OPTIONAL { ?line SmartGrid:num_phases ?num_phases . }
+            OPTIONAL { ?line SmartGrid:unit ?unit . }
         }
         """
         res = self.g.query(query_str)
@@ -284,7 +286,9 @@ class SmartGridGraph:
                 length_unit = row['unit'],
                 nodes_primary = row['n_prim'],
                 nodes_secondary = row['n_sec'],
-                num_phases = row['num_phases']
+                num_phases = row['num_phases'],
+                r1 = row['r1'],
+                x1 = row['x1'],
             )
             lines.append(line)
         return lines
@@ -296,16 +300,16 @@ class SmartGridGraph:
         WHERE {
             ?load a SmartGrid:Load .
             ?load SmartGrid:primaryAttachsTo ?bus1 .
-            ?load SmartGrid:connection_primary ?conn .
             ?load SmartGrid:kV_primary ?kv_prim .
             ?load SmartGrid:kW ?kW .
             ?load SmartGrid:kvar ?kvar .
-            ?load SmartGrid:model ?model .
-            ?load SmartGrid:nodes_primary ?n_prim .
-            ?load SmartGrid:num_phases ?num_phases . 
-            OPTIONAL {
-                ?load SmartGrid:nodes_secondary ?n_sec .
-            }
+            OPTIONAL { ?load SmartGrid:connection_primary ?conn . }
+            OPTIONAL { ?load SmartGrid:model ?model . }
+            OPTIONAL { ?load SmartGrid:num_phases ?num_phases . }
+            OPTIONAL { ?load SmartGrid:nodes_primary ?n_prim . }
+            OPTIONAL { ?load SmartGrid:nodes_secondary ?n_sec . }
+            OPTIONAL { ?load SmartGrid:vminpu ?vminpu . }
+            OPTIONAL { ?load SmartGrid:vmaxpu ?vmaxpu . }
         }
         """
         # Get the query
@@ -322,7 +326,9 @@ class SmartGridGraph:
                 model = row['model'],
                 nodes_primary = row['n_prim'],
                 nodes_secondary = row['n_sec'],
-                num_phases = row['num_phases']
+                num_phases = row['num_phases'],
+                vminpu = row['vminpu'],
+                vmaxpu = row['vmaxpu']
             )
             loads.append(load)
 
@@ -503,16 +509,14 @@ class SmartGridGraph:
             ?type rdfs:subClassOf* SmartGrid:Sensor .
             ?sen SmartGrid:connectsTo ?src_node .
             ?sen SmartGrid:feeds ?controller .
-            ?sen SmartGrid:measures ?measures . 
             ?sen SmartGrid:monitor ?monitor .
             ?monitor SmartGrid:primaryAttachsTo ?bus1 .
-            ?sen SmartGrid:rate ?rate .
             ?sen SmartGrid:phase ?phase .
             ?sen SmartGrid:bus_terminal ?bus .
             ?controller SmartGrid:connectsTo ?dst_node .
-            OPTIONAL {
-                ?monitor SmartGrid:attachsTo ?bus2 .
-            }
+            OPTIONAL { ?monitor SmartGrid:attachsTo ?bus2 . }
+            OPTIONAL { ?sen SmartGrid:measures ?measures . }
+            OPTIONAL { ?sen SmartGrid:rate ?rate . }
         }    
         """
         res = self.g.query(query_str)
