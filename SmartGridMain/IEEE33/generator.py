@@ -135,14 +135,19 @@ def main():
         } 
         # The regulators must come first before the buses
         for node in regcontrol_buses:
-            graph.nodes[node]['connections'] = list(graph.nodes[node]['connections'])
+            conn_list = list(graph.nodes[node]['connections'])
+            graph.nodes[node]['connections'] = [value for value in sorted(conn_list, key=lambda item: int(item))]
             nodes_dict['nodes'][node] = graph.nodes[node]
         
         for node in graph.nodes.keys():
-            graph.nodes[node]['connections'] = list(graph.nodes[node]['connections'])
+            conn_list = list(graph.nodes[node]['connections'])
+            graph.nodes[node]['connections'] = [value for value in sorted(conn_list, key=lambda item: int(item))]
             nodes_dict['nodes'][node] = graph.nodes[node]
 
-        nodes_file.write(json.dumps(nodes_dict, indent=2, sort_keys=True))
+        unordered_nodes = nodes_dict['nodes']
+        ordered_nodes = {key:value for key, value in sorted(unordered_nodes.items(), key=lambda item: int(item[0]))}
+        nodes_dict['nodes'] = ordered_nodes
+        nodes_file.write(json.dumps(nodes_dict, indent=2, sort_keys=False))
 
 
        
