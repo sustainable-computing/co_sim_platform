@@ -293,7 +293,8 @@ void NS3Netsim::init(string f_json,
                      string stop_time,
                      string verb,
                      string s_tcpOrUdp,
-                     string s_net)
+                     string s_net,
+                     string s_topology)
 {
   allApplications = ApplicationContainer();
   LrWpanHelper lrwpan;
@@ -305,6 +306,8 @@ void NS3Netsim::init(string f_json,
   std::cout << "NS3Netsim::init Network Mode: " << tcpOrUdp << std::endl;
   // save which architecture should be used
   netArch = s_net;
+  // save which topology is being used now
+  topology = s_topology;
   std::cout << "NS3Netsim::init Network Architecture: " << netArch << std::endl;
   if (netArch == "P2P" || netArch == "CSMA")  v4 = true;
   else  v4 = false;
@@ -697,12 +700,10 @@ void NS3Netsim::create(string client, string server)
     {
       nextHop = FindNextHop(clt, srv, nodeAdjMatrix);
       if (verbose > 3)  cout << "Next hop for " << clt << " is: " << nextHop << endl;
-
       Ptr<Node> nextHopNode = Names::Find<Node>(nextHop);
       Ptr<Node> cltNode = Names::Find<Node>(clt);
       Ptr<Ipv6> nextHopIpv6 = nextHopNode->GetObject<Ipv6> ();
       Ptr<Ipv6> cltIpv6 = cltNode->GetObject<Ipv6> ();
-
       uint32_t hostIfIndex, hopIfIndex;
       // The interfaces are in reverse order
       if(DeviceMap.find(make_pair(clt, nextHop)) == DeviceMap.end())
@@ -717,12 +718,14 @@ void NS3Netsim::create(string client, string server)
         hostIfIndex = link_dev.Get(0)->GetIfIndex() + 1;
         hopIfIndex = link_dev.Get(1)->GetIfIndex() + 1;
       }
-      if (!v4 && (isSecondary(clt) || isSecondary(nextHop)))
+      if (!v4 && topology == "IEEE33")
       {
-        if(isSecondary(clt))  hostIfIndex /= 2;
-        else hostIfIndex = hostIfIndex - 1;
-        if(isSecondary(nextHop))  hopIfIndex /= 2;
-        else hopIfIndex = hopIfIndex - 1;
+        // IEEE13 has no 6LoWPAN installed in it and so no duplicates
+        if(isSecondary(clt) || isSecondary(nextHop))
+        {
+          hostIfIndex = findIndex(clt, hostIfIndex);
+          hopIfIndex = findIndex(nextHop, hopIfIndex);
+        }
       }
       Ipv6Address nextHopAddress = nextHopIpv6->GetAddress(hopIfIndex, 1).GetAddress();
       staticRouting = ipv6StaticRouter.GetStaticRouting (cltIpv6);

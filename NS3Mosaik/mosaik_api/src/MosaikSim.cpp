@@ -94,6 +94,7 @@ void MosaikSim::initNetsimProps(void)
   netsimProp["verbose"] = "null";
   netsimProp["tcpOrUdp"] = "null";
   netsimProp["network"] = "null";
+  netsimProp["topology"] = "null";
 }
 
 AddrPort
@@ -463,7 +464,8 @@ MosaikSim::init(Json::Value args, Json::Value kwargs)
                   netsimProp["stop_time"],
                   netsimProp["verbose"],
                   netsimProp["tcpOrUdp"],
-                  netsimProp["network"]);
+                  netsimProp["network"],
+                  netsimProp["topology"]);
 
   //--- initialize Meta model
   mosaikMeta = TransporterMeta;
@@ -631,7 +633,7 @@ MosaikSim::step(Json::Value args, Json::Value kwargs)
     time_next_step = std::to_string(maxAdvance);
   #endif
 
-  if (verbose > 1)
+  if (verbose > 0)
   {
     std::cout << "MosaikSim::step time, args = " << mosaikTime << "\n"
               << args << std::endl;
@@ -849,7 +851,7 @@ MosaikSim::step(Json::Value args, Json::Value kwargs)
   #if PERFORMANCE_TEST > 1
     time_next_step = to_string(mosaikTime + 1);
   #endif
-  if (verbose > 1)
+  if (verbose > 0)
   {
     std::cout << "MosaikSim::step time_next_step = " << time_next_step << std::endl;
   }
@@ -860,7 +862,7 @@ MosaikSim::step(Json::Value args, Json::Value kwargs)
 std::string
 MosaikSim::get_data(Json::Value args, Json::Value kwargs)
 {
-  if (verbose > 0)
+  if (verbose > 1)
   {
     Json::FastWriter fastWriter;
     std::string output = fastWriter.write(args);

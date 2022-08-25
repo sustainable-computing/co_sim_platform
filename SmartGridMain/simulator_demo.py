@@ -45,8 +45,8 @@ elif Scenario == 2:
     TOPO_RPATH_FILE = 'IEEE33/outfile.dss'
     NWL_RPATH_FILE  = 'IEEE33/IEEE33_NodeWithLoadFull.csv'
     ILPQ_RPATH_FILE = 'IEEE33/IEEE33_InelasticLoadPQ.csv'
-    # DEVS_RPATH_FILE = 'IEEE33/IEEE33_Devices.csv'
-    DEVS_RPATH_FILE = 'IEEE33/IEEE33_Devices_Test.csv'
+    DEVS_RPATH_FILE = 'IEEE33/IEEE33_Devices.csv'
+    # DEVS_RPATH_FILE = 'IEEE33/IEEE33_Devices_Test.csv'
     # DEVS_RPATH_FILE = 'IEEE33/IEEE33_Devices_Test_1.csv'
 
 #--- NS3 executables and library directory
@@ -208,34 +208,54 @@ def  create_scenario( world, args ):
                               topofile = DSS_EXE_PATH + TOPO_RPATH_FILE,
                               nwlfile  = DSS_EXE_PATH + NWL_RPATH_FILE,
                               ilpqfile = DSS_EXE_PATH + ILPQ_RPATH_FILE,
-                              step_size = 100,
-                              loadgen_interval = 80,
+                            #   loadgen_interval = 80, # IEEE13
+                              loadgen_interval = 1000, # IEEE33
                               verbose = 0)    
-
-    pktnetsim = world.start( 'PktNetSim',
-        model_name      = 'TransporterModel',
-        json_file       = JSON_RPATH_FILE,
-        devs_file       = DEVS_RPATH_FILE,
-        linkRate        = "512Kbps",
-        linkDelay       = "15ms",
-        linkErrorRate   = "0.0001",
-        start_time      = 0,
-        stop_time       = END_TIME,
-        random_seed     = args.random_seed,
-        verbose         = 2,
-        tcpOrUdp        = "tcp", # transport layer protocols: tcp/udp
-        # network architecture: P2P/CSMA/P2Pv6/CSMAv6 (supported backbone architectures)
-        # When P2Pv6 or CSMAv6 is selected, secondary network is automatically fitted with
-        # LR-WPAN and 6LoWPAN (make the distance between two nodes is set accordingly)
-        network         = "P2P"
-    )
   
     if Scenario == 1:
         controlsim  = world.start('ControlSim', verbose = 0)
+
+        pktnetsim = world.start( 'PktNetSim',
+            model_name      = 'TransporterModel',
+            json_file       = JSON_RPATH_FILE,
+            devs_file       = DEVS_RPATH_FILE,
+            linkRate        = "512Kbps",
+            linkDelay       = "15ms",
+            linkErrorRate   = "0.0001",
+            start_time      = 0,
+            stop_time       = END_TIME,
+            random_seed     = args.random_seed,
+            verbose         = 0,
+            tcpOrUdp        = "tcp", # transport layer protocols: tcp/udp
+            # network architecture: P2P/CSMA/P2Pv6/CSMAv6 (supported backbone architectures)
+            # When P2Pv6 or CSMAv6 is selected, secondary network is automatically fitted with
+            # LR-WPAN and 6LoWPAN (make the distance between two nodes is set accordingly)
+            network         = "P2P",
+            topology        = "IEEE13"  # For now only IEEE13 and IEEE33
+        )
     else:
         estimator  = world.start('Estimator',
                 eid_prefix = 'DSESim_',
-                verbose = 2)
+                verbose = 0)
+
+        pktnetsim = world.start( 'PktNetSim',
+            model_name      = 'TransporterModel',
+            json_file       = JSON_RPATH_FILE,
+            devs_file       = DEVS_RPATH_FILE,
+            linkRate        = "1024Kbps",
+            linkDelay       = "1ms",
+            linkErrorRate   = "0.0001",
+            start_time      = 0,
+            stop_time       = END_TIME,
+            random_seed     = args.random_seed,
+            verbose         = 0,
+            tcpOrUdp        = "tcp", # transport layer protocols: tcp/udp
+            # network architecture: P2P/CSMA/P2Pv6/CSMAv6 (supported backbone architectures)
+            # When P2Pv6 or CSMAv6 is selected, secondary network is automatically fitted with
+            # LR-WPAN and 6LoWPAN (make the distance between two nodes is set accordingly)
+            network         = "P2Pv6",
+            topology        = "IEEE33"  # For now only IEEE13 and IEEE33
+        )
     
     collector   = world.start('Collector',
                     eid_prefix = 'Collector_',
@@ -284,9 +304,6 @@ def  create_scenario( world, args ):
                     verbose = 0
                 ))
         elif (device == 'Phasor'):
-            #--- Does not make sense to transfer data through ns-3
-            #--- to construct self-loops (source = destination)
-            if client == server: continue
             phasor_instance = device + '_' + client + '-' + server \
                                 + '.' + control_loop + '.' + namespace
             created_phasor = False
@@ -370,6 +387,9 @@ def  create_scenario( world, args ):
             ))
         else:
             #--- Transporter instances (Pktnet)
+            #--- Does not make sense to transfer data through ns-3
+            #--- to construct self-loops (source = destination)
+            if client == server: continue
             created_transporter = False
             if (device == 'Actuator'):
                 transporter_instance = 'Transp_' + client + '-' + server \
@@ -387,22 +407,23 @@ def  create_scenario( world, args ):
                     eid=transporter_instance
                 ))
 
+    if Scenario == 2:
     #--- DSE instance
-    dsesim = estimator.DSESim(
-        idt = 1, 
-        ymat_file = 'IEEE33/IEEE33_YMatrix.npy', 
-        devs_file = DEVS_RPATH_FILE,
-        acc_period = 100, 
-        max_iter = 5, 
-        threshold = 0.001,
-        baseS = 100e3/3,            # single phase power base
-        baseV = 12.66e3/np.sqrt(3),
-        baseNode = 1,               # single phase voltage base
-        basePF = 0.99,
-        se_period = 1000, # state estimation period in ms
-        pseudo_loads = 'IEEE33/loadPseudo.mat',
-        se_result = 'IEEE33/wls_results.mat' # save the wls results
-    )
+        dsesim = estimator.DSESim(
+            idt = 1, 
+            ymat_file = 'IEEE33/IEEE33_YMatrix.npy', 
+            devs_file = DEVS_RPATH_FILE,
+            acc_period = 100, 
+            max_iter = 5, 
+            threshold = 0.001,
+            baseS = 100e3/3,            # single phase power base
+            baseV = 12.66e3/np.sqrt(3),
+            baseNode = 1,               # single phase voltage base
+            basePF = 0.99,
+            se_period = 1000, # state estimation period in ms
+            pseudo_loads = 'IEEE33/loadPseudo.mat',
+            se_result = 'IEEE33/wls_results.mat' # save the wls results
+        )
 
     #--- Monitor instances
     monitor = collector.Monitor()
@@ -448,6 +469,15 @@ def  create_scenario( world, args ):
                                     + '.' + control_loop + '.' + namespace
             transporter_instance = 'Transp_' + client + '-' + server \
                                     + '.' + control_loop + '.' + namespace
+            #--- Does not make sense to transfer data through ns-3
+            #--- to construct self-loops (source = destination)
+            #--- Connect phasor directly to dsesim
+            if client == server:
+                for phasor in phasors:
+                    if (phasor_instance == phasor.eid):
+                        world.connect(phasor, dsesim, 'v', 't')
+                continue
+
             for phasor in phasors:
                 if (phasor_instance == phasor.eid):
                     for transporter in transporters:
@@ -589,8 +619,12 @@ def  create_scenario( world, args ):
     # for smartmeter in smartmeters:
     #     print('Connect', smartmeter.eid, 'to', monitor.sid)
 
-    #--- DSESim to Monitor
-    world.connect(dsesim, monitor, 'v', 't')
+    # Does not work if monitor is attached to dsesim
+    # For some reason Collector has a "triggered" step with no next step
+    # data in MOSAIK and thus ends up in an internal error of MOSAIK
+    # if Scenario == 2:
+    #     #--- DSESim to Monitor
+    #     world.connect(dsesim, monitor, 'v', 't')
         
 
 if __name__ == '__main__':

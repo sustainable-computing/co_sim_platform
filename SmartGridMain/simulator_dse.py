@@ -10,6 +10,7 @@ Mosaik interface for the Distribution State Estimation.
 '''
 
 import queue
+from tabnanny import verbose
 import mosaik_api
 import numpy as np
 import pandas as pd
@@ -23,12 +24,14 @@ from pathlib import Path
 
 META = {
 	'api-version': '3.0',
-	'type': 'event-based',
+	'type': 'hybrid',
     'models': {
         'DSESim': {
             'public': True,
             'params': ['idt', 'ymat_file', 'devs_file', 'acc_period', 'max_iter', 'threshold', 'baseS', 'baseV', 'baseNode', 'basePF', 'se_period', 'se_result', 'pseudo_loads', 'verbose'],
             'attrs': ['v', 't'],
+            'trigger': ['v', 't'],
+            'non-persistent': ['v', 't'],
         },
     },
 }
@@ -148,7 +151,7 @@ class Estimator(mosaik_api.Simulator):
 
 
     def step(self, time, inputs, max_advance):
-        if (self.verbose > 5): print('simulator_dse::step INPUT', time, inputs)
+        if (self.verbose > 1): print('simulator_dse::step INPUT', time, inputs)
 
         ''' prepare data to be used in get_data '''
         #self.data = {}
@@ -222,7 +225,7 @@ class Estimator(mosaik_api.Simulator):
                         else:
                             raise Exception('dev_param_key value unknown:', dev_param_key, "Device:", dev_id)
 
-
+        for dse_eid in self.entities:
             if (0 == time % self.entities[dse_eid]['acc_period']):
                 self.data[dse_eid] = {}
                 self.data[dse_eid]['v'] = []
@@ -230,36 +233,50 @@ class Estimator(mosaik_api.Simulator):
                 self.data[dse_eid]['v'].append(self.MsgCount)
                 self.data[dse_eid]['t'].append(time)
                 self.MsgCount = 0
-                self.eventQueue.push(time + self.entities[dse_eid]['acc_period'])
+                self.eventQueue.put(time + self.entities[dse_eid]['acc_period'])
 
             #(self.entities[dse_eid]['vecZ'], _) = self.createZVectors(dse_eid, len(self.entities[dse_eid]['vecZ']))
         # se_period = 1000
         # if next_step == 500:
         #     print("Check the phasors!")
-        if time > 0 and time %  self.entities[dse_eid]['se_period'] == 0:
-        # if time % se_period == 0:
-            z, ztype, error_cov = self.get_measurements(df_devs, time)
-            stop_counter = 0
-            while stop_counter < 5:
-                v_wls, iter_number = self.state_estimation(self.entities[dse_eid]['ymat_data'], z, ztype, error_cov,
-                                                           self.entities[dse_eid]['max_iter'], self.entities[dse_eid]['threshold'])
-                if iter_number > 1 & iter_number < 10:
-                    stop_counter = 5
+            if (time > 0) and (time % self.entities[dse_eid]['se_period'] == 0):
+            # if time % se_period == 0:
+                z, ztype, error_cov = self.get_measurements(self.entities[dse_eid]['df_devs'], time)
+                stop_counter = 0
+                while stop_counter < 5:
+                    v_wls, iter_number = self.state_estimation(self.entities[dse_eid]['ymat_data'], z, ztype, error_cov,
+                                                            self.entities[dse_eid]['max_iter'], self.entities[dse_eid]['threshold'])
+                    if iter_number > 1 & iter_number < 10:
+                        stop_counter = 5
+                    else:
+                        stop_counter += 1
+                # array_name = 'v_wls_{}'.format(int(time /  self.entities[dse_eid]['se_period']))
+                array_name = 'v_wls'
+                # if Path('C:/OpenDSS/DSSE33DetailedMultiPhase/wls_results.mat').is_file():
+                if time / self.entities[dse_eid]['se_period'] > 1:
+                        mat = spio.loadmat(self.entities[dse_eid]['se_result'], squeeze_me=True)
+                        mat[array_name] = np.vstack((mat[array_name], v_wls))
+                        spio.savemat(self.entities[dse_eid]['se_result'], mat)
                 else:
-                    stop_counter += 1
-            # array_name = 'v_wls_{}'.format(int(time /  self.entities[dse_eid]['se_period']))
-            array_name = 'v_wls'
-            # if Path('C:/OpenDSS/DSSE33DetailedMultiPhase/wls_results.mat').is_file():
-            if time / self.entities[dse_eid]['se_period'] > 1:
-                    mat = spio.loadmat(self.entities[dse_eid]['se_result'], squeeze_me=True)
-                    mat[array_name] = np.vstack((mat[array_name], v_wls))
-                    spio.savemat(self.entities[dse_eid]['se_result'], mat)
-            else:
-                spio.savemat(self.entities[dse_eid]['se_result'], {array_name: v_wls})
-                
-            self.eventQueue.push(time + self.entities[dse_eid]['se_period'])
+                    spio.savemat(self.entities[dse_eid]['se_result'], {array_name: v_wls})
+                    
+            if time % self.entities[dse_eid]['se_period'] == 0:
+                self.eventQueue.put(time + self.entities[dse_eid]['se_period'])
+
+        #--- if there is an event in the future, return next step time
+        if not self.eventQueue.empty():
+            #--- Filter the next time steps and return the earliest next time step
+            self.next_step = self.eventQueue.queue[0]
+            while(not self.eventQueue.empty() and time >= self.eventQueue.queue[0]):
+                self.next_step = self.eventQueue.get()
+            if self.next_step > time:
+                if (self.verbose > 0):  print("simulator_dse::next step: ", self.next_step)
+                sys.stdout.flush()
+
+                return self.next_step
 
     def state_estimation(self, ybus, z, ztype, err_cov, iter_max, threshold):
+        if (self.verbose > 1):  print("simulator_dse::state estimation")
         ztype= np.array(ztype)
         n = len(ybus)  # number of single phase nodes
         g = np.real(ybus)  # real part of the admittance matrix
@@ -446,6 +463,7 @@ class Estimator(mosaik_api.Simulator):
         return v_phasor, k
 
     def get_measurements(self, df_devs, time):
+        if (self.verbose > 0):  print("simulator_dse::get measurements: time = ", time)
         data = df_devs
         z = []
         z_type = []
@@ -453,6 +471,8 @@ class Estimator(mosaik_api.Simulator):
 
         # Pseudo measurements
         # find the corresponding pseudo measurement
+        # Currently the simualation is only running for a few seconds
+        # Map the time to indexes accordingly
         device = self.entities[list(self.entities.keys())[0]]
         hour = time // device['se_period'] + 8 # to start at 9 am
         # load the file with pseudo measurements
@@ -472,7 +492,10 @@ class Estimator(mosaik_api.Simulator):
             z_type.append([4, node, 0, 0])
             error_cov.append(np.square(q_std[node - 4][hourIndex]))
         for device in list(data.index.values):
-            node = int(device)
+            # device IDs are no longer integers, but strings
+            # extract the node IDs (this will not work if multiple
+            # devices are present in a single node)
+            node = int(data.loc[device, 'src'])
 
             # node voltage phasor measurements
             if data.loc[device, 'VMA'] > 0:

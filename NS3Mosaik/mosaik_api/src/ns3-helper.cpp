@@ -493,3 +493,34 @@ bool isSecondary(string nodeName)
   if(s_size < 4) return false;
   return true;
 }
+
+uint32_t findIndex(string nodeName, uint32_t interfaceIdx)
+{
+  int s_size = nodeName.size();
+  /**
+   * @brief breakdown of interface count of nodes
+   * Each node may have 6LoWPAN links or usual P2P/CSMA links
+   * duplicates are only generated for 6LoWPAN links
+   * 6LoWPAN is only installed at the secondary network
+   * 
+   * node 1 has no secondary links (2 interfaces) and will not be called
+   * nodes 2, 3, and 6 have 3 primary links and 55 secondary links
+   * nodes 18, 22, 25 and 33 have 1 primary link and 55 secondary links
+   * the remaining primary nodes all have 2 primary and 55 secondary links
+   * all secondary nodes have all duplicate links (number does not matter)
+   */
+  // secondary node
+  if (s_size > 3)  return interfaceIdx/2;
+  else if (nodeName == "2" || nodeName == "3" || nodeName == "6")
+  {
+    return ((interfaceIdx-3)/2 + 3);
+  }
+  else if (nodeName == "18" || nodeName == "22" || nodeName == "25" || nodeName == "33")
+  {
+    return ((interfaceIdx-1)/2 + 1);
+  }
+  else
+  {
+    return ((interfaceIdx-2)/2 + 2);
+  }
+}

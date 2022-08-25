@@ -5393,7 +5393,6 @@ New Line.33055-33106 Bus1=33055 Bus2=33106 x1=0.00029 r1=0.00375
 New Line.33055-33109 Bus1=33055 Bus2=33109 x1=0.00085 r1=0.01115 
 !---- Generated Switches
 Set ControlMode=OFF
-
 !---- Generated Transformer Voltages
 Set VoltageBases=[12.66, 0.416] 
 calcv 

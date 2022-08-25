@@ -183,7 +183,6 @@ class SmartmeterSim:
         self.step_size = int(step_size)
     
     def updateValues(self, time):
-        self.objSmartmeterSim.updateValues(time)
         if(0 == (time % self.step_size)):
             if (self.verbose > 2): print('Smartmeter::updateValues', 
                                     self.cktElement, self.cktTerminal, self.cktPhase)
@@ -409,20 +408,17 @@ class PFlowSim(mosaik_api.Simulator):
     def __init__(self):
         super().__init__(META)
         self.data = {}
-        self.entities = {}
         self.next_step = 0
         self.instances = {}
-        self.step_size = 1
-        self.loadgen_interval = self.step_size
+        self.loadgen_interval = 1
         self.time = -1
         self.next_steps = queue.PriorityQueue()
 
 
-    def init(self, sid, time_resolution, topofile, nwlfile, step_size, loadgen_interval, ilpqfile="", verbose=0):	
+    def init(self, sid, time_resolution, topofile, nwlfile, loadgen_interval, ilpqfile="", verbose=0):	
         self.sid = sid       
         self.verbose = verbose
         self.loadgen_interval = loadgen_interval
-        self.step_size = step_size
         
         self.swpos = 0
         self.swcycle = 35
@@ -442,15 +438,25 @@ class PFlowSim(mosaik_api.Simulator):
             dss.run_command("Show Taps")
             
         #--- create instance of LoadGenerator
+        # IEEE13
+        # self.objLoadGen = LoadGenerator(nwlfile,
+        #                                 PFLimInf   =  0.95,
+        #                                 PFLimSup   =  0.99,
+        #                                 LoadLimInf = -1.65,
+        #                                 LoadLimSup =  0.70,
+        #                                 AmpGain    =  0.30,
+        #                                 # Freq       =  1./8640,
+        #                                 Freq       =  1./100,
+        #                                 PhaseShift = math.pi)
+        
+        # IEEE33
         self.objLoadGen = LoadGenerator(nwlfile,
                                         PFLimInf   =  0.95,
-                                        PFLimSup   =  0.99,
-                                        LoadLimInf = -1.65,
-                                        LoadLimSup =  0.70,
-                                        AmpGain    =  0.30,
-                                        # Freq       =  1./8640,
-                                        Freq       =  1./100,
-                                        # Freq       =  1./1250,
+                                        PFLimSup   =  0.95,
+                                        LoadLimInf =  0.4,
+                                        LoadLimSup =  0.9,
+                                        AmpGain    =  0.25,
+                                        Freq       =  1./1250,
                                         PhaseShift = math.pi)
     
         sys.stdout.flush()
@@ -542,7 +548,16 @@ class PFlowSim(mosaik_api.Simulator):
                 if (self.verbose > 1): print("Generating load for: ", \
                     self.loadgen_interval * ( math.ceil( (self.prev_step+1)/self.loadgen_interval ) + i))
                 #-- get a new sample from loadgen
+
+                #-- IEEE13 Generate new randomized loads
                 ePQ = self.objLoadGen.createLoads()
+
+                #-- IEEE33 Get loads for standard FULL dataset
+                # ePQ = self.objLoadGen.readLoads(False)
+
+                #-- IEEE33 Get loads for standard TEST dataset
+                # ePQ = self.objLoadGen.readLoads(True)
+
                 #-- execute processing of the the new elastic load
                 self.dssObj.setLoads(ePQ)
 
@@ -596,10 +611,10 @@ class PFlowSim(mosaik_api.Simulator):
         for instance_eid in self.instances:
             if (instance_eid.find("Sensor") > -1) or \
                 (instance_eid.find("Phasor") > -1) or \
-                (instance_eid.find("Smartmeter") > -1):
+                (instance_eid.find("SmartMeter") > -1):
                 self.next_step = self.instances[instance_eid].updateValues(time)
                 if self.next_step != -1:
-                    self.next_steps.put(-self.next_step)
+                    self.next_steps.put(self.next_step)
 
         #--- 
         #--- get new set of prober data from OpenDSS
@@ -610,10 +625,11 @@ class PFlowSim(mosaik_api.Simulator):
                     
 
         #--- Filter the next time steps and return the earliest next time step
-        self.next_step = -self.next_steps.queue[0]
+        self.next_step = self.next_steps.queue[0]
         #--- For a time-based simulator, there is always a next step
-        while(self.time >= -self.next_steps.queue[0]):
-            self.next_step = -self.next_steps.get()
+        while(self.time >= self.next_steps.queue[0]):
+            self.next_step = self.next_steps.get()
+        self.next_step = self.next_steps.queue[0]
 
         if(self.verbose > 1):
             print('simulator_pflow::step next_step = ', self.next_step)
@@ -637,8 +653,8 @@ class PFlowSim(mosaik_api.Simulator):
                     data[instance_eid]['t'] = []
                     data[instance_eid]['v'].append(self.data[instance_eid]['v'])
                     data[instance_eid]['t'].append(self.data[instance_eid]['t'])
-            # All other models provide data at fixed intervals
-            elif (self.time % self.step_size == 0):
+            # All other models provide data at their own fixed intervals
+            elif (self.time % self.instances[instance_eid].step_size == 0):
                 val_v, val_t = self.instances[instance_eid].getLastValue()
                 self.data[instance_eid]['v'] = val_v
                 self.data[instance_eid]['t'] = val_t
