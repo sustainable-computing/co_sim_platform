@@ -19,7 +19,7 @@
 
 :Circuit_Master33 rdf:type owl:NamedIndividual ,
                            SmartGrid:Circuit ;
-                  SmartGrid:primaryAttachesTo :Bus_1 ;
+                  SmartGrid:primaryAttachsTo :Bus_1 ;
                   SmartGrid:MVAsc1 5000000 ;
                   SmartGrid:MVAsc3 5000000 ;
                   SmartGrid:kV_primary 12.66 ;

@@ -1,0 +1,109 @@
+!---- pre object declareation
+Clear 
+Set DefaultBaseFrequency=60 
+
+!---- Generated Circuit
+new circuit.Master33 
+~ basekv=115 pu=1 phases=3 bus1=SourceBus 
+~ MVAsc3=20000 MVAsc1=21000 
+!---- Generated Transformer
+New Transformer.Sub Phases=3 Windings=2 XHL=(8 1000 /) 
+~ wdg=1 bus=SourceBus conn=Delta kv=115 kva=5000 %r=(.5 1000 /)  
+~ wdg=2 bus=SubBus conn=Wye kv=4.16 kva=5000 %r=(.5 1000 /) 
+!---- Generated RegControls
+New Transformer.Reg1 phases=1 bank=reg1 XHL=0.01 kVAs=[1666 1666] NumTaps=32 maxtap=1.05 mintap=0.95 
+~ Buses=[SubBus.1 1.1] kVs=[2.4 2.4] %LoadLoss=0.01 
+new regcontrol.Reg1 transformer=Reg1 winding=2 vreg=122 band=2 ptratio=20 ctprim=700 R=3 X=9 
+
+New Transformer.Reg2 phases=1 bank=reg2 XHL=0.01 kVAs=[1666 1666] NumTaps=32 maxtap=1.05 mintap=0.95 
+~ Buses=[SubBus.2 1.2] kVs=[2.4 2.4] %LoadLoss=0.01 
+new regcontrol.Reg2 transformer=Reg2 winding=2 vreg=122 band=2 ptratio=20 ctprim=700 R=3 X=9 
+
+New Transformer.Reg3 phases=1 bank=reg3 XHL=0.01 kVAs=[1666 1666] NumTaps=32 maxtap=1.05 mintap=0.95 
+~ Buses=[SubBus.3 1.3] kVs=[2.4 2.4] %LoadLoss=0.01 
+new regcontrol.Reg3 transformer=Reg3 winding=2 vreg=122 band=2 ptratio=20 ctprim=700 R=3 X=9 
+
+!---- Generated Line Codes
+
+!---- Generated Loads
+New Load.10.1 Bus1=10.1 Phases=1 kV=0.240 
+New Load.11.2 Bus1=11.2 Phases=1 kV=0.240 
+New Load.12.3 Bus1=12.3 Phases=1 kV=0.240 
+New Load.13.1 Bus1=13.1 Phases=1 kV=0.240 
+New Load.14.2 Bus1=14.2 Phases=1 kV=0.240 
+New Load.15.3 Bus1=15.3 Phases=1 kV=0.240 
+New Load.16.1 Bus1=16.1 Phases=1 kV=0.240 
+New Load.17.2 Bus1=17.2 Phases=1 kV=0.240 
+New Load.18.3 Bus1=18.3 Phases=1 kV=0.240 
+New Load.19.1 Bus1=19.1 Phases=1 kV=0.240 
+New Load.20.2 Bus1=20.2 Phases=1 kV=0.240 
+New Load.21.3 Bus1=21.3 Phases=1 kV=0.240 
+New Load.22.1 Bus1=22.1 Phases=1 kV=0.240 
+New Load.23.2 Bus1=23.2 Phases=1 kV=0.240 
+New Load.24.3 Bus1=24.3 Phases=1 kV=0.240 
+New Load.25.1 Bus1=25.1 Phases=1 kV=0.240 
+New Load.26.2 Bus1=26.2 Phases=1 kV=0.240 
+New Load.27.3 Bus1=27.3 Phases=1 kV=0.240 
+New Load.28.1 Bus1=28.1 Phases=1 kV=0.240 
+New Load.29.2 Bus1=29.2 Phases=1 kV=0.240 
+New Load.2.2 Bus1=2.2 Phases=1 kV=0.240 
+New Load.30.3 Bus1=30.3 Phases=1 kV=0.240 
+New Load.31.1 Bus1=31.1 Phases=1 kV=0.240 
+New Load.32.2 Bus1=32.2 Phases=1 kV=0.240 
+New Load.33.3 Bus1=33.3 Phases=1 kV=0.240 
+New Load.3.3 Bus1=3.3 Phases=1 kV=0.240 
+New Load.4.1 Bus1=4.1 Phases=1 kV=0.240 
+New Load.5.2 Bus1=5.2 Phases=1 kV=0.240 
+New Load.6.3 Bus1=6.3 Phases=1 kV=0.240 
+New Load.7.1 Bus1=7.1 Phases=1 kV=0.240 
+New Load.8.2 Bus1=8.2 Phases=1 kV=0.240 
+New Load.9.3 Bus1=9.3 Phases=1 kV=0.240 
+!---- Generated Capacitors
+
+!---- Generated Lines
+New Line.1-2 Bus1=1 Bus2=2 x1=0.0470 r1=0.0922 
+New Line.10-11 Bus1=10 Bus2=11 x1=0.065 r1=0.1966 
+New Line.11-12 Bus1=11 Bus2=12 x1=0.1238 r1=0.3744 
+New Line.12-13 Bus1=12 Bus2=13 x1=1.155 r1=1.468 
+New Line.13-14 Bus1=13 Bus2=14 x1=0.7129 r1=0.5416 
+New Line.14-15 Bus1=14 Bus2=15 x1=0.526 r1=0.591 
+New Line.15-16 Bus1=15 Bus2=16 x1=0.545 r1=0.7463 
+New Line.16-17 Bus1=16 Bus2=17 x1=1.721 r1=1.289 
+New Line.17-18 Bus1=17 Bus2=18 x1=0.574 r1=0.732 
+New Line.19-20 Bus1=19 Bus2=20 x1=1.3554 r1=1.5042 
+New Line.2-19 Bus1=2 Bus2=19 x1=0.1565 r1=0.164 
+New Line.2-3 Bus1=2 Bus2=3 x1=0.2511 r1=0.493 
+New Line.20-21 Bus1=20 Bus2=21 x1=0.4784 r1=0.4095 
+New Line.21-22 Bus1=21 Bus2=22 x1=0.9373 r1=0.7089 
+New Line.23-24 Bus1=23 Bus2=24 x1=0.7091 r1=0.898 
+New Line.24-25 Bus1=24 Bus2=25 x1=0.7011 r1=0.896 
+New Line.26-27 Bus1=26 Bus2=27 x1=0.1447 r1=0.2842 
+New Line.27-28 Bus1=27 Bus2=28 x1=0.9337 r1=1.059 
+New Line.28-29 Bus1=28 Bus2=29 x1=0.7006 r1=0.8042 
+New Line.29-30 Bus1=29 Bus2=30 x1=0.2585 r1=0.5075 
+New Line.3-23 Bus1=3 Bus2=23 x1=0.3083 r1=0.4512 
+New Line.3-4 Bus1=3 Bus2=4 x1=0.1864 r1=0.366 
+New Line.30-31 Bus1=30 Bus2=31 x1=0.963 r1=0.9744 
+New Line.31-32 Bus1=31 Bus2=32 x1=0.3619 r1=0.3105 
+New Line.32-33 Bus1=32 Bus2=33 x1=0.5302 r1=0.341 
+New Line.4-5 Bus1=4 Bus2=5 x1=0.1941 r1=0.3811 
+New Line.5-6 Bus1=5 Bus2=6 x1=0.707 r1=0.819 
+New Line.6-26 Bus1=6 Bus2=26 x1=0.1034 r1=0.203 
+New Line.6-7 Bus1=6 Bus2=7 x1=0.6188 r1=0.1872 
+New Line.7-8 Bus1=7 Bus2=8 x1=0.2351 r1=0.7114 
+New Line.8-9 Bus1=8 Bus2=9 x1=0.74 r1=1.03 
+New Line.9-10 Bus1=9 Bus2=10 x1=0.74 r1=1.044 
+!---- Generated Switches
+!---- These are tie switches 
+! New Line.tie_25-29 Bus1=25 Bus2=29 Switch=y x1=2.0 r1=2.0
+! New Line.tie_9-15 Bus1=9 Bus2=15 Switch=y x1=2.0 r1=2.0
+! New Line.tie_18-33 Bus1=18 Bus2=33 Switch=y x1=2.0 r1=2.0
+! New Line.tie_8-21 Bus1=8 Bus2=21 Switch=y x1=2.0 r1=2.0
+! New Line.tie_12-22 Bus1=12 Bus2=22 Switch=y x1=2.0 r1=2.0
+
+
+Set ControlMode=OFF
+!---- Generated Transformer Voltages
+Set VoltageBases=[] 
+calcv 
+Solve 

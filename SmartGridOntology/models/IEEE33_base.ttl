@@ -12,14 +12,6 @@
                                                                     rdfs:comment "This will model the IEEE33 primary nodes only" .
 
 #################################################################
-#    Annotation properties
-#################################################################
-
-###  http://www.semanticweb.org/phoenix/ontologies/2022/0/SmartGrid#primaryAttachesTo
-SmartGrid:primaryAttachesTo rdf:type owl:AnnotationProperty .
-
-
-#################################################################
 #    Individuals
 #################################################################
 
@@ -293,7 +285,7 @@ SmartGrid:primaryAttachesTo rdf:type owl:AnnotationProperty .
                   SmartGrid:kV_primary 12.66 ;
                   SmartGrid:num_phases 3 ;
                   SmartGrid:pu 1 ;
-                  SmartGrid:primaryAttachesTo :Bus_1 .
+                  SmartGrid:primaryAttachsTo :Bus_1 .
 
 
 ###  http://www.semanticweb.org/phoenix/ontologies/2022/0/IEEE33_base#Coord_0_320
