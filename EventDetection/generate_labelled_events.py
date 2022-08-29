@@ -1,3 +1,4 @@
+from xmlrpc.client import Fault
 import opendssdirect as dss
 import argparse
 import random
@@ -19,7 +20,7 @@ class PMU():
         dss.run_command(f'New Monitor.{self.name} element={self.element}')
     
     def show_data(self):
-        dss.Monitors.Name(self.name.lower())
+        dss.Monitors.Name(self.name)
         res_mat = dss.Monitors.AsMatrix()
         res_dict = {
             'TS':[],
@@ -50,9 +51,180 @@ class PMU():
             res_dict['IA2'].append(row[11])
             res_dict['I3'].append(row[12])
             res_dict['IA3'].append(row[13])
-        # dss.Monitors.Save()
+        dss.Monitors.Show()
         return res_dict
     
+class Event():
+    def __init__(self, element):
+        self.name = f'Event_{element}'
+        self.element = element
+    
+    def init_event(self):
+        raise NotImplementedError('You need to define a init_event method!')
+    
+    def enable_event(self):
+        raise NotImplementedError('You need to define a enable_event method!')
+
+    def disable_event(self):
+        raise NotImplementedError('You need to define a disable_event method!')
+        
+
+class FaultEvent(Event):
+    def __init__(self, bus, phases=[1,2,3]):
+        super().__init__(f'Bus_{bus}')
+
+        if len(phases) == 0:
+            raise RuntimeError('phases cannot be empty')
+        self.name = f'Fault_{bus}_{"".join(map(str,phases))}'
+        self.bus = bus
+        self.phases = phases
+
+    def init_event(self):
+        dss.run_command(f'New Fault.{self.name} bus1={self.bus}.{".".join(map(str,self.phases))} phases={len(self.phases)}')
+        # Disable the fault
+        self.disable_event()
+
+    def enable_event(self):
+        dss.run_command(f'{self.element}.enabled=True')
+
+    def disable_event(self):
+        dss.run_command(f'{self.element}.enabled=False')
+
+class SwitchEvent(Event):
+    def __init__(self, line, direction=1):
+        """
+        The direction determines what kind of switch event 
+        direction=0 on to off
+        direction=1 off to on
+        """
+        super().__init__(f'Switch_{line}')
+        lines = dss.Lines.AllNames()
+        if 'tie' not in line:
+            raise RuntimeError(f"line: {line} is not a tie switch")
+        if line not in lines:
+            raise RuntimeError(f"line: {line} is not in circuit")
+        if direction not in [0,1]:
+            raise RuntimeError(f"direction: {direction} is not valid, should be either 0 or 1")
+        self.name = f"Switch_{line}"
+        self.line = line
+        self.direction = direction
+
+    def init_event(self):
+        # On to Off
+        if self.direction == 0:
+            dss.run_command(f"Close object=Line.{self.line} term=1")
+        # Off to On
+        if self.direction == 1:
+            dss.run_command(f"Open object=Line.{self.line} term=1")
+
+    def enable_event(self):
+        if self.direction == 0:
+            dss.run_command(f"Open object=Line.{self.line} term=1")
+        if self.direction == 1:
+            dss.run_command(f"Close object=Line.{self.line} term=1")
+    
+    def disable_event(self):
+        pass
+
+class TapEvent(Event):
+    def __init__(self, reg_control, direction=0, unit=1):
+        super().__init__(f'Tap_{reg_control}')
+
+        trafoList = dss.Transformers.AllNames()
+        if reg_control.lower() not in trafoList:
+            raise Exception('cktTrafo:', reg_control, ' not in the circuit')
+
+        if direction not in [-1, 0, 1]:
+            raise RuntimeError(f'tap value: {direction} not valid')
+
+        self.name = f"Tap_{reg_control}"
+        self.reg_control = reg_control
+        self.direction = direction
+        self.unit = unit
+
+    def init_event(self):
+        pass
+
+    def enable_event(self):
+        dss.Transformers.Name(self.reg_control)
+        maxtap  = dss.Transformers.MaxTap()
+        mintap  = dss.Transformers.MinTap()
+        numtaps = dss.Transformers.NumTaps()
+        curtap  = dss.Transformers.Tap()    
+            
+        newtap  = curtap + self.direction * ((maxtap - mintap)/numtaps) * self.unit        
+
+        if(newtap > mintap and newtap < maxtap):        
+            dss.Transformers.Tap(newtap)
+            curtap  = dss.Transformers.Tap()
+
+    def disable_event(self):
+        pass
+
+class GenEvent(Event):
+    def __init__(self, generator, direction=0):
+        super().__init__(f'Gen_{generator}')
+
+        gen_list = dss.Generators.AllNames()
+        if generator.lower() not in gen_list:
+            raise RuntimeError(f"Generator: {generator} not in circuit")
+
+        if direction not in [0,1]:
+            raise RuntimeError(f"direction: {direction} is not valid, should be either 0 or 1")
+            
+        self.name = f"Gen_{generator}"
+        self.generator = generator
+        self.direction = direction
+
+    def init_event(self):
+        # On to Off
+        if self.direction == 0:
+            dss.run_command(f"Enable Generator.{self.generator}")
+        # Off to On
+        if self.direction == 1:
+            dss.run_command(f"Disable Generator.{self.generator}")
+
+    def enable_event(self):
+        if self.direction == 0:
+            dss.run_command(f"Disable Generator.{self.generator}")
+        if self.direction == 1:
+            dss.run_command(f"Enable Generator.{self.generator}")
+    
+    def disable_event(self):
+        pass
+
+class CapEvent(Event):
+    def __init__(self, capacitor, direction=0):
+        super().__init__(f"Cap_{capacitor}")
+
+        cap_list = dss.Capacitors.AllNames()
+        if capacitor.lower() not in cap_list:
+            raise RuntimeError(f"capacitor: {capacitor} not in circuit")
+
+        if direction not in [0,1]:
+            raise RuntimeError(f"direction: {direction} is not valid, should be either 0 or 1")
+        
+        self.name = f"Cap_{capacitor}"
+        self.capacitor = capacitor
+        self.direction = direction
+
+    def init_event(self):
+        # On to Off
+        if self.direction == 0:
+            dss.run_command(f"Capacitor.{self.capacitor}.states=[1]")
+        # Off to On
+        if self.direction == 1:
+            dss.run_command(f"Capacitor.{self.capacitor}.states=[0]")
+
+    def enable_event(self):
+        if self.direction == 0:
+            dss.run_command(f"Capacitor.{self.capacitor}.states=[0]")
+        if self.direction == 1:
+            dss.run_command(f"Capacitor.{self.capacitor}.states=[1]")
+    
+    def disable_event(self):
+        pass
+        
 
 def add_monitor(line_element=None):
     """
@@ -135,19 +307,34 @@ def main():
 
     pmu_event_data_list = {}
 
-    for idx in range(2):
+    for idx in range(1):
         set_up()
         init_loads()
-        add_monitor('1-2')
-        # Solve the power network with the monitors attached to the network
+        add_monitor('4-5')
+
+
+        # Add Events here
+        # event = FaultEvent('2')
+        # event = SwitchEvent('tie_9-15', 0)
+        # event = TapEvent('Reg1',1,8)
+        # event = GenEvent('Gen1',1)
+        event = CapEvent('Cap1',0)
+        event.init_event()
+
+
+        # Solve the power network with the monitors and events attached to the network
         dss.run_command('Solve')
         # Set sim mode to dynamics with a step size of 0.001 (1ms)
+        # Must be set after creating the faults
         set_dynamics()
         pre_event, curr_event, post_event = get_randomize_event_duration()
+        print('Pre-event ', pre_event)
         run_dynamics(pre_event)
-        print("event happened")
+        event.enable_event()
         run_dynamics(curr_event)
-        print("event ended")
+        print('curr-event ', curr_event)
+        event.disable_event()
+        print('post-event ', post_event)
         run_dynamics(post_event)
 
 
@@ -162,7 +349,7 @@ def main():
 
         tear_down()
 
-    print(pmu_event_data_list)
+    # print(pmu_event_data_list)
 
 if __name__ == "__main__":
     main()

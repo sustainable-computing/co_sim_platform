@@ -26,40 +26,41 @@ new regcontrol.Reg3 transformer=Reg3 winding=2 vreg=122 band=2 ptratio=20 ctprim
 !---- Generated Line Codes
 
 !---- Generated Loads
-New Load.10.1 Bus1=10.1 Phases=1 kV=0.240 
-New Load.11.2 Bus1=11.2 Phases=1 kV=0.240 
-New Load.12.3 Bus1=12.3 Phases=1 kV=0.240 
-New Load.13.1 Bus1=13.1 Phases=1 kV=0.240 
-New Load.14.2 Bus1=14.2 Phases=1 kV=0.240 
-New Load.15.3 Bus1=15.3 Phases=1 kV=0.240 
-New Load.16.1 Bus1=16.1 Phases=1 kV=0.240 
-New Load.17.2 Bus1=17.2 Phases=1 kV=0.240 
-New Load.18.3 Bus1=18.3 Phases=1 kV=0.240 
-New Load.19.1 Bus1=19.1 Phases=1 kV=0.240 
-New Load.20.2 Bus1=20.2 Phases=1 kV=0.240 
-New Load.21.3 Bus1=21.3 Phases=1 kV=0.240 
-New Load.22.1 Bus1=22.1 Phases=1 kV=0.240 
-New Load.23.2 Bus1=23.2 Phases=1 kV=0.240 
-New Load.24.3 Bus1=24.3 Phases=1 kV=0.240 
-New Load.25.1 Bus1=25.1 Phases=1 kV=0.240 
-New Load.26.2 Bus1=26.2 Phases=1 kV=0.240 
-New Load.27.3 Bus1=27.3 Phases=1 kV=0.240 
-New Load.28.1 Bus1=28.1 Phases=1 kV=0.240 
-New Load.29.2 Bus1=29.2 Phases=1 kV=0.240 
-New Load.2.2 Bus1=2.2 Phases=1 kV=0.240 
-New Load.30.3 Bus1=30.3 Phases=1 kV=0.240 
-New Load.31.1 Bus1=31.1 Phases=1 kV=0.240 
-New Load.32.2 Bus1=32.2 Phases=1 kV=0.240 
-New Load.33.3 Bus1=33.3 Phases=1 kV=0.240 
-New Load.3.3 Bus1=3.3 Phases=1 kV=0.240 
-New Load.4.1 Bus1=4.1 Phases=1 kV=0.240 
-New Load.5.2 Bus1=5.2 Phases=1 kV=0.240 
-New Load.6.3 Bus1=6.3 Phases=1 kV=0.240 
-New Load.7.1 Bus1=7.1 Phases=1 kV=0.240 
-New Load.8.2 Bus1=8.2 Phases=1 kV=0.240 
-New Load.9.3 Bus1=9.3 Phases=1 kV=0.240 
+New Load.10.1 Bus1=10.1 Phases=1 kV=2.40 
+New Load.11.2 Bus1=11.2 Phases=1 kV=2.40 
+New Load.12.3 Bus1=12.3 Phases=1 kV=2.40 
+New Load.13.1 Bus1=13.1 Phases=1 kV=2.40 
+New Load.14.2 Bus1=14.2 Phases=1 kV=2.40 
+New Load.15.3 Bus1=15.3 Phases=1 kV=2.40 
+New Load.16.1 Bus1=16.1 Phases=1 kV=2.40 
+New Load.17.2 Bus1=17.2 Phases=1 kV=2.40 
+New Load.18.3 Bus1=18.3 Phases=1 kV=2.40 
+New Load.19.1 Bus1=19.1 Phases=1 kV=2.40 
+New Load.20.2 Bus1=20.2 Phases=1 kV=2.40 
+New Load.21.3 Bus1=21.3 Phases=1 kV=2.40 
+New Load.22.1 Bus1=22.1 Phases=1 kV=2.40 
+New Load.23.2 Bus1=23.2 Phases=1 kV=2.40 
+New Load.24.3 Bus1=24.3 Phases=1 kV=2.40 
+New Load.25.1 Bus1=25.1 Phases=1 kV=2.40 
+New Load.26.2 Bus1=26.2 Phases=1 kV=2.40 
+New Load.27.3 Bus1=27.3 Phases=1 kV=2.40 
+New Load.28.1 Bus1=28.1 Phases=1 kV=2.40 
+New Load.29.2 Bus1=29.2 Phases=1 kV=2.40 
+New Load.2.2 Bus1=2.2 Phases=1 kV=2.40 
+New Load.30.3 Bus1=30.3 Phases=1 kV=2.40 
+New Load.31.1 Bus1=31.1 Phases=1 kV=2.40 
+New Load.32.2 Bus1=32.2 Phases=1 kV=2.40 
+New Load.33.3 Bus1=33.3 Phases=1 kV=2.40 
+New Load.3.3 Bus1=3.3 Phases=1 kV=2.40 
+New Load.4.1 Bus1=4.1 Phases=1 kV=2.40 
+New Load.5.2 Bus1=5.2 Phases=1 kV=2.40 
+New Load.6.3 Bus1=6.3 Phases=1 kV=2.40 
+New Load.7.1 Bus1=7.1 Phases=1 kV=2.40 
+New Load.8.2 Bus1=8.2 Phases=1 kV=2.40 
+New Load.9.3 Bus1=9.3 Phases=1 kV=2.40 
 !---- Generated Capacitors
-
+New Capacitor.Cap1 bus1=9 phases=3 kvar=100 kv=4.16
+New Capacitor.Cap2 bus1=20 phases=3 kvar=50 kv=4.16
 !---- Generated Lines
 New Line.1-2 Bus1=1 Bus2=2 x1=0.0470 r1=0.0922 
 New Line.10-11 Bus1=10 Bus2=11 x1=0.065 r1=0.1966 
@@ -94,15 +95,28 @@ New Line.7-8 Bus1=7 Bus2=8 x1=0.2351 r1=0.7114
 New Line.8-9 Bus1=8 Bus2=9 x1=0.74 r1=1.03 
 New Line.9-10 Bus1=9 Bus2=10 x1=0.74 r1=1.044 
 !---- Generated Switches
-!---- These are tie switches 
-! New Line.tie_25-29 Bus1=25 Bus2=29 Switch=y x1=2.0 r1=2.0
-! New Line.tie_9-15 Bus1=9 Bus2=15 Switch=y x1=2.0 r1=2.0
-! New Line.tie_18-33 Bus1=18 Bus2=33 Switch=y x1=2.0 r1=2.0
-! New Line.tie_8-21 Bus1=8 Bus2=21 Switch=y x1=2.0 r1=2.0
-! New Line.tie_12-22 Bus1=12 Bus2=22 Switch=y x1=2.0 r1=2.0
+!---- These are tie switches they are open by default
+New Line.tie_25-29 Bus1=25 Bus2=29 Switch=y x1=2.0 r1=2.0
+Open line.tie_25-29 term=1
+New Line.tie_9-15 Bus1=9 Bus2=15 Switch=y x1=2.0 r1=2.0
+Open line.tie_9-15 term=1
+New Line.tie_18-33 Bus1=18 Bus2=33 Switch=y x1=2.0 r1=2.0
+Open line.tie_18-33 term=1
+New Line.tie_8-21 Bus1=8 Bus2=21 Switch=y x1=2.0 r1=2.0
+Open line.tie_8-21 term=1
+New Line.tie_12-22 Bus1=12 Bus2=22 Switch=y x1=2.0 r1=2.0
+Open line.tie_12-22 term=1
 
+!---- Generated Generator
+!---- These generators are disabled by default
+New Generator.Gen1 bus1=10.1 phases=1 kv=2.40 kw=2
+Disable Generator.Gen1
+New Generator.Gen2 bus1=23.2 phases=1 kv=2.40 kw=1.5
+Disable Generator.Gen2
+New Generator.Gen3 bus1=27.3 phases=1 kv=2.40 kw=1
+Disable Generator.Gen2
 
-Set ControlMode=OFF
+Set ControlMode=TIME
 !---- Generated Transformer Voltages
 Set VoltageBases=[] 
 calcv 
