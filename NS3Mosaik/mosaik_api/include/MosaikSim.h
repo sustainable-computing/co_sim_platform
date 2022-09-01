@@ -47,6 +47,8 @@
 #include <sstream>
 #include <array>
 #include <cstdint>
+#include <iomanip>
+#include <chrono>
 
 
 //--- NS3 and json stuff
@@ -208,7 +210,7 @@ class MosaikSim {
   std::map<std::string, std::string> netsimParams; ///< Network simulator parameters
   std::map<std::string, std::pair<std::string, std::string>> netsimEntities;         ///< Network simulator entities
   std::vector<NetSimConn> vecNetSimConn;           ///< Network simulator connections
-
+  double total_exec_time;   ///< total execution time of Mosaik calls
   //---
   //--- Transporter model variables
   //---

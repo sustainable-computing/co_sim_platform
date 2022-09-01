@@ -16,6 +16,7 @@ import numpy as np
 import warnings
 import pandas as pd
 import sys
+import datetime
 
 META = {
 	'api-version': '3.0',
@@ -49,6 +50,7 @@ class Collector(mosaik_api.Simulator):
 		self.h5_save      = h5_save
 		self.h5_storename = h5_storename
 		self.h5_panelname = h5_panelname
+		self.total_exec_time = 0.0
 
 		return self.meta
 
@@ -63,6 +65,7 @@ class Collector(mosaik_api.Simulator):
 
 
 	def step(self, time, inputs, max_advance):
+		start = datetime.datetime.now()
 		if (self.verbose > 0):  print('Collector::step time ', time, ' Max Advance ', max_advance)
 		if (self.verbose > 1): 	print('Collector::step inputs: ', inputs)
 		data = inputs[self.eid]
@@ -81,6 +84,8 @@ class Collector(mosaik_api.Simulator):
 # 					self.data[src][attr].append(np.NaN)					
 		self.time_list.append(time)
 		sys.stdout.flush()
+		end = datetime.datetime.now()
+		self.total_exec_time = (end - start).total_seconds()
 		
 			
 	def finalize(self):
@@ -96,6 +101,7 @@ class Collector(mosaik_api.Simulator):
 				store = pd.HDFStore(self.h5_storename)
 				store[self.h5_panelname] = pd.DataFrame(self.data)
 				store.close()
+		print("Collector::finalize:total execution time = ", self.total_exec_time)
 		sys.stdout.flush()
 
 

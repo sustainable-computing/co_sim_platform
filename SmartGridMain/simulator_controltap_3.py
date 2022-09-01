@@ -14,6 +14,7 @@ import queue
 from tabnanny import verbose
 import mosaik_api
 import sys
+import datetime
 
 META = {
     'api-version': '3.0',
@@ -50,6 +51,7 @@ class ControlSim(mosaik_api.Simulator):
     def init(self, sid, time_resolution, verbose=0):
         self.sid = sid
         self.verbose = verbose
+        self.total_exec_time = 0.0
 
         return self.meta
 
@@ -78,6 +80,7 @@ class ControlSim(mosaik_api.Simulator):
     
     
     def step(self, time, inputs, max_advance):
+        start = datetime.datetime.now()
         if (self.verbose > 0): print('simulator_controller::step: ', time, ' Max Advance: ', max_advance)
         if (self.verbose > 1): print('simulator_controller::step INPUT: ', inputs)
         if (self.verbose > 3): print('simulator_controller::step DATA: ', self.data)
@@ -150,12 +153,19 @@ class ControlSim(mosaik_api.Simulator):
             if (self.verbose > 0):
                 print ("simulator_controller::step next_step = ", self.eventQueue.queue[0])
             sys.stdout.flush()
+	
+            end = datetime.datetime.now()
+            self.total_exec_time = (end - start).total_seconds()
             return self.eventQueue.queue[0]
         
         sys.stdout.flush()
+	
+        end = datetime.datetime.now()
+        self.total_exec_time = (end - start).total_seconds()
 
     
     def get_data(self, outputs):
+        start = datetime.datetime.now()
         if (self.verbose > 0): print('simulator_controller::get_data INPUT', outputs)      
 
         data = {}
@@ -176,6 +186,9 @@ class ControlSim(mosaik_api.Simulator):
 
         if (self.verbose > 1): print('simulator_controller::get_data OUTPUT data =', data)
         sys.stdout.flush()
+	
+        end = datetime.datetime.now()
+        self.total_exec_time = (end - start).total_seconds()
         return data
 
 
@@ -186,11 +199,13 @@ class ControlSim(mosaik_api.Simulator):
             self.instances[controller][instance] = parameters
 
 
-#     def finalize(self):
-#         print('Controller Params:')
-#         for key in self.entities.keys():
-#             controller_name = "Control_" +  self.entities[key]['idt']
-#             print(controller_name, ": ", "Min =", self.entities[key]['min'], " -- Max =", self.entities[key]['max'])
+    def finalize(self):
+        # print('Controller Params:')
+        # for key in self.entities.keys():
+        #     controller_name = "Control_" +  self.entities[key]['idt']
+        #     print(controller_name, ": ", "Min =", self.entities[key]['min'], " -- Max =", self.entities[key]['max'])
             
+        print("simulator_controller::finalize:total execution time = ", self.total_exec_time)
+        sys.stdout.flush()
 
     

@@ -201,7 +201,7 @@ class LoadGenerator(object):
         if(test):
             mat = spio.loadmat('config/loadHour933.mat', squeeze_me=True)
         else:
-            mat = spio.loadmat('config/loadHour9.mat', squeeze_me=True)
+            mat = spio.loadmat('IEEE33/loadHour9.mat', squeeze_me=True)
         
         # Checking the contents of mat file
         # test = {k:v for k, v in mat.items()}

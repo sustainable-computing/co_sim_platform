@@ -21,6 +21,7 @@ from ast import literal_eval
 import scipy.io as spio
 import math
 from pathlib import Path
+import datetime
 
 META = {
 	'api-version': '3.0',
@@ -55,6 +56,7 @@ class Estimator(mosaik_api.Simulator):
         self.cktState  = {}
         self.MsgCount  = 0
         self.eventQueue = queue.PriorityQueue()
+		self.total_exec_time = 0.0
 
         return self.meta
 
@@ -151,6 +153,7 @@ class Estimator(mosaik_api.Simulator):
 
 
     def step(self, time, inputs, max_advance):
+        start = datetime.datetime.now()
         if (self.verbose > 1): print('simulator_dse::step INPUT', time, inputs)
 
         ''' prepare data to be used in get_data '''
@@ -272,8 +275,14 @@ class Estimator(mosaik_api.Simulator):
             if self.next_step > time:
                 if (self.verbose > 0):  print("simulator_dse::next step: ", self.next_step)
                 sys.stdout.flush()
+                end = datetime.datetime.now()
+                self.total_exec_time = (end - start).total_seconds()
 
                 return self.next_step
+            end = datetime.datetime.now()
+            self.total_exec_time = (end - start).total_seconds()
+        end = datetime.datetime.now()
+        self.total_exec_time = (end - start).total_seconds()
 
     def state_estimation(self, ybus, z, ztype, err_cov, iter_max, threshold):
         if (self.verbose > 1):  print("simulator_dse::state estimation")
@@ -688,4 +697,6 @@ class Estimator(mosaik_api.Simulator):
         print("")
 
 
-
+    def finalize(self):
+        print("Estimator::finalize:total execution time = ", self.total_exec_time)
+        sys.stdout.flush()

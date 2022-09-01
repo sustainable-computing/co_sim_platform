@@ -22,6 +22,7 @@ from CktDef import CKTTerm, CKTPhase
 import numpy as np
 import opendssdirect as dss
 import math
+import datetime
 
 META = {
     'api-version': '3.0',
@@ -422,6 +423,7 @@ class PFlowSim(mosaik_api.Simulator):
         
         self.swpos = 0
         self.swcycle = 35
+        self.total_exec_time = 0.0
         
         if (self.verbose > 0): print('simulator_pflow::init', self.sid)
         if (self.verbose > 1): print('simulator_pflow::init', topofile, nwlfile, ilpqfile, verbose)
@@ -438,26 +440,26 @@ class PFlowSim(mosaik_api.Simulator):
             dss.run_command("Show Taps")
             
         #--- create instance of LoadGenerator
-        # IEEE13
-        # self.objLoadGen = LoadGenerator(nwlfile,
-        #                                 PFLimInf   =  0.95,
-        #                                 PFLimSup   =  0.99,
-        #                                 LoadLimInf = -1.65,
-        #                                 LoadLimSup =  0.70,
-        #                                 AmpGain    =  0.30,
-        #                                 # Freq       =  1./8640,
-        #                                 Freq       =  1./100,
-        #                                 PhaseShift = math.pi)
-        
-        # IEEE33
+        #--- IEEE13
         self.objLoadGen = LoadGenerator(nwlfile,
                                         PFLimInf   =  0.95,
-                                        PFLimSup   =  0.95,
-                                        LoadLimInf =  0.4,
-                                        LoadLimSup =  0.9,
-                                        AmpGain    =  0.25,
-                                        Freq       =  1./1250,
+                                        PFLimSup   =  0.99,
+                                        LoadLimInf = -1.65,
+                                        LoadLimSup =  0.70,
+                                        AmpGain    =  0.30,
+                                        # Freq       =  1./8640,
+                                        Freq       =  1./100,
                                         PhaseShift = math.pi)
+        
+        #--- IEEE33
+        # self.objLoadGen = LoadGenerator(nwlfile,
+        #                                 PFLimInf   =  0.95,
+        #                                 PFLimSup   =  0.95,
+        #                                 LoadLimInf =  0.4,
+        #                                 LoadLimSup =  0.9,
+        #                                 AmpGain    =  0.25,
+        #                                 Freq       =  1./1250,
+        #                                 PhaseShift = math.pi)
     
         sys.stdout.flush()
         return self.meta
@@ -521,6 +523,7 @@ class PFlowSim(mosaik_api.Simulator):
         return [{'eid': eid, 'type': model}]
 
     def step(self, time, inputs, max_advance):
+        start = datetime.datetime.now()
         if (self.verbose > 0): print('simulator_pflow::step time = ', time, ' Max Advance = ', max_advance)
         if (self.verbose > 1): print('simulator_pflow::step inputs = ', inputs)
 
@@ -634,10 +637,14 @@ class PFlowSim(mosaik_api.Simulator):
         if(self.verbose > 1):
             print('simulator_pflow::step next_step = ', self.next_step)
         sys.stdout.flush()
+	
+        end = datetime.datetime.now()
+        self.total_exec_time = (end - start).total_seconds()
         return self.next_step
 
 
     def get_data(self, outputs):
+        start = datetime.datetime.now()
         if (self.verbose > 0): print('simulator_pflow::get_data INPUT', outputs)
         
         data = {}
@@ -667,6 +674,9 @@ class PFlowSim(mosaik_api.Simulator):
         if (self.verbose > 1): print('simulator_pflow::get_data data:', data)
 
         sys.stdout.flush()
+	
+        end = datetime.datetime.now()
+        self.total_exec_time = (end - start).total_seconds()
         return data 
 
     def set_next(self, pflow, instance, parameters):
@@ -675,7 +685,9 @@ class PFlowSim(mosaik_api.Simulator):
         if instance not in self.instances[pflow]:
             self.instances[pflow][instance] = parameters    
 
-    #     def finalize(self):
-    #         print('OpenDSS Final Results:')
-    #         self.dssObj.showIinout()
+    def finalize(self):
+        # print('OpenDSS Final Results:')
+        # self.dssObj.showIinout()
+        print("simulator_pflow::finalize:total execution time = ", self.total_exec_time)
+        sys.stdout.flush()
 

@@ -165,10 +165,14 @@ void MosaikSim::mainLoop(void)
   std::string messages;
   Json::Value jsonMessage;
 
+  total_exec_time = 0.0;
+
   while (!stopServer)
   {
     try
     {
+      auto start = std::chrono::system_clock::now();
+
       //--- reset the mainLoop operation result
       mosaikLastMsgOp = SUCCESS;
 
@@ -188,6 +192,10 @@ void MosaikSim::mainLoop(void)
 
       if (verbose > 1)
         std::cout << "MosaikSim::mainLoop ***** MSG SENT !! *****" << std::endl;
+
+      auto end = std::chrono::system_clock::now();
+      std::chrono::duration<double> diff = end - start;
+      total_exec_time += diff.count();
     }
     catch (std::exception &e)
     {
@@ -1242,6 +1250,7 @@ MosaikSim::stop(void)
   //--- NS3 stop and destroy model
   //---
   objNetsim->~NS3Netsim();
+  std::cout << "NS-3 Loop execution time total: " << std::setw(9) << total_exec_time << std::endl;
 
   return "null";
 }
