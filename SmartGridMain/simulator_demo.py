@@ -208,8 +208,8 @@ def  create_scenario( world, args ):
                               topofile = DSS_EXE_PATH + TOPO_RPATH_FILE,
                               nwlfile  = DSS_EXE_PATH + NWL_RPATH_FILE,
                               ilpqfile = DSS_EXE_PATH + ILPQ_RPATH_FILE,
-                            #   loadgen_interval = 80, # IEEE13
-                              loadgen_interval = 1000, # IEEE33
+                              loadgen_interval = 80, # IEEE13
+                            #   loadgen_interval = 1000, # IEEE33
                               verbose = 0)    
   
     if Scenario == 1:

@@ -424,6 +424,7 @@ class PFlowSim(mosaik_api.Simulator):
         self.swpos = 0
         self.swcycle = 35
         self.total_exec_time = 0.0
+        self.step_count = 0
         
         if (self.verbose > 0): print('simulator_pflow::init', self.sid)
         if (self.verbose > 1): print('simulator_pflow::init', topofile, nwlfile, ilpqfile, verbose)
@@ -524,6 +525,7 @@ class PFlowSim(mosaik_api.Simulator):
 
     def step(self, time, inputs, max_advance):
         start = datetime.datetime.now()
+        self.step_count = self.step_count + 1
         if (self.verbose > 0): print('simulator_pflow::step time = ', time, ' Max Advance = ', max_advance)
         if (self.verbose > 1): print('simulator_pflow::step inputs = ', inputs)
 
@@ -689,5 +691,6 @@ class PFlowSim(mosaik_api.Simulator):
         # print('OpenDSS Final Results:')
         # self.dssObj.showIinout()
         print("simulator_pflow::finalize:total execution time = ", self.total_exec_time)
+        print("simulator_pflow::finalize:total steps = ", self.step_count)
         sys.stdout.flush()
 

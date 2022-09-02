@@ -52,6 +52,7 @@ class ControlSim(mosaik_api.Simulator):
         self.sid = sid
         self.verbose = verbose
         self.total_exec_time = 0.0
+        self.step_count = 0
 
         return self.meta
 
@@ -81,6 +82,7 @@ class ControlSim(mosaik_api.Simulator):
     
     def step(self, time, inputs, max_advance):
         start = datetime.datetime.now()
+        self.step_count = self.step_count + 1
         if (self.verbose > 0): print('simulator_controller::step: ', time, ' Max Advance: ', max_advance)
         if (self.verbose > 1): print('simulator_controller::step INPUT: ', inputs)
         if (self.verbose > 3): print('simulator_controller::step DATA: ', self.data)
@@ -206,6 +208,7 @@ class ControlSim(mosaik_api.Simulator):
         #     print(controller_name, ": ", "Min =", self.entities[key]['min'], " -- Max =", self.entities[key]['max'])
             
         print("simulator_controller::finalize:total execution time = ", self.total_exec_time)
+        print("simulator_controller::finalize:total steps = ", self.step_count)
         sys.stdout.flush()
 
     

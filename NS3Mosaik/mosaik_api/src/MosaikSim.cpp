@@ -53,6 +53,9 @@ MosaikSim::MosaikSim(std::string varargin, NS3Netsim *obj)
   //--- Initial verbose setting (0 = no message)
   verbose = 0;
 
+  //--- Initialize step counter
+  step_count = 0;
+
   //--- create socket
   openSocket();
 
@@ -634,6 +637,7 @@ MosaikSim::step(Json::Value args, Json::Value kwargs)
   //---
   //--- Calculate the next step time
   //---
+  step_count++;
   std::string time_next_step;
   mosaikTime = args[0].asUInt64();
   #if PERFORMANCE_TEST < 2
@@ -1251,6 +1255,7 @@ MosaikSim::stop(void)
   //---
   objNetsim->~NS3Netsim();
   std::cout << "NS-3 Loop execution time total: " << std::setw(9) << total_exec_time << std::endl;
+  std::cout << "NS-3 total step count: " << step_count << std::endl;
 
   return "null";
 }

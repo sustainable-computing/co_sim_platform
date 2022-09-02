@@ -51,6 +51,7 @@ class Collector(mosaik_api.Simulator):
 		self.h5_storename = h5_storename
 		self.h5_panelname = h5_panelname
 		self.total_exec_time = 0.0
+		self.step_count   = 0
 
 		return self.meta
 
@@ -66,6 +67,7 @@ class Collector(mosaik_api.Simulator):
 
 	def step(self, time, inputs, max_advance):
 		start = datetime.datetime.now()
+		self.step_count = self.step_count + 1
 		if (self.verbose > 0):  print('Collector::step time ', time, ' Max Advance ', max_advance)
 		if (self.verbose > 1): 	print('Collector::step inputs: ', inputs)
 		data = inputs[self.eid]
@@ -102,6 +104,7 @@ class Collector(mosaik_api.Simulator):
 				store[self.h5_panelname] = pd.DataFrame(self.data)
 				store.close()
 		print("Collector::finalize:total execution time = ", self.total_exec_time)
+		print("Collector::finalize:total steps = ", self.step_count)
 		sys.stdout.flush()
 
 
