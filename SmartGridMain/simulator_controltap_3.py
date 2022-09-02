@@ -157,13 +157,13 @@ class ControlSim(mosaik_api.Simulator):
             sys.stdout.flush()
 	
             end = datetime.datetime.now()
-            self.total_exec_time = (end - start).total_seconds()
+            self.total_exec_time = self.total_exec_time + (end - start).total_seconds()
             return self.eventQueue.queue[0]
         
         sys.stdout.flush()
 	
         end = datetime.datetime.now()
-        self.total_exec_time = (end - start).total_seconds()
+        self.total_exec_time = self.total_exec_time + (end - start).total_seconds()
 
     
     def get_data(self, outputs):
@@ -190,7 +190,7 @@ class ControlSim(mosaik_api.Simulator):
         sys.stdout.flush()
 	
         end = datetime.datetime.now()
-        self.total_exec_time = (end - start).total_seconds()
+        self.total_exec_time = self.total_exec_time + (end - start).total_seconds()
         return data
 
 

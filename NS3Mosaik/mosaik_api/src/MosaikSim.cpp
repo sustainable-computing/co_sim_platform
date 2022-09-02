@@ -174,13 +174,13 @@ void MosaikSim::mainLoop(void)
   {
     try
     {
-      auto start = std::chrono::system_clock::now();
 
       //--- reset the mainLoop operation result
       mosaikLastMsgOp = SUCCESS;
 
       //--- Read Messages form the Socket
       messages = readSocket();
+      auto start = std::chrono::system_clock::now();
 
       //--- Deserialize the messages and get message Id
       jsonMessage = deserialize(messages, currentMsgId);
@@ -195,10 +195,13 @@ void MosaikSim::mainLoop(void)
 
       if (verbose > 1)
         std::cout << "MosaikSim::mainLoop ***** MSG SENT !! *****" << std::endl;
-
-      auto end = std::chrono::system_clock::now();
-      std::chrono::duration<double> diff = end - start;
-      total_exec_time += diff.count();
+      
+      if (jsonMessage[0].asString() == "step" || jsonMessage[0].asString() == "get_data")
+      {
+        auto end = std::chrono::system_clock::now();
+        std::chrono::duration<double> diff = end - start;
+        total_exec_time += diff.count();
+      }
     }
     catch (std::exception &e)
     {

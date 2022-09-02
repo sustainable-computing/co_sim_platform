@@ -87,7 +87,7 @@ class Collector(mosaik_api.Simulator):
 		self.time_list.append(time)
 		sys.stdout.flush()
 		end = datetime.datetime.now()
-		self.total_exec_time = (end - start).total_seconds()
+		self.total_exec_time = self.total_exec_time + (end - start).total_seconds()
 		
 			
 	def finalize(self):

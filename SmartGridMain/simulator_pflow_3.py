@@ -641,7 +641,7 @@ class PFlowSim(mosaik_api.Simulator):
         sys.stdout.flush()
 	
         end = datetime.datetime.now()
-        self.total_exec_time = (end - start).total_seconds()
+        self.total_exec_time = self.total_exec_time + (end - start).total_seconds()
         return self.next_step
 
 
@@ -678,7 +678,7 @@ class PFlowSim(mosaik_api.Simulator):
         sys.stdout.flush()
 	
         end = datetime.datetime.now()
-        self.total_exec_time = (end - start).total_seconds()
+        self.total_exec_time = self.total_exec_time + (end - start).total_seconds()
         return data 
 
     def set_next(self, pflow, instance, parameters):

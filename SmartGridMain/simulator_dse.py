@@ -276,13 +276,12 @@ class Estimator(mosaik_api.Simulator):
                 if (self.verbose > 0):  print("simulator_dse::next step: ", self.next_step)
                 sys.stdout.flush()
                 end = datetime.datetime.now()
-                self.total_exec_time = (end - start).total_seconds()
+                self.total_exec_time = self.total_exec_time + (end - start).total_seconds()
 
                 return self.next_step
-            end = datetime.datetime.now()
-            self.total_exec_time = (end - start).total_seconds()
+
         end = datetime.datetime.now()
-        self.total_exec_time = (end - start).total_seconds()
+        self.total_exec_time = self.total_exec_time + (end - start).total_seconds()
 
     def state_estimation(self, ybus, z, ztype, err_cov, iter_max, threshold):
         if (self.verbose > 1):  print("simulator_dse::state estimation")
