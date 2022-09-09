@@ -1,4 +1,3 @@
-from xmlrpc.client import Fault
 import opendssdirect as dss
 import argparse
 import random
@@ -6,8 +5,8 @@ import random
 parser = argparse.ArgumentParser(description="Generate labelled event data from a power topology")
 parser.add_argument('--topo_file', help='The filename of the power topology to generate data from', required=True)
 parser.add_argument('--seed', help='The seed to use for generating the initial load values', default=None)
+
 topo_file = None
-line_list = []
 pmu_list = []
 
 class PMU():
@@ -51,7 +50,7 @@ class PMU():
             res_dict['IA2'].append(row[11])
             res_dict['I3'].append(row[12])
             res_dict['IA3'].append(row[13])
-        dss.Monitors.Show()
+        # dss.Monitors.Show()
         return res_dict
     
 class Event():
@@ -60,24 +59,32 @@ class Event():
         self.element = element
     
     def init_event(self):
-        raise NotImplementedError('You need to define a init_event method!')
+        raise NotImplementedError('You need to define init_event method!')
     
     def enable_event(self):
-        raise NotImplementedError('You need to define a enable_event method!')
+        raise NotImplementedError('You need to define enable_event method!')
 
     def disable_event(self):
-        raise NotImplementedError('You need to define a disable_event method!')
+        raise NotImplementedError('You need to define disable_event method!')
+
+    def get_event_info(self):
+        raise NotImplementedError('You need to define get_event_info')
         
 
 class FaultEvent(Event):
     def __init__(self, bus, phases=[1,2,3]):
         super().__init__(f'Bus_{bus}')
 
+        bus_list = dss.Circuit.AllBusNames()
+        if bus not in bus_list:
+            raise RuntimeError(f'bus: {bus} is not in circuit')
+
         if len(phases) == 0:
             raise RuntimeError('phases cannot be empty')
+        
         self.name = f'Fault_{bus}_{"".join(map(str,phases))}'
         self.bus = bus
-        self.phases = phases
+        self.phases = sorted(phases)
 
     def init_event(self):
         dss.run_command(f'New Fault.{self.name} bus1={self.bus}.{".".join(map(str,self.phases))} phases={len(self.phases)}')
@@ -90,6 +97,14 @@ class FaultEvent(Event):
     def disable_event(self):
         dss.run_command(f'{self.element}.enabled=False')
 
+    def get_event_info(self):
+        fault_type = ['1','2','3','12','13','23','123']
+        info_dict = {
+            'event_type': 1,
+            'event_label': fault_type.index("".join(map(str,self.phases))),
+            'equipment': f'{self.bus}.{".".join(map(str,self.phases))}'
+        }
+        return info_dict
 class SwitchEvent(Event):
     def __init__(self, line, direction=1):
         """
@@ -125,7 +140,14 @@ class SwitchEvent(Event):
     
     def disable_event(self):
         pass
-
+    
+    def get_event_info(self):
+        info_dict = {
+            'event_type': 2,
+            'event_label': self.direction,
+            'equipment': self.line
+        }
+        return info_dict
 class TapEvent(Event):
     def __init__(self, reg_control, direction=0, unit=1):
         super().__init__(f'Tap_{reg_control}')
@@ -161,6 +183,14 @@ class TapEvent(Event):
     def disable_event(self):
         pass
 
+    def get_event_info(self):
+        info_dict = {
+            'event_type': 3,
+            'event_label': self.direction * self.unit,
+            'equipment': self.reg_control
+        }
+        return info_dict
+
 class GenEvent(Event):
     def __init__(self, generator, direction=0):
         super().__init__(f'Gen_{generator}')
@@ -192,7 +222,14 @@ class GenEvent(Event):
     
     def disable_event(self):
         pass
-
+    
+    def get_event_info(self):
+        info_dict = {
+            'event_type': 4,
+            'event_label': self.direction,
+            'equipment': self.generator
+        }
+        return info_dict
 class CapEvent(Event):
     def __init__(self, capacitor, direction=0):
         super().__init__(f"Cap_{capacitor}")
@@ -225,23 +262,32 @@ class CapEvent(Event):
     def disable_event(self):
         pass
         
+    def get_event_info(self):
+        info_dict = {
+            'event_type': 5,
+            'event_label': self.direction,
+            'equipment': self.capacitor
+        }
+        return info_dict
 
-def add_monitor(line_element=None):
+def add_monitor(line_element = None):
     """
     Add a monitor object to monitor an line_element.
     If the line_element is not defined then it will add monitors to all lines
     """
+    line_list = dss.Lines.AllNames()
+
     if line_element is None:
         for line in line_list:
             pmu = PMU(f'Line.{line}')
             pmu.init_opendss()
             pmu_list.append(pmu)
-    elif line_element in line_list:
+    elif line_element.lower() in line_list:
         pmu = PMU(f'Line.{line_element}')
         pmu.init_opendss()
         pmu_list.append(pmu)
     else:
-        print(f'Error: Line.{line_element} is not in the topology')
+        raise RuntimeError(f'Error: Line.{line_element} is not in the topology')
 
 def tear_down():
     """
@@ -301,26 +347,50 @@ def main():
     dss.run_command('Clear')
     dss.run_command(f'Compile {topo_file}')
     
-    # Get all lines from the ontology
-    global line_list 
-    line_list = dss.Lines.AllNames()
-
     pmu_event_data_list = {}
 
-    for idx in range(1):
+    for idx in range(1000):
+        # Setup the simulator and circuit
         set_up()
+        # init the loads
         init_loads()
+        # add in the monitors here
         add_monitor('4-5')
 
 
         # Add Events here
-        # event = FaultEvent('2')
-        # event = SwitchEvent('tie_9-15', 0)
-        # event = TapEvent('Reg1',1,8)
-        # event = GenEvent('Gen1',1)
-        event = CapEvent('Cap1',0)
+        if idx % 5 == 0:
+            bus_list = dss.Circuit.AllBusNames()
+            bus_list = [ele for ele in filter(lambda bus: bus.isnumeric(), bus_list)]
+            bus = random.choice(bus_list)
+            all_phases = [[1],[2],[3],[1,2],[1,3],[2,3],[1,2,3]]
+            phases = random.choice(all_phases)
+            event = FaultEvent(bus,phases)
+        elif idx % 5 == 1:
+            line_list = dss.Lines.AllNames()
+            line_list = [ele for ele in filter(lambda line: 'tie_' in line, line_list)]
+            line = random.choice(line_list)
+            direction = random.choice([0,1])
+            event = SwitchEvent(line, direction)
+        elif idx % 5 == 2:
+            reg_control_list = dss.RegControls.AllNames()
+            reg_control = random.choice(reg_control_list)
+            direction = random.choice([-1,1])
+            unit = random.choice([0,1,2,3,4,5,6,7,8,9,10])
+            event = TapEvent(reg_control,direction,unit)
+        elif idx % 5 == 3:
+            gen_list = dss.Generators.AllNames()
+            gen = random.choice(gen_list)
+            direction = random.choice([0,1])
+            event = GenEvent(gen, direction)
+        else:
+            cap_list = dss.Capacitors.AllNames()
+            cap = random.choice(cap_list)
+            direction = random.choice([0,1])
+            event = CapEvent(cap, direction)
+        
+        # init the event
         event.init_event()
-
 
         # Solve the power network with the monitors and events attached to the network
         dss.run_command('Solve')
@@ -328,23 +398,27 @@ def main():
         # Must be set after creating the faults
         set_dynamics()
         pre_event, curr_event, post_event = get_randomize_event_duration()
-        print('Pre-event ', pre_event)
         run_dynamics(pre_event)
         event.enable_event()
         run_dynamics(curr_event)
-        print('curr-event ', curr_event)
         event.disable_event()
-        print('post-event ', post_event)
         run_dynamics(post_event)
 
+        event_info = event.get_event_info()
+        event_info['pre_event_dur'] = pre_event
+        event_info['curr_event_dur'] = curr_event
+        event_info['post_event_dur'] = post_event
 
 
         for pmu in pmu_list:
-            pmu_data = pmu.show_data()
+            pmu_sample = {
+                'data': pmu.show_data(),
+                'metadata': event_info
+            }
             pmu_name = pmu.name
             if pmu_name not in pmu_event_data_list.keys():
                 pmu_event_data_list[pmu_name] = []
-            pmu_event_data_list[pmu_name].append(pmu_data)
+            pmu_event_data_list[pmu_name].append(pmu_sample)
 
 
         tear_down()
