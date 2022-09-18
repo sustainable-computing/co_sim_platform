@@ -51,8 +51,8 @@ SmartGrid:XLT rdf:type owl:AnnotationProperty .
 SmartGrid:angle rdf:type owl:AnnotationProperty .
 
 
-###  http://www.semanticweb.org/phoenix/ontologies/2022/0/SmartGrid#attachsTo
-SmartGrid:attachsTo rdf:type owl:AnnotationProperty .
+###  http://www.semanticweb.org/phoenix/ontologies/2022/0/SmartGrid#attachesTo
+SmartGrid:attachesTo rdf:type owl:AnnotationProperty .
 
 
 ###  http://www.semanticweb.org/phoenix/ontologies/2022/0/SmartGrid#band
@@ -199,8 +199,8 @@ SmartGrid:percent_R rdf:type owl:AnnotationProperty .
 SmartGrid:phase rdf:type owl:AnnotationProperty .
 
 
-###  http://www.semanticweb.org/phoenix/ontologies/2022/0/SmartGrid#primaryAttachsTo
-SmartGrid:primaryAttachsTo rdf:type owl:AnnotationProperty .
+###  http://www.semanticweb.org/phoenix/ontologies/2022/0/SmartGrid#primaryAttachesTo
+SmartGrid:primaryAttachesTo rdf:type owl:AnnotationProperty .
 
 
 ###  http://www.semanticweb.org/phoenix/ontologies/2022/0/SmartGrid#ptratio
@@ -391,7 +391,7 @@ SmartGrid:xmat rdf:type owl:AnnotationProperty .
                 SmartGrid:kV_primary 4.16 ;
                 SmartGrid:kvar 600 ;
                 SmartGrid:num_phases 3 ;
-                SmartGrid:primaryAttachsTo :Bus_675 .
+                SmartGrid:primaryAttachesTo :Bus_675 .
 
 
 ###  http://www.semanticweb.org/phoenix/ontologies/2022/0/IEEE13#Capacitor_Cap2
@@ -401,11 +401,11 @@ SmartGrid:xmat rdf:type owl:AnnotationProperty .
                 SmartGrid:kvar 100 ;
                 SmartGrid:nodes_primary 3 ;
                 SmartGrid:num_phases 1 ;
-                SmartGrid:primaryAttachsTo :Bus_611 .
+                SmartGrid:primaryAttachesTo :Bus_611 .
 
 :Circuit_IEEE13Nodeckt rdf:type owl:NamedIndividual ,
                                 SmartGrid:Circuit ;
-                       SmartGrid:primaryAttachsTo :Bus_SourceBus ;
+                       SmartGrid:primaryAttachesTo :Bus_SourceBus ;
                        SmartGrid:MVAsc1 21000 ;
                        SmartGrid:MVAsc3 20000 ;
                        SmartGrid:angle 30 ;
@@ -601,12 +601,12 @@ SmartGrid:xmat rdf:type owl:AnnotationProperty .
 :Line_632633 rdf:type owl:NamedIndividual ,
                       SmartGrid:Line ;
              SmartGrid:LineCode :LineCode_mtx602 ;
-             SmartGrid:attachsTo :Bus_633 ;
+             SmartGrid:attachesTo :Bus_633 ;
              SmartGrid:length 500 ;
              SmartGrid:nodes_primary "1 2 3" ;
              SmartGrid:nodes_secondary "1 2 3" ;
              SmartGrid:num_phases 3 ;
-             SmartGrid:primaryAttachsTo :Bus_632 ;
+             SmartGrid:primaryAttachesTo :Bus_632 ;
              SmartGrid:unit "ft" .
 
 
@@ -614,12 +614,12 @@ SmartGrid:xmat rdf:type owl:AnnotationProperty .
 :Line_632645 rdf:type owl:NamedIndividual ,
                       SmartGrid:Line ;
              SmartGrid:LineCode :LineCode_mtx603 ;
-             SmartGrid:attachsTo :Bus_645 ;
+             SmartGrid:attachesTo :Bus_645 ;
              SmartGrid:length 500 ;
              SmartGrid:nodes_primary "3 2" ;
              SmartGrid:nodes_secondary "3 2" ;
              SmartGrid:num_phases 2 ;
-             SmartGrid:primaryAttachsTo :Bus_632 ;
+             SmartGrid:primaryAttachesTo :Bus_632 ;
              SmartGrid:unit "ft" .
 
 
@@ -627,12 +627,12 @@ SmartGrid:xmat rdf:type owl:AnnotationProperty .
 :Line_632670 rdf:type owl:NamedIndividual ,
                       SmartGrid:Line ;
              SmartGrid:LineCode :LineCode_mtx601 ;
-             SmartGrid:attachsTo :Bus_670 ;
+             SmartGrid:attachesTo :Bus_670 ;
              SmartGrid:length 667 ;
              SmartGrid:nodes_primary "1 2 3" ;
              SmartGrid:nodes_secondary "1 2 3" ;
              SmartGrid:num_phases 3 ;
-             SmartGrid:primaryAttachsTo :Bus_632 ;
+             SmartGrid:primaryAttachesTo :Bus_632 ;
              SmartGrid:unit "ft" .
 
 
@@ -640,12 +640,12 @@ SmartGrid:xmat rdf:type owl:AnnotationProperty .
 :Line_645646 rdf:type owl:NamedIndividual ,
                       SmartGrid:Line ;
              SmartGrid:LineCode :LineCode_mtx603 ;
-             SmartGrid:attachsTo :Bus_646 ;
+             SmartGrid:attachesTo :Bus_646 ;
              SmartGrid:length 300 ;
              SmartGrid:nodes_primary "3 2" ;
              SmartGrid:nodes_secondary "3 2" ;
              SmartGrid:num_phases 2 ;
-             SmartGrid:primaryAttachsTo :Bus_645 ;
+             SmartGrid:primaryAttachesTo :Bus_645 ;
              SmartGrid:unit "ft" .
 
 
@@ -653,12 +653,12 @@ SmartGrid:xmat rdf:type owl:AnnotationProperty .
 :Line_650632 rdf:type owl:NamedIndividual ,
                       SmartGrid:Line ;
              SmartGrid:LineCode :LineCode_mtx601 ;
-             SmartGrid:attachsTo :Bus_632 ;
+             SmartGrid:attachesTo :Bus_632 ;
              SmartGrid:length 2000 ;
              SmartGrid:nodes_primary "1 2 3" ;
              SmartGrid:nodes_secondary "1 2 3" ;
              SmartGrid:num_phases 3 ;
-             SmartGrid:primaryAttachsTo :Bus_RG60 ;
+             SmartGrid:primaryAttachesTo :Bus_RG60 ;
              SmartGrid:unit "ft" .
 
 
@@ -666,12 +666,12 @@ SmartGrid:xmat rdf:type owl:AnnotationProperty .
 :Line_670671 rdf:type owl:NamedIndividual ,
                       SmartGrid:Line ;
              SmartGrid:LineCode :LineCode_mtx601 ;
-             SmartGrid:attachsTo :Bus_671 ;
+             SmartGrid:attachesTo :Bus_671 ;
              SmartGrid:length 1333 ;
              SmartGrid:nodes_primary "1 2 3" ;
              SmartGrid:nodes_secondary "1 2 3" ;
              SmartGrid:num_phases 3 ;
-             SmartGrid:primaryAttachsTo :Bus_670 ;
+             SmartGrid:primaryAttachesTo :Bus_670 ;
              SmartGrid:unit "ft" .
 
 
@@ -679,12 +679,12 @@ SmartGrid:xmat rdf:type owl:AnnotationProperty .
 :Line_671680 rdf:type owl:NamedIndividual ,
                       SmartGrid:Line ;
              SmartGrid:LineCode :LineCode_mtx601 ;
-             SmartGrid:attachsTo :Bus_680 ;
+             SmartGrid:attachesTo :Bus_680 ;
              SmartGrid:length 1000 ;
              SmartGrid:nodes_primary "1 2 3" ;
              SmartGrid:nodes_secondary "1 2 3" ;
              SmartGrid:num_phases 3 ;
-             SmartGrid:primaryAttachsTo :Bus_671 ;
+             SmartGrid:primaryAttachesTo :Bus_671 ;
              SmartGrid:unit "ft" .
 
 
@@ -692,12 +692,12 @@ SmartGrid:xmat rdf:type owl:AnnotationProperty .
 :Line_671684 rdf:type owl:NamedIndividual ,
                       SmartGrid:Line ;
              SmartGrid:LineCode :LineCode_mtx604 ;
-             SmartGrid:attachsTo :Bus_684 ;
+             SmartGrid:attachesTo :Bus_684 ;
              SmartGrid:length 300 ;
              SmartGrid:nodes_primary "1 3" ;
              SmartGrid:nodes_secondary "1 3" ;
              SmartGrid:num_phases 2 ;
-             SmartGrid:primaryAttachsTo :Bus_671 ;
+             SmartGrid:primaryAttachesTo :Bus_671 ;
              SmartGrid:unit "ft" .
 
 
@@ -705,12 +705,12 @@ SmartGrid:xmat rdf:type owl:AnnotationProperty .
 :Line_684611 rdf:type owl:NamedIndividual ,
                       SmartGrid:Line ;
              SmartGrid:LineCode :LineCode_mtx605 ;
-             SmartGrid:attachsTo :Bus_611 ;
+             SmartGrid:attachesTo :Bus_611 ;
              SmartGrid:length 300 ;
              SmartGrid:nodes_primary 3 ;
              SmartGrid:nodes_secondary 3 ;
              SmartGrid:num_phases 1 ;
-             SmartGrid:primaryAttachsTo :Bus_684 ;
+             SmartGrid:primaryAttachesTo :Bus_684 ;
              SmartGrid:unit "ft" .
 
 
@@ -718,12 +718,12 @@ SmartGrid:xmat rdf:type owl:AnnotationProperty .
 :Line_684652 rdf:type owl:NamedIndividual ,
                       SmartGrid:Line ;
              SmartGrid:LineCode :LineCode_mtx607 ;
-             SmartGrid:attachsTo :Bus_652 ;
+             SmartGrid:attachesTo :Bus_652 ;
              SmartGrid:length 800 ;
              SmartGrid:nodes_primary 1 ;
              SmartGrid:nodes_secondary 1 ;
              SmartGrid:num_phases 1 ;
-             SmartGrid:primaryAttachsTo :Bus_684 ;
+             SmartGrid:primaryAttachesTo :Bus_684 ;
              SmartGrid:unit "ft" .
 
 
@@ -731,12 +731,12 @@ SmartGrid:xmat rdf:type owl:AnnotationProperty .
 :Line_692675 rdf:type owl:NamedIndividual ,
                       SmartGrid:Line ;
              SmartGrid:LineCode :LineCode_mtx606 ;
-             SmartGrid:attachsTo :Bus_675 ;
+             SmartGrid:attachesTo :Bus_675 ;
              SmartGrid:length 500 ;
              SmartGrid:nodes_primary "1 2 3" ;
              SmartGrid:nodes_secondary "1 2 3" ;
              SmartGrid:num_phases 3 ;
-             SmartGrid:primaryAttachsTo :Bus_692 ;
+             SmartGrid:primaryAttachesTo :Bus_692 ;
              SmartGrid:unit "ft" .
 
 
@@ -751,7 +751,7 @@ SmartGrid:xmat rdf:type owl:AnnotationProperty .
             SmartGrid:nodes_primary "3" ;
             SmartGrid:nodes_secondary "3" ;
             SmartGrid:num_phases 1 ;
-            SmartGrid:primaryAttachsTo :Bus_611 .
+            SmartGrid:primaryAttachesTo :Bus_611 .
 
 
 ###  http://www.semanticweb.org/phoenix/ontologies/2022/0/IEEE13#Load_634_1
@@ -765,7 +765,7 @@ SmartGrid:xmat rdf:type owl:AnnotationProperty .
             SmartGrid:nodes_primary "1" ;
             SmartGrid:nodes_secondary "1" ;
             SmartGrid:num_phases 1 ;
-            SmartGrid:primaryAttachsTo :Bus_634 .
+            SmartGrid:primaryAttachesTo :Bus_634 .
 
 
 ###  http://www.semanticweb.org/phoenix/ontologies/2022/0/IEEE13#Load_634_2
@@ -779,7 +779,7 @@ SmartGrid:xmat rdf:type owl:AnnotationProperty .
             SmartGrid:nodes_primary "2" ;
             SmartGrid:nodes_secondary "2" ;
             SmartGrid:num_phases 1 ;
-            SmartGrid:primaryAttachsTo :Bus_634 .
+            SmartGrid:primaryAttachesTo :Bus_634 .
 
 
 ###  http://www.semanticweb.org/phoenix/ontologies/2022/0/IEEE13#Load_634_3
@@ -793,7 +793,7 @@ SmartGrid:xmat rdf:type owl:AnnotationProperty .
             SmartGrid:nodes_primary "3" ;
             SmartGrid:nodes_secondary "3" ;
             SmartGrid:num_phases 1 ;
-            SmartGrid:primaryAttachsTo :Bus_634 .
+            SmartGrid:primaryAttachesTo :Bus_634 .
 
 
 ###  http://www.semanticweb.org/phoenix/ontologies/2022/0/IEEE13#Load_645_2
@@ -807,7 +807,7 @@ SmartGrid:xmat rdf:type owl:AnnotationProperty .
             SmartGrid:nodes_primary "2" ;
             SmartGrid:nodes_secondary "2" ;
             SmartGrid:num_phases 1 ;
-            SmartGrid:primaryAttachsTo :Bus_645 .
+            SmartGrid:primaryAttachesTo :Bus_645 .
 
 
 ###  http://www.semanticweb.org/phoenix/ontologies/2022/0/IEEE13#Load_646_2
@@ -821,7 +821,7 @@ SmartGrid:xmat rdf:type owl:AnnotationProperty .
             SmartGrid:nodes_primary "2 3" ;
             SmartGrid:nodes_secondary "2" ;
             SmartGrid:num_phases 1 ;
-            SmartGrid:primaryAttachsTo :Bus_646 .
+            SmartGrid:primaryAttachesTo :Bus_646 .
 
 
 ###  http://www.semanticweb.org/phoenix/ontologies/2022/0/IEEE13#Load_652_1
@@ -835,7 +835,7 @@ SmartGrid:xmat rdf:type owl:AnnotationProperty .
             SmartGrid:nodes_primary "1" ;
             SmartGrid:nodes_secondary "1" ;
             SmartGrid:num_phases 1 ;
-            SmartGrid:primaryAttachsTo :Bus_652 .
+            SmartGrid:primaryAttachesTo :Bus_652 .
 
 
 ###  http://www.semanticweb.org/phoenix/ontologies/2022/0/IEEE13#Load_670_1
@@ -849,7 +849,7 @@ SmartGrid:xmat rdf:type owl:AnnotationProperty .
             SmartGrid:nodes_primary "1" ;
             SmartGrid:nodes_secondary "1" ;
             SmartGrid:num_phases 1 ;
-            SmartGrid:primaryAttachsTo :Bus_670 .
+            SmartGrid:primaryAttachesTo :Bus_670 .
 
 
 ###  http://www.semanticweb.org/phoenix/ontologies/2022/0/IEEE13#Load_670_2
@@ -863,7 +863,7 @@ SmartGrid:xmat rdf:type owl:AnnotationProperty .
             SmartGrid:nodes_primary "2" ;
             SmartGrid:nodes_secondary "2" ;
             SmartGrid:num_phases 1 ;
-            SmartGrid:primaryAttachsTo :Bus_670 .
+            SmartGrid:primaryAttachesTo :Bus_670 .
 
 
 ###  http://www.semanticweb.org/phoenix/ontologies/2022/0/IEEE13#Load_670_3
@@ -877,7 +877,7 @@ SmartGrid:xmat rdf:type owl:AnnotationProperty .
             SmartGrid:nodes_primary "3" ;
             SmartGrid:nodes_secondary "3" ;
             SmartGrid:num_phases 1 ;
-            SmartGrid:primaryAttachsTo :Bus_670 .
+            SmartGrid:primaryAttachesTo :Bus_670 .
 
 
 ###  http://www.semanticweb.org/phoenix/ontologies/2022/0/IEEE13#Load_671
@@ -890,7 +890,7 @@ SmartGrid:xmat rdf:type owl:AnnotationProperty .
           SmartGrid:model 1 ;
           SmartGrid:nodes_primary "1 2 3" ;
           SmartGrid:num_phases 3 ;
-          SmartGrid:primaryAttachsTo :Bus_671 .
+          SmartGrid:primaryAttachesTo :Bus_671 .
 
 
 ###  http://www.semanticweb.org/phoenix/ontologies/2022/0/IEEE13#Load_675_1
@@ -904,7 +904,7 @@ SmartGrid:xmat rdf:type owl:AnnotationProperty .
             SmartGrid:nodes_primary "1" ;
             SmartGrid:nodes_secondary "1" ;
             SmartGrid:num_phases 1 ;
-            SmartGrid:primaryAttachsTo :Bus_675 .
+            SmartGrid:primaryAttachesTo :Bus_675 .
 
 
 ###  http://www.semanticweb.org/phoenix/ontologies/2022/0/IEEE13#Load_675_2
@@ -918,7 +918,7 @@ SmartGrid:xmat rdf:type owl:AnnotationProperty .
             SmartGrid:nodes_primary "2" ;
             SmartGrid:nodes_secondary "2" ;
             SmartGrid:num_phases 1 ;
-            SmartGrid:primaryAttachsTo :Bus_675 .
+            SmartGrid:primaryAttachesTo :Bus_675 .
 
 
 ###  http://www.semanticweb.org/phoenix/ontologies/2022/0/IEEE13#Load_675_3
@@ -932,7 +932,7 @@ SmartGrid:xmat rdf:type owl:AnnotationProperty .
             SmartGrid:nodes_primary "3" ;
             SmartGrid:nodes_secondary "3" ;
             SmartGrid:num_phases 1 ;
-            SmartGrid:primaryAttachsTo :Bus_675 .
+            SmartGrid:primaryAttachesTo :Bus_675 .
 
 
 ###  http://www.semanticweb.org/phoenix/ontologies/2022/0/IEEE13#Load_692_3
@@ -946,18 +946,18 @@ SmartGrid:xmat rdf:type owl:AnnotationProperty .
             SmartGrid:nodes_primary "3 1" ;
             SmartGrid:nodes_secondary "3" ;
             SmartGrid:num_phases 1 ;
-            SmartGrid:primaryAttachsTo :Bus_692 .
+            SmartGrid:primaryAttachesTo :Bus_692 .
 
 
 ###  http://www.semanticweb.org/phoenix/ontologies/2022/0/IEEE13#Switch_671692
 :Switch_671692 rdf:type owl:NamedIndividual ,
                         SmartGrid:Switch ;
-               SmartGrid:attachsTo :Bus_692 ;
+               SmartGrid:attachesTo :Bus_692 ;
                SmartGrid:c0 0.0 ;
                SmartGrid:c1 0.0 ;
                SmartGrid:normal_state "open" ;
                SmartGrid:num_phases 3 ;
-               SmartGrid:primaryAttachsTo :Bus_671 ;
+               SmartGrid:primaryAttachesTo :Bus_671 ;
                SmartGrid:r0 0.0001 ;
                SmartGrid:r1 0.0001 ;
                SmartGrid:x0 0.0 ;
@@ -969,14 +969,14 @@ SmartGrid:xmat rdf:type owl:AnnotationProperty .
                           SmartGrid:Transformer ;
                  SmartGrid:Kva 5000 ;
                  SmartGrid:XHL "(8 1000 /)" ;
-                 SmartGrid:attachsTo :Bus_650 ;
+                 SmartGrid:attachesTo :Bus_650 ;
                  SmartGrid:connection_primary "Delta" ;
                  SmartGrid:connection_secondary "Wye" ;
                  SmartGrid:kV_primary 115 ;
                  SmartGrid:kV_secondary 4.16 ;
                  SmartGrid:num_phases 3 ;
                  SmartGrid:percent_R "(.5 1000 /)" ;
-                 SmartGrid:primaryAttachsTo :Bus_SourceBus ;
+                 SmartGrid:primaryAttachesTo :Bus_SourceBus ;
                  rdfs:comment "This is the transformer at the generating station" .
 
 
@@ -987,14 +987,14 @@ SmartGrid:xmat rdf:type owl:AnnotationProperty .
                   SmartGrid:XHL 2 ;
                   SmartGrid:XHT 1 ;
                   SmartGrid:XLT 1 ;
-                  SmartGrid:attachsTo :Bus_634 ;
+                  SmartGrid:attachesTo :Bus_634 ;
                   SmartGrid:connection_primary "Wye" ;
                   SmartGrid:connection_secondary "Wye" ;
                   SmartGrid:kV_primary 4.16 ;
                   SmartGrid:kV_secondary 0.480 ;
                   SmartGrid:num_phases 3 ;
                   SmartGrid:percent_R 0.55 ;
-                  SmartGrid:primaryAttachsTo :Bus_633 ;
+                  SmartGrid:primaryAttachesTo :Bus_633 ;
                   rdfs:comment "This is the transformer labelled XFM-1" .
 
 
@@ -1005,7 +1005,7 @@ SmartGrid:xmat rdf:type owl:AnnotationProperty .
                  SmartGrid:R 3 ;
                  SmartGrid:X 9 ;
                  SmartGrid:XHL 0.01 ;
-                 SmartGrid:attachsTo :Bus_RG60 ;
+                 SmartGrid:attachesTo :Bus_RG60 ;
                  SmartGrid:band 2 ;
                  SmartGrid:bank "reg1" ;
                  SmartGrid:ctprim 700 ;
@@ -1018,7 +1018,7 @@ SmartGrid:xmat rdf:type owl:AnnotationProperty .
                  SmartGrid:num_phases 1 ;
                  SmartGrid:num_taps 32 ;
                  SmartGrid:percent_Load_Loss 0.01 ;
-                 SmartGrid:primaryAttachsTo :Bus_650 ;
+                 SmartGrid:primaryAttachesTo :Bus_650 ;
                  SmartGrid:ptratio 20 ;
                  SmartGrid:tap_primary 1 ;
                  SmartGrid:tap_secondary 1 ;
@@ -1032,7 +1032,7 @@ SmartGrid:xmat rdf:type owl:AnnotationProperty .
                  SmartGrid:R 3 ;
                  SmartGrid:X 9 ;
                  SmartGrid:XHL 0.01 ;
-                 SmartGrid:attachsTo :Bus_RG60 ;
+                 SmartGrid:attachesTo :Bus_RG60 ;
                  SmartGrid:band 2 ;
                  SmartGrid:bank "reg1" ;
                  SmartGrid:ctprim 700 ;
@@ -1045,7 +1045,7 @@ SmartGrid:xmat rdf:type owl:AnnotationProperty .
                  SmartGrid:num_phases 1 ;
                  SmartGrid:num_taps 32 ;
                  SmartGrid:percent_Load_Loss 0.01 ;
-                 SmartGrid:primaryAttachsTo :Bus_650 ;
+                 SmartGrid:primaryAttachesTo :Bus_650 ;
                  SmartGrid:ptratio 20 ;
                  SmartGrid:tap_primary 1 ;
                  SmartGrid:tap_secondary 1 ;
@@ -1059,7 +1059,7 @@ SmartGrid:xmat rdf:type owl:AnnotationProperty .
                  SmartGrid:R 3 ;
                  SmartGrid:X 9 ;
                  SmartGrid:XHL 0.01 ;
-                 SmartGrid:attachsTo :Bus_RG60 ;
+                 SmartGrid:attachesTo :Bus_RG60 ;
                  SmartGrid:band 2 ;
                  SmartGrid:bank "reg1" ;
                  SmartGrid:ctprim 700 ;
@@ -1072,7 +1072,7 @@ SmartGrid:xmat rdf:type owl:AnnotationProperty .
                  SmartGrid:num_phases 1 ;
                  SmartGrid:num_taps 32 ;
                  SmartGrid:percent_Load_Loss 0.01 ;
-                 SmartGrid:primaryAttachsTo :Bus_650 ;
+                 SmartGrid:primaryAttachesTo :Bus_650 ;
                  SmartGrid:ptratio 20 ;
                  SmartGrid:tap_primary 1 ;
                  SmartGrid:tap_secondary 1 ;

@@ -530,8 +530,8 @@ SmartGrid:primaryAttachesTo rdf:type owl:AnnotationProperty .
 ###  http://www.semanticweb.org/phoenix/ontologies/2022/0/IEEE33_base#Line_1-2
 :Line_1-2 rdf:type owl:NamedIndividual ,
                    SmartGrid:Line ;
-          SmartGrid:attachsTo :Bus_2 ;
-          SmartGrid:primaryAttachsTo :Bus_1 ;
+          SmartGrid:attachesTo :Bus_2 ;
+          SmartGrid:primaryAttachesTo :Bus_1 ;
           SmartGrid:r1 0.0922 ;
           SmartGrid:x1 0.0470 .
 
@@ -539,8 +539,8 @@ SmartGrid:primaryAttachesTo rdf:type owl:AnnotationProperty .
 ###  http://www.semanticweb.org/phoenix/ontologies/2022/0/IEEE33_base#Line_10-11
 :Line_10-11 rdf:type owl:NamedIndividual ,
                      SmartGrid:Line ;
-            SmartGrid:attachsTo :Bus_11 ;
-            SmartGrid:primaryAttachsTo :Bus_10 ;
+            SmartGrid:attachesTo :Bus_11 ;
+            SmartGrid:primaryAttachesTo :Bus_10 ;
             SmartGrid:r1 0.1966 ;
             SmartGrid:x1 0.065 .
 
@@ -548,8 +548,8 @@ SmartGrid:primaryAttachesTo rdf:type owl:AnnotationProperty .
 ###  http://www.semanticweb.org/phoenix/ontologies/2022/0/IEEE33_base#Line_11-12
 :Line_11-12 rdf:type owl:NamedIndividual ,
                      SmartGrid:Line ;
-            SmartGrid:attachsTo :Bus_12 ;
-            SmartGrid:primaryAttachsTo :Bus_11 ;
+            SmartGrid:attachesTo :Bus_12 ;
+            SmartGrid:primaryAttachesTo :Bus_11 ;
             SmartGrid:r1 0.3744 ;
             SmartGrid:x1 0.1238 .
 
@@ -557,8 +557,8 @@ SmartGrid:primaryAttachesTo rdf:type owl:AnnotationProperty .
 ###  http://www.semanticweb.org/phoenix/ontologies/2022/0/IEEE33_base#Line_12-13
 :Line_12-13 rdf:type owl:NamedIndividual ,
                      SmartGrid:Line ;
-            SmartGrid:attachsTo :Bus_13 ;
-            SmartGrid:primaryAttachsTo :Bus_12 ;
+            SmartGrid:attachesTo :Bus_13 ;
+            SmartGrid:primaryAttachesTo :Bus_12 ;
             SmartGrid:r1 1.468 ;
             SmartGrid:x1 1.155 .
 
@@ -566,8 +566,8 @@ SmartGrid:primaryAttachesTo rdf:type owl:AnnotationProperty .
 ###  http://www.semanticweb.org/phoenix/ontologies/2022/0/IEEE33_base#Line_13-14
 :Line_13-14 rdf:type owl:NamedIndividual ,
                      SmartGrid:Line ;
-            SmartGrid:attachsTo :Bus_14 ;
-            SmartGrid:primaryAttachsTo :Bus_13 ;
+            SmartGrid:attachesTo :Bus_14 ;
+            SmartGrid:primaryAttachesTo :Bus_13 ;
             SmartGrid:r1 0.5416 ;
             SmartGrid:x1 0.7129 .
 
@@ -575,8 +575,8 @@ SmartGrid:primaryAttachesTo rdf:type owl:AnnotationProperty .
 ###  http://www.semanticweb.org/phoenix/ontologies/2022/0/IEEE33_base#Line_14-15
 :Line_14-15 rdf:type owl:NamedIndividual ,
                      SmartGrid:Line ;
-            SmartGrid:attachsTo :Bus_15 ;
-            SmartGrid:primaryAttachsTo :Bus_14 ;
+            SmartGrid:attachesTo :Bus_15 ;
+            SmartGrid:primaryAttachesTo :Bus_14 ;
             SmartGrid:r1 0.591 ;
             SmartGrid:x1 0.526 .
 
@@ -584,8 +584,8 @@ SmartGrid:primaryAttachesTo rdf:type owl:AnnotationProperty .
 ###  http://www.semanticweb.org/phoenix/ontologies/2022/0/IEEE33_base#Line_15-16
 :Line_15-16 rdf:type owl:NamedIndividual ,
                      SmartGrid:Line ;
-            SmartGrid:attachsTo :Bus_16 ;
-            SmartGrid:primaryAttachsTo :Bus_15 ;
+            SmartGrid:attachesTo :Bus_16 ;
+            SmartGrid:primaryAttachesTo :Bus_15 ;
             SmartGrid:r1 0.7463 ;
             SmartGrid:x1 0.545 .
 
@@ -593,8 +593,8 @@ SmartGrid:primaryAttachesTo rdf:type owl:AnnotationProperty .
 ###  http://www.semanticweb.org/phoenix/ontologies/2022/0/IEEE33_base#Line_16-17
 :Line_16-17 rdf:type owl:NamedIndividual ,
                      SmartGrid:Line ;
-            SmartGrid:attachsTo :Bus_17 ;
-            SmartGrid:primaryAttachsTo :Bus_16 ;
+            SmartGrid:attachesTo :Bus_17 ;
+            SmartGrid:primaryAttachesTo :Bus_16 ;
             SmartGrid:r1 1.289 ;
             SmartGrid:x1 1.721 .
 
@@ -602,8 +602,8 @@ SmartGrid:primaryAttachesTo rdf:type owl:AnnotationProperty .
 ###  http://www.semanticweb.org/phoenix/ontologies/2022/0/IEEE33_base#Line_17-18
 :Line_17-18 rdf:type owl:NamedIndividual ,
                      SmartGrid:Line ;
-            SmartGrid:attachsTo :Bus_18 ;
-            SmartGrid:primaryAttachsTo :Bus_17 ;
+            SmartGrid:attachesTo :Bus_18 ;
+            SmartGrid:primaryAttachesTo :Bus_17 ;
             SmartGrid:r1 0.732 ;
             SmartGrid:x1 0.574 .
 
@@ -611,8 +611,8 @@ SmartGrid:primaryAttachesTo rdf:type owl:AnnotationProperty .
 ###  http://www.semanticweb.org/phoenix/ontologies/2022/0/IEEE33_base#Line_19-20
 :Line_19-20 rdf:type owl:NamedIndividual ,
                      SmartGrid:Line ;
-            SmartGrid:attachsTo :Bus_20 ;
-            SmartGrid:primaryAttachsTo :Bus_19 ;
+            SmartGrid:attachesTo :Bus_20 ;
+            SmartGrid:primaryAttachesTo :Bus_19 ;
             SmartGrid:r1 1.5042 ;
             SmartGrid:x1 1.3554 .
 
@@ -620,8 +620,8 @@ SmartGrid:primaryAttachesTo rdf:type owl:AnnotationProperty .
 ###  http://www.semanticweb.org/phoenix/ontologies/2022/0/IEEE33_base#Line_2-19
 :Line_2-19 rdf:type owl:NamedIndividual ,
                     SmartGrid:Line ;
-           SmartGrid:attachsTo :Bus_19 ;
-           SmartGrid:primaryAttachsTo :Bus_2 ;
+           SmartGrid:attachesTo :Bus_19 ;
+           SmartGrid:primaryAttachesTo :Bus_2 ;
            SmartGrid:r1 0.164 ;
            SmartGrid:x1 0.1565 .
 
@@ -629,8 +629,8 @@ SmartGrid:primaryAttachesTo rdf:type owl:AnnotationProperty .
 ###  http://www.semanticweb.org/phoenix/ontologies/2022/0/IEEE33_base#Line_2-3
 :Line_2-3 rdf:type owl:NamedIndividual ,
                    SmartGrid:Line ;
-          SmartGrid:attachsTo :Bus_3 ;
-          SmartGrid:primaryAttachsTo :Bus_2 ;
+          SmartGrid:attachesTo :Bus_3 ;
+          SmartGrid:primaryAttachesTo :Bus_2 ;
           SmartGrid:r1 0.493 ;
           SmartGrid:x1 0.2511 .
 
@@ -638,8 +638,8 @@ SmartGrid:primaryAttachesTo rdf:type owl:AnnotationProperty .
 ###  http://www.semanticweb.org/phoenix/ontologies/2022/0/IEEE33_base#Line_20-21
 :Line_20-21 rdf:type owl:NamedIndividual ,
                      SmartGrid:Line ;
-            SmartGrid:attachsTo :Bus_21 ;
-            SmartGrid:primaryAttachsTo :Bus_20 ;
+            SmartGrid:attachesTo :Bus_21 ;
+            SmartGrid:primaryAttachesTo :Bus_20 ;
             SmartGrid:r1 0.4095 ;
             SmartGrid:x1 0.4784 .
 
@@ -647,8 +647,8 @@ SmartGrid:primaryAttachesTo rdf:type owl:AnnotationProperty .
 ###  http://www.semanticweb.org/phoenix/ontologies/2022/0/IEEE33_base#Line_21-22
 :Line_21-22 rdf:type owl:NamedIndividual ,
                      SmartGrid:Line ;
-            SmartGrid:attachsTo :Bus_22 ;
-            SmartGrid:primaryAttachsTo :Bus_21 ;
+            SmartGrid:attachesTo :Bus_22 ;
+            SmartGrid:primaryAttachesTo :Bus_21 ;
             SmartGrid:r1 0.7089 ;
             SmartGrid:x1 0.9373 .
 
@@ -656,8 +656,8 @@ SmartGrid:primaryAttachesTo rdf:type owl:AnnotationProperty .
 ###  http://www.semanticweb.org/phoenix/ontologies/2022/0/IEEE33_base#Line_23-24
 :Line_23-24 rdf:type owl:NamedIndividual ,
                      SmartGrid:Line ;
-            SmartGrid:attachsTo :Bus_24 ;
-            SmartGrid:primaryAttachsTo :Bus_23 ;
+            SmartGrid:attachesTo :Bus_24 ;
+            SmartGrid:primaryAttachesTo :Bus_23 ;
             SmartGrid:r1 0.898 ;
             SmartGrid:x1 0.7091 .
 
@@ -665,8 +665,8 @@ SmartGrid:primaryAttachesTo rdf:type owl:AnnotationProperty .
 ###  http://www.semanticweb.org/phoenix/ontologies/2022/0/IEEE33_base#Line_24-25
 :Line_24-25 rdf:type owl:NamedIndividual ,
                      SmartGrid:Line ;
-            SmartGrid:attachsTo :Bus_25 ;
-            SmartGrid:primaryAttachsTo :Bus_24 ;
+            SmartGrid:attachesTo :Bus_25 ;
+            SmartGrid:primaryAttachesTo :Bus_24 ;
             SmartGrid:r1 0.896 ;
             SmartGrid:x1 0.7011 .
 
@@ -674,8 +674,8 @@ SmartGrid:primaryAttachesTo rdf:type owl:AnnotationProperty .
 ###  http://www.semanticweb.org/phoenix/ontologies/2022/0/IEEE33_base#Line_26-27
 :Line_26-27 rdf:type owl:NamedIndividual ,
                      SmartGrid:Line ;
-            SmartGrid:attachsTo :Bus_27 ;
-            SmartGrid:primaryAttachsTo :Bus_26 ;
+            SmartGrid:attachesTo :Bus_27 ;
+            SmartGrid:primaryAttachesTo :Bus_26 ;
             SmartGrid:r1 0.2842 ;
             SmartGrid:x1 0.1447 .
 
@@ -683,8 +683,8 @@ SmartGrid:primaryAttachesTo rdf:type owl:AnnotationProperty .
 ###  http://www.semanticweb.org/phoenix/ontologies/2022/0/IEEE33_base#Line_27-28
 :Line_27-28 rdf:type owl:NamedIndividual ,
                      SmartGrid:Line ;
-            SmartGrid:attachsTo :Bus_28 ;
-            SmartGrid:primaryAttachsTo :Bus_27 ;
+            SmartGrid:attachesTo :Bus_28 ;
+            SmartGrid:primaryAttachesTo :Bus_27 ;
             SmartGrid:r1 1.059 ;
             SmartGrid:x1 0.9337 .
 
@@ -692,8 +692,8 @@ SmartGrid:primaryAttachesTo rdf:type owl:AnnotationProperty .
 ###  http://www.semanticweb.org/phoenix/ontologies/2022/0/IEEE33_base#Line_28-29
 :Line_28-29 rdf:type owl:NamedIndividual ,
                      SmartGrid:Line ;
-            SmartGrid:attachsTo :Bus_29 ;
-            SmartGrid:primaryAttachsTo :Bus_28 ;
+            SmartGrid:attachesTo :Bus_29 ;
+            SmartGrid:primaryAttachesTo :Bus_28 ;
             SmartGrid:r1 0.8042 ;
             SmartGrid:x1 0.7006 .
 
@@ -701,8 +701,8 @@ SmartGrid:primaryAttachesTo rdf:type owl:AnnotationProperty .
 ###  http://www.semanticweb.org/phoenix/ontologies/2022/0/IEEE33_base#Line_29-30
 :Line_29-30 rdf:type owl:NamedIndividual ,
                      SmartGrid:Line ;
-            SmartGrid:attachsTo :Bus_30 ;
-            SmartGrid:primaryAttachsTo :Bus_29 ;
+            SmartGrid:attachesTo :Bus_30 ;
+            SmartGrid:primaryAttachesTo :Bus_29 ;
             SmartGrid:r1 0.5075 ;
             SmartGrid:x1 0.2585 .
 
@@ -710,8 +710,8 @@ SmartGrid:primaryAttachesTo rdf:type owl:AnnotationProperty .
 ###  http://www.semanticweb.org/phoenix/ontologies/2022/0/IEEE33_base#Line_3-23
 :Line_3-23 rdf:type owl:NamedIndividual ,
                     SmartGrid:Line ;
-           SmartGrid:attachsTo :Bus_23 ;
-           SmartGrid:primaryAttachsTo :Bus_3 ;
+           SmartGrid:attachesTo :Bus_23 ;
+           SmartGrid:primaryAttachesTo :Bus_3 ;
            SmartGrid:r1 0.4512 ;
            SmartGrid:x1 0.3083 .
 
@@ -719,8 +719,8 @@ SmartGrid:primaryAttachesTo rdf:type owl:AnnotationProperty .
 ###  http://www.semanticweb.org/phoenix/ontologies/2022/0/IEEE33_base#Line_3-4
 :Line_3-4 rdf:type owl:NamedIndividual ,
                    SmartGrid:Line ;
-          SmartGrid:attachsTo :Bus_4 ;
-          SmartGrid:primaryAttachsTo :Bus_3 ;
+          SmartGrid:attachesTo :Bus_4 ;
+          SmartGrid:primaryAttachesTo :Bus_3 ;
           SmartGrid:r1 0.366 ;
           SmartGrid:x1 0.1864 .
 
@@ -728,8 +728,8 @@ SmartGrid:primaryAttachesTo rdf:type owl:AnnotationProperty .
 ###  http://www.semanticweb.org/phoenix/ontologies/2022/0/IEEE33_base#Line_30-31
 :Line_30-31 rdf:type owl:NamedIndividual ,
                      SmartGrid:Line ;
-            SmartGrid:attachsTo :Bus_31 ;
-            SmartGrid:primaryAttachsTo :Bus_30 ;
+            SmartGrid:attachesTo :Bus_31 ;
+            SmartGrid:primaryAttachesTo :Bus_30 ;
             SmartGrid:r1 0.9744 ;
             SmartGrid:x1 0.963 .
 
@@ -737,8 +737,8 @@ SmartGrid:primaryAttachesTo rdf:type owl:AnnotationProperty .
 ###  http://www.semanticweb.org/phoenix/ontologies/2022/0/IEEE33_base#Line_31-32
 :Line_31-32 rdf:type owl:NamedIndividual ,
                      SmartGrid:Line ;
-            SmartGrid:attachsTo :Bus_32 ;
-            SmartGrid:primaryAttachsTo :Bus_31 ;
+            SmartGrid:attachesTo :Bus_32 ;
+            SmartGrid:primaryAttachesTo :Bus_31 ;
             SmartGrid:r1 0.3105 ;
             SmartGrid:x1 0.3619 .
 
@@ -746,8 +746,8 @@ SmartGrid:primaryAttachesTo rdf:type owl:AnnotationProperty .
 ###  http://www.semanticweb.org/phoenix/ontologies/2022/0/IEEE33_base#Line_32-33
 :Line_32-33 rdf:type owl:NamedIndividual ,
                      SmartGrid:Line ;
-            SmartGrid:attachsTo :Bus_33 ;
-            SmartGrid:primaryAttachsTo :Bus_32 ;
+            SmartGrid:attachesTo :Bus_33 ;
+            SmartGrid:primaryAttachesTo :Bus_32 ;
             SmartGrid:r1 0.341 ;
             SmartGrid:x1 0.5302 .
 
@@ -755,8 +755,8 @@ SmartGrid:primaryAttachesTo rdf:type owl:AnnotationProperty .
 ###  http://www.semanticweb.org/phoenix/ontologies/2022/0/IEEE33_base#Line_4-5
 :Line_4-5 rdf:type owl:NamedIndividual ,
                    SmartGrid:Line ;
-          SmartGrid:attachsTo :Bus_5 ;
-          SmartGrid:primaryAttachsTo :Bus_4 ;
+          SmartGrid:attachesTo :Bus_5 ;
+          SmartGrid:primaryAttachesTo :Bus_4 ;
           SmartGrid:r1 0.3811 ;
           SmartGrid:x1 0.1941 .
 
@@ -764,8 +764,8 @@ SmartGrid:primaryAttachesTo rdf:type owl:AnnotationProperty .
 ###  http://www.semanticweb.org/phoenix/ontologies/2022/0/IEEE33_base#Line_5-6
 :Line_5-6 rdf:type owl:NamedIndividual ,
                    SmartGrid:Line ;
-          SmartGrid:attachsTo :Bus_6 ;
-          SmartGrid:primaryAttachsTo :Bus_5 ;
+          SmartGrid:attachesTo :Bus_6 ;
+          SmartGrid:primaryAttachesTo :Bus_5 ;
           SmartGrid:r1 0.819 ;
           SmartGrid:x1 0.707 .
 
@@ -773,8 +773,8 @@ SmartGrid:primaryAttachesTo rdf:type owl:AnnotationProperty .
 ###  http://www.semanticweb.org/phoenix/ontologies/2022/0/IEEE33_base#Line_6-26
 :Line_6-26 rdf:type owl:NamedIndividual ,
                     SmartGrid:Line ;
-           SmartGrid:attachsTo :Bus_26 ;
-           SmartGrid:primaryAttachsTo :Bus_6 ;
+           SmartGrid:attachesTo :Bus_26 ;
+           SmartGrid:primaryAttachesTo :Bus_6 ;
            SmartGrid:r1 0.203 ;
            SmartGrid:x1 0.1034 .
 
@@ -782,8 +782,8 @@ SmartGrid:primaryAttachesTo rdf:type owl:AnnotationProperty .
 ###  http://www.semanticweb.org/phoenix/ontologies/2022/0/IEEE33_base#Line_6-7
 :Line_6-7 rdf:type owl:NamedIndividual ,
                    SmartGrid:Line ;
-          SmartGrid:attachsTo :Bus_7 ;
-          SmartGrid:primaryAttachsTo :Bus_6 ;
+          SmartGrid:attachesTo :Bus_7 ;
+          SmartGrid:primaryAttachesTo :Bus_6 ;
           SmartGrid:r1 0.1872 ;
           SmartGrid:x1 0.6188 .
 
@@ -791,8 +791,8 @@ SmartGrid:primaryAttachesTo rdf:type owl:AnnotationProperty .
 ###  http://www.semanticweb.org/phoenix/ontologies/2022/0/IEEE33_base#Line_7-8
 :Line_7-8 rdf:type owl:NamedIndividual ,
                    SmartGrid:Line ;
-          SmartGrid:attachsTo :Bus_8 ;
-          SmartGrid:primaryAttachsTo :Bus_7 ;
+          SmartGrid:attachesTo :Bus_8 ;
+          SmartGrid:primaryAttachesTo :Bus_7 ;
           SmartGrid:r1 0.7114 ;
           SmartGrid:x1 0.2351 .
 
@@ -800,8 +800,8 @@ SmartGrid:primaryAttachesTo rdf:type owl:AnnotationProperty .
 ###  http://www.semanticweb.org/phoenix/ontologies/2022/0/IEEE33_base#Line_8-9
 :Line_8-9 rdf:type owl:NamedIndividual ,
                    SmartGrid:Line ;
-          SmartGrid:attachsTo :Bus_9 ;
-          SmartGrid:primaryAttachsTo :Bus_8 ;
+          SmartGrid:attachesTo :Bus_9 ;
+          SmartGrid:primaryAttachesTo :Bus_8 ;
           SmartGrid:r1 1.03 ;
           SmartGrid:x1 0.74 .
 
@@ -809,8 +809,8 @@ SmartGrid:primaryAttachesTo rdf:type owl:AnnotationProperty .
 ###  http://www.semanticweb.org/phoenix/ontologies/2022/0/IEEE33_base#Line_9-10
 :Line_9-10 rdf:type owl:NamedIndividual ,
                     SmartGrid:Line ;
-           SmartGrid:attachsTo :Bus_10 ;
-           SmartGrid:primaryAttachsTo :Bus_9 ;
+           SmartGrid:attachesTo :Bus_10 ;
+           SmartGrid:primaryAttachesTo :Bus_9 ;
            SmartGrid:r1 1.044 ;
            SmartGrid:x1 0.74 .
 
@@ -818,7 +818,7 @@ SmartGrid:primaryAttachesTo rdf:type owl:AnnotationProperty .
 ###  http://www.semanticweb.org/phoenix/ontologies/2022/0/IEEE33_base#Load_10_1
 :Load_10_1 rdf:type owl:NamedIndividual ,
                     SmartGrid:Load ;
-           SmartGrid:primaryAttachsTo :Bus_10 ;
+           SmartGrid:primaryAttachesTo :Bus_10 ;
            SmartGrid:kV_primary 0.240 ;
            SmartGrid:kW 0 ;
            SmartGrid:kvar 0 ;
@@ -830,7 +830,7 @@ SmartGrid:primaryAttachesTo rdf:type owl:AnnotationProperty .
 ###  http://www.semanticweb.org/phoenix/ontologies/2022/0/IEEE33_base#Load_11_2
 :Load_11_2 rdf:type owl:NamedIndividual ,
                     SmartGrid:Load ;
-           SmartGrid:primaryAttachsTo :Bus_11 ;
+           SmartGrid:primaryAttachesTo :Bus_11 ;
            SmartGrid:kV_primary 0.240 ;
            SmartGrid:kW 0 ;
            SmartGrid:kvar 0 ;
@@ -842,7 +842,7 @@ SmartGrid:primaryAttachesTo rdf:type owl:AnnotationProperty .
 ###  http://www.semanticweb.org/phoenix/ontologies/2022/0/IEEE33_base#Load_12_3
 :Load_12_3 rdf:type owl:NamedIndividual ,
                     SmartGrid:Load ;
-           SmartGrid:primaryAttachsTo :Bus_12 ;
+           SmartGrid:primaryAttachesTo :Bus_12 ;
            SmartGrid:kV_primary 0.240 ;
            SmartGrid:kW 0 ;
            SmartGrid:kvar 0 ;
@@ -854,7 +854,7 @@ SmartGrid:primaryAttachesTo rdf:type owl:AnnotationProperty .
 ###  http://www.semanticweb.org/phoenix/ontologies/2022/0/IEEE33_base#Load_13_1
 :Load_13_1 rdf:type owl:NamedIndividual ,
                     SmartGrid:Load ;
-           SmartGrid:primaryAttachsTo :Bus_13 ;
+           SmartGrid:primaryAttachesTo :Bus_13 ;
            SmartGrid:kV_primary 0.240 ;
            SmartGrid:kW 0 ;
            SmartGrid:kvar 0 ;
@@ -866,7 +866,7 @@ SmartGrid:primaryAttachesTo rdf:type owl:AnnotationProperty .
 ###  http://www.semanticweb.org/phoenix/ontologies/2022/0/IEEE33_base#Load_14_2
 :Load_14_2 rdf:type owl:NamedIndividual ,
                     SmartGrid:Load ;
-           SmartGrid:primaryAttachsTo :Bus_14 ;
+           SmartGrid:primaryAttachesTo :Bus_14 ;
            SmartGrid:kV_primary 0.240 ;
            SmartGrid:kW 0 ;
            SmartGrid:kvar 0 ;
@@ -878,7 +878,7 @@ SmartGrid:primaryAttachesTo rdf:type owl:AnnotationProperty .
 ###  http://www.semanticweb.org/phoenix/ontologies/2022/0/IEEE33_base#Load_15_3
 :Load_15_3 rdf:type owl:NamedIndividual ,
                     SmartGrid:Load ;
-           SmartGrid:primaryAttachsTo :Bus_15 ;
+           SmartGrid:primaryAttachesTo :Bus_15 ;
            SmartGrid:kV_primary 0.240 ;
            SmartGrid:kW 0 ;
            SmartGrid:kvar 0 ;
@@ -890,7 +890,7 @@ SmartGrid:primaryAttachesTo rdf:type owl:AnnotationProperty .
 ###  http://www.semanticweb.org/phoenix/ontologies/2022/0/IEEE33_base#Load_16_1
 :Load_16_1 rdf:type owl:NamedIndividual ,
                     SmartGrid:Load ;
-           SmartGrid:primaryAttachsTo :Bus_16 ;
+           SmartGrid:primaryAttachesTo :Bus_16 ;
            SmartGrid:kV_primary 0.240 ;
            SmartGrid:kW 0 ;
            SmartGrid:kvar 0 ;
@@ -902,7 +902,7 @@ SmartGrid:primaryAttachesTo rdf:type owl:AnnotationProperty .
 ###  http://www.semanticweb.org/phoenix/ontologies/2022/0/IEEE33_base#Load_17_2
 :Load_17_2 rdf:type owl:NamedIndividual ,
                     SmartGrid:Load ;
-           SmartGrid:primaryAttachsTo :Bus_17 ;
+           SmartGrid:primaryAttachesTo :Bus_17 ;
            SmartGrid:kV_primary 0.240 ;
            SmartGrid:kW 0 ;
            SmartGrid:kvar 0 ;
@@ -914,7 +914,7 @@ SmartGrid:primaryAttachesTo rdf:type owl:AnnotationProperty .
 ###  http://www.semanticweb.org/phoenix/ontologies/2022/0/IEEE33_base#Load_18_3
 :Load_18_3 rdf:type owl:NamedIndividual ,
                     SmartGrid:Load ;
-           SmartGrid:primaryAttachsTo :Bus_18 ;
+           SmartGrid:primaryAttachesTo :Bus_18 ;
            SmartGrid:kV_primary 0.240 ;
            SmartGrid:kW 0 ;
            SmartGrid:kvar 0 ;
@@ -926,7 +926,7 @@ SmartGrid:primaryAttachesTo rdf:type owl:AnnotationProperty .
 ###  http://www.semanticweb.org/phoenix/ontologies/2022/0/IEEE33_base#Load_19_1
 :Load_19_1 rdf:type owl:NamedIndividual ,
                     SmartGrid:Load ;
-           SmartGrid:primaryAttachsTo :Bus_19 ;
+           SmartGrid:primaryAttachesTo :Bus_19 ;
            SmartGrid:kV_primary 0.240 ;
            SmartGrid:kW 0 ;
            SmartGrid:kvar 0 ;
@@ -938,7 +938,7 @@ SmartGrid:primaryAttachesTo rdf:type owl:AnnotationProperty .
 ###  http://www.semanticweb.org/phoenix/ontologies/2022/0/IEEE33_base#Load_20_2
 :Load_20_2 rdf:type owl:NamedIndividual ,
                     SmartGrid:Load ;
-           SmartGrid:primaryAttachsTo :Bus_20 ;
+           SmartGrid:primaryAttachesTo :Bus_20 ;
            SmartGrid:kV_primary 0.240 ;
            SmartGrid:kW 0 ;
            SmartGrid:kvar 0 ;
@@ -950,7 +950,7 @@ SmartGrid:primaryAttachesTo rdf:type owl:AnnotationProperty .
 ###  http://www.semanticweb.org/phoenix/ontologies/2022/0/IEEE33_base#Load_21_3
 :Load_21_3 rdf:type owl:NamedIndividual ,
                     SmartGrid:Load ;
-           SmartGrid:primaryAttachsTo :Bus_21 ;
+           SmartGrid:primaryAttachesTo :Bus_21 ;
            SmartGrid:kV_primary 0.240 ;
            SmartGrid:kW 0 ;
            SmartGrid:kvar 0 ;
@@ -962,7 +962,7 @@ SmartGrid:primaryAttachesTo rdf:type owl:AnnotationProperty .
 ###  http://www.semanticweb.org/phoenix/ontologies/2022/0/IEEE33_base#Load_22_1
 :Load_22_1 rdf:type owl:NamedIndividual ,
                     SmartGrid:Load ;
-           SmartGrid:primaryAttachsTo :Bus_22 ;
+           SmartGrid:primaryAttachesTo :Bus_22 ;
            SmartGrid:kV_primary 0.240 ;
            SmartGrid:kW 0 ;
            SmartGrid:kvar 0 ;
@@ -974,7 +974,7 @@ SmartGrid:primaryAttachesTo rdf:type owl:AnnotationProperty .
 ###  http://www.semanticweb.org/phoenix/ontologies/2022/0/IEEE33_base#Load_23_2
 :Load_23_2 rdf:type owl:NamedIndividual ,
                     SmartGrid:Load ;
-           SmartGrid:primaryAttachsTo :Bus_23 ;
+           SmartGrid:primaryAttachesTo :Bus_23 ;
            SmartGrid:kV_primary 0.240 ;
            SmartGrid:kW 0 ;
            SmartGrid:kvar 0 ;
@@ -986,7 +986,7 @@ SmartGrid:primaryAttachesTo rdf:type owl:AnnotationProperty .
 ###  http://www.semanticweb.org/phoenix/ontologies/2022/0/IEEE33_base#Load_24_3
 :Load_24_3 rdf:type owl:NamedIndividual ,
                     SmartGrid:Load ;
-           SmartGrid:primaryAttachsTo :Bus_24 ;
+           SmartGrid:primaryAttachesTo :Bus_24 ;
            SmartGrid:kV_primary 0.240 ;
            SmartGrid:kW 0 ;
            SmartGrid:kvar 0 ;
@@ -998,7 +998,7 @@ SmartGrid:primaryAttachesTo rdf:type owl:AnnotationProperty .
 ###  http://www.semanticweb.org/phoenix/ontologies/2022/0/IEEE33_base#Load_25_1
 :Load_25_1 rdf:type owl:NamedIndividual ,
                     SmartGrid:Load ;
-           SmartGrid:primaryAttachsTo :Bus_25 ;
+           SmartGrid:primaryAttachesTo :Bus_25 ;
            SmartGrid:kV_primary 0.240 ;
            SmartGrid:kW 0 ;
            SmartGrid:kvar 0 ;
@@ -1010,7 +1010,7 @@ SmartGrid:primaryAttachesTo rdf:type owl:AnnotationProperty .
 ###  http://www.semanticweb.org/phoenix/ontologies/2022/0/IEEE33_base#Load_26_2
 :Load_26_2 rdf:type owl:NamedIndividual ,
                     SmartGrid:Load ;
-           SmartGrid:primaryAttachsTo :Bus_26 ;
+           SmartGrid:primaryAttachesTo :Bus_26 ;
            SmartGrid:kV_primary 0.240 ;
            SmartGrid:kW 0 ;
            SmartGrid:kvar 0 ;
@@ -1022,7 +1022,7 @@ SmartGrid:primaryAttachesTo rdf:type owl:AnnotationProperty .
 ###  http://www.semanticweb.org/phoenix/ontologies/2022/0/IEEE33_base#Load_27_3
 :Load_27_3 rdf:type owl:NamedIndividual ,
                     SmartGrid:Load ;
-           SmartGrid:primaryAttachsTo :Bus_27 ;
+           SmartGrid:primaryAttachesTo :Bus_27 ;
            SmartGrid:kV_primary 0.240 ;
            SmartGrid:kW 0 ;
            SmartGrid:kvar 0 ;
@@ -1034,7 +1034,7 @@ SmartGrid:primaryAttachesTo rdf:type owl:AnnotationProperty .
 ###  http://www.semanticweb.org/phoenix/ontologies/2022/0/IEEE33_base#Load_28_1
 :Load_28_1 rdf:type owl:NamedIndividual ,
                     SmartGrid:Load ;
-           SmartGrid:primaryAttachsTo :Bus_28 ;
+           SmartGrid:primaryAttachesTo :Bus_28 ;
            SmartGrid:kV_primary 0.240 ;
            SmartGrid:kW 0 ;
            SmartGrid:kvar 0 ;
@@ -1046,7 +1046,7 @@ SmartGrid:primaryAttachesTo rdf:type owl:AnnotationProperty .
 ###  http://www.semanticweb.org/phoenix/ontologies/2022/0/IEEE33_base#Load_29_2
 :Load_29_2 rdf:type owl:NamedIndividual ,
                     SmartGrid:Load ;
-           SmartGrid:primaryAttachsTo :Bus_29 ;
+           SmartGrid:primaryAttachesTo :Bus_29 ;
            SmartGrid:kV_primary 0.240 ;
            SmartGrid:kW 0 ;
            SmartGrid:kvar 0 ;
@@ -1058,7 +1058,7 @@ SmartGrid:primaryAttachesTo rdf:type owl:AnnotationProperty .
 ###  http://www.semanticweb.org/phoenix/ontologies/2022/0/IEEE33_base#Load_2_2
 :Load_2_2 rdf:type owl:NamedIndividual ,
                    SmartGrid:Load ;
-          SmartGrid:primaryAttachsTo :Bus_2 ;
+          SmartGrid:primaryAttachesTo :Bus_2 ;
           SmartGrid:kV_primary 0.240 ;
           SmartGrid:kW 0 ;
           SmartGrid:kvar 0 ;
@@ -1070,7 +1070,7 @@ SmartGrid:primaryAttachesTo rdf:type owl:AnnotationProperty .
 ###  http://www.semanticweb.org/phoenix/ontologies/2022/0/IEEE33_base#Load_30_3
 :Load_30_3 rdf:type owl:NamedIndividual ,
                     SmartGrid:Load ;
-           SmartGrid:primaryAttachsTo :Bus_30 ;
+           SmartGrid:primaryAttachesTo :Bus_30 ;
            SmartGrid:kV_primary 0.240 ;
            SmartGrid:kW 0 ;
            SmartGrid:kvar 0 ;
@@ -1082,7 +1082,7 @@ SmartGrid:primaryAttachesTo rdf:type owl:AnnotationProperty .
 ###  http://www.semanticweb.org/phoenix/ontologies/2022/0/IEEE33_base#Load_31_1
 :Load_31_1 rdf:type owl:NamedIndividual ,
                     SmartGrid:Load ;
-           SmartGrid:primaryAttachsTo :Bus_31 ;
+           SmartGrid:primaryAttachesTo :Bus_31 ;
            SmartGrid:kV_primary 0.240 ;
            SmartGrid:kW 0 ;
            SmartGrid:kvar 0 ;
@@ -1094,7 +1094,7 @@ SmartGrid:primaryAttachesTo rdf:type owl:AnnotationProperty .
 ###  http://www.semanticweb.org/phoenix/ontologies/2022/0/IEEE33_base#Load_32_2
 :Load_32_2 rdf:type owl:NamedIndividual ,
                     SmartGrid:Load ;
-           SmartGrid:primaryAttachsTo :Bus_32 ;
+           SmartGrid:primaryAttachesTo :Bus_32 ;
            SmartGrid:kV_primary 0.240 ;
            SmartGrid:kW 0 ;
            SmartGrid:kvar 0 ;
@@ -1106,7 +1106,7 @@ SmartGrid:primaryAttachesTo rdf:type owl:AnnotationProperty .
 ###  http://www.semanticweb.org/phoenix/ontologies/2022/0/IEEE33_base#Load_33_3
 :Load_33_3 rdf:type owl:NamedIndividual ,
                     SmartGrid:Load ;
-           SmartGrid:primaryAttachsTo :Bus_33 ;
+           SmartGrid:primaryAttachesTo :Bus_33 ;
            SmartGrid:kV_primary 0.240 ;
            SmartGrid:kW 0 ;
            SmartGrid:kvar 0 ;
@@ -1118,7 +1118,7 @@ SmartGrid:primaryAttachesTo rdf:type owl:AnnotationProperty .
 ###  http://www.semanticweb.org/phoenix/ontologies/2022/0/IEEE33_base#Load_3_3
 :Load_3_3 rdf:type owl:NamedIndividual ,
                    SmartGrid:Load ;
-          SmartGrid:primaryAttachsTo :Bus_3 ;
+          SmartGrid:primaryAttachesTo :Bus_3 ;
           SmartGrid:kV_primary 0.240 ;
           SmartGrid:kW 0 ;
           SmartGrid:kvar 0 ;
@@ -1130,7 +1130,7 @@ SmartGrid:primaryAttachesTo rdf:type owl:AnnotationProperty .
 ###  http://www.semanticweb.org/phoenix/ontologies/2022/0/IEEE33_base#Load_4_1
 :Load_4_1 rdf:type owl:NamedIndividual ,
                    SmartGrid:Load ;
-          SmartGrid:primaryAttachsTo :Bus_4 ;
+          SmartGrid:primaryAttachesTo :Bus_4 ;
           SmartGrid:kV_primary 0.240 ;
           SmartGrid:kW 0 ;
           SmartGrid:kvar 0 ;
@@ -1142,7 +1142,7 @@ SmartGrid:primaryAttachesTo rdf:type owl:AnnotationProperty .
 ###  http://www.semanticweb.org/phoenix/ontologies/2022/0/IEEE33_base#Load_5_2
 :Load_5_2 rdf:type owl:NamedIndividual ,
                    SmartGrid:Load ;
-          SmartGrid:primaryAttachsTo :Bus_5 ;
+          SmartGrid:primaryAttachesTo :Bus_5 ;
           SmartGrid:kV_primary 0.240 ;
           SmartGrid:kW 0 ;
           SmartGrid:kvar 0 ;
@@ -1154,7 +1154,7 @@ SmartGrid:primaryAttachesTo rdf:type owl:AnnotationProperty .
 ###  http://www.semanticweb.org/phoenix/ontologies/2022/0/IEEE33_base#Load_6_3
 :Load_6_3 rdf:type owl:NamedIndividual ,
                    SmartGrid:Load ;
-          SmartGrid:primaryAttachsTo :Bus_6 ;
+          SmartGrid:primaryAttachesTo :Bus_6 ;
           SmartGrid:kV_primary 0.240 ;
           SmartGrid:kW 0 ;
           SmartGrid:kvar 0 ;
@@ -1166,7 +1166,7 @@ SmartGrid:primaryAttachesTo rdf:type owl:AnnotationProperty .
 ###  http://www.semanticweb.org/phoenix/ontologies/2022/0/IEEE33_base#Load_7_1
 :Load_7_1 rdf:type owl:NamedIndividual ,
                    SmartGrid:Load ;
-          SmartGrid:primaryAttachsTo :Bus_7 ;
+          SmartGrid:primaryAttachesTo :Bus_7 ;
           SmartGrid:kV_primary 0.240 ;
           SmartGrid:kW 0 ;
           SmartGrid:kvar 0 ;
@@ -1178,7 +1178,7 @@ SmartGrid:primaryAttachesTo rdf:type owl:AnnotationProperty .
 ###  http://www.semanticweb.org/phoenix/ontologies/2022/0/IEEE33_base#Load_8_2
 :Load_8_2 rdf:type owl:NamedIndividual ,
                    SmartGrid:Load ;
-          SmartGrid:primaryAttachsTo :Bus_8 ;
+          SmartGrid:primaryAttachesTo :Bus_8 ;
           SmartGrid:kV_primary 0.240 ;
           SmartGrid:kW 0 ;
           SmartGrid:kvar 0 ;
@@ -1190,7 +1190,7 @@ SmartGrid:primaryAttachesTo rdf:type owl:AnnotationProperty .
 ###  http://www.semanticweb.org/phoenix/ontologies/2022/0/IEEE33_base#Load_9_3
 :Load_9_3 rdf:type owl:NamedIndividual ,
                    SmartGrid:Load ;
-          SmartGrid:primaryAttachsTo :Bus_9 ;
+          SmartGrid:primaryAttachesTo :Bus_9 ;
           SmartGrid:kV_primary 0.240 ;
           SmartGrid:kW 0 ;
           SmartGrid:kvar 0 ;

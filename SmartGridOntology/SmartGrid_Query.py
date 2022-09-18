@@ -33,7 +33,7 @@ class SmartGridGraph:
         SELECT *
         WHERE {
             ?circuit a SmartGrid:Circuit .
-            ?circuit SmartGrid:primaryAttachsTo ?bus1 .
+            ?circuit SmartGrid:primaryAttachesTo ?bus1 .
             ?circuit SmartGrid:MVAsc1 ?MVAsc1 .
             ?circuit SmartGrid:MVAsc3 ?MVAsc3 .
             ?circuit SmartGrid:kV_primary ?kv_sec .
@@ -64,7 +64,7 @@ class SmartGridGraph:
         SELECT *
         WHERE {
             ?gen a SmartGrid:Generator .
-            ?gen SmartGrid:primaryAttachsTo ?bus1 .
+            ?gen SmartGrid:primaryAttachesTo ?bus1 .
             ?gen SmartGrid:MVAsc1 ?MVAsc1 .
             ?gen SmartGrid:MVAsc3 ?MVAsc3 .
             ?gen SmartGrid:pu ?pu .
@@ -96,8 +96,8 @@ class SmartGridGraph:
         SELECT *
         WHERE {
             ?trans a SmartGrid:Transformer .
-            ?trans SmartGrid:primaryAttachsTo ?prim_bus .
-            ?trans SmartGrid:attachsTo ?sec_bus .
+            ?trans SmartGrid:primaryAttachesTo ?prim_bus .
+            ?trans SmartGrid:attachesTo ?sec_bus .
             ?trans SmartGrid:Kva ?Kva .
             ?trans SmartGrid:XHL ?xhl .
             ?trans SmartGrid:connection_primary ?conn_prim .
@@ -139,7 +139,7 @@ class SmartGridGraph:
         SELECT *
         WHERE {
             ?cap a SmartGrid:Capacitor .
-            ?cap SmartGrid:primaryAttachsTo ?bus .
+            ?cap SmartGrid:primaryAttachesTo ?bus .
             ?cap SmartGrid:kV_primary ?kv .
             ?cap SmartGrid:kvar ?kvar .
             ?cap SmartGrid:num_phases ?num_phases .
@@ -199,8 +199,8 @@ class SmartGridGraph:
         WHERE {
             ?entity rdf:type ?type .
             ?type rdfs:subClassOf* SmartGrid:Electrical_Equipment .
-            ?entity SmartGrid:primaryAttachsTo ?bus1 .
-            ?entity SmartGrid:attachsTo ?bus2 .
+            ?entity SmartGrid:primaryAttachesTo ?bus1 .
+            ?entity SmartGrid:attachesTo ?bus2 .
         } 
         """
         res = self.g.query(query_str)
@@ -262,8 +262,8 @@ class SmartGridGraph:
         SELECT *
         WHERE {
             ?line a SmartGrid:Line .
-            ?line SmartGrid:primaryAttachsTo ?bus1 .
-            ?line SmartGrid:attachsTo ?bus2 .
+            ?line SmartGrid:primaryAttachesTo ?bus1 .
+            ?line SmartGrid:attachesTo ?bus2 .
             OPTIONAL { ?line SmartGrid:x1 ?x1 . }
             OPTIONAL { ?line SmartGrid:r1 ?r1 . }
             OPTIONAL { ?line SmartGrid:LineCode ?linecode . }
@@ -299,7 +299,7 @@ class SmartGridGraph:
         SELECT *
         WHERE {
             ?load a SmartGrid:Load .
-            ?load SmartGrid:primaryAttachsTo ?bus1 .
+            ?load SmartGrid:primaryAttachesTo ?bus1 .
             ?load SmartGrid:kV_primary ?kv_prim .
             ?load SmartGrid:kW ?kW .
             ?load SmartGrid:kvar ?kvar .
@@ -371,8 +371,8 @@ class SmartGridGraph:
         SELECT *
         WHERE {
             ?switch a SmartGrid:Switch .
-            ?switch SmartGrid:primaryAttachsTo ?bus1 .
-            ?switch SmartGrid:attachsTo ?bus2 .
+            ?switch SmartGrid:primaryAttachesTo ?bus1 .
+            ?switch SmartGrid:attachesTo ?bus2 .
             ?switch SmartGrid:num_phases ?num_phases .
             ?switch SmartGrid:c0 ?c0 .
             ?switch SmartGrid:c1 ?c1 .
@@ -405,8 +405,8 @@ class SmartGridGraph:
         SELECT *
         WHERE {
             ?reg a SmartGrid:regcontrol .
-            ?reg SmartGrid:primaryAttachsTo ?bus1 .
-            ?reg SmartGrid:attachsTo ?bus2 .
+            ?reg SmartGrid:primaryAttachesTo ?bus1 .
+            ?reg SmartGrid:attachesTo ?bus2 .
             ?reg SmartGrid:Kva ?kva .
             ?reg SmartGrid:R ?R .
             ?reg SmartGrid:X ?X.
@@ -472,10 +472,10 @@ class SmartGridGraph:
             ?act SmartGrid:isFedBy ?fedby .
             ?act SmartGrid:phase ?phase .
             ?act SmartGrid:bus_terminal ?bus .
-            ?controls SmartGrid:primaryAttachsTo ?bus1 .
+            ?controls SmartGrid:primaryAttachesTo ?bus1 .
             ?fedby SmartGrid:connectsTo ?src_node .
             OPTIONAL {
-                ?controls SmartGrid:attachsTo ?bus2 .
+                ?controls SmartGrid:attachesTo ?bus2 .
             }
         }    
         """
@@ -510,11 +510,11 @@ class SmartGridGraph:
             ?sen SmartGrid:connectsTo ?src_node .
             ?sen SmartGrid:feeds ?controller .
             ?sen SmartGrid:monitor ?monitor .
-            ?monitor SmartGrid:primaryAttachsTo ?bus1 .
+            ?monitor SmartGrid:primaryAttachesTo ?bus1 .
             ?sen SmartGrid:phase ?phase .
             ?sen SmartGrid:bus_terminal ?bus .
             ?controller SmartGrid:connectsTo ?dst_node .
-            OPTIONAL { ?monitor SmartGrid:attachsTo ?bus2 . }
+            OPTIONAL { ?monitor SmartGrid:attachesTo ?bus2 . }
             OPTIONAL { ?sen SmartGrid:measures ?measures . }
             OPTIONAL { ?sen SmartGrid:rate ?rate . }
         }    
@@ -613,22 +613,22 @@ class SmartGridGraph:
                 ?entity rdf:type ?type .
                 ?type rdfs:subClassOf* SmartGrid:Electrical_Equipment .
                 {
-                    ?entity SmartGrid:primaryAttachsTo ?prim .
+                    ?entity SmartGrid:primaryAttachesTo ?prim .
                     FILTER regex(str(?prim),  '""" + bus + """') .
                     OPTIONAL {
                         ?entity a SmartGrid:Line .
-                        ?entity SmartGrid:primaryAttachsTo ?n1 .
-                        ?entity SmartGrid:attachsTo ?n2 .
+                        ?entity SmartGrid:primaryAttachesTo ?n1 .
+                        ?entity SmartGrid:attachesTo ?n2 .
                     }
                 }
                 UNION
                 {
-                    ?entity SmartGrid:attachsTo ?sec .
+                    ?entity SmartGrid:attachesTo ?sec .
                     FILTER regex(str(?sec), '""" + bus + """') . 
                     OPTIONAL {
                         ?entity a SmartGrid:Line .
-                        ?entity SmartGrid:primaryAttachsTo ?n1 .
-                        ?entity SmartGrid:attachsTo ?n2 .
+                        ?entity SmartGrid:primaryAttachesTo ?n1 .
+                        ?entity SmartGrid:attachesTo ?n2 .
                     }
                 }
             } 

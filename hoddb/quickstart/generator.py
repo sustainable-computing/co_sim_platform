@@ -25,7 +25,7 @@ def query_generator():
 SELECT *
 WHERE {
     ?gen a :Generator .
-    ?gen :primaryAttachsTo ?bus1 .
+    ?gen :primaryAttachesTo ?bus1 .
     ?gen :MVAsc1 ?MVAsc1 .
     ?gen :MVAsc3 ?MVAsc3 .
     ?gen :pu ?pu .
@@ -59,8 +59,8 @@ def query_transformers():
 SELECT *
 WHERE {
     ?trans a :Transformer .
-    ?trans :primaryAttachsTo ?prim_bus .
-    ?trans :attachsTo ?sec_bus .
+    ?trans :primaryAttachesTo ?prim_bus .
+    ?trans :attachesTo ?sec_bus .
     ?trans :num_phases ?num_phases .
     ?trans :Kva ?Kva .
     ?trans :XHL ?xhl .
@@ -104,7 +104,7 @@ def query_capacitors():
 SELECT *
 WHERE {
     ?cap a :Capacitor .
-    ?cap :attachsTo ?bus .
+    ?cap :attachesTo ?bus .
     ?cap :kV_primary ?kv .
     ?cap :kvar ?kvar .
     ?cap :num_phases ?num_phases .
@@ -160,8 +160,8 @@ def query_lines():
 SELECT *
 WHERE {
     ?line a :Line .
-    ?line :primaryAttachsTo ?bus1 .
-    ?line :attachsTo ?bus2 .
+    ?line :primaryAttachesTo ?bus1 .
+    ?line :attachesTo ?bus2 .
     ?line :hasComponent ?linecode .
     ?line :length ?length .
     ?line :nodes_primary ?n_prim .
@@ -194,7 +194,7 @@ def query_loads():
 SELECT *
 WHERE {
     ?load a :Load .
-    ?load :attachsTo ?bus1 .
+    ?load :attachesTo ?bus1 .
     ?load :connection_primary ?conn .
     ?load :kV_primary ?kv_prim .
     ?load :kW ?kW .
@@ -264,8 +264,8 @@ def query_switches():
 SELECT *
 WHERE {
     ?switch a :Switch .
-    ?switch :primaryAttachsTo ?bus1 .
-    ?switch :attachsTo ?bus2 .
+    ?switch :primaryAttachesTo ?bus1 .
+    ?switch :attachesTo ?bus2 .
     ?switch :num_phases ?num_phases .
     ?switch :c0 ?c0 .
     ?switch :c1 ?c1 .
@@ -299,8 +299,8 @@ def query_regcontrol():
 SELECT *
 WHERE {
     ?reg a :RegControl .
-    ?reg :primaryAttachsTo ?bus1 .
-    ?reg :attachsTo ?bus2 .
+    ?reg :primaryAttachesTo ?bus1 .
+    ?reg :attachesTo ?bus2 .
     ?reg :Kva ?kva .
     ?reg :R ?R .
     ?reg :X ?X.
@@ -405,8 +405,8 @@ SELECT *
 WHERE {
     ?entity rdf:type ?type .
     ?type rdfs:subClassOf* :Electrical_Equipment .
-    ?entity :primaryAttachsTo ?bus1 .
-    ?entity :attachsTo ?bus2 .
+    ?entity :primaryAttachesTo ?bus1 .
+    ?entity :attachesTo ?bus2 .
 } 
 """
     res = g.query(query_str)

@@ -93,13 +93,13 @@
 #    Object Properties
 #################################################################
 
-###  http://www.semanticweb.org/phoenix/ontologies/2022/0/SmartGrid#attachsTo
-:attachsTo rdf:type owl:ObjectProperty ,
+###  http://www.semanticweb.org/phoenix/ontologies/2022/0/SmartGrid#attachesTo
+:attachesTo rdf:type owl:ObjectProperty ,
                     owl:AsymmetricProperty ,
                     owl:IrreflexiveProperty ;
            rdfs:domain :Electrical_Equipment ;
            rdfs:range :Bus ;
-           owl:propertyDisjointWith :primaryAttachsTo ;
+           owl:propertyDisjointWith :primaryAttachesTo ;
            <http://www.w3.org/2004/02/skos/core#definition> "A electrical connection to bus2" .
 
 
@@ -214,8 +214,8 @@
          <http://www.w3.org/2004/02/skos/core#definition> "A sensor that monitors/senses another equipment" .
 
 
-###  http://www.semanticweb.org/phoenix/ontologies/2022/0/SmartGrid#primaryAttachsTo
-:primaryAttachsTo rdf:type owl:ObjectProperty ,
+###  http://www.semanticweb.org/phoenix/ontologies/2022/0/SmartGrid#primaryAttachesTo
+:primaryAttachesTo rdf:type owl:ObjectProperty ,
                            owl:AsymmetricProperty ,
                            owl:IrreflexiveProperty ;
                   rdfs:domain :Electrical_Equipment ;

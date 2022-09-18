@@ -132,8 +132,8 @@ with open(f'../models/{filename_prefix}.ttl', "w+") as outfile:
             line_instance = """
 :Line_{name} rdf:type owl:NamedIndividual ,
                     SmartGrid:Line ;
-            SmartGrid:primaryAttachsTo :Bus_{bus1} ;
-            SmartGrid:attachsTo :Bus_{bus2} ;
+            SmartGrid:primaryAttachesTo :Bus_{bus1} ;
+            SmartGrid:attachesTo :Bus_{bus2} ;
             SmartGrid:x1 {x1} ;
             SmartGrid:r1 {r1} .
 
@@ -170,8 +170,8 @@ with open(f'../models/{filename_prefix}.ttl', "w+") as outfile:
             transformer_instance = """
 :Transformer_{name} rdf:type owl:NamedIndividual ,
                              SmartGrid:Transformer ;
-                    SmartGrid:primaryAttachsTo :Bus_{bus1} ;
-                    SmartGrid:attachsTo :Bus_{bus2} ;
+                    SmartGrid:primaryAttachesTo :Bus_{bus1} ;
+                    SmartGrid:attachesTo :Bus_{bus2} ;
                     SmartGrid:connection_primary "{conn_primary}" ;
                     SmartGrid:connection_secondary "{conn_secondary}" ;
                     SmartGrid:kV_primary {kv_primary} ;
@@ -215,7 +215,7 @@ with open(f'../models/{filename_prefix}.ttl', "w+") as outfile:
              SmartGrid:nodes_secondary "{nodes_secondary}" ;
              SmartGrid:nodes_primary "{nodes_primary}" ;
              SmartGrid:num_phases {num_phases} ;
-             SmartGrid:primaryAttachsTo :Bus_{bus1} ;
+             SmartGrid:primaryAttachesTo :Bus_{bus1} ;
              SmartGrid:kW {kw} ;
              SmartGrid:kvar {kvar} ;
              SmartGrid:kV_primary {kv} ;

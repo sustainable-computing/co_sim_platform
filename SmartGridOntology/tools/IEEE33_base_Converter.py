@@ -54,8 +54,8 @@ with open('../models/IEEE33_base.ttl', "w+") as outfile:
     substation_instance = """
 :Transformer_Sub rdf:type owl:NamedIndividual ,
                           SmartGrid:Transformer ;
-                 SmartGrid:primaryAttachsTo :Bus_1 ;
-                 SmartGrid:attachsTo :Bus_2 ;
+                 SmartGrid:primaryAttachesTo :Bus_1 ;
+                 SmartGrid:attachesTo :Bus_2 ;
                  SmartGrid:connection_primary "Delta" ;
                  SmartGrid:connection_secondary "Wye" ;
                  SmartGrid:kV_primary 12.66 ;
@@ -127,8 +127,8 @@ with open('../models/IEEE33_base.ttl', "w+") as outfile:
             line_instance = """
 :Line_{name} rdf:type owl:NamedIndividual ,
                     SmartGrid:Line ;
-            SmartGrid:primaryAttachsTo :Bus_{bus1} ;
-            SmartGrid:attachsTo :Bus_{bus2} ;
+            SmartGrid:primaryAttachesTo :Bus_{bus1} ;
+            SmartGrid:attachesTo :Bus_{bus2} ;
             SmartGrid:x1 {x1} ;
             SmartGrid:r1 {r1} .
 
@@ -172,6 +172,6 @@ with open('../models/IEEE33_base.ttl', "w+") as outfile:
             SmartGrid:nodes_primary "{terminal}" ;
             SmartGrid:nodes_secondary "{terminal}" ;
             SmartGrid:num_phases 1 ;
-            SmartGrid:primaryAttachsTo :Bus_{bus} .
+            SmartGrid:primaryAttachesTo :Bus_{bus} .
 """.format(bus=bus,terminal=terminal)
         outfile.write(load_instance)
