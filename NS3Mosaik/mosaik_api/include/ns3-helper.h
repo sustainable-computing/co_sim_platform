@@ -170,4 +170,14 @@ void PrintRoutingTable (Ptr<Node>& n, bool v4);
  */
 bool isSecondary(string nodeName);
 
+/**
+ * @brief Find the interface index of the node through conversion
+ * This is required because ns-3 adds duplicate interfaces for 6LoWPAN
+ * 
+ * @param nodeName the name of the node in the topology
+ * @param interfaceIdx the interface index to be converted
+ * @return the converted interface index
+ */
+uint32_t findIndex(string nodeName, uint32_t interfaceIdx);
+
 #endif /* SMARTGRID_NS3_HELPER_H_ */

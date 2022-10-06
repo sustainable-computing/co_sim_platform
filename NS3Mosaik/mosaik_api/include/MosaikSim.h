@@ -47,6 +47,8 @@
 #include <sstream>
 #include <array>
 #include <cstdint>
+#include <iomanip>
+#include <chrono>
 
 
 //--- NS3 and json stuff
@@ -56,7 +58,8 @@
 //--- NEW Maximum Mosaik message size: Buffer size 1024 * 1024 * 10 bytes = 10485760 bytes
 //--- However, this size cannot be declared (variable memory limit) so a small size is
 //--- used for now (as the current maximum message size is 635 for "init")
-#define BUFFER_SIZE 90000
+// #define BUFFER_SIZE 90000   //--- May work for smaller topologies
+#define BUFFER_SIZE 3000000 //--- DSE Requires larger buffer
 #define MAXRECV     30000   //--- Socket receiving maximum size
 
 /**
@@ -207,7 +210,8 @@ class MosaikSim {
   std::map<std::string, std::string> netsimParams; ///< Network simulator parameters
   std::map<std::string, std::pair<std::string, std::string>> netsimEntities;         ///< Network simulator entities
   std::vector<NetSimConn> vecNetSimConn;           ///< Network simulator connections
-
+  double total_exec_time;   ///< total execution time of Mosaik calls
+  int step_count;           ///< total number of times "step" is called
   //---
   //--- Transporter model variables
   //---
@@ -216,12 +220,20 @@ class MosaikSim {
       .attrs = {"v", "t"}
   };
 
-  MosaikMeta TransporterMeta = {.api_version = {"3.0"},
+#if PERFORMANCE_TEST > 1
+  MosaikMeta TransporterMeta = {
+      .api_version = {"2.6"},
+      .model = "Transporter",
+      .props = {TransporterModel}
+  };
+#else
+  MosaikMeta TransporterMeta = {
+      .api_version = {"3.0"},
       .type = "event-based",
       .model = "Transporter",
       .props = {TransporterModel}
   };
-
+#endif
 
 
   //---

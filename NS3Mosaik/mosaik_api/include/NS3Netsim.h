@@ -28,6 +28,13 @@
 #ifndef NS3NETSIM_H_
 #define NS3NETSIM_H_
 
+//--- Conditional compilation for performance evaluation
+//--- 0. MOSAIK 3 with ns-3 relevance filtering
+//--- 1. MOSAIK 3 without ns-3 relevance filtering
+//--- 2. MOSAIK 2 with ns-3 relevance filtering (useless actually)
+//--- 3. MOSAIK 2 without ns-3 relevance filtering
+#define PERFORMANCE_TEST 0
+
 #include <iostream>
 #include <iomanip>
 
@@ -105,13 +112,17 @@ class NS3Netsim {
    * \param start_time: when the NS3 simulator should start (not used now)
    * \param stop_time: when the NS3 simulator should end
    * \param verb: level of verbose mode
+   * \param s_tcpOrUdp: transmision layer protocol
+   * \param s_net: network and link layer protocols
+   * \param s_topology: IEEE 13 vs 33 topology
    *
    * \returns None
    *
    */
   void init (string f_json, string f_devs, string s_linkRate,
-             string s_linkDelay, string s_linkErrorRate, string start_time,
-             string stop_time, string verb, string s_tcpOrUdp, string s_net);
+             string s_linkDelay, string s_linkErrorRate,
+             string start_time, string stop_time, string verb,
+             string s_tcpOrUdp, string s_net, string s_topology);
 
   /**
    * \brief Create Transport connection between two nodes
@@ -280,6 +291,7 @@ private:
 
   string tcpOrUdp; ///< Which network protocol should be used
   string netArch;  ///< Which network architecture should be used
+  string topology; ///< topology = IEEE13/IEEE33
 };
 
 #endif /* NS3NETSIM_H_ */

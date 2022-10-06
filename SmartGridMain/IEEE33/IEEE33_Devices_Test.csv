@@ -1,5 +1,5 @@
-idn,type,src,dst,period,error,cktElement,cktTerminal,cktPhase,cktProperty
-001,phasor,1,1,20,0.00001667,line.1-2,BUS1,PHASE_123,None
-0031,phasor,31,1,20,0.00001667,line.30-31,BUS2,PHASE_123,None
-0032,phasor,32,1,20,0.00001667,line.31-32,BUS2,PHASE_123,None
-0033,phasor,33,1,20,0.00001667,line.32-33,BUS2,PHASE_123,None
+type,src,dst,cidx,didx,period,error,cktElement,cktTerminal,cktPhase,cktProperty
+Phasor,1,1,0,0,100,0.00001667,line.1-2,BUS1,PHASE_123,None
+Phasor,31,1,0,0,100,0.00001667,line.30-31,BUS2,PHASE_123,None
+Phasor,32,1,0,0,100,0.00001667,line.31-32,BUS2,PHASE_123,None
+Phasor,33,1,0,0,100,0.00001667,line.32-33,BUS2,PHASE_123,None

@@ -51,6 +51,7 @@ mkdir virtualenv
 virtualenv -p /usr/bin/python3 virtualenv/cosimul
 source virtualenv/cosimul/bin/activate
 pip install mosaik
+# pip install "mosaik<3"
 pip install tables
 pip install scipy
 pip install matplotlib
