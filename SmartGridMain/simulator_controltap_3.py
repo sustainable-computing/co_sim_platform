@@ -12,7 +12,7 @@ Only to be used with MOSAIK 3 and later versions
 
 import queue
 from tabnanny import verbose
-import mosaik_api
+import mosaik_api_v3 as mosaik_api
 import sys
 import datetime
 

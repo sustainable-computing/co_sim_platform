@@ -843,7 +843,9 @@ MosaikSim::step(Json::Value args, Json::Value kwargs)
   }
 
   //---
-  //--- Execute NS3 until time of the next NS3 step
+  //--- Execute NS3 until time of the next step
+  //--- To get a lookAhead time of when the next event is (to let others know)
+  //--- Will keep executing until next event or Max Advance time is reached
   //---
   if (verbose > 1)
   {
@@ -920,7 +922,7 @@ MosaikSim::get_data(Json::Value args, Json::Value kwargs)
     if (verbose > 2)
       std::cout << "MosaikSim::get_data NO output data on NS3 !! " << std::endl;
   }
-  //--- there something in the buffer, retrieve to MosaikSim
+  //--- there is something in the buffer, retrieve to MosaikSim
   else
   {
     if (verbose > 2)

@@ -19,3 +19,4 @@ SimDSE/data/Monitor_Small.png
 SimDSE/data/Monitor_Full.png
 TapControl/Monitor.png
 SimDSE/wls_results.mat
+virtualenv/
