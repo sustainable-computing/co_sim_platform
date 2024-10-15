@@ -12,7 +12,7 @@ Works only with MOSAIK 3 and later versions
 
 import queue
 import random
-import mosaik_api_v3 as mosaik_api
+import mosaik_api
 import os
 import sys
 import csv

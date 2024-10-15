@@ -13,9 +13,11 @@ point to point or Carrier Sense Multiple Access (CSMA) links.
 * This project is being developed on linux, it has been tested on the following:
     * Ubuntu 18.04 LTS
     * Ubuntu 20.04 LTS
+    * Ubuntu 24.04 LTS
 * The following python versions have been used to develop the co-simulator:
     * 3.6.8
     * 3.8.2
+    * 3.12
 * Hardware Requirements:
     * 8.0 GB or more to build NS-3
 

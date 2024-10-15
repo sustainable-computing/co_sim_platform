@@ -215,7 +215,7 @@ def  create_scenario( world, args ):
                               ilpqfile = DSS_EXE_PATH + ILPQ_RPATH_FILE,
                               loadgen_interval = 80, # IEEE13
                             #   loadgen_interval = 1000, # IEEE33
-                              verbose = 2)    
+                              verbose = 0)    
   
     if Scenario == 1:
         controlsim  = world.start('ControlSim', verbose = 0)
@@ -563,7 +563,7 @@ def  create_scenario( world, args ):
                     for transporter in transporters:
                         if (transporter_instance == transporter.eid):
                             world.connect(controller, transporter, 'v', 't',
-                                          time_shifted=True, initial_data={'v': [None], 't': [None]})
+                                          weak=True, initial_data={'v': [None], 't': [None]})
                             print('Connect', controller.eid, 'to', transporter.eid)
         
             #--- PktNet(Transporter) to Actuator           
@@ -572,7 +572,7 @@ def  create_scenario( world, args ):
                     for transporter in transporters:
                         if (transporter_instance == transporter.eid):
                             world.connect(transporter, actuator, 'v', 't',
-                                time_shifted=True, initial_data={'v': [None], 't': [None]})
+                                weak=True, initial_data={'v': [None], 't': [None]})
                             print('Connect', transporter.eid, 'to', actuator.eid)
 
             #--- PktNet(Transporter) to Controller

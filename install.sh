@@ -52,10 +52,11 @@ cd ../
 mkdir virtualenv
 virtualenv -p /usr/bin/python3 virtualenv/cosimul
 source virtualenv/cosimul/bin/activate
-pip install mosaik
+pip install "mosaik<3.1"
 # pip install "mosaik<3"
 pip install tables
 pip install scipy
 pip install matplotlib
 pip install pandas
+pip install setuptools
 pip install ./opendssdirect3.7
