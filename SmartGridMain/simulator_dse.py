@@ -56,7 +56,7 @@ class Estimator(mosaik_api.Simulator):
         self.cktState  = {}
         self.MsgCount  = 0
         self.eventQueue = queue.PriorityQueue()
-		self.total_exec_time = 0.0
+        self.total_exec_time = 0.0
 
         return self.meta
 

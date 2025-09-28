@@ -1,17 +1,19 @@
 #!/bin/bash
 
 echo "Updating apt"
+sudo add-apt-repository ppa:ubuntu-toolchain-r/test -y
 sudo apt-get update --fix-missing
 
 echo "Installing requirements"
 sudo apt install libjsoncpp-dev -y
 sudo apt install g++ -y
-sudo apt install python-setuptools -y
 sudo apt install python3-setuptools -y
 sudo apt install mercurial -y
 sudo apt install python3-virtualenv -y
 sudo apt install python3-pip -y
 sudo apt install make -y
+sudo apt install gcc-9 -y
+sudo apt install g++-9 -y
 
 echo "Downloading NS-3"
 if test -f ns-allinone-3.33.tar.bz2
@@ -37,23 +39,24 @@ cp wscripts/wscript_core ns-allinone-3.33/ns-3.33/src/core/wscript
 echo "Building NS-3"
 cd ns-allinone-3.33/ns-3.33
 
-./waf configure --build-profile=optimized
+CXX=g++-9 ./waf configure --build-profile=optimized --disable-python
 # ./waf configure --build-profile=debug
-./waf
+CXX=g++-9 ./waf
 
 echo "Building NS3Mosaik"
 cd ../../NS3Mosaik
 make
 
 echo "Creating virtual env"
-cd ../../
+cd ../
 mkdir virtualenv
 virtualenv -p /usr/bin/python3 virtualenv/cosimul
 source virtualenv/cosimul/bin/activate
-pip install mosaik
+pip install "mosaik<3.1"
 # pip install "mosaik<3"
 pip install tables
 pip install scipy
 pip install matplotlib
 pip install pandas
-pip install co_sim_platform/opendssdirect3.7
+pip install setuptools
+pip install ./opendssdirect3.7

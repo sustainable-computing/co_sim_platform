@@ -13,6 +13,7 @@ import os
 import sys
 import csv
 import mosaik
+import mosaik.util
 import argparse
 from datetime import datetime
 from pathlib import Path
@@ -25,7 +26,7 @@ Mosaik_2 = False
 #--- Scenario selection:
 #--- 1. Tap Control with IEEE13
 #--- 2. State Estimation with IEEE33 and secondary test feeders
-Scenario = 1
+Scenario = 2
 
 #--- Base Directory
 BASE_DIR = os.getcwd()
@@ -472,6 +473,13 @@ def  create_scenario( world, args ):
 
     #---
     #--- Simulators interconnections
+    # Sometimes the simulated system requires cyclic data-flows between components, e.g. a control mechanism (C)
+    # that controls another entity (E) based on its state, e.g. by sending commands or a schedule.
+    # It is not possible to perform both data-flows (the state from E to C and the commands/schedule from C to E)
+    # at the same time because they depend on each other (yes, this is similar to the chicken or egg dilemma).
+    # The cycle can be resolved by first stepping E (e.g., from t = 0 to t = 1). E’s state for that interval can
+    # then be used as input for C ’s step for the same interval. The commands/schedule that C generates for E will
+    # then be used in E’s next step. This results in a serial execution, also called Gauss-Seidel scheme.
     #---
     
     for key in devParams.keys():
@@ -554,7 +562,8 @@ def  create_scenario( world, args ):
                 if (controller_instance == controller.eid):
                     for transporter in transporters:
                         if (transporter_instance == transporter.eid):
-                            world.connect(controller, transporter, 'v', 't')
+                            world.connect(controller, transporter, 'v', 't',
+                                          weak=True, initial_data={'v': [None], 't': [None]})
                             print('Connect', controller.eid, 'to', transporter.eid)
         
             #--- PktNet(Transporter) to Actuator           
@@ -563,7 +572,7 @@ def  create_scenario( world, args ):
                     for transporter in transporters:
                         if (transporter_instance == transporter.eid):
                             world.connect(transporter, actuator, 'v', 't',
-                                time_shifted=True, initial_data={'v': [None], 't': [None]})
+                                weak=True, initial_data={'v': [None], 't': [None]})
                             print('Connect', transporter.eid, 'to', actuator.eid)
 
             #--- PktNet(Transporter) to Controller
@@ -580,8 +589,7 @@ def  create_scenario( world, args ):
                         t_control_loop = t_control_loop.split('.')[1]
                         # print(transporter.eid, " Server: ", t_server, " Control Loop: ", t_control_loop)
                         if (t_server == client and t_control_loop == control_loop):
-                            world.connect(transporter, controller, 'v', 't',
-                                time_shifted=True, initial_data={'v': [None], 't': [None]})
+                            world.connect(transporter, controller, 'v', 't')
                             print('Connect', transporter.eid, 'to', controller.eid)
  
     #--- Sensor to Controller

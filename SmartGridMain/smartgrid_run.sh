@@ -4,14 +4,14 @@
 # Script to run Smart-Grid application
 #---
 
-BASE_DIR="../.."
+BASE_DIR=".."
 
 VIRTENV=$BASE_DIR/virtualenv/cosimul
-SGEXEC=$BASE_DIR/co_sim_platform/SmartGridMain
+SGEXEC=$BASE_DIR/SmartGridMain
 
 #--- set python environment
 source $VIRTENV/bin/activate
-export PYTHONPATH=$PYTHONPATH:$BASE_DIR:$BASE_DIR/co_sim_platform/OpenDSS
+export PYTHONPATH=$PYTHONPATH:$BASE_DIR:$BASE_DIR/OpenDSS
 
 #--- run mosaik script
 python $SGEXEC/simulator_demo.py
